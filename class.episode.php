@@ -38,6 +38,11 @@
 			return $this->episode_data["Name"];
 		}
 		
+		public function getEpisodeNumber() {
+			$episode_explosion = explode("_", $this->getName());
+			return $episode_explosion[1];
+		}
+		
 		public function getTitle() {
 			return $this->episode_data["Title"];
 		}

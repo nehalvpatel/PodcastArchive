@@ -26,6 +26,7 @@ a {
 #episodes .thumb { z-index: 2; background: rgba(20,20,20,0.3); border-radius: 5px; left: -15px; height: 20px; width: 12px; cursor: pointer; overflow: hidden; position: absolute; top: 0; }
 #episodes .thumb .end { overflow: hidden; height: 5px; width: 13px; }
 #episodes .disable{ display: none; }
+#episodes a { text-decoration: none; }
 .noSelect { user-select: none; -o-user-select: none; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; }
 
 /* Controller Styles */
@@ -56,13 +57,16 @@ a {
 	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
 }
 .video-player{
-	height: 315px;
-	width: 560px;
+	width: 100%;
 	background: #555;
 	margin: 10px 1% 0 0;
 	padding: 10px;
 	float: left;
 	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
+	box-sizing: border-box;
+}
+.video-player iframe {
+	width: 100%;
 }
 
 /* Episode Tile Styles */

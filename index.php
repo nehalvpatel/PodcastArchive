@@ -2,24 +2,35 @@
 
 	require_once("config.php");
 	
-	$keys = array_keys($Podcast->getEpisodes());
+	$settings = $Podcast->getSettings();
+	$domain = $settings["Domain"];
 	
-	$current_episode = (isset($_GET['episode'])) ? new Episode('PKA_'.$_GET['episode'], $con) : new Episode($keys[0], $con);
+	if (isset($_GET["episode"]) && is_numeric($_GET["episode"])) {
+		$current_episode = new Episode("PKA_" . $Podcast->padEpisodeNumber($_GET["episode"]), $con);
+		$canonical = $domain . "episode/" . $Podcast->trimEpisodeNumber($_GET["episode"]);
+	} else {
+		$current_episode = new Episode($Podcast->getLatestEpisode(), $con);
+		$canonical = $domain;
+	}
 	
 ?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Painkiller Already Achive</title>
-		<link rel="stylesheet" type="text/css" href="css/main.css" />
-		<script type="text/javascript" src="js/scroll.js"></script>
+		<title><?php if (!empty($_GET["episode"])) { echo $current_episode->getTitle() . " - "; } ?>Painkiller Already Archive</title>
+		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css" />
+		<link rel="canonical" href="<?php echo $canonical; ?>">
+		<base href="<?php echo $domain; ?>">
+		<script type="text/javascript" src="<?php echo $domain; ?>js/scroll.js"></script>
 	</head>
 	<body>
 		<div id="episodes">
 <?php
-	foreach($Podcast->getEpisodes() as $episode_name=>$episode){
+	foreach ($Podcast->getEpisodes() as $episode_name => $episode) {
+		$episode_explosion = explode("_", $episode_name);
+		
 ?>
-			<a href="index.php?episode=<?php echo substr($episode_name, 4, 3); ?>">
+			<a href="episode/<?php echo $Podcast->trimEpisodeNumber($episode_explosion[1]); ?>">
 				<div class="episode">
 					<h3><?php echo $episode['Title']; ?></h3>
 				</div>
@@ -34,10 +45,7 @@
 			</div>
 			<div id="videos">
 				<div class="video-player">
-					<iframe width="560" height="315" src="//www.youtube.com/embed/<?php echo $current_episode->getYouTube(); ?>" frameborder="0" allowfullscreen></iframe>
-				</div>
-				<div class="video-player">
-					<iframe width="560" height="315" src="//www.youtube.com/embed/9I55AjbUjis" frameborder="0" allowfullscreen></iframe>
+					<iframe height="315" src="//www.youtube.com/embed/<?php echo $current_episode->getYouTube(); ?>" frameborder="0" allowfullscreen></iframe>
 				</div>
 				<div class="clear"></div>
 			</div>

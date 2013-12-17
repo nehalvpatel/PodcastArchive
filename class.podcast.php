@@ -148,6 +148,18 @@
 			$this->authoremail = $authoremail;
 		}
 		
+		// settings
+		public function getSettings() {
+			$settings_query = $this->con->prepare("SELECT * FROM `Settings`");
+			$settings_query->execute();
+			$settings_results = $settings_query->fetchAll();
+			
+			$settings = array(
+				"Domain" => $settings_results[0]["Value"]
+			);
+			return $settings;
+		}
+		
 		public function getLink() {
 			if ($this->getCollection() == "") {
 				$search = "https://archive.org/search.php?query=" . rawurlencode('creator:"' . $this->getCreator() . '" AND subject:"' . $this->getSubject() . '"&sort=-date');
@@ -157,6 +169,32 @@
 				$search = "https://archive.org/details/" . $this->getCollection();
 			}
 			return $search;
+		}
+		
+		public function trimEpisodeNumber($episode) {
+			$episode = ltrim($episode, "0");
+			
+			if ($episode == "") {
+				return "0";
+			} else {
+				return ltrim($episode, "0");
+			}
+		}
+		
+		public function padEpisodeNumber($episode) {
+			$episode = $this->trimEpisodeNumber($episode);
+			
+			if ($episode == "0") {
+				return "000";
+			} else {
+				if (is_numeric($episode) && floor($episode) != $episode) {
+					$episode = str_pad($episode, 4, "0", STR_PAD_LEFT);
+				} else {
+					$episode = str_pad($episode, 3, "0", STR_PAD_LEFT);
+				}
+				
+				return $episode;
+			}
 		}
 		
 		public function addEpisode($episode) {
@@ -229,8 +267,16 @@
 			return $feed;
 		}
 		
+		public function getLatestEpisode() {
+			$latest_query = $this->con->prepare("SELECT `Name` FROM `" . $this->getTable() . "` ORDER BY `Name` DESC LIMIT 1");
+			$latest_query->execute();
+			$latest_results = $latest_query->fetchAll();
+			
+			return $latest_results[0]["Name"];
+		}
+		
 		public function getEpisodes() {
-			$info_query = $this->con->prepare("SELECT * FROM `" . $this->getTable() . "` ORDER BY `name` DESC");
+			$info_query = $this->con->prepare("SELECT * FROM `" . $this->getTable() . "` ORDER BY `Name` DESC");
 			$info_query->execute();
 			$info_results = $info_query->fetchAll();
 			
