@@ -6,15 +6,16 @@ body{
 	clear: both;
 }
 #header{
+	height: 25%;
 	height: 40px;
-	background: #333;
 	padding: 30px;
+	background: #333;
 }
 #header h1{
 	margin: 0;
 	color: white;
 }
-#episodes { width: 315px; clear: both; float:left;}
+#episodes { width: 15%; clear: both; float:left;}
 #episodes .viewport { width: 300px; overflow: hidden; position: relative; }
 #episodes .overview { list-style: none; position: absolute; left: 0; top: 0; }
 #episodes .scrollbar { position: relative; float: right; width: 15px; }
@@ -28,25 +29,24 @@ body{
 #controller{
 	float: left;
 	height: 855px;
-	margin: 10px 10px 10px 0;
+	margin: 10px 0 10px 1%;
+	width: 84%;
 }
 #title{
 	background: white;
 	padding: 15px;
-	width: 1140px;
+	width: 95%;
 	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
 }
 #title h1{
 	margin: 0;
 }
 #videos{
-	width: 1180px;
-	height: 335px;
+	width: 95%;
 	margin-top: 10px;
 }
 #timeline{
-	height: 400px;
-	width: 1140px;
+	width: 95%;
 	padding: 15px;
 	background: white;
 	margin-top: 10px;
@@ -66,20 +66,13 @@ body{
 
 .episode{
 	height: 60px;
-	width: 300px;
+	width: 100%;
 	background: #555;
 	border-top: 1px solid #666;
 }
-.title{
-	
-}
-.title h3{
+.episode h3{
 	text-align: center;
 	margin: 10px 0;
 	padding-bottom: 5px;
 	color: #333;
-}
-.video img{
-	display: block;
-	margin: 0 auto;
 }

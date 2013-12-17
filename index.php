@@ -15,29 +15,20 @@
 		<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 		<script type="text/javascript" src="js/scroll.js"></script>
 	</head>
-	<body onresize="adjustHeight();" onload="adjustHeight();">
+	<body>
 		<div id="header">
 			<h1>Painkiller Already Archive</h1>
 		</div>
 		<div id="episodes">
-			<div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
-			<div class="viewport" id="height-obj">
-				<div class="overview">
 <?php
 	foreach($episodes as $episode){
 ?>
-					<div class="episode">
-						<div class="title">
-							<h3><?php echo $episode['Title']; ?></h3>
-						</div>
-						<div class="video">
-						</div>
-					</div>
+			<div class="episode">
+				<h3><?php echo $episode['Title']; ?></h3>
+			</div>
 <?php
 	}
-?>					
-				</div>
-			</div>
+?>
 		</div>
 		<div id="controller">
 			<div id="title">
@@ -50,6 +41,7 @@
 				<div class="video-player">
 					<iframe width="560" height="315" src="//www.youtube.com/embed/9I55AjbUjis" frameborder="0" allowfullscreen></iframe>
 				</div>
+				<div class="clear"></div>
 			</div>
 			<div id="timeline">
 				<h3>Timeline</h3>
