@@ -1,0 +1,85 @@
+body{
+	margin: 0;
+	background: #f0f0f0;
+}
+.clear{
+	clear: both;
+}
+#header{
+	height: 40px;
+	background: #333;
+	padding: 30px;
+}
+#header h1{
+	margin: 0;
+	color: white;
+}
+#episodes { width: 315px; clear: both; float:left;}
+#episodes .viewport { width: 300px; overflow: hidden; position: relative; }
+#episodes .overview { list-style: none; position: absolute; left: 0; top: 0; }
+#episodes .scrollbar { position: relative; float: right; width: 15px; }
+#episodes .track { height: 100%; width:13px; position: relative; padding: 0 1px; }
+#episodes .thumb { z-index: 2; background: rgba(20,20,20,0.3); border-radius: 5px; left: -15px; height: 20px; width: 12px; cursor: pointer; overflow: hidden; position: absolute; top: 0; }
+#episodes .thumb .end { overflow: hidden; height: 5px; width: 13px; }
+#episodes .disable{ display: none; }
+.noSelect { user-select: none; -o-user-select: none; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; }
+
+/* Controller Styles */
+#controller{
+	float: left;
+	height: 855px;
+	margin: 10px 10px 10px 0;
+}
+#title{
+	background: white;
+	padding: 15px;
+	width: 1140px;
+	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
+}
+#title h1{
+	margin: 0;
+}
+#videos{
+	width: 1180px;
+	height: 335px;
+	margin-top: 10px;
+}
+#timeline{
+	height: 400px;
+	width: 1140px;
+	padding: 15px;
+	background: white;
+	margin-top: 10px;
+	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
+}
+.video-player{
+	height: 315px;
+	width: 560px;
+	background: white;
+	margin-right: 10px;
+	padding: 10px;
+	float: left;
+	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
+}
+
+/* Episode Tile Styles */
+
+.episode{
+	height: 60px;
+	width: 300px;
+	background: #555;
+	border-top: 1px solid #666;
+}
+.title{
+	
+}
+.title h3{
+	text-align: center;
+	margin: 10px 0;
+	padding-bottom: 5px;
+	color: #333;
+}
+.video img{
+	display: block;
+	margin: 0 auto;
+}
