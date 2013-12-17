@@ -2,7 +2,7 @@ body{
 	margin: 0;
 	background: #444;
 }
-a:link {
+a {
 	color:#888;
 }
 .clear{
@@ -18,7 +18,7 @@ a:link {
 	margin: 0;
 	color: white;
 }
-#episodes { width: 15%; clear: both; float:left; box-shadow: 0 -10px 5px black inset}
+#episodes { width: 15%; clear: both; float:left;}
 #episodes .viewport { width: 300px; overflow: hidden; position: relative; }
 #episodes .overview { list-style: none; position: absolute; left: 0; top: 0; }
 #episodes .scrollbar { position: relative; float: right; width: 15px; }
@@ -32,11 +32,12 @@ a:link {
 #controller{
 	float: left;
 	height: 855px;
-	margin: 10px 1% 10px 1%;
-	width: 83%;
+	margin: 10px 1% 10px 15%;
+	width: 84%;
+	position: fixed;
 }
 #title{
-	background: white;
+	background: #555;
 	padding: 15px 1%;
 	width: 98%;
 	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
@@ -50,14 +51,14 @@ a:link {
 #timeline{
 	width: 98%;
 	padding: 1%;
-	background: white;
+	background: #555;
 	margin-top: 10px;
 	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
 }
 .video-player{
 	height: 315px;
 	width: 560px;
-	background: white;
+	background: #555;
 	margin: 10px 1% 0 0;
 	padding: 10px;
 	float: left;
@@ -67,7 +68,8 @@ a:link {
 /* Episode Tile Styles */
 
 .episode{
-	width: 100%;
+	width: 90%;
+	padding: 0 5px;
 	background: url('../img/background.jpg');
 	border-bottom: 1px solid #333;
 	border-top: 1px solid #555;
@@ -86,4 +88,22 @@ a:link {
 	font-size: 0.7em;
 	text-shadow: 1px 1px 0 black;
 	text-decoration: none;
+}
+
+/* Timeline Styles */
+#line{
+	background: white;
+	width: 98%;
+	margin: 1%;
+	height: 20px;
+}
+.topic{
+	height: 100%;
+	float: left;
+}
+.black{
+	background: black;
+}
+.grey{
+	background: grey;
 }

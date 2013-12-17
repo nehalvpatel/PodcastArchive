@@ -236,7 +236,7 @@
 			
 			$episodes = array();
 			foreach ($info_results as $info) {
-				$episode_info = array(
+				$episodes[$info["Name"]] = array(
 					"Title" => $info["Title"],
 					"Hosts" => $info["Hosts"],
 					"Guests" => $info["Guests"],
@@ -244,7 +244,7 @@
 					"Byte" => $info["Bytes"],
 					"YouTube" => $info["YouTube"]
 				);
-				$episodes[$info["Name"]] = $episode_info;
+				
 			}
 			
 			return $episodes;
