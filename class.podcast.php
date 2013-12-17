@@ -230,7 +230,7 @@
 		}
 		
 		public function getEpisodes() {
-			$info_query = $this->con->prepare("SELECT * FROM `" . $this->getTable() . "`");
+			$info_query = $this->con->prepare("SELECT * FROM `" . $this->getTable() . "` ORDER BY `name` DESC");
 			$info_query->execute();
 			$info_results = $info_query->fetchAll();
 			

@@ -1,6 +1,9 @@
 body{
 	margin: 0;
-	background: #f0f0f0;
+	background: #444;
+}
+a:link {
+	color:#888;
 }
 .clear{
 	clear: both;
@@ -15,7 +18,7 @@ body{
 	margin: 0;
 	color: white;
 }
-#episodes { width: 15%; clear: both; float:left;}
+#episodes { width: 15%; clear: both; float:left; box-shadow: 0 -10px 5px black inset}
 #episodes .viewport { width: 300px; overflow: hidden; position: relative; }
 #episodes .overview { list-style: none; position: absolute; left: 0; top: 0; }
 #episodes .scrollbar { position: relative; float: right; width: 15px; }
@@ -29,25 +32,24 @@ body{
 #controller{
 	float: left;
 	height: 855px;
-	margin: 10px 0 10px 1%;
-	width: 84%;
+	margin: 10px 1% 10px 1%;
+	width: 83%;
 }
 #title{
 	background: white;
-	padding: 15px;
-	width: 95%;
+	padding: 15px 1%;
+	width: 98%;
 	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
 }
 #title h1{
 	margin: 0;
 }
 #videos{
-	width: 95%;
-	margin-top: 10px;
+	width: 100%;
 }
 #timeline{
-	width: 95%;
-	padding: 15px;
+	width: 98%;
+	padding: 1%;
 	background: white;
 	margin-top: 10px;
 	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
@@ -56,7 +58,7 @@ body{
 	height: 315px;
 	width: 560px;
 	background: white;
-	margin-right: 10px;
+	margin: 10px 1% 0 0;
 	padding: 10px;
 	float: left;
 	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
@@ -65,14 +67,23 @@ body{
 /* Episode Tile Styles */
 
 .episode{
-	height: 60px;
 	width: 100%;
-	background: #555;
-	border-top: 1px solid #666;
+	background: url('../img/background.jpg');
+	border-bottom: 1px solid #333;
+	border-top: 1px solid #555;
+	border-right: 1px solid #333;
+	color: #888;
+}
+.episode:hover{
+	background: url('../img/background-h.jpg');
+	color: #999;
 }
 .episode h3{
 	text-align: center;
-	margin: 10px 0;
-	padding-bottom: 5px;
-	color: #333;
+	margin: 0;
+	padding: 10px 0;
+	font-family: verdana;
+	font-size: 0.7em;
+	text-shadow: 1px 1px 0 black;
+	text-decoration: none;
 }

@@ -1,18 +1,16 @@
 <?php
 
 	require_once("config.php");
-	$episodes = array_reverse($Podcast->getEpisodes());
 	
-	$keys = array_keys($episodes);
+	$keys = array_keys($Podcast->getEpisodes());
 	$latest_episode = new Episode($keys[0], $con);
 	
 ?>
 <!DOCTYPE html>
-<html lang="en" id="html">
+<html lang="en">
 	<head>
 		<title>Painkiller Already Achive</title>
 		<link rel="stylesheet" type="text/css" href="css/main.css" />
-		<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 		<script type="text/javascript" src="js/scroll.js"></script>
 	</head>
 	<body>
@@ -21,11 +19,13 @@
 		</div>
 		<div id="episodes">
 <?php
-	foreach($episodes as $episode){
+	foreach($Podcast->getEpisodes() as $episode){
 ?>
-			<div class="episode">
-				<h3><?php echo $episode['Title']; ?></h3>
-			</div>
+			<a href="index.php?episode=<?php echo $episode['Name']; ?>">
+				<div class="episode">
+					<h3><?php echo $episode['Title']; ?></h3>
+				</div>
+			</a>
 <?php
 	}
 ?>
