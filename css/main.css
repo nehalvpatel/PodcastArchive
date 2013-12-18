@@ -3,7 +3,7 @@ body{
 	background: #444;
 }
 a {
-	color:#888;
+	text-decoration: none;
 }
 .clear{
 	clear: both;
@@ -91,7 +91,6 @@ a {
 	font-family: verdana;
 	font-size: 0.7em;
 	text-shadow: 1px 1px 0 black;
-	text-decoration: none;
 }
 
 /* Timeline Styles */

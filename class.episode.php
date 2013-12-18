@@ -157,13 +157,13 @@
 			return $this->episode_data["Timestamps"];
 		}
 		
-		public function addTimestamp($type, $timestamp, $value) {
+		public function addTimestamp($type, $episode, $timestamp, $value) {
 			$type = ucfirst(strtolower($type));
 			
 			try {
 				$timestamp_query = $this->con->prepare("INSERT INTO `Timestamps` (`Episode`, `Type`, `Timestamp`, `Value`) VALUES (:Episode, :Type, :Timestamp, :Value)");
 				$timestamp_query->execute(array(
-					":Episode" => $this->getName(),
+					":Episode" => $episode,
 					":Type" => $type,
 					":Timestamp" => $timestamp,
 					":Value" => $value
