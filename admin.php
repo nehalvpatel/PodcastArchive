@@ -25,11 +25,11 @@
 				<tbody>
 					<tr>
 						<td class="label"><label for="username">Username:</label></td>
-						<td><input type="text" id="username" name="username"></td>
+						<td><input type="text" id="username" name="username" required></td>
 					</tr>
 					<tr>
 						<td class="label"><label for="password">Password:</label></td>
-						<td><input type="password" id="password" name="password"></td>
+						<td><input type="password" id="password" name="password" required></td>
 					</tr>
 					<tr>
 						<td colspan="2"><input class="form-button" type="submit" name="submit" value="Login"></td>
