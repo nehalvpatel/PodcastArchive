@@ -288,7 +288,7 @@
 					"Guests" => $info["Guests"],
 					"Length" => gmdate("H:i:s", $info["Length"]),
 					"Byte" => $info["Bytes"],
-					"YouTube" => $info["YouTube"]
+					"YouTube" => $info["WoodysGamertag"]
 				);
 				
 			}

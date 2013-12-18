@@ -132,7 +132,7 @@
 		}
 		
 		public function getYouTube() {
-			return $this->episode_data["YouTube"];
+			return $this->episode_data["WoodysGamertag"];
 		}
 		
 		public function setYouTube($youtube) {
@@ -157,16 +157,17 @@
 			return $this->episode_data["Timestamps"];
 		}
 		
-		public function addTimestamp($type, $episode, $timestamp, $value) {
+		public function addTimestamp($type, $timestamp, $value, $url = "") {
 			$type = ucfirst(strtolower($type));
 			
 			try {
-				$timestamp_query = $this->con->prepare("INSERT INTO `Timestamps` (`Episode`, `Type`, `Timestamp`, `Value`) VALUES (:Episode, :Type, :Timestamp, :Value)");
+				$timestamp_query = $this->con->prepare("INSERT INTO `Timestamps` (`Episode`, `Type`, `Timestamp`, `Value`, `URL`) VALUES (:Episode, :Type, :Timestamp, :Value, :URL)");
 				$timestamp_query->execute(array(
-					":Episode" => $episode,
+					":Episode" => $this->getName(),
 					":Type" => $type,
 					":Timestamp" => $timestamp,
-					":Value" => $value
+					":Value" => $value,
+					":URL" => $url
 				));
 				
 				$this->reloadTimestamps();
