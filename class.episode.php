@@ -118,7 +118,7 @@
 			try {
 				$timestamp_query = $this->con->prepare("INSERT INTO `timestamps` (`Episode`, `Type`, `Timestamp`, `Value`, `URL`) VALUES (:Episode, :Type, :Timestamp, :Value, :URL)");
 				$timestamp_query->execute(array(
-					":Episode" => $this->getName(),
+					":Episode" => $this->getIdentifier(),
 					":Type" => $type,
 					":Timestamp" => $timestamp,
 					":Value" => $value,
