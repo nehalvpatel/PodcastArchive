@@ -60,14 +60,6 @@
 			return $this->episode_data["Number"];
 		}
 		
-		public function getTitle() {
-			return $this->episode_data["Title"];
-		}
-		
-		public function setTitle($title) {
-			return $this->updateValue("Title", $title);
-		}
-		
 		public function getHosts() {
 			return $this->episode_data["Hosts"];
 		}
@@ -106,6 +98,14 @@
 		
 		public function setYouTube($youtube) {
 			return $this->updateValue("YouTube", $youtube);
+		}
+		
+		public function getReddit() {
+			return $this->episode_data["Reddit"];
+		}
+		
+		public function setReddit($reddit) {
+			return $this->updateValue("Reddit", $reddit);
 		}
 		
 		public function getTimestamps() {

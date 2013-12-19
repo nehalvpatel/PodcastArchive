@@ -13,7 +13,7 @@ a {
 #header{
 	background: #444;
 }
-#header h1{
+#header h1 {
 	color: #eee;
 	margin: 0;
 	padding: 10px;
@@ -67,7 +67,8 @@ a {
 	padding: 10px;
 	margin-top: 10px;
 }
-#title h1{
+#title h2 {
+	display: inline-block;
 	margin: 0;
 	color: #aaa;
 	text-shadow: 1px 1px 0 #444;
@@ -76,6 +77,18 @@ a {
 }
 #video-player iframe {
 	width: 100%;
+}
+#discussion {
+	display: inline-block;
+	float: right;
+	border: 1px solid #aaa;
+	padding: 5px 10px;
+	text-align: center;
+	background: #444;
+	color: #aaa;
+	-moz-border-radius: 7px;
+	-webkit-border-radius: 7px;
+	border-radius: 7px;
 }
 
 /* Episode Tile Styles */

@@ -70,7 +70,8 @@
 		</div>
 		<div id="controller">
 			<div id="title">
-				<h1><?php if (!isset($_GET["episode"]) || $_GET["episode"] != $current_episode->getNumber()) { echo "Painkiller Already Archive"; } else { echo "Painkiller Already #" . $current_episode->getNumber(); } ?></h1>
+				<h2><?php echo "Painkiller Already #" . $current_episode->getNumber(); ?></h2>
+				<?php if ($current_episode->getReddit() != "") { ?><a href="http://www.reddit.com/comments/<?php echo $current_episode->getReddit(); ?>"><div id="discussion">Discussion</div></a><?php } ?>
 			</div>
 			<div id="video-player">
 				<iframe height="315" src="//www.youtube.com/embed/<?php echo $current_episode->getYouTube(); ?>" frameborder="0" allowfullscreen></iframe>
