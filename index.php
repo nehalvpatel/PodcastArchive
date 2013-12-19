@@ -41,7 +41,7 @@
 		</div>
 		<div id="controller">
 			<div id="title">
-				<h1><?php echo $current_episode->getTitle(); ?> - Painkiller Already Archive</h1>
+				<h1><?php echo $current_episode->getTitle(); ?></h1>
 			</div>
 			<div id="videos">
 				<div class="video-player">
