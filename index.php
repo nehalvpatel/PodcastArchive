@@ -17,11 +17,10 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title><?php if (!empty($_GET["episode"])) { echo $current_episode->getTitle() . " - "; } ?>Painkiller Already Archive</title>
+		<title><?php if(!empty($_GET["episode"])) { echo $current_episode->getTitle() . " - "; } ?>Painkiller Already Archive</title>
 		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css" />
 		<link rel="canonical" href="<?php echo $canonical; ?>">
 		<base href="<?php echo $domain; ?>">
-		<script type="text/javascript" src="<?php echo $domain; ?>js/scroll.js"></script>
 	</head>
 	<body>
 		<div id="episodes">
@@ -43,11 +42,8 @@
 			<div id="title">
 				<h1><?php echo $current_episode->getTitle(); ?></h1>
 			</div>
-			<div id="videos">
-				<div class="video-player">
-					<iframe height="315" src="//www.youtube.com/embed/<?php echo $current_episode->getYouTube(); ?>" frameborder="0" allowfullscreen></iframe>
-				</div>
-				<div class="clear"></div>
+			<div id="video-player">
+				<iframe height="315" src="//www.youtube.com/embed/<?php echo $current_episode->getYouTube(); ?>" frameborder="0" allowfullscreen></iframe>
 			</div>
 			<div id="timeline">
 				<div id="line">
@@ -80,55 +76,15 @@
 		
 		// Multiply by 100 to express in percentage form.
 		$timeline_element_percentage = $timeline_element_quotent*100;
-		
-		// Functionality to toggle topic background colours.
-		if($toggler){
 ?>
-					<div class="topic black" style="width: <?php echo $timeline_element_percentage; ?>%">
+					<div class="topic" style="width: <?php echo $timeline_element_percentage; ?>%">
 					
 					</div>
 <?php
-		} else {
-?>
-					<div class="topic grey" style="width: <?php echo $timeline_element_percentage; ?>%">
-					
-					</div>
-<?php
-		}
-		$toggler = !$toggler;
 	}
 ?>
 				</div>
-				<p>
-<?php
-/*
-	foreach ($current_episode->getTimestamps() as $timestamp) {
-		$init = $timestamp["Timestamp"];
-		$hours = floor($init / 3600);
-		$minutes = floor(($init / 60) % 60);
-		$seconds = $init % 60;
-		
-		printf("%02d:%02d:%02d", $hours, $minutes, $seconds);
-		
-		echo " - " . $timestamp["Value"];
-*/?>
-<br>
-<?php
-	/*}*/
-?>
-				</p>
 			</div>
 		</div>
-		<script type="text/javascript">
-		function adjustHeight(){
-			var newHeight = window.innerHeight-100;
-			$('#height-obj').height(newHeight);
-		}
-		$(document).ready(function(){
-
-        $('#episodes').tinyscrollbar();
-
-		});
-		</script>
 	</body>
 </html>

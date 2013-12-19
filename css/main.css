@@ -5,79 +5,41 @@ body{
 a {
 	text-decoration: none;
 }
-.clear{
+
+/* Episodes Styles */
+#episodes {
+	width: 220px;
+	overflow: hidden;
 	clear: both;
+	float:left;
+	margin-right: 10px;
 }
-#header{
-	height: 25%;
-	height: 40px;
-	padding: 30px;
-	background: #333;
-}
-#header h1{
-	margin: 0;
-	color: white;
-}
-#episodes { width: 15%; clear: both; float:left;}
-#episodes .viewport { width: 300px; overflow: hidden; position: relative; }
-#episodes .overview { list-style: none; position: absolute; left: 0; top: 0; }
-#episodes .scrollbar { position: relative; float: right; width: 15px; }
-#episodes .track { height: 100%; width:13px; position: relative; padding: 0 1px; }
-#episodes .thumb { z-index: 2; background: rgba(20,20,20,0.3); border-radius: 5px; left: -15px; height: 20px; width: 12px; cursor: pointer; overflow: hidden; position: absolute; top: 0; }
-#episodes .thumb .end { overflow: hidden; height: 5px; width: 13px; }
-#episodes .disable{ display: none; }
-#episodes a { text-decoration: none; }
-.noSelect { user-select: none; -o-user-select: none; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; }
 
 /* Controller Styles */
 #controller{
-	float: left;
 	height: 855px;
-	margin: 10px 1% 10px 15%;
-	width: 84%;
-	position: fixed;
+	margin: 0 10px 0 10px;
+	width: auto;
+	overflow: hidden;
 }
-#title{
+#title, #video-player, #timeline{
 	background: #555;
-	padding: 15px 1%;
-	width: 98%;
 	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
+	padding: 10px;
+	margin-top: 10px;
 }
 #title h1{
 	margin: 0;
 }
-#videos{
-	width: 100%;
-}
-#timeline{
-	width: 98%;
-	padding: 1%;
-	background: #555;
-	margin-top: 10px;
-	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
-}
-.video-player{
-	width: 100%;
-	background: #555;
-	margin: 10px 1% 0 0;
-	padding: 10px;
-	float: left;
-	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
-	box-sizing: border-box;
-}
-.video-player iframe {
+#video-player iframe {
 	width: 100%;
 }
 
 /* Episode Tile Styles */
-
 .episode{
-	width: 90%;
-	padding: 0 5px;
 	background: url('../img/background.jpg');
-	border-bottom: 1px solid #333;
+	border: 1px solid #333;
 	border-top: 1px solid #555;
-	border-right: 1px solid #333;
 	color: #888;
 }
 .episode:hover{
@@ -95,18 +57,14 @@ a {
 
 /* Timeline Styles */
 #line{
-	background: white;
-	width: 98%;
-	margin: 1%;
-	height: 20px;
+	height: 35px;
 }
 .topic{
 	height: 100%;
 	float: left;
+	border-radius: 4px;
+	background: #333;
 }
-.black{
-	background: black;
-}
-.grey{
-	background: grey;
+.topic:hover{
+	background: #444;
 }
