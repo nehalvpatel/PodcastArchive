@@ -150,7 +150,7 @@
 		
 		// settings
 		public function getSettings() {
-			$settings_query = $this->con->prepare("SELECT * FROM `Settings`");
+			$settings_query = $this->con->prepare("SELECT * FROM `settings`");
 			$settings_query->execute();
 			$settings_results = $settings_query->fetchAll();
 			
@@ -268,28 +268,23 @@
 		}
 		
 		public function getLatestEpisode() {
-			$latest_query = $this->con->prepare("SELECT `Name` FROM `" . $this->getTable() . "` ORDER BY `Name` DESC LIMIT 1");
+			$latest_query = $this->con->prepare("SELECT `Identifier` FROM `" . $this->getTable() . "` ORDER BY `Identifier` DESC LIMIT 1");
 			$latest_query->execute();
 			$latest_results = $latest_query->fetchAll();
 			
-			return $latest_results[0]["Name"];
+			return $latest_results[0]["Identifier"];
 		}
 		
 		public function getEpisodes() {
-			$info_query = $this->con->prepare("SELECT * FROM `" . $this->getTable() . "` ORDER BY `Name` DESC");
+			$info_query = $this->con->prepare("SELECT * FROM `" . $this->getTable() . "` ORDER BY `Identifier` DESC");
 			$info_query->execute();
 			$info_results = $info_query->fetchAll();
 			
 			$episodes = array();
 			foreach ($info_results as $info) {
-				$episodes[$info["Name"]] = array(
-					"Title" => $info["Title"],
-					"Hosts" => $info["Hosts"],
-					"Guests" => $info["Guests"],
-					"Length" => gmdate("H:i:s", $info["Length"]),
-					"Byte" => $info["Bytes"],
-					"YouTube" => $info["WoodysGamertag"]
-				);
+				$info["Length"] = gmdate("H:i:s", $info["Length"]);
+				
+				$episodes[$info["Identifier"]] = $info;
 				
 			}
 			
@@ -340,7 +335,7 @@
 						
 						$mp3_url = "http://media.blubrry.com/" . $this->getBlubrry() . "/" . str_replace("https://", "", $base_url) . "/" . $mp3_identifier . ".mp3";
 						$enclosure["url"] = $mp3_url;
-						$enclosure["length"] = $episodes[$episode_identifier]["Byte"];
+						$enclosure["length"] = $episodes[$episode_identifier]["Bytes"];
 					}
 				}
 			}

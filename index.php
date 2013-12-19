@@ -7,7 +7,7 @@
 	
 	if (isset($_GET["episode"]) && is_numeric($_GET["episode"])) {
 		$current_episode = new Episode("PKA_" . $Podcast->padEpisodeNumber($_GET["episode"]), $con);
-		$canonical = $domain . "episode/" . $Podcast->trimEpisodeNumber($_GET["episode"]);
+		$canonical = $domain . "episode/" . $current_episode->getNumber();
 	} else {
 		$current_episode = new Episode($Podcast->getLatestEpisode(), $con);
 		$canonical = $domain;
@@ -17,7 +17,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title><?php if(!empty($_GET["episode"])) { echo $current_episode->getTitle() . " - "; } ?>Painkiller Already Archive</title>
+		<title><?php if(!empty($_GET["episode"])) { echo "Episode #" . $current_episode->getNumber() . " &middot; "; } ?>Painkiller Already Archive</title>
 		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css" />
 		<link rel="canonical" href="<?php echo $canonical; ?>">
 		<base href="<?php echo $domain; ?>">
@@ -26,12 +26,10 @@
 		<div id="episodes">
 <?php
 	foreach ($Podcast->getEpisodes() as $episode_name => $episode) {
-		$episode_explosion = explode("_", $episode_name);
-		
 ?>
-			<a href="episode/<?php echo $Podcast->trimEpisodeNumber($episode_explosion[1]); ?>">
+			<a href="episode/<?php echo $episode["Number"]; ?>">
 				<div class="episode">
-					<h3><?php echo $episode['Title']; ?></h3>
+					<h3><?php echo $episode["Title"]; ?></h3>
 				</div>
 			</a>
 <?php
@@ -40,7 +38,7 @@
 		</div>
 		<div id="controller">
 			<div id="title">
-				<h1><?php echo $current_episode->getTitle(); ?></h1>
+				<h1><?php if (!isset($_GET["episode"]) || $_GET["episode"] != $current_episode->getNumber()) { echo "Painkiller Already Archive"; } else { echo "Painkiller Already #" . $current_episode->getNumber(); } ?></h1>
 			</div>
 			<div id="video-player">
 				<iframe height="315" src="//www.youtube.com/embed/<?php echo $current_episode->getYouTube(); ?>" frameborder="0" allowfullscreen></iframe>

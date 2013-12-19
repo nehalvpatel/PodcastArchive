@@ -10,7 +10,7 @@
 	$Podcast->setDescription("Three gamers discuss games, current events, and tell a few stories.");
 	$Podcast->setPrefix("PKA");
 	
-	$Podcast->setTable("Episodes");
+	$Podcast->setTable("episodes");
 	$Podcast->setBlubrry("painkilleralready");
 	$Podcast->setFeedburner("Painkiller_Already");
 	$Podcast->setSubreddit("PKA");

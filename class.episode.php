@@ -8,8 +8,8 @@
 			$this->con = $con;
 			unset($con);
 			
-			$episode_query = $this->con->prepare("SELECT * FROM `Episodes` WHERE `Name` = :Name");
-			$episode_query->execute(array(":Name" => $episode));
+			$episode_query = $this->con->prepare("SELECT * FROM `episodes` WHERE `Identifier` = :Identifier");
+			$episode_query->execute(array(":Identifier" => $episode));
 			
 			if ($episode_query->rowCount() > 0) {
 				$episode_results = $episode_query->fetchAll();
@@ -17,30 +17,47 @@
 				
 				$this->reloadTimestamps();
 			} else {
-				throw new Exception("Invalid episode name");
+				throw new Exception("Invalid episode identifier");
 			}
 		}
 		
 		public function reloadData() {
-			$episode_query = $this->con->prepare("SELECT * FROM `Episodes` WHERE `Name` = :Name");
-			$episode_query->execute(array(":Name" => $this->getName()));
+			$episode_query = $this->con->prepare("SELECT * FROM `episodes` WHERE `Identifier` = :Identifier");
+			$episode_query->execute(array(":Identifier" => $this->getIdentifier()));
 			$episode_results = $episode_query->fetchAll();
 			$this->episode_data = $episode_results[0];
 		}
 		
 		public function reloadTimestamps() {
-			$timestamps_query = $this->con->prepare("SELECT * FROM `Timestamps` WHERE `Episode` = :Episode ORDER BY `Timestamp` ASC");
-			$timestamps_query->execute(array(":Episode" => $this->getName()));
+			$timestamps_query = $this->con->prepare("SELECT * FROM `timestamps` WHERE `Episode` = :Episode ORDER BY `Timestamp` ASC");
+			$timestamps_query->execute(array(":Episode" => $this->getIdentifier()));
 			$this->episode_data["Timestamps"] = $timestamps_query->fetchAll();
 		}
 		
-		public function getName() {
-			return $this->episode_data["Name"];
+		private function updateValue($field, $value) {
+			try {
+				$update_query = $this->con->prepare("UPDATE `episodes` SET `" . $field . "` = :Value WHERE `Identifier` = :Identifier");
+				$update_query->execute(
+					array(
+						":Value" => $value,
+						":Identifier" => $this->getIdentifier()
+					)
+				);
+				
+				$this->reloadData();
+				
+				return TRUE;
+			} catch (PDOException $e) {
+				return FALSE;
+			}
 		}
 		
-		public function getEpisodeNumber() {
-			$episode_explosion = explode("_", $this->getName());
-			return $episode_explosion[1];
+		public function getIdentifier() {
+			return $this->episode_data["Identifier"];
+		}
+		
+		public function getNumber() {
+			return $this->episode_data["Number"];
 		}
 		
 		public function getTitle() {
@@ -48,43 +65,23 @@
 		}
 		
 		public function setTitle($title) {
-			try {
-				$title_query = $this->con->prepare("UPDATE `Episodes` SET `Title` = :Title WHERE `Name` = :Name");
-				$title_query->execute(
-					array(
-						":Title" => $title,
-						":Name" => $this->getName()
-					)
-				);
-				
-				$this->reloadData();
-				
-				return TRUE;
-			} catch (PDOException $e) {
-				return FALSE;
-			}
+			return $this->updateValue("Title", $title);
 		}
 		
-		public function getDescription() {
-			return $this->episode_data["Description"];
+		public function getHosts() {
+			return $this->episode_data["Hosts"];
 		}
 		
-		public function setDescription($description) {
-			try {
-				$description_query = $this->con->prepare("UPDATE `Episodes` SET `Description` = :Description WHERE `Name` = :Name");
-				$description_query->execute(
-					array(
-						":Description" => $description,
-						":Name" => $this->getName()
-					)
-				);
-				
-				$this->reloadData();
-				
-				return TRUE;
-			} catch (PDOException $e) {
-				return FALSE;
-			}
+		public function setHosts($hosts) {
+			return $this->updateValue("Hosts", $hosts);
+		}
+		
+		public function getGuests() {
+			return $this->episode_data["Guests"];
+		}
+		
+		public function setGuests($guests) {
+			return $this->updateValue("Guests", $guests);
 		}
 		
 		public function getLength() {
@@ -92,21 +89,7 @@
 		}
 		
 		public function setLength($length) {
-			try {
-				$length_query = $this->con->prepare("UPDATE `Episodes` SET `Length` = :Length WHERE `Name` = :Name");
-				$length_query->execute(
-					array(
-						":Length" => $length,
-						":Name" => $this->getName()
-					)
-				);
-				
-				$this->reloadData();
-				
-				return TRUE;
-			} catch (PDOException $e) {
-				return FALSE;
-			}
+			return $this->updateValue("Length", $length);
 		}
 		
 		public function getBytes() {
@@ -114,43 +97,15 @@
 		}
 		
 		public function setBytes($bytes) {
-			try {
-				$bytes_query = $this->con->prepare("UPDATE `Episodes` SET `Bytes` = :Bytes WHERE `Name` = :Name");
-				$bytes_query->execute(
-					array(
-						":Bytes" => $bytes,
-						":Name" => $this->getName()
-					)
-				);
-				
-				$this->reloadData();
-				
-				return TRUE;
-			} catch (PDOException $e) {
-				return FALSE;
-			}
+			return $this->updateValue("Bytes", $bytes);
 		}
 		
 		public function getYouTube() {
-			return $this->episode_data["WoodysGamertag"];
+			return $this->episode_data["YouTube"];
 		}
 		
 		public function setYouTube($youtube) {
-			try {
-				$youtube_query = $this->con->prepare("UPDATE `Episodes` SET `YouTube` = :YouTube WHERE `Name` = :Name");
-				$youtube_query->execute(
-					array(
-						":YouTube" => $youtube,
-						":Name" => $this->getName()
-					)
-				);
-				
-				$this->reloadData();
-				
-				return TRUE;
-			} catch (PDOException $e) {
-				return FALSE;
-			}
+			return $this->updateValue("YouTube", $youtube);
 		}
 		
 		public function getTimestamps() {
@@ -161,7 +116,7 @@
 			$type = ucfirst(strtolower($type));
 			
 			try {
-				$timestamp_query = $this->con->prepare("INSERT INTO `Timestamps` (`Episode`, `Type`, `Timestamp`, `Value`, `URL`) VALUES (:Episode, :Type, :Timestamp, :Value, :URL)");
+				$timestamp_query = $this->con->prepare("INSERT INTO `timestamps` (`Episode`, `Type`, `Timestamp`, `Value`, `URL`) VALUES (:Episode, :Type, :Timestamp, :Value, :URL)");
 				$timestamp_query->execute(array(
 					":Episode" => $this->getName(),
 					":Type" => $type,
