@@ -1,9 +1,47 @@
 body{
 	margin: 0;
-	background: #444;
+	background: #888;
 }
 a {
 	text-decoration: none;
+}
+.clear{
+	clear: both;
+}
+
+/* Header Styles */
+#header{
+	background: #444;
+}
+#header h1{
+	color: #eee;
+	margin: 0;
+	padding: 10px;
+	float: left;
+}
+#links{
+	width: 220px;
+	float: left;
+}
+#reddit{
+	background: url('../img/reddit.png');
+}
+#woody{
+	background: url('../img/woody.jpg');
+}
+#wings{
+	background: url('../img/wings.jpg');
+}
+#lefty{
+	background: url('../img/lefty.jpg');
+}
+#reddit, #woody, #wings, #lefty{
+	height: 45px;
+	width: 45px;
+	padding: 5px;
+	float: left;
+	background-origin: content-box;
+	background-clip: content-box;
 }
 
 /* Episodes Styles */
@@ -13,6 +51,7 @@ a {
 	clear: both;
 	float:left;
 	margin-right: 10px;
+	box-shadow: 0 6px 6px rgba(0,0,0,0.6);
 }
 
 /* Controller Styles */
@@ -30,6 +69,10 @@ a {
 }
 #title h1{
 	margin: 0;
+	color: #aaa;
+	text-shadow: 1px 1px 0 #444;
+	font-family: verdana;
+	font-size: 1.5em;
 }
 #video-player iframe {
 	width: 100%;
@@ -42,9 +85,10 @@ a {
 	border-top: 1px solid #555;
 	color: #888;
 }
-.episode:hover{
+.episode:hover, .active{
 	background: url('../img/background-h.jpg');
 	color: #999;
+	border-top: 1px solid #333;
 }
 .episode h3{
 	text-align: center;
@@ -59,12 +103,47 @@ a {
 #line{
 	height: 35px;
 }
-.topic{
+#topic{
 	height: 100%;
 	float: left;
 	border-radius: 4px;
 	background: #333;
+	box-sizing: border-box;
+	border-right: 1px solid #555;
+	border-top: 1px solid #666;
+	border-bottom: 1px solid #222;
+	position: relative;
 }
-.topic:hover{
+#topic:hover{
 	background: #444;
+}
+.tooltip{
+	width: 300px;
+	padding: 3px;
+	border-radius: 4px;
+	background: black;
+	position: absolute;
+	top: 40px;
+	text-align: center;
+	left: -5px;
+	display: none;
+}
+.tooltip .triangle{
+	position: absolute;
+	top: -10px;
+	height: 0;
+	width: 1px;
+	border: 5px solid black;
+	border-color: transparent transparent black transparent;
+}
+.tooltip span{
+	color: white;
+	font-family: verdana;
+	font-size: 0.8em;
+}
+.right{
+	left: -290px;
+}
+.right .triangle{
+	left: 292px;
 }
