@@ -8,24 +8,24 @@
 			$this->con = $con;
 			unset($con);
 			
-			$episode_query = $this->con->prepare("SELECT * FROM `episodes` WHERE `Identifier` = :Identifier");
-			$episode_query->execute(array(":Identifier" => $episode));
+			$this->reloadData($episode);
+			$this->reloadTimestamps();
+		}
+		
+		public function reloadData($identifier = "") {
+			if (empty($identifier)) {
+				$identifier = $this->getIdentifier();
+			}
 			
-			if ($episode_query->rowCount() > 0) {
-				$episode_results = $episode_query->fetchAll();
+			$episode_query = $this->con->prepare("SELECT * FROM `episodes` WHERE `Identifier` = :Identifier");
+			$episode_query->execute(array(":Identifier" => $identifier));
+			$episode_results = $episode_query->fetchAll();
+			
+			if (count($episode_results) > 0) {
 				$this->episode_data = $episode_results[0];
-				
-				$this->reloadTimestamps();
 			} else {
 				throw new Exception("Invalid episode identifier");
 			}
-		}
-		
-		public function reloadData() {
-			$episode_query = $this->con->prepare("SELECT * FROM `episodes` WHERE `Identifier` = :Identifier");
-			$episode_query->execute(array(":Identifier" => $this->getIdentifier()));
-			$episode_results = $episode_query->fetchAll();
-			$this->episode_data = $episode_results[0];
 		}
 		
 		public function reloadTimestamps() {

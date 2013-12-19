@@ -198,11 +198,7 @@
 		}
 		
 		public function addEpisode($episode) {
-			if (is_numeric($episode) && floor($episode) != $episode) {
-				$episode = str_pad($episode, 3, "0");
-			} else {
-				$episode = str_pad($episode, 4, "0");
-			}
+			$episode = $this->padEpisodeNumber($episode);
 			
 			$json = json_decode(@file_get_contents("https://archive.org/details/" . $this->getPrefix() . "_" . $episode . "?output=json"), true);
 			
@@ -228,9 +224,10 @@
 					}
 					
 					try {
-						$insert_query = $this->con->prepare("INSERT INTO `" . $this->getTable() . "` (`Name`, `Title`, `Hosts`, `Guests`, `Length`, `Bytes`) VALUES (:Name, :Title, :Hosts, :Guests, :Length, :Bytes) ON DUPLICATE KEY UPDATE `Title` = :Title, `Hosts` = :Hosts, `Guests` = :Guests, `Length` = :Length, `Bytes` = :Bytes");
+						$insert_query = $this->con->prepare("INSERT INTO `" . $this->getTable() . "` (`Identifier`, `Number`, `Title`, `Hosts`, `Guests`, `Length`, `Bytes`) VALUES (:Identifier, :Number, :Title, :Hosts, :Guests, :Length, :Bytes) ON DUPLICATE KEY UPDATE `Title` = :Title, `Hosts` = :Hosts, `Guests` = :Guests, `Length` = :Length, `Bytes` = :Bytes");
 						$insert_query->execute(array(
-							":Name" => $this->getPrefix() . "_" . $episode,
+							":Identifier" => $this->getPrefix() . "_" . $episode,
+							":Number" => $this->trimEpisodeNumber($episode),
 							":Title" => $title,
 							":Hosts" => join($hosts, ","),
 							":Guests" => join($guests, ","),
