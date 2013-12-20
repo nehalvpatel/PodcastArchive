@@ -8,9 +8,11 @@
 	if (isset($_GET["episode"]) && is_numeric($_GET["episode"])) {
 		$current_episode = new Episode("PKA_" . $Podcast->padEpisodeNumber($_GET["episode"]), $con);
 		$canonical = $domain . "episode/" . $current_episode->getNumber();
+		$source = "get";
 	} else {
 		$current_episode = new Episode($Podcast->getLatestEpisode(), $con);
 		$canonical = $domain;
+		$source = "latest";
 	}
 	
 	$guests = $current_episode->getGuests();
@@ -33,22 +35,38 @@
 	<head>
 		<!-- Meta -->
 		<meta charset="utf-8">
+		<meta name="description" content="Three gamers discuss games, current events, and tell a few stories.">
 		<base href="<?php echo $domain; ?>">
 		<link rel="canonical" href="<?php echo $canonical; ?>">
 		<title><?php if(!empty($_GET["episode"])) { echo "Episode #" . $current_episode->getNumber() . " &middot; "; } ?>Painkiller Already Archive</title>
 		
 		<!-- Open Graph -->
+		<meta property="og:image" content="<?php echo $domain; ?>img/pka.png">
+		<meta property="og:site_name" content="Painkiller Already Archive">
+		
+<?php
+		if ($source == "get") {
+?>
 		<meta property="og:type" content="music.song">
 		<meta property="og:title" content="Painkiller Already #<?php echo $current_episode->getNumber(); ?>">
 		<meta property="og:description" content="Guests: <?php echo $guests; ?>">
-		<meta property="og:image" content="<?php echo $domain; ?>img/pka.png">
 		<meta property="og:url" content="<?php echo $domain; ?>episode/<?php echo $current_episode->getNumber(); ?>">
-		<meta property="music:duration" content="<?php echo $current_episode->getLength(); ?>">
-		<meta property="music:album" content="Painkiller Already">
-		<meta property="music:album:disc" content="1">
+		<meta property="og:audio" content="http://media.blubrry.com/painkilleralready/archive.org/download/<?php echo $current_episode->getIdentifier(); ?>/<?php echo str_replace("_", "-", strtolower($current_episode->getIdentifier())); ?>.mp3">
+		<meta property="og:audio:type" content="audio/vnd.facebook.bridge">
+		<meta property="music:album" content="<?php echo $domain; ?>">
 		<meta property="music:album:track" content="<?php echo $current_episode->getNumber(); ?>">
-		<meta property="music:album:url" content="<?php echo $domain; ?>">
-		
+		<meta property="music:duration" content="<?php echo $current_episode->getLength(); ?>">
+<?php
+		} else {
+?>
+		<meta property="og:type" content="music.album">
+		<meta property="og:title" content="Painkiller Already">
+		<meta property="og:description" content="Three gamers discuss games, current events, and tell a few stories.">
+		<meta property="og:url" content="<?php echo $domain; ?>">
+<?php
+		}
+?>
+
 		<!-- CSS -->
 		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css" />
 		
