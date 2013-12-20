@@ -63,7 +63,15 @@
 		<meta property="og:title" content="Painkiller Already">
 		<meta property="og:description" content="Three gamers discuss games, current events, and tell a few stories.">
 		<meta property="og:url" content="<?php echo $domain; ?>">
+		<meta property="music:release_date" content="2010-04-19">
 <?php
+			foreach ($Podcast->getEpisodes() as $episode) {
+?>
+		<meta property="music:song" content="<?php echo $domain; ?>episode/<?php echo $episode["Number"]; ?>">
+		<meta property="music:song:disc" content="1">
+		<meta property="music:song:track" content="<?php echo $episode["Number"]; ?>"> 
+<?php
+			}
 		}
 ?>
 
