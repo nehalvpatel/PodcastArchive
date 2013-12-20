@@ -13,14 +13,45 @@
 		$canonical = $domain;
 	}
 	
+	$guests = $current_episode->getGuests();
+	if ($guests == "") {
+		$guests = "Nobody";
+	} elseif (strpos($guests, ",") !== FALSE) {
+		$guests_explosion = explode(",", $guests);
+		
+		if (count($guests_explosion) > 2) {
+			$guests_explosion[count($guests_explosion) - 1] = "and " . $guests_explosion[count($guests_explosion) - 1];
+			$guests = join(", ", $guests_explosion);
+		} else {
+			$guests = join(" and ", $guests_explosion);
+		}
+	}
+	
 ?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title><?php if(!empty($_GET["episode"])) { echo "Episode #" . $current_episode->getNumber() . " &middot; "; } ?>Painkiller Already Archive</title>
-		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css" />
-		<link rel="canonical" href="<?php echo $canonical; ?>">
+		<!-- Meta -->
+		<meta charset="utf-8">
 		<base href="<?php echo $domain; ?>">
+		<link rel="canonical" href="<?php echo $canonical; ?>">
+		<title><?php if(!empty($_GET["episode"])) { echo "Episode #" . $current_episode->getNumber() . " &middot; "; } ?>Painkiller Already Archive</title>
+		
+		<!-- Open Graph -->
+		<meta property="og:type" content="music.song">
+		<meta property="og:title" content="Painkiller Already #<?php echo $current_episode->getNumber(); ?>">
+		<meta property="og:description" content="Guests: <?php echo $guests; ?>">
+		<meta property="og:image" content="<?php echo $domain; ?>img/pka.png">
+		<meta property="og:url" content="<?php echo $domain; ?>episode/<?php echo $current_episode->getNumber(); ?>">
+		<meta property="music:duration" content="<?php echo $current_episode->getLength(); ?>">
+		<meta property="music:album" content="Painkiller Already">
+		<meta property="music:album:disc" content="1">
+		<meta property="music:album:track" content="<?php echo $current_episode->getNumber(); ?>">
+		
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css" />
+		
+		<!-- JS -->
 		<script type="text/javascript">
 			function disappear(id){
 				document.getElementById(id).style.display = 'none';
@@ -28,7 +59,6 @@
 			function appear(id){
 				document.getElementById(id).style.display = 'block';
 			}
-		
 		</script>
 	</head>
 	<body>
