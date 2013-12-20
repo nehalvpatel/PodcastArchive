@@ -204,7 +204,6 @@
 			
 			if (!is_null($json)) {
 				if (json_last_error() == JSON_ERROR_NONE) {
-					$title = $json["metadata"]["title"][0];
 					$description = $json["metadata"]["description"][0];
 					$identifier = $json["metadata"]["identifier"][0];
 					$mp3 = str_replace("_", "-", strtolower($identifier)) . ".mp3";
@@ -224,11 +223,10 @@
 					}
 					
 					try {
-						$insert_query = $this->con->prepare("INSERT INTO `" . $this->getTable() . "` (`Identifier`, `Number`, `Title`, `Hosts`, `Guests`, `Length`, `Bytes`) VALUES (:Identifier, :Number, :Title, :Hosts, :Guests, :Length, :Bytes) ON DUPLICATE KEY UPDATE `Title` = :Title, `Hosts` = :Hosts, `Guests` = :Guests, `Length` = :Length, `Bytes` = :Bytes");
+						$insert_query = $this->con->prepare("INSERT INTO `" . $this->getTable() . "` (`Identifier`, `Number`, `Hosts`, `Guests`, `Length`, `Bytes`) VALUES (:Identifier, :Number, :Hosts, :Guests, :Length, :Bytes) ON DUPLICATE KEY UPDATE `Hosts` = :Hosts, `Guests` = :Guests, `Length` = :Length, `Bytes` = :Bytes");
 						$insert_query->execute(array(
 							":Identifier" => $this->getPrefix() . "_" . $episode,
 							":Number" => $this->trimEpisodeNumber($episode),
-							":Title" => $title,
 							":Hosts" => join($hosts, ","),
 							":Guests" => join($guests, ","),
 							":Length" => $length,
