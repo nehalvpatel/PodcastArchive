@@ -6,9 +6,15 @@
 	$domain = $settings["Domain"];
 	
 	if (isset($_GET["episode"]) && is_numeric($_GET["episode"])) {
-		$current_episode = new Episode("PKA_" . $Podcast->padEpisodeNumber($_GET["episode"]), $con);
-		$canonical = $domain . "episode/" . $current_episode->getNumber();
-		$source = "get";
+		try {
+			$current_episode = new Episode("PKA_" . $Podcast->padEpisodeNumber($_GET["episode"]), $con);
+			$canonical = $domain . "episode/" . $current_episode->getNumber();
+			$source = "get";
+		} catch (Exception $e) {
+			$current_episode = new Episode($Podcast->getLatestEpisode(), $con);
+			$canonical = $domain;
+			$source = "latest";
+		}
 	} else {
 		$current_episode = new Episode($Podcast->getLatestEpisode(), $con);
 		$canonical = $domain;
