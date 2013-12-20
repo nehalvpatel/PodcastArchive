@@ -38,7 +38,7 @@
 		<meta name="description" content="Three gamers discuss games, current events, and tell a few stories.">
 		<base href="<?php echo $domain; ?>">
 		<link rel="canonical" href="<?php echo $canonical; ?>">
-		<title><?php if(!empty($_GET["episode"])) { echo "Episode #" . $current_episode->getNumber() . " &middot; "; } ?>Painkiller Already Archive</title>
+		<title><?php if($source == "get") { echo "Episode #" . $current_episode->getNumber() . " &middot; "; } ?>Painkiller Already Archive</title>
 		
 		<!-- Open Graph -->
 		<meta property="og:image" content="<?php echo $domain; ?>img/pka.png">
