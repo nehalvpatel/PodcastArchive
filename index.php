@@ -115,6 +115,7 @@
 	<body>
 		<div id="header">
 			<h1>Painkiller Already Archive</h1>
+			<?php if ($current_episode->getReddit() != "") { ?><a href="http://www.reddit.com/comments/<?php echo $current_episode->getReddit(); ?>"><div id="discussion">Discussion</div></a><?php } ?>
 			<div class="clear"></div>
 		</div>
 		<div id="episodes">
@@ -131,16 +132,12 @@
 ?>
 		</div>
 		<div id="controller">
-			<div id="title">
-				<h2><?php echo "Painkiller Already #" . $current_episode->getNumber(); ?></h2>
-				<?php if ($current_episode->getReddit() != "") { ?><a href="http://www.reddit.com/comments/<?php echo $current_episode->getReddit(); ?>"><div id="discussion">Discussion</div></a><?php } ?>
-			</div>
-			<iframe height="315" src="//www.youtube.com/embed/<?php echo $current_episode->getYouTube(); ?>" frameborder="0" allowfullscreen></iframe>
+			<iframe height="600" src="//www.youtube.com/embed/<?php echo $current_episode->getYouTube(); ?>" frameborder="0" allowfullscreen></iframe>
 			<div id="timeline">	
 <?php
 	/*	This is a complicated code. In here we are trying to create a new array based off the old array of the timeline values.
 	*	We want the new array to be a multi-dimensional array. Each element contains the timeline timestamp (time in seconds), the value (timeline label) and the timestamp of the next topic.
-	*	This is so we can find the time of the beginning and the end of each topic and will help create the graphical timeline.
+	*	This is so we can find the time of the beginning & the end of each topic and will help create the graphical timeline.
 	*/
 	$timestamps = $current_episode->getTimestamps();
 	if(empty($timestamps)){

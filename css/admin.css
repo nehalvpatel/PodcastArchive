@@ -1,0 +1,11 @@
+.label {
+	text-align: right;
+	width: 50%;
+}
+input {
+	width: 100%;
+	box-sizing: border-box;
+}
+select, .form-button {
+	width: 100%;
+}

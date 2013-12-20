@@ -9,7 +9,7 @@ a {
 	clear: both;
 }
 * {
-	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif !important;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
 /* Header Styles */
@@ -21,30 +21,6 @@ a {
 	margin: 0;
 	padding: 10px;
 	float: left;
-}
-#links{
-	width: 220px;
-	float: left;
-}
-#reddit{
-	background: url('../img/reddit.png');
-}
-#woody{
-	background: url('../img/woody.jpg');
-}
-#wings{
-	background: url('../img/wings.jpg');
-}
-#lefty{
-	background: url('../img/lefty.jpg');
-}
-#reddit, #woody, #wings, #lefty{
-	height: 45px;
-	width: 45px;
-	padding: 5px;
-	float: left;
-	background-origin: content-box;
-	background-clip: content-box;
 }
 
 /* Episodes Styles */
@@ -63,26 +39,16 @@ a {
 	width: auto;
 	overflow: hidden;
 }
-#title, #timeline{
+#timeline{
 	background: #555;
 	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
-	padding: 10px;
+	padding: 10px 10px 38px 10px;
 	margin-top: 10px;
 }
 iframe {
 	margin-top: 10px;
 	width: 100%;
 	display: block;
-}
-#title h2 {
-	display: inline-block;
-	margin: 0;
-	color: #aaa;
-	text-shadow: 1px 1px 0 #444;
-	font-size: 1.5em;
-}
-#video-player iframe {
-	width: 100%;
 }
 #discussion {
 	display: inline-block;
@@ -107,7 +73,7 @@ iframe {
 	border: 1px solid #333;
 	border-top: 1px solid #555;
 	color: #888;
-	padding: 0px 5px;
+	padding: 0px 35px;
 	font-size: 13pt;
 }
 .episode:hover, .active{
