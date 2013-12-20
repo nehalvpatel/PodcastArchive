@@ -19,7 +19,7 @@
 	foreach ($Podcast->getEpisodes() as $episode) {
 ?>
 	<url>
-		<loc><?php echo $domain; ?>episodes/<?php echo $episode["Number"]; ?></loc>
+		<loc><?php echo $domain; ?>episode/<?php echo $episode["Number"]; ?></loc>
 		<changefreq>monthly</changefreq>
 	</url>
 <?php
