@@ -1,3 +1,4 @@
 RewriteEngine On
 
 RewriteRule ^episode\/(\d+\.?\d*)$ index.php?episode=$1
+RewriteRule ^sitemap.xml$ sitemap.php
