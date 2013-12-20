@@ -42,7 +42,7 @@
 		<!-- Meta -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<meta name="description" content="Three gamers discuss games, current events, and tell a few stories.">
+		<meta name="description" content="<?php if ($source == "latest") { echo "Three gamers discuss games, current events, and tell a few stories."; } else { echo "Guests: " . $guests; } ?>">
 		<base href="<?php echo $domain; ?>">
 		<link rel="canonical" href="<?php echo $canonical; ?>">
 		<title><?php if($source == "get") { echo "Episode #" . $current_episode->getNumber() . " &middot; "; } ?>Painkiller Already Archive</title>
