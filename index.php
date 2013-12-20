@@ -47,6 +47,7 @@
 		<meta property="music:album" content="Painkiller Already">
 		<meta property="music:album:disc" content="1">
 		<meta property="music:album:track" content="<?php echo $current_episode->getNumber(); ?>">
+		<meta property="music:album:url" content="<?php echo $domain; ?>">
 		
 		<!-- CSS -->
 		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css" />
