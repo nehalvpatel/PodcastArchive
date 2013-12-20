@@ -8,6 +8,9 @@ a {
 .clear{
 	clear: both;
 }
+* {
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif !important;
+}
 
 /* Header Styles */
 #header{
@@ -46,7 +49,6 @@ a {
 
 /* Episodes Styles */
 #episodes {
-	width: 220px;
 	overflow: hidden;
 	clear: both;
 	float:left;
@@ -61,18 +63,22 @@ a {
 	width: auto;
 	overflow: hidden;
 }
-#title, #video-player, #timeline{
+#title, #timeline{
 	background: #555;
 	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
 	padding: 10px;
 	margin-top: 10px;
+}
+iframe {
+	margin-top: 10px;
+	width: 100%;
+	display: block;
 }
 #title h2 {
 	display: inline-block;
 	margin: 0;
 	color: #aaa;
 	text-shadow: 1px 1px 0 #444;
-	font-family: verdana;
 	font-size: 1.5em;
 }
 #video-player iframe {
@@ -90,6 +96,10 @@ a {
 	-webkit-border-radius: 7px;
 	border-radius: 7px;
 }
+#discussion:hover {
+	background: #aaa;
+	color: #444;
+}
 
 /* Episode Tile Styles */
 .episode{
@@ -97,6 +107,8 @@ a {
 	border: 1px solid #333;
 	border-top: 1px solid #555;
 	color: #888;
+	padding: 0px 5px;
+	font-size: 13pt;
 }
 .episode:hover, .active{
 	background: url('../img/background-h.jpg');
@@ -107,7 +119,6 @@ a {
 	text-align: center;
 	margin: 0;
 	padding: 10px 0;
-	font-family: verdana;
 	font-size: 0.7em;
 	text-shadow: 1px 1px 0 black;
 }
@@ -151,7 +162,6 @@ a {
 }
 .tooltip span{
 	color: white;
-	font-family: verdana;
 	font-size: 0.8em;
 }
 .right{
@@ -159,4 +169,8 @@ a {
 }
 .right .triangle{
 	left: 292px;
+}
+.no-timeline {
+	color: #aaa;
+	margin: 0;
 }

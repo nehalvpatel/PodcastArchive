@@ -41,10 +41,28 @@
 	<head>
 		<!-- Meta -->
 		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<meta name="description" content="Three gamers discuss games, current events, and tell a few stories.">
 		<base href="<?php echo $domain; ?>">
 		<link rel="canonical" href="<?php echo $canonical; ?>">
 		<title><?php if($source == "get") { echo "Episode #" . $current_episode->getNumber() . " &middot; "; } ?>Painkiller Already Archive</title>
+		
+		<!-- Icons -->
+		<link rel="apple-touch-icon" sizes="57x57" href="apple-touch-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="apple-touch-icon-114x114.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="apple-touch-icon-72x72.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="apple-touch-icon-144x144.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="apple-touch-icon-60x60.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="apple-touch-icon-120x120.png">
+		<link rel="apple-touch-icon" sizes="76x76" href="apple-touch-icon-76x76.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="apple-touch-icon-152x152.png">
+		<link rel="icon" type="image/png" href="favicon-196x196.png" sizes="196x196">
+		<link rel="icon" type="image/png" href="favicon-160x160.png" sizes="160x160">
+		<link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96">
+		<link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32">
+		<link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16">
+		<meta name="msapplication-TileColor" content="#ffffff">
+		<meta name="msapplication-TileImage" content="mstile-144x144.png">
 		
 		<!-- Open Graph -->
 		<meta property="og:image" content="<?php echo $domain; ?>img/pka.png">
@@ -96,25 +114,6 @@
 	</head>
 	<body>
 		<div id="header">
-			<div id="links">
-				<a href="http://www.reddit.com/r/PKA/">
-				<div id="reddit">
-				</div>
-				</a>
-				<a href="http://www.youtube.com/WoodysGamertag">
-				<div id="woody">
-				</div>
-				</a>
-				<a href="http://www.youtube.com/WingsofRedemption">
-				<div id="wings">
-				</div>
-				</a>
-				<a href="http://www.youtube.com/LeftyOX">
-				<div id="lefty">
-				</div>
-				</a>
-				<div class="clear"></div>
-			</div>
 			<h1>Painkiller Already Archive</h1>
 			<div class="clear"></div>
 		</div>
@@ -124,7 +123,7 @@
 ?>
 			<a href="episode/<?php echo $episode["Number"]; ?>">
 				<div class="episode<?php echo ($episode['Number'] == $_GET['episode']) ? ' active' : null; ?>">
-					<h3>Painkiller Already #<?php echo $episode["Number"]; ?></h3>
+					<h3>Episode #<?php echo $episode["Number"]; ?></h3>
 				</div>
 			</a>
 <?php
@@ -136,12 +135,8 @@
 				<h2><?php echo "Painkiller Already #" . $current_episode->getNumber(); ?></h2>
 				<?php if ($current_episode->getReddit() != "") { ?><a href="http://www.reddit.com/comments/<?php echo $current_episode->getReddit(); ?>"><div id="discussion">Discussion</div></a><?php } ?>
 			</div>
-			<div id="video-player">
-				<iframe height="315" src="//www.youtube.com/embed/<?php echo $current_episode->getYouTube(); ?>" frameborder="0" allowfullscreen></iframe>
-			</div>
-			<div id="timeline">
-				<div id="line">
-					
+			<iframe height="315" src="//www.youtube.com/embed/<?php echo $current_episode->getYouTube(); ?>" frameborder="0" allowfullscreen></iframe>
+			<div id="timeline">	
 <?php
 	/*	This is a complicated code. In here we are trying to create a new array based off the old array of the timeline values.
 	*	We want the new array to be a multi-dimensional array. Each element contains the timeline timestamp (time in seconds), the value (timeline label) and the timestamp of the next topic.
@@ -150,9 +145,12 @@
 	$timestamps = $current_episode->getTimestamps();
 	if(empty($timestamps)){
 ?>
-					<p>No timeline available</p>
+					<p class="no-timeline">No timeline available</p>
 <?php
 	} else {
+?>
+				<div id="line">
+<?php
 		$timeline_array = array();
 		$i = 0;
 		foreach ($timestamps as $timestamp){
@@ -189,6 +187,9 @@
 <?php
 			$i++;
 		}
+?>
+				</div>
+<?php
 	}
 ?>
 
