@@ -42,7 +42,7 @@
 		<!-- Meta -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<meta name="description" content="<?php if ($source == "latest") { echo "Three gamers discuss games, current events, and tell a few stories."; } else { echo "Guests: " . $guests; } ?>">
+		<meta name="description" content="<?php if ($source == "latest") { echo "Four gamers discuss games, current events, and tell a few stories."; } else { echo "Guests: " . $guests; } ?>">
 		<base href="<?php echo $domain; ?>">
 		<link rel="canonical" href="<?php echo $canonical; ?>">
 		<title><?php if($source == "get") { echo "Episode #" . $current_episode->getNumber() . " &middot; "; } ?>Painkiller Already Archive</title>
@@ -63,6 +63,9 @@
 		<link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16">
 		<meta name="msapplication-TileColor" content="#ffffff">
 		<meta name="msapplication-TileImage" content="mstile-144x144.png">
+		
+		<!-- Google+ -->
+		<link rel="publisher" href="https://plus.google.com/107397414095793132493">
 		
 		<!-- Open Graph -->
 		<meta property="og:image" content="<?php echo $domain; ?>img/pka.png">
@@ -85,7 +88,7 @@
 ?>
 		<meta property="og:type" content="music.album">
 		<meta property="og:title" content="Painkiller Already">
-		<meta property="og:description" content="Three gamers discuss games, current events, and tell a few stories.">
+		<meta property="og:description" content="Four gamers discuss games, current events, and tell a few stories.">
 		<meta property="og:url" content="<?php echo $domain; ?>">
 		<meta property="music:release_date" content="2010-04-19">
 <?php
