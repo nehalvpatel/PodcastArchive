@@ -155,13 +155,13 @@
 		<div id="controller">
 			<iframe src="//www.youtube.com/embed/<?php echo $current_episode->getYouTube(); ?>" frameborder="0" allowfullscreen></iframe>
 			<div id="hosts">
-				<h3 id="hosts-title">Hosts</h3>
+				<h3>Hosts</h3>
 <?php
 
 	foreach ($hosts as $host) {
 ?>
 				<a href="https://www.youtube.com/<?php echo $host->getYouTube(); ?>">
-					<div class="host">
+					<div class="person">
 						<img alt="<?php echo $host->getName(); ?>" src="<?php echo $host->getImage(); ?>">
 					</div>
 				</a>
@@ -175,7 +175,7 @@
 	if (count($guests) > 0) {
 ?>
 			<div id="guests">
-				<h3 id="guests-title">Guests</h3>
+				<h3>Guests</h3>
 <?php
 
 	foreach ($guests as $guest) {
@@ -183,9 +183,9 @@
 		if ($guest_image == "") { $guest_image = "http://upload.wikimedia.org/wikipedia/en/e/ee/Unknown-person.gif"; }
 ?>
 				<a href="https://www.youtube.com/<?php echo $guest->getYouTube(); ?>">
-					<div class="guest">
+					<div class="person">
 						<img alt="<?php echo $guest->getName(); ?>" src="<?php echo $guest_image; ?>">
-						<span class="guest-name"><?php echo $guest->getName(); ?></span>
+						<span class="person-name"><?php echo $guest->getName(); ?></span>
 					</div>
 				</a>
 <?php		
@@ -196,9 +196,6 @@
 <?php
 	}
 	
-?>
-			<div id="timeline">	
-<?php
 	/*	This is a complicated code. In here we are trying to create a new array based off the old array of the timeline values.
 	*	We want the new array to be a multi-dimensional array. Each element contains the timeline timestamp (time in seconds), the value (timeline label) and the timestamp of the next topic.
 	*	This is so we can find the time of the beginning & the end of each topic and will help create the graphical timeline.
@@ -206,10 +203,14 @@
 	$timestamps = $current_episode->getTimestamps();
 	if(empty($timestamps)){
 ?>
-					<p class="no-timeline">No timeline available</p>
+			<div id="timeline" style="padding: 10px;">
+				<h3>Timeline</h3>
+				<p class="no-timeline">No timeline available</p>
 <?php
 	} else {
 ?>
+			<div id="timeline">
+				<h3>Timeline</h3>
 				<div id="line">
 <?php
 		$timeline_array = array();

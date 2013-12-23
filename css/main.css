@@ -1,11 +1,11 @@
-body{
+body {
 	margin: 0;
 	background: #888;
 }
 a {
 	text-decoration: none;
 }
-.clear{
+.clear {
 	clear: both;
 }
 * {
@@ -13,7 +13,7 @@ a {
 }
 
 /* Header Styles */
-#header{
+#header {
 	background: #444;
 }
 #header h1 {
@@ -33,18 +33,18 @@ a {
 }
 
 /* Controller Styles */
-#controller{
+#controller {
 	margin: 0 10px 0 10px;
 	width: auto;
 	overflow: hidden;
 }
-#timeline, #hosts, #guests {
+#hosts, #guests, #timeline {
 	background: #555;
 	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
 	padding: 10px 10px 38px 10px;
 	margin-top: 10px;
 }
-#hosts-title, #guests-title {
+#hosts h3, #guests h3, #timeline h3 {
 	margin: 0;
 	font-size: 0.7em;
 	text-shadow: 1px 1px 0 black;
@@ -55,7 +55,7 @@ a {
 #hosts, #guests {
 	padding: 10px;
 }
-.host, .guest {
+.person {
 	padding: 3px;
 	background: #fff;
 	border-style: solid;
@@ -72,11 +72,11 @@ a {
 	vertical-align: top;
 	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
 }
-.host img, .guest img {
+.person img {
 	vertical-align: middle;
 	width: 100%;
 }
-.host-name, .guest-name {
+.person-name {
 	margin-top: 3px;
 	display: block;
 }
@@ -104,7 +104,7 @@ iframe {
 }
 
 /* Episode Tile Styles */
-.episode{
+.episode {
 	background: url('../img/background.jpg');
 	border: 1px solid #333;
 	border-top: 1px solid #555;
@@ -112,12 +112,12 @@ iframe {
 	padding: 0px 35px;
 	font-size: 13pt;
 }
-.episode:hover, .active{
+.episode:hover, .active {
 	background: url('../img/background-h.jpg');
 	color: #999;
 	border-top: 1px solid #333;
 }
-.episode h3{
+.episode h3 {
 	text-align: center;
 	margin: 0;
 	padding: 10px 0;
@@ -126,10 +126,10 @@ iframe {
 }
 
 /* Timeline Styles */
-#line{
+#line {
 	height: 35px;
 }
-#topic{
+#topic {
 	height: 100%;
 	float: left;
 	border-radius: 4px;
@@ -140,10 +140,10 @@ iframe {
 	border-bottom: 1px solid #222;
 	position: relative;
 }
-#topic:hover{
+#topic:hover {
 	background: #444;
 }
-.tooltip{
+.tooltip {
 	width: 300px;
 	padding: 3px;
 	border-radius: 4px;
@@ -154,7 +154,7 @@ iframe {
 	left: -5px;
 	display: none;
 }
-.tooltip .triangle{
+.tooltip .triangle {
 	position: absolute;
 	top: -10px;
 	height: 0;
@@ -162,14 +162,14 @@ iframe {
 	border: 5px solid black;
 	border-color: transparent transparent black transparent;
 }
-.tooltip span{
+.tooltip span {
 	color: white;
 	font-size: 0.8em;
 }
-.right{
+.right {
 	left: -290px;
 }
-.right .triangle{
+.right .triangle {
 	left: 292px;
 }
 .no-timeline {
