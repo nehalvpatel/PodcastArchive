@@ -161,9 +161,8 @@
 	foreach ($hosts as $host) {
 ?>
 				<a href="https://www.youtube.com/<?php echo $host->getYouTube(); ?>">
-					<div class="host" style="text-align: center; font-size: 8pt; word-break: break-word; color: black; vertical-align: top; box-shadow: 0 1px 3px rgba(34,25,25,0.4);">
-						<img style="width: 100%;" src="<?php echo $host->getImage(); ?>">
-						<?php echo $host->getName(); ?>
+					<div class="host">
+						<img alt="<?php echo $host->getName(); ?>" src="<?php echo $host->getImage(); ?>">
 					</div>
 				</a>
 <?php
@@ -184,9 +183,9 @@
 		if ($guest_image == "") { $guest_image = "http://upload.wikimedia.org/wikipedia/en/e/ee/Unknown-person.gif"; }
 ?>
 				<a href="https://www.youtube.com/<?php echo $guest->getYouTube(); ?>">
-					<div class="guest" style="text-align: center; font-size: 8pt; word-break: break-word; color: black; vertical-align: top; box-shadow: 0 1px 3px rgba(34,25,25,0.4);">
-						<img style="width: 100%;" src="<?php echo $guest_image; ?>">
-						<?php echo $guest->getName(); ?>
+					<div class="guest">
+						<img alt="<?php echo $guest->getName(); ?>" src="<?php echo $guest_image; ?>">
+						<span class="guest-name"><?php echo $guest->getName(); ?></span>
 					</div>
 				</a>
 <?php		
