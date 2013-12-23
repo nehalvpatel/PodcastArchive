@@ -3,6 +3,7 @@
 	require_once("mysql.php");
 	require_once("class.podcast.php");
 	require_once("class.episode.php");
+	require_once("class.person.php");
 	
 	$Podcast = new Podcast($con);
 	

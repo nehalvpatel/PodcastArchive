@@ -34,18 +34,40 @@ a {
 
 /* Controller Styles */
 #controller{
-	height: 855px;
 	margin: 0 10px 0 10px;
 	width: auto;
 	overflow: hidden;
 }
-#timeline{
+#timeline, #hosts, #guests {
 	background: #555;
 	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
 	padding: 10px 10px 38px 10px;
 	margin-top: 10px;
 }
+#hosts-title, #guests-title {
+	margin: 0;
+	font-size: 0.7em;
+	text-shadow: 1px 1px 0 black;
+	color: #888;
+	font-size: 13pt;
+	margin-bottom: 10px;
+}
+#hosts, #guests {
+	padding: 10px;
+}
+.host, .guest {
+	padding: 3px;
+	background: #fff;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #fff;
+	width: 50px;
+	display: inline-block;
+	vertical-align: bottom;
+	margin-right: 5px;
+}
 iframe {
+	height: 400px;
 	margin-top: 10px;
 	width: 100%;
 	display: block;

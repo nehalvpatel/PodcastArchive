@@ -21,17 +21,35 @@
 		$source = "latest";
 	}
 	
-	$guests = $current_episode->getGuests();
-	if ($guests == "") {
-		$guests = "Nobody";
-	} elseif (strpos($guests, ",") !== FALSE) {
-		$guests_explosion = explode(",", $guests);
+	$hosts = array();
+	$hosts_list = array();
+	foreach (json_decode($current_episode->getHosts(), true) as $host) {
+		$host_profile = new Person($con);
+		$host_profile->initWithID($host);
 		
-		if (count($guests_explosion) > 2) {
-			$guests_explosion[count($guests_explosion) - 1] = "and " . $guests_explosion[count($guests_explosion) - 1];
-			$guests = join(", ", $guests_explosion);
+		$hosts[] = $host_profile;
+		$hosts_list[] = $host_profile->getName();
+	}
+	$hosts_list = join(", ", $hosts_list);
+	
+	$guests = array();
+	$guests_list = array();
+	foreach (json_decode($current_episode->getGuests(), true) as $guest) {
+		$guest_profile = new Person($con);
+		$guest_profile->initWithID($guest);
+		
+		$guests[] = $guest_profile;
+		$guests_list[] = $guest_profile->getName();
+	}
+	
+	if (count($guests_list) == 0) {
+		$guests_list = "Nobody";
+	} else {
+		if (count($guests_list) > 2) {
+			$guests_list[count($guests_list) - 1] = "and " . $guests_list[count($guests_list) - 1];
+			$guests_list = join(", ", $guests_list);
 		} else {
-			$guests = join(" and ", $guests_explosion);
+			$guests_list = join(" and ", $guests_list);
 		}
 	}
 	
@@ -42,7 +60,7 @@
 		<!-- Meta -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<meta name="description" content="<?php if ($source == "latest") { echo "Four gamers discuss games, current events, and tell a few stories."; } else { echo "Guests: " . $guests; } ?>">
+		<meta name="description" content="<?php if ($source == "latest") { echo "Four gamers discuss games, current events, and tell a few stories."; } else { echo "Guests: " . $guests_list; } ?>">
 		<base href="<?php echo $domain; ?>">
 		<link rel="canonical" href="<?php echo $canonical; ?>">
 		<title><?php if($source == "get") { echo "Episode #" . $current_episode->getNumber() . " &middot; "; } ?>Painkiller Already Archive</title>
@@ -76,7 +94,7 @@
 ?>
 		<meta property="og:type" content="music.song">
 		<meta property="og:title" content="Painkiller Already #<?php echo $current_episode->getNumber(); ?>">
-		<meta property="og:description" content="Guests: <?php echo $guests; ?>">
+		<meta property="og:description" content="Guests: <?php echo $guests_list; ?>">
 		<meta property="og:url" content="<?php echo $domain; ?>episode/<?php echo $current_episode->getNumber(); ?>">
 		<meta property="og:audio" content="http://media.blubrry.com/painkilleralready/archive.org/download/<?php echo $current_episode->getIdentifier(); ?>/<?php echo str_replace("_", "-", strtolower($current_episode->getIdentifier())); ?>.mp3">
 		<meta property="og:audio:type" content="audio/vnd.facebook.bridge">
@@ -135,7 +153,51 @@
 ?>
 		</div>
 		<div id="controller">
-			<iframe height="600" src="//www.youtube.com/embed/<?php echo $current_episode->getYouTube(); ?>" frameborder="0" allowfullscreen></iframe>
+			<iframe src="//www.youtube.com/embed/<?php echo $current_episode->getYouTube(); ?>" frameborder="0" allowfullscreen></iframe>
+			<div id="hosts">
+				<h3 id="hosts-title">Hosts</h3>
+<?php
+
+	foreach ($hosts as $host) {
+?>
+				<a href="https://www.youtube.com/<?php echo $host->getYouTube(); ?>">
+					<div class="host" style="text-align: center; font-size: 8pt; word-break: break-word; color: black; vertical-align: top; box-shadow: 0 1px 3px rgba(34,25,25,0.4);">
+						<img style="width: 100%;" src="<?php echo $host->getImage(); ?>">
+						<?php echo $host->getName(); ?>
+					</div>
+				</a>
+<?php
+	}
+	
+?>
+			</div>
+<?php
+	
+	if (count($guests) > 0) {
+?>
+			<div id="guests">
+				<h3 id="guests-title">Guests</h3>
+<?php
+
+	foreach ($guests as $guest) {
+		$guest_image = $guest->getImage();
+		if ($guest_image == "") { $guest_image = "http://upload.wikimedia.org/wikipedia/en/e/ee/Unknown-person.gif"; }
+?>
+				<a href="https://www.youtube.com/<?php echo $guest->getYouTube(); ?>">
+					<div class="guest" style="text-align: center; font-size: 8pt; word-break: break-word; color: black; vertical-align: top; box-shadow: 0 1px 3px rgba(34,25,25,0.4);">
+						<img style="width: 100%;" src="<?php echo $guest_image; ?>">
+						<?php echo $guest->getName(); ?>
+					</div>
+				</a>
+<?php		
+	}
+
+?>
+			</div>
+<?php
+	}
+	
+?>
 			<div id="timeline">	
 <?php
 	/*	This is a complicated code. In here we are trying to create a new array based off the old array of the timeline values.
