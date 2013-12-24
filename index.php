@@ -136,7 +136,6 @@
 	<body>
 		<div id="header">
 			<h1>Painkiller Already Archive</h1>
-			<?php if ($current_episode->getReddit() != "") { ?><a href="http://www.reddit.com/comments/<?php echo $current_episode->getReddit(); ?>"><div id="discussion">Discussion</div></a><?php } ?>
 			<div class="clear"></div>
 		</div>
 		<div id="episodes">
@@ -145,7 +144,8 @@
 ?>
 			<a href="episode/<?php echo $episode["Number"]; ?>">
 				<div class="episode<?php echo ($episode['Number'] == $_GET['episode']) ? ' active' : null; ?>">
-					<h3>Episode #<?php echo $episode["Number"]; ?></h3>
+					<h3 style="<?php echo (floor($episode["Number"]) != $episode["Number"]) ? 'margin-left: -10px;' : null; ?>">Episode #<?php echo $episode["Number"]; ?></h3>
+					<?php if ($episode["Reddit"] != "") { ?><img class="discussion" onclick="window.location.href='http://www.reddit.com/comments/<?php echo $episode["Reddit"]; ?>'; return false;" src="<?php echo $domain; ?>img/discussion.png"><?php } ?>
 				</div>
 			</a>
 <?php
@@ -180,7 +180,7 @@
 
 	foreach ($guests as $guest) {
 		$guest_image = $guest->getImage();
-		if ($guest_image == "") { $guest_image = "http://upload.wikimedia.org/wikipedia/en/e/ee/Unknown-person.gif"; }
+		if ($guest_image == "") { $guest_image = $domain . "img/unknown.png"; }
 ?>
 				<a href="https://www.youtube.com/<?php echo $guest->getYouTube(); ?>">
 					<div class="person">
@@ -201,7 +201,7 @@
 	*	This is so we can find the time of the beginning & the end of each topic and will help create the graphical timeline.
 	*/
 	$timestamps = $current_episode->getTimestamps();
-	if(empty($timestamps)){
+	if (empty($timestamps)) {
 ?>
 			<div id="timeline" style="padding: 10px;">
 				<h3>Timeline</h3>
