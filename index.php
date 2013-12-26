@@ -53,6 +53,14 @@
 		}
 	}
 	
+	$sponsors = array();
+	foreach (json_decode($current_episode->getSponsors(), true) as $sponsor) {
+		$sponsor_profile = new Person($con);
+		$sponsor_profile->initWithID($sponsor);
+		
+		$sponsors[] = $sponsor_profile;
+	}
+	
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -161,7 +169,7 @@
 
 	foreach ($hosts as $host) {
 ?>
-				<a href="https://www.youtube.com/<?php echo $host->getYouTube(); ?>">
+				<a href="<?php echo $host->getURL(); ?>">
 					<div class="person">
 						<img alt="<?php echo $host->getName(); ?>" src="<?php echo $host->getImage(); ?>">
 					</div>
@@ -183,10 +191,34 @@
 		$guest_image = $guest->getImage();
 		if ($guest_image == "") { $guest_image = $domain . "img/unknown.png"; }
 ?>
-				<a href="https://www.youtube.com/<?php echo $guest->getYouTube(); ?>">
+				<a href="<?php echo $guest->getURL(); ?>">
 					<div class="person">
 						<img alt="<?php echo $guest->getName(); ?>" src="<?php echo $guest_image; ?>">
 						<span class="person-name"><?php echo $guest->getName(); ?></span>
+					</div>
+				</a>
+<?php		
+	}
+
+?>
+			</div>
+<?php
+	}
+	
+	if (count($sponsors) > 0) {
+?>
+			<div id="sponsors">
+				<h3>Sponsors</h3>
+<?php
+
+	foreach ($sponsors as $sponsor) {
+		$sponsor_image = $sponsor->getImage();
+		if ($sponsor_image == "") { $sponsor_image = $domain . "img/unknown.png"; }
+?>
+				<a href="<?php echo $sponsor->getURL(); ?>">
+					<div class="person">
+						<img alt="<?php echo $sponsor->getName(); ?>" src="<?php echo $sponsor_image; ?>">
+						<span class="person-name"><?php echo $sponsor->getName(); ?></span>
 					</div>
 				</a>
 <?php		

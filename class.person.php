@@ -95,12 +95,12 @@
 			return $this->updateValue("Image", $image);
 		}
 		
-		public function getYouTube() {
-			return $this->person_data["YouTube"];
+		public function getURL() {
+			return $this->person_data["URL"];
 		}
 		
-		public function setYouTube($youtube) {
-			return $this->updateValue("YouTube", $youtube);
+		public function setURL($url) {
+			return $this->updateValue("URL", $url);
 		}
 	}
 

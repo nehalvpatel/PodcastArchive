@@ -76,6 +76,14 @@
 			return $this->updateValue("Guests", $guests);
 		}
 		
+		public function getSponsors() {
+			return $this->episode_data["Sponsors"];
+		}
+		
+		public function setSponsors($sponsors) {
+			return $this->updateValue("Sponsors", $sponsors);
+		}
+		
 		public function getLength() {
 			return $this->episode_data["Length"];
 		}

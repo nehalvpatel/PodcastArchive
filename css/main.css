@@ -41,13 +41,13 @@ a {
 	width: auto;
 	overflow: hidden;
 }
-#hosts, #guests, #timeline {
+#hosts, #guests, #sponsors, #timeline {
 	background: #555;
 	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
 	padding: 10px 10px 38px 10px;
 	margin-top: 10px;
 }
-#hosts h3, #guests h3, #timeline h3 {
+#hosts h3, #guests h3, #sponsors h3, #timeline h3 {
 	margin: 0;
 	font-size: 0.7em;
 	text-shadow: 1px 1px 0 black;
@@ -55,11 +55,11 @@ a {
 	font-size: 13pt;
 	margin-bottom: 10px;
 }
-#hosts a, #guests a {
+#hosts a, #guests a, #sponsors a {
 	display: inline-block;
 	margin-bottom: 10px;
 }
-#hosts, #guests {
+#hosts, #guests, #sponsors {
 	padding: 10px 10px 0px 10px;
 }
 .person {
