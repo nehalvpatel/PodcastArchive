@@ -188,12 +188,10 @@
 <?php
 
 	foreach ($guests as $guest) {
-		$guest_image = $guest->getImage();
-		if ($guest_image == "") { $guest_image = $domain . "img/unknown.png"; }
 ?>
 				<a href="<?php echo $guest->getURL(); ?>">
 					<div class="person">
-						<img alt="<?php echo $guest->getName(); ?>" src="<?php echo $guest_image; ?>">
+						<img alt="<?php echo $guest->getName(); ?>" src="<?php echo $guest->getImage(); ?>">
 						<span class="person-name"><?php echo $guest->getName(); ?></span>
 					</div>
 				</a>
@@ -212,12 +210,10 @@
 <?php
 
 	foreach ($sponsors as $sponsor) {
-		$sponsor_image = $sponsor->getImage();
-		if ($sponsor_image == "") { $sponsor_image = $domain . "img/unknown.png"; }
 ?>
 				<a href="<?php echo $sponsor->getURL(); ?>">
 					<div class="person">
-						<img alt="<?php echo $sponsor->getName(); ?>" src="<?php echo $sponsor_image; ?>">
+						<img alt="<?php echo $sponsor->getName(); ?>" src="<?php echo $sponsor->getImage(); ?>">
 						<span class="person-name"><?php echo $sponsor->getName(); ?></span>
 					</div>
 				</a>
