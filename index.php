@@ -171,7 +171,7 @@
 ?>
 				<a href="<?php echo $host->getURL(); ?>">
 					<div class="person">
-						<img alt="<?php echo $host->getName(); ?>" src="<?php echo $host->getImage(); ?>">
+						<img alt="<?php echo $host->getName(); ?>" src="<?php echo $domain . $host->getImage(); ?>">
 					</div>
 				</a>
 <?php
@@ -191,7 +191,7 @@
 ?>
 				<a href="<?php echo $guest->getURL(); ?>">
 					<div class="person">
-						<img alt="<?php echo $guest->getName(); ?>" src="<?php echo $guest->getImage(); ?>">
+						<img alt="<?php echo $guest->getName(); ?>" src="<?php echo $domain . $guest->getImage(); ?>">
 						<span class="person-name"><?php echo $guest->getName(); ?></span>
 					</div>
 				</a>
@@ -213,7 +213,7 @@
 ?>
 				<a href="<?php echo $sponsor->getURL(); ?>">
 					<div class="person">
-						<img alt="<?php echo $sponsor->getName(); ?>" src="<?php echo $sponsor->getImage(); ?>">
+						<img alt="<?php echo $sponsor->getName(); ?>" src="<?php echo $domain . $sponsor->getImage(); ?>">
 						<span class="person-name"><?php echo $sponsor->getName(); ?></span>
 					</div>
 				</a>
