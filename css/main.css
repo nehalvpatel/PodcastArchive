@@ -114,6 +114,10 @@ nav ul li.active {
 	padding: 10px 10px 10px 10px;
 	margin-bottom: 20px;
 }
+#timeline{
+	/* This is to leave room for the graphical timeline tooltips */
+	min-height: 110px;
+}
 #hosts h4, #guests h4, #sponsors h4, #timeline h4 {
 	margin: 0;
 	font-size: 0.7em;
@@ -222,12 +226,66 @@ td.event a i {
 	vertical-align: top;
 	margin-bottom: 20px;
 }
-#timeline {
-	color: #888;
-	width: 100%;
+
+/* Table Timeline Styles */
+table#timeline {
+        color: #888;
+        width: 100%;
 }
-#timeline tbody {
-	font-size: 11pt
+table#timeline tbody {
+        font-size: 11pt
+}
+
+/* Graphical Timeline Styles */
+#line {
+        height: 35px;
+}
+#topic {
+        height: 100%;
+        float: left;
+        border-radius: 4px;
+        background: #333;
+        box-sizing: border-box;
+        border-right: 1px solid #555;
+        border-top: 1px solid #666;
+        border-bottom: 1px solid #222;
+        position: relative;
+}
+#topic:hover {
+        background: #444;
+}
+.tooltip {
+        width: 300px;
+        padding: 3px;
+        border-radius: 4px;
+        background: black;
+        position: absolute;
+        top: 40px;
+        text-align: center;
+        left: -5px;
+        display: none;
+}
+.tooltip .triangle {
+        position: absolute;
+        top: -10px;
+        height: 0;
+        width: 1px;
+        border: 5px solid black;
+        border-color: transparent transparent black transparent;
+}
+.tooltip span {
+        color: white;
+        font-size: 0.8em;
+}
+.right {
+        left: -290px;
+}
+.right .triangle {
+        left: 288px;
+}
+.no-timeline {
+        color: #aaa;
+        margin: 0;
 }
 @media all and (max-width: 1024px) {
 	.sidebar.toggled {

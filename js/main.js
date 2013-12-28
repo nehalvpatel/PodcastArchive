@@ -50,3 +50,9 @@ $(function(){
 		$('.sidebar').toggleClass('toggled');
 	});
 });
+function disappear(id){
+	document.getElementById(id).style.display = 'none';
+}
+function appear(id){
+	document.getElementById(id).style.display = 'block';
+}

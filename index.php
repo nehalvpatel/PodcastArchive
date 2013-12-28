@@ -259,41 +259,94 @@
 ?>
 			</div>
 <?php
-	}
-	
-	$timestamps = $current_episode->getTimestamps();
-	
-	if (count($timestamps) > 0) {
+        }
+        
+        /*        This is a complicated code. In here we are trying to create a new array based off the old array of the timeline values.
+        *        We want the new array to be a multi-dimensional array. Each element contains the timeline timestamp (time in seconds), the value (timeline label) and the timestamp of the next topic.
+        *        This is so we can find the time of the beginning & the end of each topic and will help create the graphical timeline.
+        */
+        $timestamps = $current_episode->getTimestamps();
+        if (count($timestamps) < 1) {
 ?>
-			<table id="timeline">
-				<thead>
-					<tr>
-						<th>Time</th>
-						<th>Event</th>
-					</tr>
-				</thead>
-				<tbody>
+                        <div id="timeline" style="padding: 10px;">
+                                <h4>Timeline</h4>
+                                <p class="no-timeline">No timeline available</p>
 <?php
-	
-		foreach ($timestamps as $timestamp) {
-			$init = $timestamp["Timestamp"];
-			$hours = floor($init / 3600);
-			$minutes = floor(($init / 60) % 60);
-			$seconds = $init % 60;
+        } else {
 ?>
-					<tr>
-						<td class="timestamp"><a href="https://www.youtube.com/watch?v=<?php echo $current_episode->getYouTube(); ?>#t=<?php echo $init; ?>" data-timestamp="<?php echo $init; ?>"><?php printf("%02d:%02d:%02d", $hours, $minutes, $seconds); ?></a></td>
-						<td class="event"><?php echo $timestamp["Value"]; ?><?php if ($timestamp["Type"] == "Link") { ?><a target="_blank" href="<?php echo $timestamp["URL"]; ?>"><i class="fontawesome-external-link"></i></a><?php } ?></td>
-					</tr>
+                        <div id="timeline">
+                                <h4>Timeline</h4>
+                                <div id="line">
 <?php
-		}
-	
+                $timeline_array = array();
+                $i = 0;
+                foreach ($timestamps as $timestamp){
+                        $timeline_array[] = array($timestamp['Timestamp'], $timestamp['Value']);
+                        // Set the previous array element's finishing time to the currents starting time.
+                        if(isset($timeline_array[count($timeline_array)-2])){
+                                $timeline_array[count($timeline_array)-2][2] = $timestamp['Timestamp'];
+                        }
+                        $last_timestamp = $timestamp['Timestamp'];
+                }
+                // The last topic ends when the episode ends.
+                $timeline_array[count($timeline_array)-1][2] = $current_episode->getLength();
+                
+                // We now start printing the timeline.
+                $toggler = true;
+                foreach($timeline_array as $timeline_element){
+                        // Find size of timeline element .
+                        $timeline_element_size = $timeline_element[2]-$timeline_element[0];
+                        
+                        // Express the timeline size as a quotent of the full current episode size.
+                        $timeline_element_quotent = $timeline_element_size/$current_episode->getLength();
+                        
+                        // Multiply by 100 to express in percentage form.
+                        $timeline_element_percentage = $timeline_element_quotent*100;
 ?>
-				</tbody>
-			</table>
+                                        <div id="topic" style="width:<?php echo $timeline_element_percentage; ?>%" onmouseover="appear('<?php echo $i; ?>');" onmouseout="disappear('<?php echo $i; ?>');">
+                                                <div class="tooltip<?php echo($timeline_element[0] > ($current_episode->getLength())/2) ? ' right' : null; ?>" id="<?php echo $i; ?>" >
+                                                        <div class="triangle">
+                                                        
+                                                        </div>
+                                                        <span><?php echo $timeline_element[1]; ?></span>
+                                                </div>
+                                        </div>
 <?php
-	}
+                        $i++;
+                }
 ?>
+
+                                </div>
+                        <table id="timeline">
+                                <thead>
+                                        <tr>
+                                                <th>Time</th>
+                                                <th>Event</th>
+                                        </tr>
+                                </thead>
+                                <tbody>
+<?php
+        
+                foreach ($timestamps as $timestamp) {
+                        $init = $timestamp["Timestamp"];
+                        $hours = floor($init / 3600);
+                        $minutes = floor(($init / 60) % 60);
+                        $seconds = $init % 60;
+?>
+                                        <tr>
+                                                <td class="timestamp"><a href="https://www.youtube.com/watch?v=<?php echo $current_episode->getYouTube(); ?>#t=<?php echo $init; ?>" data-timestamp="<?php echo $init; ?>"><?php printf("%02d:%02d:%02d", $hours, $minutes, $seconds); ?></a></td>
+                                                <td class="event"><?php echo $timestamp["Value"]; ?><?php if ($timestamp["Type"] == "Link") { ?><a target="_blank" href="<?php echo $timestamp["URL"]; ?>"><i class="fontawesome-external-link"></i></a><?php } ?></td>
+                                        </tr>
+<?php
+                }
+        
+?>
+                                </tbody>
+                        </table>
+<?php
+        }
+?>
+						</div>
 		</section>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 		<script type="text/javascript" src="<?php echo $domain; ?>js/main.js"></script>
