@@ -100,12 +100,38 @@
 			return $this->updateValue("Bytes", $bytes);
 		}
 		
+		public function getDuration() {
+			$hours = floor($this->getLength() / 3600);
+			$minutes = floor(($this->getLength() / 60) % 60);
+			$seconds = $this->getLength() % 60;
+			
+			return "T" . $hours . "H" . $minutes . "M" . $seconds . "S";
+		}
+		
+		public function getContentURL() {
+			$vid_info = file_get_contents("http://www.youtube.com/get_video_info?&video_id=" . $this->getYouTube());
+			parse_str($vid_info, $vid_bits);
+			
+			$formats = explode(",", $vid_bits["url_encoded_fmt_stream_map"]);
+			
+			parse_str($formats[0], $format_bits);
+			return urldecode($format_bits["url"]) . "&signature=" . $format_bits["sig"];
+		}
+		
 		public function getYouTube() {
 			return $this->episode_data["YouTube"];
 		}
 		
 		public function setYouTube($youtube) {
 			return $this->updateValue("YouTube", $youtube);
+		}
+		
+		public function getPublished() {
+			return $this->episode_data["Published"];
+		}
+		
+		public function setPublished($published) {
+			return $this->updateValue("Published", $published);
 		}
 		
 		public function getReddit() {
