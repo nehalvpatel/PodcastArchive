@@ -168,7 +168,7 @@
 				<meta itemprop="thumbnailUrl" content="http://img.youtube.com/vi/<?php echo $current_episode->getYouTube(); ?>/hqdefault.jpg">
 				<meta itemprop="duration" content="<?php echo $current_episode->getDuration(); ?>">
 				<meta itemprop="contentURL" content="<?php echo $current_episode->getContentURL(); ?>">
-				<meta itemprop="embedURL" content="https://www.youtube.com/watch?v=<?php echo $current_episode->getYouTube(); ?>">
+				<meta itemprop="embedURL" content="https://www.youtube.com/v/<?php echo $current_episode->getYouTube(); ?>">
 				<meta itemprop="uploadDate" content="<?php echo $current_episode->getPublished(); ?>">
 				<iframe src="//www.youtube.com/embed/<?php echo $current_episode->getYouTube(); ?>" frameborder="0" allowfullscreen></iframe>
 			</div>
