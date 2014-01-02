@@ -128,7 +128,19 @@
 			}
 		}
 ?>
-
+		
+		<!-- Twitter -->
+		<meta name="twitter:card" content="player">
+		<meta name="twitter:site" content="@PKA_Archive">
+		<meta name="twitter:creator" content="@nehalvpatel">
+		<meta name="twitter:title" content="Painkiller Already #<?php echo $current_episode->getNumber(); ?>">
+		<meta name="twitter:description" content="Guests: <?php echo $guests_list; ?>">
+		<meta name="twitter:image:src" content="http://i1.ytimg.com/vi/<?php echo $current_episode->getYouTube(); ?>/hqdefault.jpg">
+		<meta name="twitter:player" content="https://www.youtube.com/embed/<?php echo $current_episode->getYouTube(); ?>">
+		<meta name="twitter:player:height" content="1280">
+		<meta name="twitter:player:width" content="720">
+		<meta name="twitter:domain" content="www.painkilleralready.info">
+		
 		<!-- CSS -->
 		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css" />
 		
