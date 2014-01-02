@@ -68,7 +68,7 @@
 		<!-- Meta -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<meta name="description" content="<?php if ($source == "latest") { echo "Four gamers discuss games, current events, and tell a few stories."; } else { echo "Guests: " . $guests_list; } ?>">
+		<meta name="description" content="<?php if ($source == "latest") { echo $Podcast->getDescription(); } else { echo "Guests: " . $guests_list; } ?>">
 		<base href="<?php echo $domain; ?>">
 		<link rel="canonical" href="<?php echo $canonical; ?>">
 		<link rel="alternate" type="application/rss+xml" title="<?php echo $Podcast->getName(); ?>" href="http://feeds.feedburner.com/<?php echo $Podcast->getFeedburner(); ?>">
@@ -115,7 +115,7 @@
 ?>
 		<meta property="og:type" content="music.album">
 		<meta property="og:title" content="Painkiller Already">
-		<meta property="og:description" content="Four gamers discuss games, current events, and tell a few stories.">
+		<meta property="og:description" content="<?php echo $Podcast->getDescription(); ?>">
 		<meta property="og:url" content="<?php echo $domain; ?>">
 		<meta property="music:release_date" content="2010-04-19">
 <?php
@@ -130,16 +130,31 @@
 ?>
 		
 		<!-- Twitter -->
-		<meta name="twitter:card" content="player">
 		<meta name="twitter:site" content="@PKA_Archive">
 		<meta name="twitter:creator" content="@nehalvpatel">
+		<meta name="twitter:domain" content="www.painkilleralready.info">
+<?php
+
+		if ((!empty($_GET["episode"])) && ($current_episode->getNumber() == $_GET["episode"])) {
+?>
+		<meta name="twitter:card" content="player">
 		<meta name="twitter:title" content="Painkiller Already #<?php echo $current_episode->getNumber(); ?>">
 		<meta name="twitter:description" content="Guests: <?php echo $guests_list; ?>">
 		<meta name="twitter:image:src" content="http://i1.ytimg.com/vi/<?php echo $current_episode->getYouTube(); ?>/hqdefault.jpg">
 		<meta name="twitter:player" content="https://www.youtube.com/embed/<?php echo $current_episode->getYouTube(); ?>">
 		<meta name="twitter:player:height" content="1280">
 		<meta name="twitter:player:width" content="720">
-		<meta name="twitter:domain" content="www.painkilleralready.info">
+<?php
+		} else {
+?>
+		<meta name="twitter:card" content="summary">
+		<meta name="twitter:title" content="<?php echo $Podcast->getName(); ?>">
+		<meta name="twitter:description" content="<?php echo $Podcast->getDescription(); ?>">
+		<meta name="twitter:image:src" content="<?php echo $domain; ?>img/pka.png">
+<?php
+		}
+		
+?>
 		
 		<!-- CSS -->
 		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css" />

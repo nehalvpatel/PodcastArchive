@@ -8,7 +8,7 @@
 	$Podcast = new Podcast($con);
 	
 	$Podcast->setName("Painkiller Already");
-	$Podcast->setDescription("Three gamers discuss games, current events, and tell a few stories.");
+	$Podcast->setDescription("Four gamers discuss games, current events, and tell a few stories.");
 	$Podcast->setPrefix("PKA");
 	
 	$Podcast->setTable("episodes");
