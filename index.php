@@ -135,7 +135,7 @@
 		<meta name="twitter:domain" content="www.painkilleralready.info">
 <?php
 
-		if ((!empty($_GET["episode"])) && ($current_episode->getNumber() == $_GET["episode"])) {
+		if ($source == "get") {
 ?>
 		<meta name="twitter:card" content="player">
 		<meta name="twitter:title" content="Painkiller Already #<?php echo $current_episode->getNumber(); ?>">
