@@ -216,7 +216,7 @@ td.event a i {
 #timeline tbody {
 	font-size: 11pt
 }
-@media all and (max-width: 1024px) { 
+@media all and (max-width: 1024px) {
 	.sidebar.toggled {
 		left: 0;
 		z-index: 10;
@@ -237,5 +237,13 @@ td.event a i {
 	}
 	h1 {
 		left: 40px
+	}
+}
+@media all and (max-width: 400px) {
+	.discussion i {
+		display: table;
+		margin-left: 0px;
+		margin-top: -10px;
+		margin-bottom: 10px;
 	}
 }

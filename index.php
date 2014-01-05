@@ -158,46 +158,6 @@
 		
 		<!-- CSS -->
 		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css" />
-		
-		<!-- JS -->
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-		<script>
-			// collapsible sidebar
-			$(function(){
-				$('.toggle-menu').click(function(e){
-					e.preventDefault();
-					$('.sidebar').toggleClass('toggled');
-				});
-			});
-			
-			// get YT player container
-			var playerContainer;
-			$(document).ready(function() {
-				playerContainer = document.getElementById("player");
-			});
-			
-			// add YT script tag
-			var tag = document.createElement("script");
-			var firstScriptTag = document.getElementsByTagName("script")[0];
-			tag.src = "https://www.youtube.com/player_api";
-			firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-			
-			// load YT player
-			var player;
-			function onYouTubePlayerAPIReady() {
-				player = new YT.Player("player", {
-					height: "400",
-					width: "650",
-					videoId: playerContainer.getAttribute("data-youtube")
-				});
-			}
-			
-			// click timestamp to seek video
-			function seekYT(timestamp) {
-				player.seekTo(timestamp);
-				document.getElementById("top").scrollIntoView();
-			}
-		</script>
 	</head>
 	<body>
 		<header>
@@ -328,5 +288,43 @@
 	}
 ?>
 		</section>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script>
+			// collapsible sidebar
+			$(function(){
+				$('.toggle-menu').click(function(e){
+					e.preventDefault();
+					$('.sidebar').toggleClass('toggled');
+				});
+			});
+			
+			// get YT player container
+			var playerContainer;
+			$(document).ready(function() {
+				playerContainer = document.getElementById("player");
+			});
+			
+			// add YT script tag
+			var tag = document.createElement("script");
+			var firstScriptTag = document.getElementsByTagName("script")[0];
+			tag.src = "https://www.youtube.com/player_api";
+			firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+			
+			// load YT player
+			var player;
+			function onYouTubePlayerAPIReady() {
+				player = new YT.Player("player", {
+					height: "400",
+					width: "650",
+					videoId: playerContainer.getAttribute("data-youtube")
+				});
+			}
+			
+			// click timestamp to seek video
+			function seekYT(timestamp) {
+				player.seekTo(timestamp);
+				document.getElementById("top").scrollIntoView();
+			}
+		</script>
 	</body>
 </html>
