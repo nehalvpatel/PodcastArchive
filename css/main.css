@@ -48,7 +48,7 @@ h1 {
 	position: absolute;
 	left: 260px;
 	right: 0;
-	padding: 20px;
+	padding: 20px 20px 0px 20px;
 }
 h2 {
 	margin: 0 0 1em 0;
@@ -112,7 +112,7 @@ nav ul li.active {
 	background: #333;
 	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
 	padding: 10px 10px 10px 10px;
-	margin-top: 20px;
+	margin-bottom: 20px;
 }
 #hosts h4, #guests h4, #sponsors h4, #timeline h4 {
 	margin: 0;
@@ -154,6 +154,7 @@ nav ul li.active {
 .person-name {
 	margin-top: 3px;
 	display: block;
+	word-wrap: break-word;
 }
 thead tr th {
 	padding-bottom: 10px
@@ -188,10 +189,12 @@ td.event a i {
 	font-style: normal;
 	font-size: 10pt;
 	padding-left: 8px;
+	color: #999;
 }
 .discussion {
 	color: black;
 	border-color: black;
+	text-decoration: none;
 }
 .discussion i {
 	font-style: normal;
@@ -208,6 +211,7 @@ td.event a i {
 #player {
 	width: 100%;
 	vertical-align: top;
+	margin-bottom: 20px;
 }
 #timeline {
 	color: #888;
