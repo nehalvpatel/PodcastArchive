@@ -164,7 +164,7 @@
 			<a href="#" class="toggle-menu fontawesome-reorder"></a>
 			<h1>Painkiller Already Archive</h1>
 		</header>
-		<aside class="sidebar">
+		<aside class="sidebar" id="sidebar">
 			<h3>Episodes</h3>
 			<nav>
 				<ul>
@@ -172,7 +172,7 @@
 	foreach ($Podcast->getEpisodes() as $episode) {
 ?>
 					<a href="episode/<?php echo $episode["Number"]; ?>">
-						<li class="<?php echo ($episode['Number'] == $_GET['episode']) ? 'active' : null; ?>">#<?php echo $episode["Number"]; ?></li>
+						<li<?php if ((isset($_GET["episode"])) && ($episode["Number"] == $_GET["episode"])) { echo ' class="active" id="active"'; } ?>>#<?php echo $episode["Number"]; ?></li>
 					</a>
 <?php
 	}
@@ -298,10 +298,14 @@
 				});
 			});
 			
-			// get YT player container
+			// get YT player container and scroll to active episode
 			var playerContainer;
 			$(document).ready(function() {
 				playerContainer = document.getElementById("player");
+				
+				if (document.getElementById("active")) {
+					$("#sidebar").animate({scrollTop:$('#active').position().top},1000);
+				}
 			});
 			
 			// add YT script tag
