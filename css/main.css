@@ -126,6 +126,7 @@ nav ul li.active {
 #hosts a, #guests a, #sponsors a {
 	display: inline-block;
 	margin-bottom: 10px;
+	vertical-align: top;
 }
 #hosts, #guests, #sponsors {
 	padding: 10px 10px 0px 10px
@@ -150,6 +151,7 @@ nav ul li.active {
 .person img {
 	vertical-align: middle;
 	width: 100%;
+	border: 0;
 }
 .person-name {
 	margin-top: 3px;
