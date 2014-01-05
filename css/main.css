@@ -1,192 +1,241 @@
+@import url(http://weloveiconfonts.com/api/?family=fontawesome);
+[class*="fontawesome-"]:before {
+    font-family: "fontawesome", sans-serif
+}
+*, *:before, *:after {
+    box-sizing: border-box
+}
+html, body {
+    height: 100%
+}
+html {
+    font-family: sans-serif;
+    background-color: #222222;
+}
 body {
-	margin: 0;
-	background: #888;
+    position: relative;
+    margin: 0 auto;
 }
-a {
+header {
+    color: white;
+    background-color: black;
+    overflow: hidden;
+}
+h1 {
+    font-weight: normal;
+    margin: 0;
+    padding: 0 20px;
+    line-height: 2;
+    position: relative;
+    transition: all 0.3s ease-out;
+}
+.sidebar, .main {
+    transition: all 0.3s ease-out;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    position: absolute;
+    top: 64px;
+    bottom: 0;
+}
+.sidebar {
+    width: 260px;
+    background-color: #333333;
+    left: 0;
+}
+.main {
+    background-color: whitesmoke;
+    position: absolute;
+    left: 260px;
+    right: 0;
+    padding: 20px;
+}
+h2 {
+    margin: 0 0 1em 0;
+    margin-bottom: 15px;
+    display: inline-block;
+}
+h3 {
+    background-color: #555555;
+    color: #cccccc;
+    margin: 0;
+    padding: 0 20px;
+    font-weight: normal;
+    line-height: 2;
+    text-transform: uppercase;
+    font-size: 90%;
+}
+.toggle-menu {
+    color: #cccccc;
+    text-decoration: none;
+    font-size: 50px;
+    float: left;
+    display: block;
+    position: absolute;
+    left: 0;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+}
+.toggle-menu:hover {
+    color: white
+}
+.toggle-menu:before {
+    height: 64px;
+    width: 64px;
+    display: block;
+    text-align: center;
+    line-height: 64px;
+    font-size: 24px;
+}
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: #444444;
+}
+nav ul a {
 	text-decoration: none;
-}
-.clear {
-	clear: both;
-}
-* {
-	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-}
-
-/* Header Styles */
-#header {
-	background: #444;
-}
-#header h1 {
-	color: #eee;
-	margin: 0;
-	padding: 10px;
-	float: left;
-}
-
-/* Episodes Styles */
-#episodes {
-	overflow: hidden;
-	clear: both;
-	float:left;
-	margin-right: 10px;
-	box-shadow: 0 6px 6px rgba(0,0,0,0.6);
-}
-#episodes a {
 	display: block;
 }
-
-/* Controller Styles */
-#controller {
-	margin: 0 10px 0 10px;
-	width: auto;
-	overflow: hidden;
+nav ul li {
+	padding: 20px;
+	color: #cccccc;
+	background-color: #333333;
+	margin-bottom: 1px;
+	border-left: 10px solid transparent;
+}
+nav ul li.active {
+	border-color: #e35205
 }
 #hosts, #guests, #sponsors, #timeline {
-	background: #555;
-	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
-	padding: 10px 10px 38px 10px;
-	margin-top: 10px;
+    background: #333;
+    box-shadow: 0 1px 3px rgba(34,25,25,0.4);
+    padding: 10px 10px 10px 10px;
+    margin-top: 20px;
 }
-#hosts h3, #guests h3, #sponsors h3, #timeline h3 {
+#hosts h4, #guests h4, #sponsors h4, #timeline h4 {
 	margin: 0;
 	font-size: 0.7em;
 	text-shadow: 1px 1px 0 black;
 	color: #888;
 	font-size: 13pt;
 	margin-bottom: 10px;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 #hosts a, #guests a, #sponsors a {
 	display: inline-block;
 	margin-bottom: 10px;
 }
 #hosts, #guests, #sponsors {
-	padding: 10px 10px 0px 10px;
+    padding: 10px 10px 0px 10px
 }
 .person {
-	padding: 3px;
-	background: #fff;
-	border-style: solid;
-	border-width: 1px;
-	border-color: #fff;
-	width: 50px;
-	box-sizing: border-box;
-	display: inline-block;
-	margin-right: 5px;
-	text-align: center;
-	font-size: 8pt;
-	word-break: break-word;
-	color: black;
-	vertical-align: top;
-	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
+    padding: 3px;
+    background: #fff;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #fff;
+    width: 50px;
+    box-sizing: border-box;
+    display: inline-block;
+    margin-right: 5px;
+    text-align: center;
+    font-size: 8pt;
+    word-break: break-word;
+    color: black;
+    vertical-align: top;
+    box-shadow: 0 1px 3px rgba(34,25,25,0.4);
 }
 .person img {
 	vertical-align: middle;
 	width: 100%;
 }
 .person-name {
-	margin-top: 3px;
-	display: block;
+    margin-top: 3px;
+    display: block;
 }
-iframe {
-	height: 400px;
-	margin-top: 10px;
-	width: 100%;
-	display: block;
+thead tr th {
+    padding-bottom: 10px
 }
-#discussion {
+tbody tr:hover {
+    color: white
+}
+td.timestamp {
+    cursor: pointer;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    width: 35px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-right-width: 1px;
+    border-right-style: solid;
+    border-top-width: 1px;
+    border-top-style: solid;
+    text-decoration: underline;
+}
+td.event {
+    padding-top: 3px;
+    padding-left: 10px;
+    border-top-width: 1px;
+    border-top-style: solid;
+}
+td.event a {
+	color: #555;
+	text-decoration: none;
+}
+td.event a i {
+	font-style: normal;
+	font-size: 10pt;
+	padding-left: 8px;
+}
+.discussion {
+    color: black;
+    border-color: black;
+}
+.discussion i {
+	font-style: normal;
 	display: inline-block;
-	float: right;
-	border: 1px solid #aaa;
-	padding: 5px 10px;
-	text-align: center;
-	background: #444;
-	color: #aaa;
-	-moz-border-radius: 7px;
-	-webkit-border-radius: 7px;
-	border-radius: 7px;
-}
-#discussion:hover {
-	background: #aaa;
-	color: #444;
-}
-
-/* Episode Tile Styles */
-.episode {
-	background: url('../img/background.jpg');
-	border: 1px solid #333;
-	border-top: 1px solid #555;
-	color: #888;
-	padding: 0px 35px;
-	font-size: 13pt;
-	padding-right: 10px;
-}
-.episode:hover, .active {
-	background: url('../img/background-h.jpg');
-	color: #999;
-	border-top: 1px solid #333;
-}
-.episode h3 {
-	text-align: center;
-	margin: 0;
-	padding: 10px 0;
-	font-size: 0.7em;
-	text-shadow: 1px 1px 0 black;
-	display: inline-block;
-}
-img.discussion {
-	display: inline-block;
-	vertical-align: middle;
+	vertical-align: top;
+	margin-top: 4px;
 	margin-left: 10px;
+	padding-right: 5px;
+	padding-left: 5px;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 5px;
 }
-
-/* Timeline Styles */
-#line {
-	height: 35px;
+#player {
+    width: 100%;
+    vertical-align: top;
 }
-#topic {
-	height: 100%;
-	float: left;
-	border-radius: 4px;
-	background: #333;
-	box-sizing: border-box;
-	border-right: 1px solid #555;
-	border-top: 1px solid #666;
-	border-bottom: 1px solid #222;
-	position: relative;
+#timeline {
+    color: #888;
+    width: 100%;
 }
-#topic:hover {
-	background: #444;
+#timeline tbody {
+	font-size: 11pt
 }
-.tooltip {
-	width: 300px;
-	padding: 3px;
-	border-radius: 4px;
-	background: black;
-	position: absolute;
-	top: 40px;
-	text-align: center;
-	left: -5px;
-	display: none;
-}
-.tooltip .triangle {
-	position: absolute;
-	top: -10px;
-	height: 0;
-	width: 1px;
-	border: 5px solid black;
-	border-color: transparent transparent black transparent;
-}
-.tooltip span {
-	color: white;
-	font-size: 0.8em;
-}
-.right {
-	left: -290px;
-}
-.right .triangle {
-	left: 292px;
-}
-.no-timeline {
-	color: #aaa;
-	margin: 0;
+@media all and (max-width: 1024px) { 
+	.sidebar.toggled {
+	    left: 0;
+	    z-index: 10;
+	    box-shadow: 3px 1px 10px rgba(0, 0, 0, 0.8);
+	}
+	.sidebar.toggled + .main {
+		overflow: hidden
+	}
+	.sidebar {
+	    left: -260px
+	}
+	.main {
+	    left: 0
+	}
+	.toggle-menu {
+	    z-index: 1;
+	    opacity: 1;
+	}
+	h1 {
+	    left: 40px
+	}
 }

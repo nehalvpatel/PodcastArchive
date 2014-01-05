@@ -160,35 +160,68 @@
 		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css" />
 		
 		<!-- JS -->
-		<script type="text/javascript">
-			function disappear(id){
-				document.getElementById(id).style.display = 'none';
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+		<script>
+			// collapsible sidebar
+			$(function(){
+				$('.toggle-menu').click(function(e){
+					e.preventDefault();
+					$('.sidebar').toggleClass('toggled');
+				});
+			});
+			
+			// get YT player container
+			var playerContainer;
+			$(document).ready(function() {
+				playerContainer = document.getElementById("player");
+			});
+			
+			// add YT script tag
+			var tag = document.createElement("script");
+			var firstScriptTag = document.getElementsByTagName("script")[0];
+			tag.src = "https://www.youtube.com/player_api";
+			firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+			
+			// load YT player
+			var player;
+			function onYouTubePlayerAPIReady() {
+				player = new YT.Player("player", {
+					height: "400",
+					width: "650",
+					videoId: playerContainer.getAttribute("data-youtube")
+				});
 			}
-			function appear(id){
-				document.getElementById(id).style.display = 'block';
+			
+			// click timestamp to seek video
+			function seekYT(timestamp) {
+				player.seekTo(timestamp);
+				document.getElementById("top").scrollIntoView();
 			}
 		</script>
 	</head>
 	<body>
-		<div id="header">
+		<header>
+			<a href="#" class="toggle-menu fontawesome-reorder"></a>
 			<h1>Painkiller Already Archive</h1>
-			<div class="clear"></div>
-		</div>
-		<div id="episodes">
+		</header>
+		<aside class="sidebar">
+			<h3>Episodes</h3>
+			<nav>
+				<ul>
 <?php
 	foreach ($Podcast->getEpisodes() as $episode) {
 ?>
-			<a href="episode/<?php echo $episode["Number"]; ?>">
-				<div class="episode<?php echo ($episode['Number'] == $_GET['episode']) ? ' active' : null; ?>">
-					<h3 style="<?php echo (floor($episode["Number"]) != $episode["Number"]) ? 'margin-left: -10px;' : null; ?>">Episode #<?php echo $episode["Number"]; ?></h3>
-					<?php if ($episode["Reddit"] != "") { ?><img class="discussion" onclick="window.location.href='http://www.reddit.com/comments/<?php echo $episode["Reddit"]; ?>'; return false;" src="<?php echo $domain; ?>img/discussion.png"><?php } ?>
-				</div>
-			</a>
+					<a href="episode/<?php echo $episode["Number"]; ?>">
+						<li class="<?php echo ($episode['Number'] == $_GET['episode']) ? 'active' : null; ?>">#<?php echo $episode["Number"]; ?></li>
+					</a>
 <?php
 	}
 ?>
-		</div>
-		<div id="controller">
+				</ul>
+			</nav>
+		</aside>
+		<section class="main">
+			<h2 id="top">Painkiller Already #<?php echo $current_episode->getNumber(); ?></h2><?php if ($current_episode->getReddit() != "") { ?><a class="discussion" href="http://www.reddit.com/comments/<?php echo $current_episode->getReddit(); ?>"><i class="fontawesome-comments"></i></a><?php } ?>
 			<div itemprop="video" itemscope itemtype="http://schema.org/VideoObject">
 				<meta itemprop="name" content="Painkiller Already #<?php echo $current_episode->getNumber(); ?>">
 				<meta itemprop="description" content="Guests: <?php echo $guests_list; ?>">
@@ -197,15 +230,15 @@
 				<meta itemprop="contentURL" content="<?php echo $current_episode->getContentURL(); ?>">
 				<meta itemprop="embedURL" content="https://www.youtube.com/v/<?php echo $current_episode->getYouTube(); ?>">
 				<meta itemprop="uploadDate" content="<?php echo $current_episode->getPublished(); ?>">
-				<iframe src="//www.youtube.com/embed/<?php echo $current_episode->getYouTube(); ?>" frameborder="0" allowfullscreen></iframe>
+				<div id="player" data-youtube="<?php echo $current_episode->getYouTube(); ?>"></div>
 			</div>
 			<div id="hosts">
-				<h3>Hosts</h3>
+				<h4>Hosts</h4>
 <?php
 
 	foreach ($hosts as $host) {
 ?>
-				<a href="<?php echo $host->getURL(); ?>">
+				<a target="_blank" href="<?php echo $host->getURL(); ?>">
 					<div class="person">
 						<img alt="<?php echo $host->getName(); ?>" src="<?php echo $domain . $host->getImage(); ?>">
 					</div>
@@ -220,12 +253,12 @@
 	if (count($guests) > 0) {
 ?>
 			<div id="guests">
-				<h3>Guests</h3>
+				<h4>Guests</h4>
 <?php
 
 	foreach ($guests as $guest) {
 ?>
-				<a href="<?php echo $guest->getURL(); ?>">
+				<a target="_blank" href="<?php echo $guest->getURL(); ?>">
 					<div class="person">
 						<img alt="<?php echo $guest->getName(); ?>" src="<?php echo $domain . $guest->getImage(); ?>">
 						<span class="person-name"><?php echo $guest->getName(); ?></span>
@@ -242,86 +275,58 @@
 	if (count($sponsors) > 0) {
 ?>
 			<div id="sponsors">
-				<h3>Sponsors</h3>
+				<h4>Sponsors</h4>
 <?php
 
-	foreach ($sponsors as $sponsor) {
+		foreach ($sponsors as $sponsor) {
 ?>
-				<a href="<?php echo $sponsor->getURL(); ?>">
+				<a target="_blank" href="<?php echo $sponsor->getURL(); ?>">
 					<div class="person">
 						<img alt="<?php echo $sponsor->getName(); ?>" src="<?php echo $domain . $sponsor->getImage(); ?>">
 						<span class="person-name"><?php echo $sponsor->getName(); ?></span>
 					</div>
 				</a>
 <?php		
-	}
+		}
 
 ?>
 			</div>
 <?php
 	}
 	
-	/*	This is a complicated code. In here we are trying to create a new array based off the old array of the timeline values.
-	*	We want the new array to be a multi-dimensional array. Each element contains the timeline timestamp (time in seconds), the value (timeline label) and the timestamp of the next topic.
-	*	This is so we can find the time of the beginning & the end of each topic and will help create the graphical timeline.
-	*/
 	$timestamps = $current_episode->getTimestamps();
-	if (empty($timestamps)) {
+	
+	if (count($timestamps) > 0) {
 ?>
-			<div id="timeline" style="padding: 10px;">
-				<h3>Timeline</h3>
-				<p class="no-timeline">No timeline available</p>
+			<table id="timeline">
+				<thead>
+					<tr>
+						<th>Time</th>
+						<th>Event</th>
+					</tr>
+				</thead>
+				<tbody>
 <?php
-	} else {
+	
+		foreach ($timestamps as $timestamp) {
+			$init = $timestamp["Timestamp"];
+			$hours = floor($init / 3600);
+			$minutes = floor(($init / 60) % 60);
+			$seconds = $init % 60;
 ?>
-			<div id="timeline">
-				<h3>Timeline</h3>
-				<div id="line">
+					<tr>
+						<td class="timestamp" onclick='seekYT(<?php echo $init; ?>);'><?php printf("%02d:%02d:%02d", $hours, $minutes, $seconds); ?></td>
+						<td class="event"><?php echo $timestamp["Value"]; ?><?php if ($timestamp["Type"] == "Link") { ?><a target="_blank" href="<?php echo $timestamp["URL"]; ?>"><i class="fontawesome-external-link"></i></a><?php } ?></td>
+					</tr>
 <?php
-		$timeline_array = array();
-		$i = 0;
-		foreach ($timestamps as $timestamp){
-			$timeline_array[] = array($timestamp['Timestamp'], $timestamp['Value']);
-			// Set the previous array element's finishing time to the currents starting time.
-			if(isset($timeline_array[count($timeline_array)-2])){
-				$timeline_array[count($timeline_array)-2][2] = $timestamp['Timestamp'];
-			}
-			$last_timestamp = $timestamp['Timestamp'];
 		}
-		// The last topic ends when the episode ends.
-		$timeline_array[count($timeline_array)-1][2] = $current_episode->getLength();
-		
-		// We now start printing the timeline.
-		$toggler = true;
-		foreach($timeline_array as $timeline_element){
-			// Find size of timeline element .
-			$timeline_element_size = $timeline_element[2]-$timeline_element[0];
-			
-			// Express the timeline size as a quotent of the full current episode size.
-			$timeline_element_quotent = $timeline_element_size/$current_episode->getLength();
-			
-			// Multiply by 100 to express in percentage form.
-			$timeline_element_percentage = $timeline_element_quotent*100;
+	
 ?>
-					<div id="topic" style="width:<?php echo $timeline_element_percentage; ?>%" onmouseover="appear('<?php echo $i; ?>');" onmouseout="disappear('<?php echo $i; ?>');">
-						<div class="tooltip<?php echo($timeline_element[0] > ($current_episode->getLength())/2) ? ' right' : null; ?>" id="<?php echo $i; ?>" >
-							<div class="triangle">
-							
-							</div>
-							<span><?php echo $timeline_element[1]; ?></span>
-						</div>
-					</div>
-<?php
-			$i++;
-		}
-?>
-				</div>
+				</tbody>
+			</table>
 <?php
 	}
 ?>
-
-				</div>
-			</div>
-		</div>
+		</section>
 	</body>
 </html>
