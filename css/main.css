@@ -1,98 +1,98 @@
 @import url(http://weloveiconfonts.com/api/?family=fontawesome);
 [class*="fontawesome-"]:before {
-    font-family: "fontawesome", sans-serif
+	font-family: "fontawesome", sans-serif
 }
 *, *:before, *:after {
-    box-sizing: border-box
+	box-sizing: border-box
 }
 html, body {
-    height: 100%
+	height: 100%
 }
 html {
-    font-family: sans-serif;
-    background-color: #222222;
+	font-family: sans-serif;
+	background-color: #222222;
 }
 body {
-    position: relative;
-    margin: 0 auto;
+	position: relative;
+	margin: 0 auto;
 }
 header {
-    color: white;
-    background-color: black;
-    overflow: hidden;
+	color: white;
+	background-color: black;
+	overflow: hidden;
 }
 h1 {
-    font-weight: normal;
-    margin: 0;
-    padding: 0 20px;
-    line-height: 2;
-    position: relative;
-    transition: all 0.3s ease-out;
+	font-weight: normal;
+	margin: 0;
+	padding: 0 20px;
+	line-height: 2;
+	position: relative;
+	transition: all 0.3s ease-out;
 }
 .sidebar, .main {
-    transition: all 0.3s ease-out;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
-    position: absolute;
-    top: 64px;
-    bottom: 0;
+	transition: all 0.3s ease-out;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	-webkit-overflow-scrolling: touch;
+	position: absolute;
+	top: 64px;
+	bottom: 0;
 }
 .sidebar {
-    width: 260px;
-    background-color: #333333;
-    left: 0;
+	width: 260px;
+	background-color: #333333;
+	left: 0;
 }
 .main {
-    background-color: whitesmoke;
-    position: absolute;
-    left: 260px;
-    right: 0;
-    padding: 20px;
+	background-color: whitesmoke;
+	position: absolute;
+	left: 260px;
+	right: 0;
+	padding: 20px;
 }
 h2 {
-    margin: 0 0 1em 0;
-    margin-bottom: 15px;
-    display: inline-block;
+	margin: 0 0 1em 0;
+	margin-bottom: 15px;
+	display: inline-block;
 }
 h3 {
-    background-color: #555555;
-    color: #cccccc;
-    margin: 0;
-    padding: 0 20px;
-    font-weight: normal;
-    line-height: 2;
-    text-transform: uppercase;
-    font-size: 90%;
+	background-color: #555555;
+	color: #cccccc;
+	margin: 0;
+	padding: 0 20px;
+	font-weight: normal;
+	line-height: 2;
+	text-transform: uppercase;
+	font-size: 90%;
 }
 .toggle-menu {
-    color: #cccccc;
-    text-decoration: none;
-    font-size: 50px;
-    float: left;
-    display: block;
-    position: absolute;
-    left: 0;
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 0.3s ease-out;
+	color: #cccccc;
+	text-decoration: none;
+	font-size: 50px;
+	float: left;
+	display: block;
+	position: absolute;
+	left: 0;
+	z-index: -1;
+	opacity: 0;
+	transition: opacity 0.3s ease-out;
 }
 .toggle-menu:hover {
-    color: white
+	color: white
 }
 .toggle-menu:before {
-    height: 64px;
-    width: 64px;
-    display: block;
-    text-align: center;
-    line-height: 64px;
-    font-size: 24px;
+	height: 64px;
+	width: 64px;
+	display: block;
+	text-align: center;
+	line-height: 64px;
+	font-size: 24px;
 }
 nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    background-color: #444444;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	background-color: #444444;
 }
 nav ul a {
 	text-decoration: none;
@@ -109,10 +109,10 @@ nav ul li.active {
 	border-color: #e35205
 }
 #hosts, #guests, #sponsors, #timeline {
-    background: #333;
-    box-shadow: 0 1px 3px rgba(34,25,25,0.4);
-    padding: 10px 10px 10px 10px;
-    margin-top: 20px;
+	background: #333;
+	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
+	padding: 10px 10px 10px 10px;
+	margin-top: 20px;
 }
 #hosts h4, #guests h4, #sponsors h4, #timeline h4 {
 	margin: 0;
@@ -128,57 +128,57 @@ nav ul li.active {
 	margin-bottom: 10px;
 }
 #hosts, #guests, #sponsors {
-    padding: 10px 10px 0px 10px
+	padding: 10px 10px 0px 10px
 }
 .person {
-    padding: 3px;
-    background: #fff;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #fff;
-    width: 50px;
-    box-sizing: border-box;
-    display: inline-block;
-    margin-right: 5px;
-    text-align: center;
-    font-size: 8pt;
-    word-break: break-word;
-    color: black;
-    vertical-align: top;
-    box-shadow: 0 1px 3px rgba(34,25,25,0.4);
+	padding: 3px;
+	background: #fff;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #fff;
+	width: 50px;
+	box-sizing: border-box;
+	display: inline-block;
+	margin-right: 5px;
+	text-align: center;
+	font-size: 8pt;
+	word-break: break-word;
+	color: black;
+	vertical-align: top;
+	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
 }
 .person img {
 	vertical-align: middle;
 	width: 100%;
 }
 .person-name {
-    margin-top: 3px;
-    display: block;
+	margin-top: 3px;
+	display: block;
 }
 thead tr th {
-    padding-bottom: 10px
+	padding-bottom: 10px
 }
 tbody tr:hover {
-    color: white
+	color: white
 }
 td.timestamp {
-    cursor: pointer;
-    padding-top: 3px;
-    padding-bottom: 3px;
-    width: 35px;
-    padding-left: 10px;
-    padding-right: 10px;
-    border-right-width: 1px;
-    border-right-style: solid;
-    border-top-width: 1px;
-    border-top-style: solid;
-    text-decoration: underline;
+	cursor: pointer;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	width: 35px;
+	padding-left: 10px;
+	padding-right: 10px;
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-top-width: 1px;
+	border-top-style: solid;
+	text-decoration: underline;
 }
 td.event {
-    padding-top: 3px;
-    padding-left: 10px;
-    border-top-width: 1px;
-    border-top-style: solid;
+	padding-top: 3px;
+	padding-left: 10px;
+	border-top-width: 1px;
+	border-top-style: solid;
 }
 td.event a {
 	color: #555;
@@ -190,8 +190,8 @@ td.event a i {
 	padding-left: 8px;
 }
 .discussion {
-    color: black;
-    border-color: black;
+	color: black;
+	border-color: black;
 }
 .discussion i {
 	font-style: normal;
@@ -206,36 +206,36 @@ td.event a i {
 	border-radius: 5px;
 }
 #player {
-    width: 100%;
-    vertical-align: top;
+	width: 100%;
+	vertical-align: top;
 }
 #timeline {
-    color: #888;
-    width: 100%;
+	color: #888;
+	width: 100%;
 }
 #timeline tbody {
 	font-size: 11pt
 }
 @media all and (max-width: 1024px) { 
 	.sidebar.toggled {
-	    left: 0;
-	    z-index: 10;
-	    box-shadow: 3px 1px 10px rgba(0, 0, 0, 0.8);
+		left: 0;
+		z-index: 10;
+		box-shadow: 3px 1px 10px rgba(0, 0, 0, 0.8);
 	}
 	.sidebar.toggled + .main {
 		overflow: hidden
 	}
 	.sidebar {
-	    left: -260px
+		left: -260px
 	}
 	.main {
-	    left: 0
+		left: 0
 	}
 	.toggle-menu {
-	    z-index: 1;
-	    opacity: 1;
+		z-index: 1;
+		opacity: 1;
 	}
 	h1 {
-	    left: 40px
+		left: 40px
 	}
 }
