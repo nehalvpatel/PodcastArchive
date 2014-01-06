@@ -52,7 +52,7 @@ h1 {
 }
 h2 {
 	margin: 0 0 1em 0;
-	margin-bottom: 15px;
+	margin-bottom: 0px;
 	display: inline-block;
 }
 h3 {
@@ -99,7 +99,7 @@ nav ul a {
 	display: block;
 }
 nav ul li {
-	padding: 20px;
+	padding: 15px;
 	color: #cccccc;
 	background-color: #333333;
 	margin-bottom: 1px;
@@ -193,22 +193,24 @@ td.event a i {
 	padding-left: 8px;
 	color: #999;
 }
-.discussion {
+.info {
+	margin-bottom: 20px;
+}
+.info small {
+	margin-left: 5px;
+}
+.published {
+	vertical-align: middle;
+	font-style: normal;
+}
+.comments {
 	color: black;
-	border-color: black;
 	text-decoration: none;
 }
-.discussion i {
+.comments i {
 	font-style: normal;
-	display: inline-block;
 	vertical-align: top;
-	margin-top: 4px;
-	margin-left: 10px;
-	padding-right: 5px;
-	padding-left: 5px;
-	border-style: solid;
-	border-width: 1px;
-	border-radius: 5px;
+	margin-left: 5px;
 }
 #player {
 	width: 100%;
@@ -243,13 +245,5 @@ td.event a i {
 	}
 	h1 {
 		left: 40px
-	}
-}
-@media all and (max-width: 400px) {
-	.discussion i {
-		display: table;
-		margin-left: 0px;
-		margin-top: -10px;
-		margin-bottom: 10px;
 	}
 }

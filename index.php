@@ -69,27 +69,26 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<meta name="description" content="<?php if ($source == "latest") { echo $Podcast->getDescription(); } else { echo "Guests: " . $guests_list; } ?>">
-		<base href="<?php echo $domain; ?>">
 		<link rel="canonical" href="<?php echo $canonical; ?>">
 		<link rel="alternate" type="application/rss+xml" title="<?php echo $Podcast->getName(); ?>" href="http://feeds.feedburner.com/<?php echo $Podcast->getFeedburner(); ?>">
 		<title><?php if($source == "get") { echo "Episode #" . $current_episode->getNumber() . " &middot; "; } ?>Painkiller Already Archive</title>
 		
 		<!-- Icons -->
-		<link rel="apple-touch-icon" sizes="57x57" href="apple-touch-icon-57x57.png">
-		<link rel="apple-touch-icon" sizes="114x114" href="apple-touch-icon-114x114.png">
-		<link rel="apple-touch-icon" sizes="72x72" href="apple-touch-icon-72x72.png">
-		<link rel="apple-touch-icon" sizes="144x144" href="apple-touch-icon-144x144.png">
-		<link rel="apple-touch-icon" sizes="60x60" href="apple-touch-icon-60x60.png">
-		<link rel="apple-touch-icon" sizes="120x120" href="apple-touch-icon-120x120.png">
-		<link rel="apple-touch-icon" sizes="76x76" href="apple-touch-icon-76x76.png">
-		<link rel="apple-touch-icon" sizes="152x152" href="apple-touch-icon-152x152.png">
-		<link rel="icon" type="image/png" href="favicon-196x196.png" sizes="196x196">
-		<link rel="icon" type="image/png" href="favicon-160x160.png" sizes="160x160">
-		<link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96">
-		<link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32">
-		<link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16">
+		<link rel="apple-touch-icon" sizes="57x57" href="<?php echo $domain; ?>apple-touch-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="<?php echo $domain; ?>apple-touch-icon-114x114.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="<?php echo $domain; ?>apple-touch-icon-72x72.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="<?php echo $domain; ?>apple-touch-icon-144x144.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="<?php echo $domain; ?>apple-touch-icon-60x60.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="<?php echo $domain; ?>apple-touch-icon-120x120.png">
+		<link rel="apple-touch-icon" sizes="76x76" href="<?php echo $domain; ?>apple-touch-icon-76x76.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="<?php echo $domain; ?>apple-touch-icon-152x152.png">
+		<link rel="icon" sizes="196x196" type="image/png" href="<?php echo $domain; ?>favicon-196x196.png">
+		<link rel="icon" sizes="160x160" type="image/png" href="<?php echo $domain; ?>favicon-160x160.png">
+		<link rel="icon" sizes="96x96" type="image/png" href="<?php echo $domain; ?>favicon-96x96.png">
+		<link rel="icon" sizes="32x32" type="image/png" href="<?php echo $domain; ?>favicon-32x32.png">
+		<link rel="icon" sizes="16x16" type="image/png" href="<?php echo $domain; ?>favicon-16x16.png">
 		<meta name="msapplication-TileColor" content="#ffffff">
-		<meta name="msapplication-TileImage" content="mstile-144x144.png">
+		<meta name="msapplication-TileImage" content="<?php echo $domain; ?>mstile-144x144.png">
 		
 		<!-- Google+ -->
 		<link rel="publisher" href="https://plus.google.com/107397414095793132493">
@@ -171,7 +170,7 @@
 <?php
 	foreach ($Podcast->getEpisodes() as $episode) {
 ?>
-					<a href="episode/<?php echo $episode["Number"]; ?>">
+					<a href="<?php echo $domain; ?>episode/<?php echo $episode["Number"]; ?>">
 						<li<?php if ((isset($_GET["episode"])) && ($episode["Number"] == $_GET["episode"])) { echo ' class="active" id="active"'; } ?>>#<?php echo $episode["Number"]; ?></li>
 					</a>
 <?php
@@ -181,7 +180,11 @@
 			</nav>
 		</aside>
 		<section class="main">
-			<h2 id="top">Painkiller Already #<?php echo $current_episode->getNumber(); ?></h2><?php if ($current_episode->getReddit() != "") { ?><a class="discussion" href="http://www.reddit.com/comments/<?php echo $current_episode->getReddit(); ?>"><i class="fontawesome-comments"></i></a><?php } ?>
+			<h2 id="top">Painkiller Already #<?php echo $current_episode->getNumber(); ?></h2>
+			<div class="info">
+				<i class="published fontawesome-time"></i><small><time datetime="<?php echo $current_episode->getDate(); ?>"><?php echo date("F d, Y", strtotime($current_episode->getDate())); ?></time></small>
+				<?php if ($current_episode->getReddit() != "") { ?><a class="comments" href="http://www.reddit.com/comments/<?php echo $current_episode->getReddit(); ?>"><i class="fontawesome-comments"></i><small id="comments" data-reddit="<?php echo $current_episode->getReddit(); ?>">Comments</small></a><?php } ?>
+			</div>
 			<div itemprop="video" itemscope itemtype="http://schema.org/VideoObject">
 				<meta itemprop="name" content="Painkiller Already #<?php echo $current_episode->getNumber(); ?>">
 				<meta itemprop="description" content="Guests: <?php echo $guests_list; ?>">

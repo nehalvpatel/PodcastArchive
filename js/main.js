@@ -13,6 +13,12 @@ $(document).ready(function() {
 	if (document.getElementById("active")) {
 		$("#sidebar").animate({scrollTop:$('#active').position().top},1000);
 	}
+	
+	if (document.getElementById("comments")) {
+		$.get("http://www.reddit.com/comments/" + document.getElementById("comments").getAttribute("data-reddit") + ".json", function (data) {
+			$("#comments").html(data[0]["data"]["children"][0]["data"]["num_comments"] + " Comments");
+		});
+	}
 });
 
 // load YT player

@@ -60,6 +60,14 @@
 			return $this->episode_data["Number"];
 		}
 		
+		public function getDate() {
+			return $this->episode_data["Date"];
+		}
+		
+		public function setDate($date) {
+			return $this->updateValue("Date", $date);
+		}
+		
 		public function getHosts() {
 			return $this->episode_data["Hosts"];
 		}
