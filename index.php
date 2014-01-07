@@ -278,7 +278,7 @@
 			$seconds = $init % 60;
 ?>
 					<tr>
-						<td class="timestamp" onclick='seekYT(<?php echo $init; ?>);'><?php printf("%02d:%02d:%02d", $hours, $minutes, $seconds); ?></td>
+						<td class="timestamp"><a href="javascript:void(0);" onclick="seekYT(<?php echo $init; ?>);"><?php printf("%02d:%02d:%02d", $hours, $minutes, $seconds); ?></a></td>
 						<td class="event"><?php echo $timestamp["Value"]; ?><?php if ($timestamp["Type"] == "Link") { ?><a target="_blank" href="<?php echo $timestamp["URL"]; ?>"><i class="fontawesome-external-link"></i></a><?php } ?></td>
 					</tr>
 <?php

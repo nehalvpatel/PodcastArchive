@@ -162,10 +162,13 @@ thead tr th {
 	padding-bottom: 10px
 }
 tbody tr:hover {
-	color: white
+	color: white;
+	background-color: #333;
+}
+tbody tr:hover td a {
+	color: white;
 }
 td.timestamp {
-	cursor: pointer;
 	padding-top: 3px;
 	padding-bottom: 3px;
 	width: 35px;
@@ -175,7 +178,9 @@ td.timestamp {
 	border-right-style: solid;
 	border-top-width: 1px;
 	border-top-style: solid;
-	text-decoration: underline;
+}
+td.timestamp a {
+	color: #888;
 }
 td.event {
 	padding-top: 3px;
