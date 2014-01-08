@@ -1,156 +1,107 @@
+<?php
+	session_start();
+	require_once('config.php');
+	require_once('class.admin.php');
+	$Admin = new Admin($con);
+	
+	// Process form submissions
+	$errors = array();
+	
+	if(!empty($_POST)){
+		if(isset($_SESSION['admin'])){ // User is currently logged in.
+			if($_POST['form'] == 'addepisode'){
+				
+			}
+			if($_POST['form'] == 'addtimestamp'){
+				$timestamp = $_POST['timestamp_hours'].':'.$_POST['timestamp_minutes'].':'.$_POST['timestamp_seconds'];
+				$result = $Admin->addTimestamp($timestamp, $_POST['value'], $_POST['episode']);
+				if($result === true){
+					$success = 'Timestamp was successfully added to the database.';
+				} else {
+					$errors = $result;
+				}
+			}
+			if($_POST['form'] == 'addtimeline'){
+				$result = $Admin->addTimeline($_POST['episode'], $_POST['timeline']);
+				if($result === true){
+					$success = 'Timeline was successfully added to the database.';
+				} else {
+					$errors = $result;
+				}
+			}
+		} else { // User is not currently logged in.
+			if($_POST['form'] == 'login'){
+				$result = $Admin->doLogin($_POST['username'], $_POST['password']);
+				if($result === true){
+					$_SESSION['admin'] = $_POST['username'];
+				} else {
+					$errors = $result;
+				}
+			}
+		}
+	}
+?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Admin</title>
-		<style type="text/css">
-			.label {
-				text-align: right;
-				width: 50%;
-			}
-			input {
-				width: 100%;
-				box-sizing: border-box;
-			}
-			select, .form-button {
-				width: 100%;
-			}
-		</style>
+		<title>Admin Panel</title>
+		<link rel="stylesheet" type="text/css" href="css/admin.css" />
 	</head>
 	<body>
+		<div id="top_bar">
+			<h1>Admin Panel</h1>
 <?php
-
-	session_start();
-	require_once("config.php");
-	
-	if (!isset($_SESSION["Admin"])) {
-		if (!isset($_POST["submit"])) {
-loginform:
+if(isset($_SESSION['admin'])){
 ?>
-		<form method="POST">
-			<table>
-				<tbody>
-					<tr>
-						<td class="label"><label for="username">Username:</label></td>
-						<td><input type="text" id="username" name="username" required></td>
-					</tr>
-					<tr>
-						<td class="label"><label for="password">Password:</label></td>
-						<td><input type="password" id="password" name="password" required></td>
-					</tr>
-					<tr>
-						<td colspan="2"><input class="form-button" type="submit" name="submit" value="Login"></td>
-					</tr>
-				</tbody>
-			</table>
-		</form>
-	</body>
-</html>
+			<p>Welcome to the admin panel!</p>
 <?php
-		} else {
-			if ((empty($_POST["username"])) || (empty($_POST["password"]))) {
-				echo "Not all fields were filled in<br><br>";
-				goto loginform;
-			} else {
-				$login_query = $con->prepare("SELECT `username` FROM `admins` WHERE `username` = :username AND `password` = :password");
-				$login_query->execute(
-					array(
-						":username" => $_POST["username"],
-						":password" => hash('sha512', $_POST['password'] . '305yh83],>')
-					)
-				);
-				$login_results = $login_query->fetchAll();
-				
-				if (count($login_results) > 0) {
-					$_SESSION["Admin"] = $login_results[0]["username"];
-					goto timestampform;
-				} else {
-					echo "Invalid credentials<br><br>";
-					goto loginform;
-				}
-			}
-		}
-	} else {
-		if (!isset($_POST["submit"])) {
-timestampform:
+}
 ?>
-		<form method="POST">
-			<table>
-				<tbody>
-					<tr>
-						<td class="label"><label for="episode">Episode:</label></td>
-						<td>
-							<select id="episode" name="episode">
+		</div>
+		<div id="navigation">
+			<ul>
+				<li><a href="admin.php?module=addtimestamp">Add Timestamp</a></li>
+				<li><a href="admin.php?module=addtimeline">Add Timeline</a></li>
+			</ul>
+		</div>
+<?php                // Success and Error handling.
+	if(isset($success)){
+?>
+		<div class="success">
+			<p><?php echo $success; ?></p>
+		</div>
 <?php
-
-	foreach ($Podcast->getEpisodes() as $episode_name => $episode) {
-?>
-								<option value="<?php echo $episode_name; ?>"><?php echo $episode_name; ?></option>
-<?php	
 	}
-	
+	if(!empty($errors)){
+		foreach($errors as $error){
 ?>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td><br></td>
-					</tr>
-					<tr>
-						<td class="label"><label for="type">Type:</label></td>
-						<td>
-							<select id="type" name="type">
-								<option value="Text">Text</option>
-								<option value="Link">Link</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td class="label"><label for="timestamp">Timestamp:</label></td>
-						<td><input type="text" id="timestamp" name="timestamp" placeholder="hh:mm:ss" required></td>
-					</tr>
-					<tr>
-						<td class="label"><label for="value">Value:</label></td>
-						<td><input type="text" id="value" name="value" required></td>
-					</tr>
-					<tr>
-						<td class="label"><label for="url">URL:</label></td>
-						<td><input type="text" id="url" name="url" placeholder="Optional for Text"></td>
-					</tr>
-					<tr>
-						<td colspan="2"><input class="form-button" type="submit" name="submit" value="Add"></td>
-					</tr>
-				</tbody>
-			</table>
-		</form>
-	</body>
-</html>
+		<div class="error">
+			<p><?php echo $error; ?></p>
+		</div>
 <?php
-		} else {
-			if ((empty($_POST["episode"])) || (empty($_POST["type"])) || (empty($_POST["timestamp"])) || (empty($_POST["value"])) || (empty($_POST["url"]))) {
-				echo "Not all fields were filled in<br><br>";
-				goto timestampform;
-			} else {
-				$pattern = "/^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$/";
-				preg_match($pattern, substr($_POST["timestamp"], 3), $matches, PREG_OFFSET_CAPTURE);
-				
-				if (count($matches) == 0) {
-					echo "Invalid timestamp<br><br>";
-					goto timestampform;
-				} else {
-					$Episode = new Episode($_POST["episode"], $con);
-					
-					sscanf($_POST["timestamp"], "%d:%d:%d", $hours, $minutes, $seconds);
-					$time_seconds = isset($seconds) ? $hours * 3600 + $minutes * 60 + $seconds : $hours * 60 + $minutes;
-					
-					$Episode->addTimestamp($_POST["type"], $time_seconds, $_POST['value'], $_POST["url"]);
-					
-					echo "Added timestamp<br><br>";
-					goto timestampform;
-				}
-			}
 		}
 	}
 
+	if(isset($_GET['module'])){
+		switch($_GET['module']){
+			case 'addepisode':
+				require('templates/addepisode.php');
+			break;
+			case 'addtimestamp':
+				require('templates/addtimestamp.php');
+			break;
+			case 'addtimeline':
+				require('templates/addtimeline.php');
+			break;
+			default:
+				require('template/admin_general');
+			break;
+		}
+	}
+	if(!isset($_SESSION['admin'])){
+		require('templates/login.php');
+	}
 ?>
+	</body>
+</html>

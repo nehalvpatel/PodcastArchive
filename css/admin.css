@@ -1,11 +1,152 @@
-.label {
-	text-align: right;
-	width: 50%;
+body{
+	margin: 0;
+	background: #222;
+	font-family: verdana;
+	color: #999;
 }
-input {
-	width: 100%;
+.clear{
+	clear: both;
+}
+#top_bar{
+	background: black;
+	height: 70px;
+	padding: 15px;
+}
+#top_bar h1, #top_bar p{
+	text-align: center;
+	margin: 0;
+}
+#navigation{
+	background: #111;
+	text-align: center;
+	padding: 10px;
+	margin-bottom: 15px;
+}
+#navigation ul{
+	padding: 0;
+	margin: 0;
+}
+#navigation li{
+	display: inline;
+	padding: 0 5px;
+	list-style: none;
+}
+#navigation a{
+	text-decoration: none;
+	color: #666;
+}
+#navigation a:hover{
+	color: #777;
+}
+
+/* Login Styles */
+#login{
+	width: 450px;
+	margin: 100px auto;
+}
+#title{
+	height: 50px;
+	background: #111;
+	border-radius: 5px 5px 0 0;
+	border: 1px solid #333;
+}
+#title h1{
+	color: #bbb;
+	font: italic bold 1.4em verdana;
+	margin: 0;
+	padding: 12px;
+}
+#form{
+	background: #333;
+	border-radius: 0 0 5px 5px;
+	border: 1px solid #111;
+	border-top: 0;
+	padding: 15px;
 	box-sizing: border-box;
 }
-select, .form-button {
+#form input{
+	background: #111;
+	border: 2px solid #333;
 	width: 100%;
+	font-size: 1.2em;
+	box-sizing: border-box;
+	padding: 10px;
+	color: #bbb;
+	border-radius: 5px;
+}
+#form input:focus{
+	outline: 0;
+}
+#form input[type=submit]:hover{
+	background: #1a1a1a;
+}
+
+/* Module Styles */
+
+.module{
+	width: 960px;
+	margin: 0 auto;
+}
+.module_title{
+	height: 40px;
+	background: #444;
+}
+.module_title h2{
+	margin: 0;
+	padding: 10px 50px;
+}
+.module_body{
+	background: #111;
+	padding: 15px 0;
+}
+.input{
+	margin-bottom: 10px;
+}
+.label{
+	width: 200px;
+	float: left;
+}
+.label label{
+	float: right;
+	margin-right: 15px;
+}
+.input_box{
+	width: 760px;
+	float: right;
+}
+
+/* addtimestamp Styles */
+
+#timestamp_hours, #timestamp_minutes, #timestamp_seconds{
+	width:39px;
+}
+
+/* addtimeline Styles */
+#timeline_textbox{
+	resize: vertical;
+	width: 600px;
+	height: 250px;
+}
+
+/* Error and Success Styles */
+.success, .error {
+	border: 1px solid;
+	margin: 10px auto;
+	padding:15px 10px 15px 50px;
+	background-repeat: no-repeat;
+	background-position: 10px center;
+	-moz-border-radius:.5em;
+	-webkit-border-radius:.5em;
+	border-radius:.5em;
+	width: 900px;
+}
+.success {
+	color: #4F8A10;
+	background-color: #DFF2BF;
+	background-image:url('../img/success.png');
+}
+.error {
+	color: #D8000C;
+	background-color: #FFBABA;
+	background-image: url('../img/error.png');
 }

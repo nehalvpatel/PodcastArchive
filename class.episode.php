@@ -153,27 +153,6 @@
 		public function getTimestamps() {
 			return $this->episode_data["Timestamps"];
 		}
-		
-		public function addTimestamp($type, $timestamp, $value, $url = "") {
-			$type = ucfirst(strtolower($type));
-			
-			try {
-				$timestamp_query = $this->con->prepare("INSERT INTO `timestamps` (`Episode`, `Type`, `Timestamp`, `Value`, `URL`) VALUES (:Episode, :Type, :Timestamp, :Value, :URL)");
-				$timestamp_query->execute(array(
-					":Episode" => $this->getIdentifier(),
-					":Type" => $type,
-					":Timestamp" => $timestamp,
-					":Value" => $value,
-					":URL" => $url
-				));
-				
-				$this->reloadTimestamps();
-				
-				return TRUE;
-			} catch (PDOException $e) {
-				return FALSE;
-			}
-		}
 	} 
 
 ?>
