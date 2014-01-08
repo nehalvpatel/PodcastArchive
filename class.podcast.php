@@ -148,18 +148,6 @@
 			$this->authoremail = $authoremail;
 		}
 		
-		// settings
-		public function getSettings() {
-			$settings_query = $this->con->prepare("SELECT * FROM `settings`");
-			$settings_query->execute();
-			$settings_results = $settings_query->fetchAll();
-			
-			$settings = array(
-				"Domain" => $settings_results[0]["Value"]
-			);
-			return $settings;
-		}
-		
 		public function getLink() {
 			if ($this->getCollection() == "") {
 				$search = "https://archive.org/search.php?query=" . rawurlencode('creator:"' . $this->getCreator() . '" AND subject:"' . $this->getSubject() . '"&sort=-date');

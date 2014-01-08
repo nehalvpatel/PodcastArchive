@@ -2,8 +2,7 @@
 
 	require_once("config.php");
 	
-	$settings = $Podcast->getSettings();
-	$domain = $settings["Domain"];
+	$domain = "http://" . $_SERVER["HTTP_HOST"] . str_replace(basename($_SERVER["PHP_SELF"]), "", $_SERVER["PHP_SELF"]);
 	
 	if (isset($_GET["episode"]) && is_numeric($_GET["episode"])) {
 		try {
