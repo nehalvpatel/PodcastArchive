@@ -60,13 +60,14 @@
 		$sponsors[] = $sponsor_profile;
 	}
 	
+	if (isset($_SERVER["HTTP_USER_AGENT"]) && (strpos($_SERVER["HTTP_USER_AGENT"], "MSIE") !== false)) header("X-UA-Compatible: IE=edge,chrome=1");
+	
 ?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
 		<!-- Meta -->
 		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<meta name="description" content="<?php if ($source == "latest") { echo $Podcast->getDescription(); } else { echo "Guests: " . $guests_list; } ?>">
 		<link rel="canonical" href="<?php echo $canonical; ?>">
@@ -129,27 +130,27 @@
 ?>
 		
 		<!-- Twitter -->
-		<meta name="twitter:site" content="@PKA_Archive">
-		<meta name="twitter:creator" content="@nehalvpatel">
-		<meta name="twitter:domain" content="www.painkilleralready.info">
+		<meta property="twitter:site" content="@PKA_Archive">
+		<meta property="twitter:creator" content="@nehalvpatel">
+		<meta property="twitter:domain" content="www.painkilleralready.info">
 <?php
 
 		if ($source == "get") {
 ?>
-		<meta name="twitter:card" content="player">
-		<meta name="twitter:title" content="Painkiller Already #<?php echo $current_episode->getNumber(); ?>">
-		<meta name="twitter:description" content="Guests: <?php echo $guests_list; ?>">
-		<meta name="twitter:image:src" content="http://i1.ytimg.com/vi/<?php echo $current_episode->getYouTube(); ?>/hqdefault.jpg">
-		<meta name="twitter:player" content="https://www.youtube.com/embed/<?php echo $current_episode->getYouTube(); ?>">
-		<meta name="twitter:player:height" content="1280">
-		<meta name="twitter:player:width" content="720">
+		<meta property="twitter:card" content="player">
+		<meta property="twitter:title" content="Painkiller Already #<?php echo $current_episode->getNumber(); ?>">
+		<meta property="twitter:description" content="Guests: <?php echo $guests_list; ?>">
+		<meta property="twitter:image:src" content="http://i1.ytimg.com/vi/<?php echo $current_episode->getYouTube(); ?>/hqdefault.jpg">
+		<meta property="twitter:player" content="https://www.youtube.com/embed/<?php echo $current_episode->getYouTube(); ?>">
+		<meta property="twitter:player:height" content="1280">
+		<meta property="twitter:player:width" content="720">
 <?php
 		} else {
 ?>
-		<meta name="twitter:card" content="summary">
-		<meta name="twitter:title" content="<?php echo $Podcast->getName(); ?>">
-		<meta name="twitter:description" content="<?php echo $Podcast->getDescription(); ?>">
-		<meta name="twitter:image:src" content="<?php echo $domain; ?>img/pka.png">
+		<meta property="twitter:card" content="summary">
+		<meta property="twitter:title" content="<?php echo $Podcast->getName(); ?>">
+		<meta property="twitter:description" content="<?php echo $Podcast->getDescription(); ?>">
+		<meta property="twitter:image:src" content="<?php echo $domain; ?>img/pka.png">
 <?php
 		}
 		
@@ -158,7 +159,7 @@
 		<!-- CSS -->
 		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css" />
 	</head>
-	<body>
+	<body itemscope itemtype="http://schema.org/WebPage">
 		<header>
 			<a href="#" class="toggle-menu fontawesome-reorder"></a>
 			<h1>Painkiller Already Archive</h1>
@@ -170,9 +171,9 @@
 <?php
 	foreach ($Podcast->getEpisodes() as $episode) {
 ?>
-					<a href="<?php echo $domain; ?>episode/<?php echo $episode["Number"]; ?>">
-						<li<?php if ((isset($_GET["episode"])) && ($episode["Number"] == $_GET["episode"])) { echo ' class="active" id="active"'; } ?>>#<?php echo $episode["Number"]; ?></li>
-					</a>
+					<li<?php if ((isset($_GET["episode"])) && ($episode["Number"] == $_GET["episode"])) { echo ' class="active" id="active"'; } ?>>
+						<a href="<?php echo $domain; ?>episode/<?php echo $episode["Number"]; ?>">#<?php echo $episode["Number"]; ?></a>
+					</li>
 <?php
 	}
 ?>
@@ -190,7 +191,7 @@
 				<meta itemprop="description" content="Guests: <?php echo $guests_list; ?>">
 				<meta itemprop="thumbnailUrl" content="http://img.youtube.com/vi/<?php echo $current_episode->getYouTube(); ?>/hqdefault.jpg">
 				<meta itemprop="duration" content="<?php echo $current_episode->getDuration(); ?>">
-				<meta itemprop="contentURL" content="<?php echo $current_episode->getContentURL(); ?>">
+				<meta itemprop="contentURL" content="<?php echo htmlspecialchars($current_episode->getContentURL()); ?>">
 				<meta itemprop="embedURL" content="https://www.youtube.com/v/<?php echo $current_episode->getYouTube(); ?>">
 				<meta itemprop="uploadDate" content="<?php echo $current_episode->getPublished(); ?>">
 				<div id="player" data-youtube="<?php echo $current_episode->getYouTube(); ?>"></div>
@@ -278,7 +279,7 @@
 			$seconds = $init % 60;
 ?>
 					<tr>
-						<td class="timestamp"><a href="javascript:void(0);" onclick="seekYT(<?php echo $init; ?>);"><?php printf("%02d:%02d:%02d", $hours, $minutes, $seconds); ?></a></td>
+						<td class="timestamp"><a href="https://www.youtube.com/watch?v=<?php echo $current_episode->getYouTube(); ?>#t=<?php echo $init; ?>" data-timestamp="<?php echo $init; ?>"><?php printf("%02d:%02d:%02d", $hours, $minutes, $seconds); ?></a></td>
 						<td class="event"><?php echo $timestamp["Value"]; ?><?php if ($timestamp["Type"] == "Link") { ?><a target="_blank" href="<?php echo $timestamp["URL"]; ?>"><i class="fontawesome-external-link"></i></a><?php } ?></td>
 					</tr>
 <?php

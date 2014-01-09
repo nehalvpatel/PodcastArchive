@@ -19,12 +19,17 @@ $(document).ready(function() {
 			$("#comments").html(data[0]["data"]["children"][0]["data"]["num_comments"] + " Comments");
 		});
 	}
+	
+	// capture timestamp click events
+	$(".timestamp a").click(function() {
+		seekYT($(this).data("timestamp"));
+		return false;
+	});
 });
 
 // load YT player
 var player;
 function onYouTubePlayerAPIReady() {
-	console.log("ready");
 	player = new YT.Player("player", {
 		height: "400",
 		width: "650",

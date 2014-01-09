@@ -94,16 +94,16 @@ nav ul {
 	margin: 0;
 	background-color: #444444;
 }
-nav ul a {
-	text-decoration: none;
-	display: block;
-}
 nav ul li {
-	padding: 15px;
-	color: #cccccc;
 	background-color: #333333;
 	margin-bottom: 1px;
 	border-left: 10px solid transparent;
+}
+nav ul li a {
+	text-decoration: none;
+	display: block;
+	color: #cccccc;
+	padding: 15px;
 }
 nav ul li.active {
 	border-color: #e35205
