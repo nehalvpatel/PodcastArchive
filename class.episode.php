@@ -4,12 +4,35 @@
 		private $con;
 		private $episode_data;
 		
-		public function __construct($episode, $con) {
+		public function __construct($con) {
 			$this->con = $con;
 			unset($con);
+		}
+		
+		public function initWithIdentifier($identifier) {
+			$episode_query = $this->con->prepare("SELECT * FROM `episodes` WHERE `Identifier` = :Identifier");
+			$episode_query->execute(array(":Identifier" => $identifier));
+			$episode_results = $episode_query->fetchAll();
 			
-			$this->reloadData($episode);
-			$this->reloadTimestamps();
+			if (count($episode_results) > 0) {
+				$this->episode_data = $episode_results[0];
+				$this->reloadTimestamps();
+			} else {
+				throw new Exception("Invalid episode identifier");
+			}
+		}
+		
+		public function initWithNumber($number) {
+			$episode_query = $this->con->prepare("SELECT * FROM `episodes` WHERE `Number` = :Number");
+			$episode_query->execute(array(":Number" => $number));
+			$episode_results = $episode_query->fetchAll();
+			
+			if (count($episode_results) > 0) {
+				$this->episode_data = $episode_results[0];
+				$this->reloadTimestamps();
+			} else {
+				throw new Exception("Invalid episode number");
+			}
 		}
 		
 		public function reloadData($identifier = "") {
@@ -153,6 +176,28 @@
 		public function getTimestamps() {
 			return $this->episode_data["Timestamps"];
 		}
-	} 
+		
+		public function addTimestamp($timestamp, $value, $type = "Text", $url = "", $special = "0") {
+			$type = ucfirst(strtolower($type));
+			
+			try {
+				$timestamp_query = $this->con->prepare("INSERT INTO `timestamps` (`Episode`, `Type`, `Timestamp`, `Value`, `URL`, `Special`) VALUES (:Episode, :Type, :Timestamp, :Value, :URL, :Special)");
+				$timestamp_query->execute(array(
+					":Episode" => $this->getIdentifier(),
+					":Type" => $type,
+					":Timestamp" => $timestamp,
+					":Value" => $value,
+					":URL" => $url,
+					":Special" => $special
+				));
+				
+				$this->reloadTimestamps();
+				
+				return TRUE;
+			} catch (PDOException $e) {
+				return FALSE;
+			}
+		}
+	}
 
 ?>

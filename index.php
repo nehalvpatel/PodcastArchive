@@ -6,16 +6,19 @@
 	
 	if (isset($_GET["episode"]) && is_numeric($_GET["episode"])) {
 		try {
-			$current_episode = new Episode("PKA_" . $Podcast->padEpisodeNumber($_GET["episode"]), $con);
+			$current_episode = new Episode($con);
+			$current_episode->initWithNumber($Podcast->trimEpisodeNumber($_GET["episode"]));
 			$canonical = $domain . "episode/" . $current_episode->getNumber();
 			$source = "get";
 		} catch (Exception $e) {
-			$current_episode = new Episode($Podcast->getLatestEpisode(), $con);
+			$current_episode = new Episode($con);
+			$current_episode->initWithIdentifier($Podcast->getLatestEpisode());
 			$canonical = $domain;
 			$source = "latest";
 		}
 	} else {
-		$current_episode = new Episode($Podcast->getLatestEpisode(), $con);
+		$current_episode = new Episode($con);
+		$current_episode->initWithIdentifier($Podcast->getLatestEpisode());
 		$canonical = $domain;
 		$source = "latest";
 	}
