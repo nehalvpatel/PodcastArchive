@@ -10,7 +10,7 @@ html, body {
 }
 html {
 	font-family: sans-serif;
-	background-color: #222222;
+	background: #222;
 }
 body {
 	position: relative;
@@ -18,14 +18,14 @@ body {
 }
 header {
 	color: lightgrey;
-	background: #555555;
-	background: -moz-linear-gradient(top,  #555555 1%, #444444 100%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#555555), color-stop(100%,#444444));
-	background: -webkit-linear-gradient(top,  #555555 1%,#444444 100%);
-	background: -o-linear-gradient(top,  #555555 1%,#444444 100%);
-	background: -ms-linear-gradient(top,  #555555 1%,#444444 100%);
-	background: linear-gradient(to bottom,  #555555 1%,#444444 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#555555', endColorstr='#444444',GradientType=0 );
+	background: #555;
+	background: -moz-linear-gradient(top,  #555 1%, #444 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#555), color-stop(100%,#444));
+	background: -webkit-linear-gradient(top,  #555 1%,#444 100%);
+	background: -o-linear-gradient(top,  #555 1%,#444 100%);
+	background: -ms-linear-gradient(top,  #555 1%,#444 100%);
+	background: linear-gradient(to bottom,  #555 1%,#444 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#555', endColorstr='#444',GradientType=0 );
 	overflow: hidden;
 }
 h1 {
@@ -48,13 +48,13 @@ h1 {
 }
 .sidebar {
 	width: 260px;
-	background-color: #333;
+	background: #333;
 	left: 0;
 	overflow: hidden;
 	border-top: 2px solid #222;
 }
 .main {
-	background-color: #333;
+	background: #333;
 	position: absolute;
 	left: 260px;
 	right: 0;
@@ -63,12 +63,11 @@ h1 {
 	border-left: 2px solid #222;
 }
 h2 {
-	margin: 0 0 1em 0;
-	margin-bottom: 0px;
+	margin: 0;
 	display: inline-block;
 }
 .toggle-menu {
-	color: #cccccc;
+	color: #ccc;
 	text-decoration: none;
 	font-size: 50px;
 	float: left;
@@ -95,7 +94,7 @@ nav ul {
 	margin: 0;
 }
 nav ul li {
-	background: #333333;
+	background: #333;
 	list-style: none;
 	margin: 5px 0;
 	border-top: 1px solid transparent;
