@@ -330,4 +330,7 @@ td.event a i {
 	#timeline-vertical {
 		display: block
 	}
+	.people {
+		width: 100%;
+	}
 }
