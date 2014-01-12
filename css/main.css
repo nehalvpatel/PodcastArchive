@@ -35,7 +35,6 @@ h1 {
 	line-height: 2;
 	position: relative;
 	transition: all 0.3s ease-out;
-	text-align: center;
 }
 .sidebar, .main {
 	transition: all 0.3s ease-out;
@@ -47,24 +46,31 @@ h1 {
 	bottom: 0;
 }
 .sidebar {
-	width: 260px;
+	width: 230px;
 	background: #333;
 	left: 0;
 	overflow: hidden;
-	border-top: 2px solid #222;
 }
 .main {
-	background: #333;
+	background: whitesmoke;
 	position: absolute;
-	left: 260px;
+	left: 230px;
 	right: 0;
 	padding: 20px 20px 0px 20px;
-	border-top: 2px solid #222;
-	border-left: 2px solid #222;
 }
 h2 {
 	margin: 0;
 	display: inline-block;
+}
+h3 {
+	background-color: #555555;
+	color: #cccccc;
+	margin: 0;
+	padding: 0 20px;
+	font-weight: normal;
+	line-height: 2;
+	text-transform: uppercase;
+	font-size: 90%;
 }
 .toggle-menu {
 	color: #ccc;
@@ -96,18 +102,16 @@ nav ul {
 nav ul li {
 	background: #333;
 	list-style: none;
-	margin: 5px 0;
 	border-top: 1px solid transparent;
-	border-bottom: 1px solid transparent;
+	border-bottom: 1px solid #444;
 	color: #777;
 }
 nav ul li a {
 	text-decoration: none;
 	display: block;
-	padding: 3px 10px;
 	font-weight: bold;
 	color: inherit;
-	text-align: center;
+	padding: 10px 0px 10px 25px;
 }
 nav ul li.active, nav ul li:hover {
 	background: #426dc3;
@@ -120,24 +124,23 @@ nav ul li.active, nav ul li:hover {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#426dc3', endColorstr='#0d4f8d',GradientType=0 );
 	border-top: 1px solid #7BA5FF;
 	border-bottom: 1px solid #092763;
-	color: #ccc;
+	color: white;
 }
-#scroll-bar-hider{
-	width: 275px;
+#scroll-bar-hider {
 	height: 100%;
 	overflow: auto;
 }
-#hosts, #guests, #sponsors, #timeline {
+.people, #timeline-horizontal, #timeline-vertical {
 	background: #3a3a3a;
 	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
 	padding: 10px 10px 10px 10px;
 	margin-bottom: 20px;
 }
-#timeline{
+#timeline-horizontal {
 	/* This is to leave room for the graphical timeline tooltips */
 	min-height: 110px;
 }
-#hosts h4, #guests h4, #sponsors h4, #timeline h4 {
+.people h4, #timeline-horizontal h4, #timeline-vertical h4 {
 	margin: 0;
 	font-size: 0.7em;
 	text-shadow: 1px 1px 0 black;
@@ -146,22 +149,25 @@ nav ul li.active, nav ul li:hover {
 	margin-bottom: 10px;
 	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
-#hosts a, #guests a, #sponsors a {
+.people a {
 	display: inline-block;
 	margin-bottom: 10px;
+	margin-right: 10px;
 	vertical-align: top;
 }
-#hosts, #guests, #sponsors {
-	padding: 10px 10px 0px 10px;
+.people {
+	padding: 10px 10px 0px 10px !important;
 	float: left;
 	margin-right: 20px;
+}
+.people a:last-child {
+	margin-right: 0px
 }
 .person {
 	padding: 4px;
 	background: #fff;
 	width: 46px;
 	display: inline-block;
-	margin-right: 5px;
 	vertical-align: top;
 	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
 }
@@ -178,7 +184,7 @@ tbody tr:hover {
 	background-color: #333;
 }
 tbody tr:hover td a {
-	color: white;
+	color: white
 }
 td.timestamp {
 	padding-top: 3px;
@@ -192,7 +198,7 @@ td.timestamp {
 	border-top-style: solid;
 }
 td.timestamp a {
-	color: #888;
+	color: #888
 }
 td.event {
 	padding-top: 3px;
@@ -211,10 +217,10 @@ td.event a i {
 	color: #999;
 }
 .info {
-	margin-bottom: 20px;
+	margin-bottom: 20px
 }
 .info small {
-	margin-left: 5px;
+	margin-left: 5px
 }
 .published {
 	vertical-align: middle;
@@ -233,69 +239,70 @@ td.event a i {
 	width: 100%;
 	vertical-align: top;
 	margin-bottom: 20px;
+	display: block;
 }
 
 /* Table Timeline Styles */
 #timeline-table {
-        color: #888;
-        width: 100%;
+	color: #888;
+	width: 100%;
 }
 #timeline-table tbody {
-        font-size: 11pt
+	font-size: 11pt
 }
 
 /* Graphical Timeline Styles */
 #line {
-        height: 35px;
+	height: 35px
 }
-#topic {
-        height: 100%;
-        float: left;
-        border-radius: 4px;
-        background: #333;
-        box-sizing: border-box;
-        border-right: 1px solid #555;
-        border-top: 1px solid #666;
-        border-bottom: 1px solid #222;
-        position: relative;
+.topic {
+	height: 100%;
+	float: left;
+	border-radius: 4px;
+	background: #333;
+	box-sizing: border-box;
+	border-right: 1px solid #555;
+	border-top: 1px solid #666;
+	border-bottom: 1px solid #222;
+	position: relative;
 }
-#topic:hover {
-        background: #444;
+.topic:hover {
+	background: #444
 }
 .tooltip {
-        width: 300px;
-        padding: 3px;
-        border-radius: 4px;
-        background: black;
-        position: absolute;
-        top: 40px;
-        text-align: center;
-        left: -5px;
-        display: none;
+	width: 300px;
+	padding: 3px;
+	border-radius: 4px;
+	background: black;
+	position: absolute;
+	top: 40px;
+	text-align: center;
+	left: -5px;
+	display: none;
 }
 .tooltip .triangle {
-        position: absolute;
-        top: -10px;
-        height: 0;
-        width: 1px;
-        border: 5px solid black;
-        border-color: transparent transparent black transparent;
+	position: absolute;
+	top: -10px;
+	height: 0;
+	width: 1px;
+	border: 5px solid black;
+	border-color: transparent transparent black transparent;
 }
 .tooltip span {
-        color: white;
-        font-size: 0.8em;
+	color: white;
+	font-size: 0.8em;
 }
 .right {
-        left: -290px;
+	left: -290px
 }
 .right .triangle {
-        left: 288px;
+	left: 288px
 }
 .no-timeline {
-        color: #aaa;
-        margin: 0;
+	color: #aaa;
+	margin: 0;
 }
-@media all and (max-width: 1024px) {
+@media all and (max-width: 1024px) { 
 	.sidebar.toggled {
 		left: 0;
 		z-index: 10;
@@ -305,7 +312,7 @@ td.event a i {
 		overflow: hidden
 	}
 	.sidebar {
-		left: -260px
+		left: -230px
 	}
 	.main {
 		left: 0
@@ -316,5 +323,11 @@ td.event a i {
 	}
 	h1 {
 		left: 40px
+	}
+	#timeline-horizontal {
+		display: none
+	}
+	#timeline-vertical {
+		display: block
 	}
 }

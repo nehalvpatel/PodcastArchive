@@ -11,7 +11,7 @@ $(document).ready(function() {
 	
 	// scroll to active episode
 	if (document.getElementById("active")) {
-		$("#sidebar").animate({scrollTop:$('#active').position().top},1000);
+		$("#scroll-bar-hider").animate({scrollTop:$('#active').position().top},1000);
 	}
 	
 	if (document.getElementById("comments")) {
@@ -21,7 +21,7 @@ $(document).ready(function() {
 	}
 	
 	// capture timestamp click events
-	$(".timestamp a").click(function() {
+	$(".timelink").click(function() {
 		seekYT($(this).data("timestamp"));
 		return false;
 	});

@@ -169,6 +169,7 @@
 		</header>
 		<aside class="sidebar" id="sidebar">
 			<div id="scroll-bar-hider">
+				<h3>Episodes</h3>
 				<nav>
 					<ul>
 <?php
@@ -176,7 +177,7 @@
 ?>
 						<li <?php if ((isset($_GET["episode"])) && ($episode["Number"] == $_GET["episode"])) { echo ' class="active" id="active"'; } ?>>
 							<a href="<?php echo $domain; ?>episode/<?php echo $episode["Number"]; ?>">
-								Painkiller Already #<?php echo $episode["Number"]; ?>
+								#<?php echo $episode["Number"]; ?>
 							</a>
 						</li>
 <?php
@@ -202,18 +203,12 @@
 				<meta itemprop="uploadDate" content="<?php echo $current_episode->getPublished(); ?>">
 				<div id="player" data-youtube="<?php echo $current_episode->getYouTube(); ?>"></div>
 			</div>
-			<div id="hosts">
+			<div id="hosts" class="people">
 				<h4>Hosts</h4>
 <?php
 
 	foreach ($hosts as $host) {
-?>
-				<a target="_blank" href="<?php echo $host->getURL(); ?>" title="<?php echo $host->getName(); ?>">
-					<div class="person">
-						<img alt="<?php echo $host->getName(); ?>" src="<?php echo $domain . $host->getImage(); ?>">
-					</div>
-				</a>
-<?php
+?><a target="_blank" href="<?php echo $host->getURL(); ?>" title="<?php echo $host->getName(); ?>"><div class="person"><img alt="<?php echo $host->getName(); ?>" src="<?php echo $domain . $host->getImage(); ?>"></div></a><?php
 	}
 	
 ?>
@@ -222,18 +217,12 @@
 	
 	if (count($guests) > 0) {
 ?>
-			<div id="guests">
+			<div id="guests" class="people">
 				<h4>Guests</h4>
 <?php
 
 	foreach ($guests as $guest) {
-?>
-				<a target="_blank" href="<?php echo $guest->getURL(); ?>" title="<?php echo $guest->getName(); ?>">
-					<div class="person">
-						<img alt="<?php echo $guest->getName(); ?>" src="<?php echo $domain . $guest->getImage(); ?>">
-					</div>
-				</a>
-<?php		
+?><a target="_blank" href="<?php echo $guest->getURL(); ?>" title="<?php echo $guest->getName(); ?>"><div class="person"><img alt="<?php echo $guest->getName(); ?>" src="<?php echo $domain . $guest->getImage(); ?>"></div></a><?php		
 	}
 
 ?>
@@ -243,18 +232,12 @@
 	
 	if (count($sponsors) > 0) {
 ?>
-			<div id="sponsors">
+			<div id="sponsors" class="people">
 				<h4>Sponsors</h4>
 <?php
 
 		foreach ($sponsors as $sponsor) {
-?>
-				<a target="_blank" href="<?php echo $sponsor->getURL(); ?>" title="<?php echo $sponsor->getName(); ?>">
-					<div class="person">
-						<img alt="<?php echo $sponsor->getName(); ?>" src="<?php echo $domain . $sponsor->getImage(); ?>">
-					</div>
-				</a>
-<?php		
+?><a target="_blank" href="<?php echo $sponsor->getURL(); ?>" title="<?php echo $sponsor->getName(); ?>"><div class="person"><img alt="<?php echo $sponsor->getName(); ?>" src="<?php echo $domain . $sponsor->getImage(); ?>"></div></a><?php		
 		}
 
 ?>
@@ -270,16 +253,9 @@
         *        This is so we can find the time of the beginning & the end of each topic and will help create the graphical timeline.
         */
         $timestamps = $current_episode->getTimestamps();
-        if (count($timestamps) < 1) {
+        if (count($timestamps) > 0) {
 ?>
-			<div id="timeline" style="padding: 10px;">
-				<h4>Timeline</h4>
-				<p class="no-timeline">No timeline available</p>
-			</div>
-<?php
-        } else {
-?>
-			<div id="timeline">
+			<div id="timeline-horizontal">
 				<h4>Timeline</h4>
 				<div id="line">
 <?php
@@ -308,20 +284,24 @@
 				// Multiply by 100 to express in percentage form.
 				$timeline_element_percentage = $timeline_element_quotent*100;
 ?>
-				<div id="topic" style="width:<?php echo $timeline_element_percentage; ?>%" onmouseover="appear('<?php echo $i; ?>');" onmouseout="disappear('<?php echo $i; ?>');">
-					<div class="tooltip<?php echo($timeline_element[0] > ($current_episode->getLength())/2) ? ' right' : null; ?>" id="<?php echo $i; ?>" >
-						<div class="triangle">
-						
+				<a class="timelink" href="https://www.youtube.com/watch?v=<?php echo $current_episode->getYouTube(); ?>#t=<?php echo $timeline_element[0]; ?>" data-timestamp="<?php echo $timeline_element[0]; ?>">
+					<div class="topic" style="width:<?php echo $timeline_element_percentage; ?>%" onmouseover="appear('<?php echo $i; ?>');" onmouseout="disappear('<?php echo $i; ?>');">
+						<div class="tooltip<?php echo($timeline_element[0] > ($current_episode->getLength())/2) ? ' right' : null; ?>" id="<?php echo $i; ?>" >
+							<div class="triangle">
+							
+							</div>
+							<span><?php echo $timeline_element[1]; ?></span>
 						</div>
-						<span><?php echo $timeline_element[1]; ?></span>
 					</div>
-				</div>
+				</a>
 <?php
 				$i++;
 			}
 ?>
 
 				</div>
+			</div>
+			<div id="timeline-vertical">
 				<table id="timeline-table">
 					<thead>
 							<tr>
@@ -339,7 +319,7 @@
 					$seconds = $init % 60;
 ?>
 						<tr>
-								<td class="timestamp"><a href="https://www.youtube.com/watch?v=<?php echo $current_episode->getYouTube(); ?>#t=<?php echo $init; ?>" data-timestamp="<?php echo $init; ?>"><?php printf("%02d:%02d:%02d", $hours, $minutes, $seconds); ?></a></td>
+								<td class="timestamp"><a class="timelink" href="https://www.youtube.com/watch?v=<?php echo $current_episode->getYouTube(); ?>#t=<?php echo $init; ?>" data-timestamp="<?php echo $init; ?>"><?php printf("%02d:%02d:%02d", $hours, $minutes, $seconds); ?></a></td>
 								<td class="event"><?php echo $timestamp["Value"]; ?><?php if ($timestamp["Type"] == "Link") { ?><a target="_blank" href="<?php echo $timestamp["URL"]; ?>"><i class="fontawesome-external-link"></i></a><?php } ?></td>
 						</tr>
 <?php
