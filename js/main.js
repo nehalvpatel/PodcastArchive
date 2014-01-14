@@ -11,7 +11,7 @@ $(document).ready(function() {
 	
 	// scroll to active episode
 	if (document.getElementById("active")) {
-		$("#scroll-bar-hider").animate({scrollTop:$('#active').position().top},1000);
+		$("#sidebar").animate({scrollTop:$("#active").position().top},1000);
 	}
 	
 	if (document.getElementById("comments")) {
@@ -45,14 +45,16 @@ function seekYT(timestamp) {
 
 // collapsible sidebar
 $(function(){
-	$('.toggle-menu').click(function(e){
+	$(".toggle-menu").click(function(e){
 		e.preventDefault();
-		$('.sidebar').toggleClass('toggled');
+		$(".sidebar").toggleClass("toggled");
 	});
 });
+
+// horizontal timeline
 function disappear(id){
-	document.getElementById(id).style.display = 'none';
+	document.getElementById(id).style.display = "none";
 }
 function appear(id){
-	document.getElementById(id).style.display = 'block';
+	document.getElementById(id).style.display = "block";
 }

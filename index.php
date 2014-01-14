@@ -167,25 +167,21 @@
 			<a href="#" class="toggle-menu fontawesome-reorder"></a>
 			<h1>Painkiller Already Archive</h1>
 		</header>
-		<aside class="sidebar" id="sidebar">
-			<div id="scroll-bar-hider">
+		<aside class="sidebar">
+			<nav id="sidebar">
 				<h3>Episodes</h3>
-				<nav>
-					<ul>
+				<ul>
 <?php
 	foreach ($Podcast->getEpisodes() as $episode) {
 ?>
-						<li <?php if ((isset($_GET["episode"])) && ($episode["Number"] == $_GET["episode"])) { echo ' class="active" id="active"'; } ?>>
-							<a href="<?php echo $domain; ?>episode/<?php echo $episode["Number"]; ?>">
-								#<?php echo $episode["Number"]; ?>
-							</a>
-						</li>
+					<li <?php if ((isset($_GET["episode"])) && ($episode["Number"] == $_GET["episode"])) { echo ' id="active"'; } ?>>
+						<a href="<?php echo $domain; ?>episode/<?php echo $episode["Number"]; ?>">#<?php echo $episode["Number"]; ?></a>
+					</li>
 <?php
 	}
 ?>
-					</ul>
-				</nav>
-			</div>
+				</ul>
+			</nav>
 		</aside>
 		<section class="main">
 			<h2 id="top">Painkiller Already #<?php echo $current_episode->getNumber(); ?></h2>
