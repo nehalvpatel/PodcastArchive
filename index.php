@@ -163,10 +163,6 @@
 		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css" />
 	</head>
 	<body itemscope itemtype="http://schema.org/WebPage">
-		<header>
-			<a href="#" class="toggle-menu fontawesome-reorder"></a>
-			<h1>Painkiller Already Archive</h1>
-		</header>
 		<aside class="sidebar">
 			<nav id="sidebar">
 				<h3>Episodes</h3>
@@ -184,23 +180,28 @@
 			</nav>
 		</aside>
 		<section class="main">
-			<h2 id="top">Painkiller Already #<?php echo $current_episode->getNumber(); ?></h2>
-			<div class="info">
-				<i class="published fontawesome-time"></i><small><time datetime="<?php echo $current_episode->getDate(); ?>"><?php echo date("F d, Y", strtotime($current_episode->getDate())); ?></time></small>
-				<?php if ($current_episode->getReddit() != "") { ?><a class="comments" href="http://www.reddit.com/comments/<?php echo $current_episode->getReddit(); ?>"><i class="fontawesome-comments"></i><small id="comments" data-reddit="<?php echo $current_episode->getReddit(); ?>">Comments</small></a><?php } ?>
-			</div>
-			<div itemprop="video" itemscope itemtype="http://schema.org/VideoObject">
-				<meta itemprop="name" content="Painkiller Already #<?php echo $current_episode->getNumber(); ?>">
-				<meta itemprop="description" content="Guests: <?php echo $guests_list; ?>">
-				<meta itemprop="thumbnailUrl" content="http://img.youtube.com/vi/<?php echo $current_episode->getYouTube(); ?>/hqdefault.jpg">
-				<meta itemprop="duration" content="<?php echo $current_episode->getDuration(); ?>">
-				<meta itemprop="contentURL" content="<?php echo htmlspecialchars($current_episode->getContentURL()); ?>">
-				<meta itemprop="embedURL" content="https://www.youtube.com/v/<?php echo $current_episode->getYouTube(); ?>">
-				<meta itemprop="uploadDate" content="<?php echo $current_episode->getPublished(); ?>">
-				<div id="player" data-youtube="<?php echo $current_episode->getYouTube(); ?>"></div>
-			</div>
-			<div id="hosts" class="people">
-				<h4>Hosts</h4>
+			<header>
+				<a href="#" class="toggle-menu fontawesome-reorder"></a>
+				<h1>Painkiller Already Archive</h1>
+			</header>
+			<div id="container">
+				<h2 id="top">Painkiller Already #<?php echo $current_episode->getNumber(); ?></h2>
+				<div class="info">
+					<i class="published fontawesome-time"></i><small><time datetime="<?php echo $current_episode->getDate(); ?>"><?php echo date("F d, Y", strtotime($current_episode->getDate())); ?></time></small>
+					<?php if ($current_episode->getReddit() != "") { ?><a class="comments" href="http://www.reddit.com/comments/<?php echo $current_episode->getReddit(); ?>"><i class="fontawesome-comments"></i><small id="comments" data-reddit="<?php echo $current_episode->getReddit(); ?>">Comments</small></a><?php } ?>
+				</div>
+				<div itemprop="video" itemscope itemtype="http://schema.org/VideoObject">
+					<meta itemprop="name" content="Painkiller Already #<?php echo $current_episode->getNumber(); ?>">
+					<meta itemprop="description" content="Guests: <?php echo $guests_list; ?>">
+					<meta itemprop="thumbnailUrl" content="http://img.youtube.com/vi/<?php echo $current_episode->getYouTube(); ?>/hqdefault.jpg">
+					<meta itemprop="duration" content="<?php echo $current_episode->getDuration(); ?>">
+					<meta itemprop="contentURL" content="<?php echo htmlspecialchars($current_episode->getContentURL()); ?>">
+					<meta itemprop="embedURL" content="https://www.youtube.com/v/<?php echo $current_episode->getYouTube(); ?>">
+					<meta itemprop="uploadDate" content="<?php echo $current_episode->getPublished(); ?>">
+					<div id="player" data-youtube="<?php echo $current_episode->getYouTube(); ?>"></div>
+				</div>
+				<div id="hosts" class="people">
+					<h4>Hosts</h4>
 <?php
 
 	foreach ($hosts as $host) {
@@ -208,13 +209,13 @@
 	}
 	
 ?>
-			</div>
+				</div>
 <?php
 	
 	if (count($guests) > 0) {
 ?>
-			<div id="guests" class="people">
-				<h4>Guests</h4>
+				<div id="guests" class="people">
+					<h4>Guests</h4>
 <?php
 
 	foreach ($guests as $guest) {
@@ -222,14 +223,14 @@
 	}
 
 ?>
-			</div>
+				</div>
 <?php
 	}
 	
 	if (count($sponsors) > 0) {
 ?>
-			<div id="sponsors" class="people">
-				<h4>Sponsors</h4>
+				<div id="sponsors" class="people">
+					<h4>Sponsors</h4>
 <?php
 
 		foreach ($sponsors as $sponsor) {
@@ -237,11 +238,11 @@
 		}
 
 ?>
-			</div>
+				</div>
 <?php
         }
 ?>
-			<div style="clear: both;"></div>
+				<div style="clear: both;"></div>
 <?php
         
         /*       This is a complicated code. In here we are trying to create a new array based off the old array of the timeline values.
@@ -251,9 +252,9 @@
         $timestamps = $current_episode->getTimestamps();
         if (count($timestamps) > 0) {
 ?>
-			<div id="timeline-horizontal">
-				<h4>Timeline</h4>
-				<div id="line">
+				<div id="timeline-horizontal">
+					<h4>Timeline</h4>
+					<div id="line">
 <?php
 			$timeline_array = array();
 			$i = 0;
@@ -280,32 +281,32 @@
 				// Multiply by 100 to express in percentage form.
 				$timeline_element_percentage = $timeline_element_quotent*100;
 ?>
-				<a class="timelink" href="https://www.youtube.com/watch?v=<?php echo $current_episode->getYouTube(); ?>#t=<?php echo $timeline_element[0]; ?>" data-timestamp="<?php echo $timeline_element[0]; ?>">
-					<div class="topic" style="width:<?php echo $timeline_element_percentage; ?>%" onmouseover="appear('<?php echo $i; ?>');" onmouseout="disappear('<?php echo $i; ?>');">
-						<div class="tooltip<?php echo($timeline_element[0] > ($current_episode->getLength())/2) ? ' right' : null; ?>" id="<?php echo $i; ?>" >
-							<div class="triangle">
-							
+					<a class="timelink" href="https://www.youtube.com/watch?v=<?php echo $current_episode->getYouTube(); ?>#t=<?php echo $timeline_element[0]; ?>" data-timestamp="<?php echo $timeline_element[0]; ?>">
+						<div class="topic" style="width:<?php echo $timeline_element_percentage; ?>%" onmouseover="appear('<?php echo $i; ?>');" onmouseout="disappear('<?php echo $i; ?>');">
+							<div class="tooltip<?php echo($timeline_element[0] > ($current_episode->getLength())/2) ? ' right' : null; ?>" id="<?php echo $i; ?>" >
+								<div class="triangle">
+								
+								</div>
+								<span><?php echo $timeline_element[1]; ?></span>
 							</div>
-							<span><?php echo $timeline_element[1]; ?></span>
 						</div>
-					</div>
-				</a>
+					</a>
 <?php
 				$i++;
 			}
 ?>
 
+					</div>
 				</div>
-			</div>
-			<div id="timeline-vertical">
-				<table id="timeline-table">
-					<thead>
-							<tr>
-									<th>Time</th>
-									<th>Event</th>
-							</tr>
-					</thead>
-					<tbody>
+				<div id="timeline-vertical">
+					<table id="timeline-table">
+						<thead>
+								<tr>
+										<th>Time</th>
+										<th>Event</th>
+								</tr>
+						</thead>
+						<tbody>
 <?php
         
 			foreach ($timestamps as $timestamp) {
@@ -314,19 +315,20 @@
 					$minutes = floor(($init / 60) % 60);
 					$seconds = $init % 60;
 ?>
-						<tr>
-								<td class="timestamp"><a class="timelink" href="https://www.youtube.com/watch?v=<?php echo $current_episode->getYouTube(); ?>#t=<?php echo $init; ?>" data-timestamp="<?php echo $init; ?>"><?php printf("%02d:%02d:%02d", $hours, $minutes, $seconds); ?></a></td>
-								<td class="event"><?php echo $timestamp["Value"]; ?><?php if ($timestamp["Type"] == "Link") { ?><a target="_blank" href="<?php echo $timestamp["URL"]; ?>"><i class="fontawesome-external-link"></i></a><?php } ?></td>
-						</tr>
+							<tr>
+									<td class="timestamp"><a class="timelink" href="https://www.youtube.com/watch?v=<?php echo $current_episode->getYouTube(); ?>#t=<?php echo $init; ?>" data-timestamp="<?php echo $init; ?>"><?php printf("%02d:%02d:%02d", $hours, $minutes, $seconds); ?></a></td>
+									<td class="event"><?php echo $timestamp["Value"]; ?><?php if ($timestamp["Type"] == "Link") { ?><a target="_blank" href="<?php echo $timestamp["URL"]; ?>"><i class="fontawesome-external-link"></i></a><?php } ?></td>
+							</tr>
 <?php
                 }
         
 ?>
-					</tbody>
-				</table>
+						</tbody>
+					</table>
 <?php
         }
 ?>
+				</div>
 			</div>
 		</section>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
