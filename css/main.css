@@ -30,10 +30,10 @@ h1 {
 	padding: 0 20px;
 	line-height: 2;
 	position: relative;
-	transition: all 0.3s ease-out;
+	transition: all 0.2s ease-out;
 }
 .sidebar, .main {
-	transition: all 0.3s ease-out;
+	transition: all 0.2s ease-out;
 	overflow-x: hidden;
 	overflow-y: scroll;
 	-webkit-overflow-scrolling: touch;
@@ -80,7 +80,7 @@ h3 {
 	left: 0;
 	z-index: -1;
 	opacity: 0;
-	transition: opacity 0.3s ease-out;
+	transition: opacity 0.2s ease-out;
 }
 .toggle-menu:hover {
 	color: white
@@ -284,7 +284,8 @@ td.event a i {
 		z-index: 10;
 	}
 	.sidebar.toggled + .main {
-		overflow: hidden
+		overflow: hidden;
+		left: 230px;
 	}
 	.sidebar {
 		left: -230px
