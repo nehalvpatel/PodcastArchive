@@ -16,14 +16,15 @@ html {
 body {
 	position: relative;
 	margin: 0 auto;
+	color: white;
 }
 header {
-	background: #444;
+	background: #BB4D3E;
 	overflow: hidden;
+	border-bottom: 7px solid #D97062;
 }
 h1 {
 	font-weight: normal;
-	color: white;
 	margin: 0;
 	font-size: 2em;
 	padding: 0 20px;
@@ -47,7 +48,7 @@ h1 {
 	overflow: hidden;
 }
 .main {
-	background: whitesmoke;
+	background: #414040;
 	position: absolute;
 	left: 230px;
 	right: 0;
@@ -70,10 +71,10 @@ h3 {
 	font-size: 90%;
 }
 .toggle-menu {
-	color: #ccc;
 	text-decoration: none;
 	font-size: 50px;
 	float: left;
+	color: white;
 	display: block;
 	position: absolute;
 	left: 0;
@@ -99,9 +100,8 @@ nav ul {
 nav ul li {
 	background: #333;
 	list-style: none;
-	border-top: 1px solid transparent;
 	border-bottom: 1px solid #444;
-	color: #777;
+	color: #aaa;
 }
 nav ul li a {
 	text-decoration: none;
@@ -109,27 +109,17 @@ nav ul li a {
 	font-weight: bold;
 	color: inherit;
 	padding: 10px 0px 10px 25px;
+	border-left: 10px solid transparent;
 }
-nav ul li#active, nav ul li:hover {
-	background: #426dc3;
-	background: -moz-linear-gradient(top,  #426dc3 0%, #0d4f8d 100%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#426dc3), color-stop(100%,#0d4f8d));
-	background: -webkit-linear-gradient(top,  #426dc3 0%,#0d4f8d 100%);
-	background: -o-linear-gradient(top,  #426dc3 0%,#0d4f8d 100%);
-	background: -ms-linear-gradient(top,  #426dc3 0%,#0d4f8d 100%);
-	background: linear-gradient(to bottom,  #426dc3 0%,#0d4f8d 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#426dc3', endColorstr='#0d4f8d',GradientType=0 );
-	border-top: 1px solid #7BA5FF;
-	border-bottom: 1px solid #092763;
-	color: white;
+nav ul li a:hover{
+	border-left: 10px solid #bb4d3e;
 }
 #sidebar {
 	height: 100%;
 	overflow: auto;
 }
 .people, #timeline-horizontal, #timeline-vertical {
-	background: #3a3a3a;
-	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
+	background: #BB4D3E;
 	padding: 10px 10px 10px 10px;
 	margin-bottom: 20px;
 }
@@ -140,8 +130,6 @@ nav ul li#active, nav ul li:hover {
 .people h4, #timeline-horizontal h4, #timeline-vertical h4 {
 	margin: 0;
 	font-size: 0.7em;
-	text-shadow: 1px 1px 0 black;
-	color: #888;
 	font-size: 13pt;
 	margin-bottom: 10px;
 	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -162,11 +150,10 @@ nav ul li#active, nav ul li:hover {
 }
 .person {
 	padding: 4px;
-	background: #fff;
+	background: #414040;
 	width: 46px;
 	display: inline-block;
 	vertical-align: top;
-	box-shadow: 0 1px 3px rgba(34,25,25,0.4);
 }
 .person img {
 	vertical-align: middle;
@@ -175,13 +162,6 @@ nav ul li#active, nav ul li:hover {
 }
 thead tr th {
 	padding-bottom: 10px
-}
-tbody tr:hover {
-	color: white;
-	background-color: #333;
-}
-tbody tr:hover td a {
-	color: white
 }
 td.timestamp {
 	padding-top: 3px;
@@ -195,7 +175,10 @@ td.timestamp {
 	border-top-style: solid;
 }
 td.timestamp a {
-	color: #888
+	color: inherit;
+}
+td.timestamp a:hover{
+	color: white;
 }
 td.event {
 	padding-top: 3px;
@@ -204,14 +187,13 @@ td.event {
 	border-top-style: solid;
 }
 td.event a {
-	color: #555;
+	color: inherit;
 	text-decoration: none;
 }
 td.event a i {
 	font-style: normal;
 	font-size: 10pt;
 	padding-left: 8px;
-	color: #999;
 }
 .info {
 	margin-bottom: 20px
@@ -224,8 +206,8 @@ td.event a i {
 	font-style: normal;
 }
 .comments {
-	color: black;
 	text-decoration: none;
+	color: inherit;
 }
 .comments i {
 	font-style: normal;
@@ -241,7 +223,6 @@ td.event a i {
 
 /* Table Timeline Styles */
 #timeline-table {
-	color: #888;
 	width: 100%;
 }
 #timeline-table tbody {
@@ -252,16 +233,18 @@ td.event a i {
 #line {
 	height: 35px
 }
+#line a{
+	color: inherit;
+}
 .topic {
 	height: 100%;
 	float: left;
-	background: #333;
-	border-right: 1px solid #555;
-	border-top: 1px solid #666;
-	border-bottom: 1px solid #222;
+	background: #d34537;
+	border-right: 1px solid #ff6657;
+	border-top: 4px solid #ff6657;
 }
 .topic:hover {
-	background: #444
+	background: #ff6657;
 }
 .tooltip {
 	width: 300px;
@@ -283,7 +266,6 @@ td.event a i {
 	border-color: transparent transparent black transparent;
 }
 .tooltip span {
-	color: white;
 	font-size: 0.8em;
 }
 .right {
@@ -300,7 +282,6 @@ td.event a i {
 	.sidebar.toggled {
 		left: 0;
 		z-index: 10;
-		box-shadow: 3px 1px 10px rgba(0, 0, 0, 0.8);
 	}
 	.sidebar.toggled + .main {
 		overflow: hidden
@@ -320,9 +301,6 @@ td.event a i {
 	}
 	#timeline-horizontal {
 		display: none
-	}
-	#timeline-vertical {
-		display: block
 	}
 	.people {
 		width: 100%;
