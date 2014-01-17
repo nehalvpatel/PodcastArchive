@@ -185,7 +185,7 @@
 				<h1>Painkiller Already Archive</h1>
 			</header>
 			<div id="container">
-				<h2 id="top">Painkiller Already #<?php echo $current_episode->getNumber(); ?></h2>
+				<h2>Painkiller Already #<?php echo $current_episode->getNumber(); ?></h2>
 				<div class="info">
 					<i class="published fontawesome-time"></i><small><time datetime="<?php echo $current_episode->getDate(); ?>"><?php echo date("F d, Y", strtotime($current_episode->getDate())); ?></time></small>
 					<?php if ($current_episode->getReddit() != "") { ?><a class="comments" href="http://www.reddit.com/comments/<?php echo $current_episode->getReddit(); ?>"><i class="fontawesome-comments"></i><small id="comments" data-reddit="<?php echo $current_episode->getReddit(); ?>">Comments</small></a><?php } ?>

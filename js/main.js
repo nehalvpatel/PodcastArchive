@@ -40,7 +40,7 @@ function onYouTubePlayerAPIReady() {
 // click timestamp to seek video
 function seekYT(timestamp) {
 	player.seekTo(timestamp);
-	document.getElementById("top").scrollIntoView();
+	document.getElementsByTagName("header")[0].scrollIntoView();
 }
 
 // collapsible sidebar
