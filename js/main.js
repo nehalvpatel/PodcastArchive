@@ -25,6 +25,14 @@ $(document).ready(function() {
 		seekYT($(this).data("timestamp"));
 		return false;
 	});
+	
+	// increase horizontal timeline padding on hover
+	$(".topic").mouseenter(function() {
+		$("#line").css("margin-bottom", "30px");
+	});
+	$(".topic").mouseleave(function() {
+		$("#line").css("margin-bottom", "");
+	});
 });
 
 // load YT player

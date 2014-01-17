@@ -123,10 +123,6 @@ nav ul li a:hover, nav ul li#active a{
 	padding: 10px 10px 10px 10px;
 	margin-bottom: 20px;
 }
-#timeline-horizontal {
-	/* This is to leave room for the graphical timeline tooltips */
-	min-height: 110px;
-}
 .people h4, #timeline-horizontal h4, #timeline-vertical h4 {
 	margin: 0;
 	font-size: 0.7em;
@@ -239,12 +235,12 @@ td.event a i {
 .topic {
 	height: 100%;
 	float: left;
-	background: #d34537;
-	border-right: 1px solid #ff6657;
-	border-top: 4px solid #ff6657;
+	background: #333;
+	border-right: 1px solid #414040;
+	border-top: 4px solid #414040;
 }
 .topic:hover {
-	background: #ff6657;
+	background: #414040;
 }
 .tooltip {
 	width: 300px;
