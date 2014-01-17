@@ -111,7 +111,7 @@ nav ul li a {
 	padding: 10px 0px 10px 25px;
 	border-left: 10px solid transparent;
 }
-nav ul li a:hover, nav ul li#active{
+nav ul li a:hover, nav ul li#active a{
 	border-left: 10px solid #bb4d3e;
 }
 #sidebar {
