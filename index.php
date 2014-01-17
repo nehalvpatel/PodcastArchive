@@ -160,7 +160,8 @@
 ?>
 		
 		<!-- CSS -->
-		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css" />
+		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css">
+		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/fontawesome.css">
 	</head>
 	<body itemscope itemtype="http://schema.org/WebPage">
 		<aside class="sidebar">
@@ -181,14 +182,14 @@
 		</aside>
 		<section class="main">
 			<header>
-				<a href="#" class="toggle-menu fontawesome-reorder"></a>
+				<a href="#" class="toggle-menu icon-reorder"></a>
 				<h1>Painkiller Already Archive</h1>
 			</header>
 			<div id="container">
 				<h2>Painkiller Already #<?php echo $current_episode->getNumber(); ?></h2>
 				<div class="info">
-					<i class="published fontawesome-time"></i><small><time datetime="<?php echo $current_episode->getDate(); ?>"><?php echo date("F d, Y", strtotime($current_episode->getDate())); ?></time></small>
-					<?php if ($current_episode->getReddit() != "") { ?><a class="comments" href="http://www.reddit.com/comments/<?php echo $current_episode->getReddit(); ?>"><i class="fontawesome-comments"></i><small id="comments" data-reddit="<?php echo $current_episode->getReddit(); ?>">Comments</small></a><?php } ?>
+					<span class="published"><i class="icon-time"></i><small><time datetime="<?php echo $current_episode->getDate(); ?>"><?php echo date("F d, Y", strtotime($current_episode->getDate())); ?></time></small></span>
+					<?php if ($current_episode->getReddit() != "") { ?><a class="comments" href="http://www.reddit.com/comments/<?php echo $current_episode->getReddit(); ?>"><i class="icon-comments"></i><small id="comments" data-reddit="<?php echo $current_episode->getReddit(); ?>">Comments</small></a><?php } ?>
 				</div>
 				<div itemprop="video" itemscope itemtype="http://schema.org/VideoObject">
 					<meta itemprop="name" content="Painkiller Already #<?php echo $current_episode->getNumber(); ?>">
@@ -316,7 +317,7 @@
 ?>
 							<tr>
 									<td class="timestamp"><a class="timelink" href="https://www.youtube.com/watch?v=<?php echo $current_episode->getYouTube(); ?>#t=<?php echo $init; ?>" data-timestamp="<?php echo $init; ?>"><?php printf("%02d:%02d:%02d", $hours, $minutes, $seconds); ?></a></td>
-									<td class="event"><?php echo $timestamp["Value"]; ?><?php if ($timestamp["Type"] == "Link") { ?><a target="_blank" href="<?php echo $timestamp["URL"]; ?>"><i class="fontawesome-external-link"></i></a><?php } ?></td>
+									<td class="event"><?php echo $timestamp["Value"]; ?><?php if ($timestamp["Type"] == "Link") { ?><a target="_blank" href="<?php echo $timestamp["URL"]; ?>"><i class="icon-external-link"></i></a><?php } ?></td>
 							</tr>
 <?php
 				}
