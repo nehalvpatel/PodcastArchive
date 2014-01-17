@@ -229,6 +229,9 @@ td.event a i {
 #line {
 	height: 35px
 }
+#line:hover +#spacer{
+	height: 35px;
+}
 #line a{
 	color: inherit;
 }

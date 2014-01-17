@@ -295,8 +295,8 @@
 				$i++;
 			}
 ?>
-
 					</div>
+					<div id="spacer"></div>
 				</div>
 				<div id="timeline-vertical">
 					<table id="timeline-table">
