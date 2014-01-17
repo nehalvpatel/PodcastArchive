@@ -240,17 +240,17 @@
 ?>
 				</div>
 <?php
-        }
+		}
 ?>
 				<div style="clear: both;"></div>
 <?php
-        
-        /*       This is a complicated code. In here we are trying to create a new array based off the old array of the timeline values.
-        *        We want the new array to be a multi-dimensional array. Each element contains the timeline timestamp (time in seconds), the value (timeline label) and the timestamp of the next topic.
-        *        This is so we can find the time of the beginning & the end of each topic and will help create the graphical timeline.
-        */
-        $timestamps = $current_episode->getTimestamps();
-        if (count($timestamps) > 0) {
+		
+		/*		This is a complicated code. In here we are trying to create a new array based off the old array of the timeline values.
+		*		We want the new array to be a multi-dimensional array. Each element contains the timeline timestamp (time in seconds), the value (timeline label) and the timestamp of the next topic.
+		*		This is so we can find the time of the beginning & the end of each topic and will help create the graphical timeline.
+		*/
+		$timestamps = $current_episode->getTimestamps();
+		if (count($timestamps) > 0) {
 ?>
 				<div id="timeline-horizontal">
 					<h4>Timeline</h4>
@@ -296,7 +296,6 @@
 			}
 ?>
 					</div>
-					<div id="spacer"></div>
 				</div>
 				<div id="timeline-vertical">
 					<table id="timeline-table">
@@ -308,7 +307,7 @@
 						</thead>
 						<tbody>
 <?php
-        
+		
 			foreach ($timestamps as $timestamp) {
 					$init = $timestamp["Timestamp"];
 					$hours = floor($init / 3600);
@@ -320,13 +319,13 @@
 									<td class="event"><?php echo $timestamp["Value"]; ?><?php if ($timestamp["Type"] == "Link") { ?><a target="_blank" href="<?php echo $timestamp["URL"]; ?>"><i class="fontawesome-external-link"></i></a><?php } ?></td>
 							</tr>
 <?php
-                }
-        
+				}
+		
 ?>
 						</tbody>
 					</table>
 <?php
-        }
+		}
 ?>
 				</div>
 			</div>
