@@ -19,6 +19,7 @@ header {
 	background: #BB4D3E;
 	overflow: hidden;
 	border-bottom: 7px solid #D97062;
+	white-space: nowrap;
 }
 h1 {
 	font-weight: normal;
@@ -28,6 +29,8 @@ h1 {
 	line-height: 2;
 	position: relative;
 	transition: all 0.2s ease-out;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 .sidebar, .main {
 	transition: all 0.2s ease-out;
@@ -107,8 +110,12 @@ nav ul li a {
 	padding: 10px 0px 10px 25px;
 	border-left: 10px solid transparent;
 }
-nav ul li a:hover, nav ul li#active a{
+nav ul li a:hover {
 	border-left: 10px solid #bb4d3e;
+}
+nav ul li#active a {
+	background: #bb4d3e;
+	color: #FFFFFF;
 }
 #sidebar {
 	height: 100%;
