@@ -171,7 +171,7 @@
 <?php
 	foreach ($Podcast->getEpisodes() as $episode) {
 ?>
-					<li <?php if ((isset($_GET["episode"])) && ($episode["Number"] == $_GET["episode"])) { echo ' id="active"'; } ?>>
+					<li<?php if ((isset($_GET["episode"])) && ($episode["Number"] == $_GET["episode"])) { echo ' id="active"'; } ?>>
 						<a href="<?php echo $domain; ?>episode/<?php echo $episode["Number"]; ?>">#<?php echo $episode["Number"]; ?></a>
 					</li>
 <?php
@@ -189,7 +189,7 @@
 				<h2>Painkiller Already #<?php echo $current_episode->getNumber(); ?></h2>
 				<div class="info">
 					<span class="published"><i class="icon-time"></i><small><time datetime="<?php echo $current_episode->getDate(); ?>"><?php echo date("F d, Y", strtotime($current_episode->getDate())); ?></time></small></span>
-					<?php if ($current_episode->getReddit() != "") { ?><a class="comments" href="http://www.reddit.com/comments/<?php echo $current_episode->getReddit(); ?>"><i class="icon-comments"></i><small id="comments" data-reddit="<?php echo $current_episode->getReddit(); ?>">Comments</small></a><?php } ?>
+					<?php if ($current_episode->getReddit() != "") { ?><a class="comments" href="http://www.reddit.com/comments/<?php echo $current_episode->getReddit(); ?>"><i class="icon-comments"></i><small id="comments" data-reddit="<?php echo $current_episode->getReddit(); ?>">Comments</small></a><?php echo PHP_EOL; } ?>
 				</div>
 				<div itemprop="video" itemscope itemtype="http://schema.org/VideoObject">
 					<meta itemprop="name" content="Painkiller Already #<?php echo $current_episode->getNumber(); ?>">
@@ -258,40 +258,39 @@
 					<div id="line">
 <?php
 			$timeline_array = array();
+			$timeline_array[] = array(0, "Intro");
 			$i = 0;
-			foreach ($timestamps as $timestamp){
-				$timeline_array[] = array($timestamp['Timestamp'], $timestamp['Value']);
+			foreach ($timestamps as $timestamp) {
+				$timeline_array[] = array($timestamp["Timestamp"], $timestamp["Value"]);
 				// Set the previous array element's finishing time to the currents starting time.
-				if(isset($timeline_array[count($timeline_array)-2])){
-						$timeline_array[count($timeline_array)-2][2] = $timestamp['Timestamp'];
+				if (isset($timeline_array[count($timeline_array) - 2])) {
+					$timeline_array[count($timeline_array) - 2][2] = $timestamp["Timestamp"];
 				}
-				$last_timestamp = $timestamp['Timestamp'];
+				$last_timestamp = $timestamp["Timestamp"];
 			}
 			// The last topic ends when the episode ends.
-			$timeline_array[count($timeline_array)-1][2] = $current_episode->getLength();
+			$timeline_array[count($timeline_array) - 1][2] = $current_episode->getLength();
 			
 			// We now start printing the timeline.
 			$toggler = true;
-			foreach($timeline_array as $timeline_element){
-				// Find size of timeline element .
-				$timeline_element_size = $timeline_element[2]-$timeline_element[0];
+			foreach ($timeline_array as $timeline_element) {
+				// Find size of timeline element.
+				$timeline_element_size = $timeline_element[2] - $timeline_element[0];
 				
 				// Express the timeline size as a quotent of the full current episode size.
-				$timeline_element_quotent = $timeline_element_size/$current_episode->getLength();
+				$timeline_element_quotent = $timeline_element_size / $current_episode->getLength();
 				
 				// Multiply by 100 to express in percentage form.
-				$timeline_element_percentage = $timeline_element_quotent*100;
+				$timeline_element_percentage = $timeline_element_quotent * 100;
 ?>
-					<a class="timelink" href="https://www.youtube.com/watch?v=<?php echo $current_episode->getYouTube(); ?>#t=<?php echo $timeline_element[0]; ?>" data-timestamp="<?php echo $timeline_element[0]; ?>">
-						<div class="topic" style="width:<?php echo $timeline_element_percentage; ?>%" onmouseover="appear('<?php echo $i; ?>');" onmouseout="disappear('<?php echo $i; ?>');">
-							<div class="tooltip<?php echo($timeline_element[0] > ($current_episode->getLength())/2) ? ' right' : null; ?>" id="<?php echo $i; ?>" >
-								<div class="triangle">
-								
+						<a class="timelink" href="https://www.youtube.com/watch?v=<?php echo $current_episode->getYouTube(); ?>#t=<?php echo $timeline_element[0]; ?>" data-timestamp="<?php echo $timeline_element[0]; ?>">
+							<div class="topic" style="width:<?php echo $timeline_element_percentage; ?>%" onmouseover="appear('<?php echo $i; ?>');" onmouseout="disappear('<?php echo $i; ?>');">
+								<div class="tooltip<?php echo ($timeline_element[0] > ($current_episode->getLength()) / 2) ? " right" : null; ?>" id="<?php echo $i; ?>">
+									<div class="triangle"></div>
+									<span><?php echo $timeline_element[1]; ?></span>
 								</div>
-								<span><?php echo $timeline_element[1]; ?></span>
 							</div>
-						</div>
-					</a>
+						</a>
 <?php
 				$i++;
 			}
@@ -301,10 +300,10 @@
 				<div id="timeline-vertical">
 					<table id="timeline-table">
 						<thead>
-								<tr>
-										<th>Time</th>
-										<th>Event</th>
-								</tr>
+							<tr>
+								<th>Time</th>
+								<th>Event</th>
+							</tr>
 						</thead>
 						<tbody>
 <?php
@@ -316,11 +315,11 @@
 					$seconds = $init % 60;
 ?>
 							<tr>
-									<td class="timestamp"><a class="timelink" href="https://www.youtube.com/watch?v=<?php echo $current_episode->getYouTube(); ?>#t=<?php echo $init; ?>" data-timestamp="<?php echo $init; ?>"><?php printf("%02d:%02d:%02d", $hours, $minutes, $seconds); ?></a></td>
-									<td class="event"><?php echo $timestamp["Value"]; ?><?php if ($timestamp["Type"] == "Link") { ?><a target="_blank" href="<?php echo $timestamp["URL"]; ?>"><i class="icon-external-link"></i></a><?php } ?></td>
+								<td class="timestamp"><a class="timelink" href="https://www.youtube.com/watch?v=<?php echo $current_episode->getYouTube(); ?>#t=<?php echo $init; ?>" data-timestamp="<?php echo $init; ?>"><?php printf("%02d:%02d:%02d", $hours, $minutes, $seconds); ?></a></td>
+								<td class="event"><?php echo $timestamp["Value"]; ?><?php if ($timestamp["Type"] == "Link") { ?><a target="_blank" href="<?php echo $timestamp["URL"]; ?>"><i class="icon-external-link"></i></a><?php } ?></td>
 							</tr>
 <?php
-				}
+			}
 		
 ?>
 						</tbody>
