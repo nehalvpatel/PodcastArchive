@@ -2,8 +2,6 @@
 
 	require_once("config.php");
 	
-	$domain = "http://" . $_SERVER["HTTP_HOST"] . str_replace(basename($_SERVER["PHP_SELF"]), "", $_SERVER["PHP_SELF"]);
-	
 	if (isset($_GET["episode"]) && is_numeric($_GET["episode"])) {
 		try {
 			$current_episode = new Episode($con);
@@ -171,7 +169,7 @@
 <?php
 	foreach ($Podcast->getEpisodes() as $episode) {
 ?>
-					<li id="<?php echo $episode["Identifier"]; ?>"<?php if ((isset($_GET["episode"])) && ($episode["Number"] == $_GET["episode"])) { echo ' id="active"'; } ?>>
+					<li data-episode="<?php echo $episode["Identifier"]; ?>"<?php if ((isset($_GET["episode"])) && ($episode["Number"] == $_GET["episode"])) { echo ' id="active"'; } ?>>
 						<a href="<?php echo $domain; ?>episode/<?php echo $episode["Number"]; ?>">#<?php echo $episode["Number"]; ?></a>
 					</li>
 <?php

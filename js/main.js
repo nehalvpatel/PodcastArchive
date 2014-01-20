@@ -48,7 +48,7 @@ $(document).ready(function() {
 						if (results_json.length > 0) {
 							$.each(results_json, function(result_id) {
 								// show only returned episodes
-								var episode = "#" + results_json[result_id];
+								var episode = "li[data-episode='" + results_json[result_id] + "']";
 								$(episode).css("display", "block");
 							});
 						}
@@ -56,6 +56,8 @@ $(document).ready(function() {
 				}
 			} else {
 				// reset episode list
+				previous_search = "";
+				
 				$("#sidebar ul li").each(function(id, li){
 					$(li).css("display", "block");
 				});

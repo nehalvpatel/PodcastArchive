@@ -4,9 +4,6 @@
 
 	require_once("config.php");
 	
-	$settings = $Podcast->getSettings();
-	$domain = $settings["Domain"];
-	
 	echo '<?xml version="1.0" encoding="utf-8"?>' . PHP_EOL;
 	
 ?>

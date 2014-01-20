@@ -21,5 +21,7 @@
 	
 	$Podcast->setAuthorName("Nehal Patel");
 	$Podcast->setAuthorEmail("nehal@itspatel.com");
+	
+	$domain = "http://" . $_SERVER["HTTP_HOST"] . str_replace(basename($_SERVER["PHP_SELF"]), "", $_SERVER["PHP_SELF"]);
 
 ?>
