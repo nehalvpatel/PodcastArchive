@@ -261,10 +261,16 @@
 					<div id="line">
 <?php
 			$timeline_array = array();
-			$timeline_array[] = array(0, "Intro");
+			// If the first timestamp is far into the episode, add an intro timestamp.
+			if($timestamps[0]["Timestamp"] > 20){
+				$timeline_array[] = array(0, "Intro");
+			}
 			$i = 0;
 			foreach ($timestamps as $timestamp) {
-				$timeline_array[] = array($timestamp["Timestamp"], $timestamp["Value"]);
+				// Only allow text timestamps in the horizontal timeline.
+				if($timestamp["Type"] == "Text"){
+					$timeline_array[] = array($timestamp["Timestamp"], $timestamp["Value"]);
+				}
 				// Set the previous array element's finishing time to the currents starting time.
 				if (isset($timeline_array[count($timeline_array) - 2])) {
 					$timeline_array[count($timeline_array) - 2][2] = $timestamp["Timestamp"];
