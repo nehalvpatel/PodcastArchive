@@ -171,7 +171,7 @@
 <?php
 	foreach ($Podcast->getEpisodes() as $episode) {
 ?>
-					<li<?php if ((isset($_GET["episode"])) && ($episode["Number"] == $_GET["episode"])) { echo ' id="active"'; } ?>>
+					<li id="<?php echo $episode["Identifier"]; ?>"<?php if ((isset($_GET["episode"])) && ($episode["Number"] == $_GET["episode"])) { echo ' id="active"'; } ?>>
 						<a href="<?php echo $domain; ?>episode/<?php echo $episode["Number"]; ?>">#<?php echo $episode["Number"]; ?></a>
 					</li>
 <?php
@@ -184,6 +184,9 @@
 			<header>
 				<a href="#" class="toggle-menu icon-reorder"></a>
 				<h1>Painkiller Already Archive</h1>
+				<div class="search-form">
+					<input type="search" id="search-field" class="search-field" name="query" placeholder="Search">
+				</div>
 			</header>
 			<div id="container">
 				<h2>Painkiller Already #<?php echo $current_episode->getNumber(); ?></h2>
@@ -331,6 +334,9 @@
 			</div>
 		</section>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script type="text/javascript">
+			var domain = "<?php echo $domain; ?>";
+		</script>
 		<script type="text/javascript" src="<?php echo $domain; ?>js/main.js"></script>
 	</body>
 </html>

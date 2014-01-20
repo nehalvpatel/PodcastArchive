@@ -14,6 +14,7 @@ $(document).ready(function() {
 		$("#sidebar").animate({scrollTop:$("#active").position().top},1000);
 	}
 	
+	// load comment count
 	if (document.getElementById("comments")) {
 		$.get("http://www.reddit.com/comments/" + document.getElementById("comments").getAttribute("data-reddit") + ".json", function (data) {
 			$("#comments").html(data[0]["data"]["children"][0]["data"]["num_comments"] + " Comments");
@@ -24,6 +25,41 @@ $(document).ready(function() {
 	$(".timelink").click(function() {
 		seekYT($(this).data("timestamp"));
 		return false;
+	});
+	
+	// live search
+	var search_timer;
+	var previous_search;
+	$("#search-field").keyup(function() {
+		clearTimeout(search_timer);
+		var search_value = this.value;
+		
+		search_timer = setTimeout(function() {
+			if ($.trim(search_value) != "") {
+				if (previous_search != search_value) {
+					previous_search = search_value;
+					
+					$.getJSON(domain + "search.php?query=" + search_value, function(results_json){
+						if (results_json.length > 0) {
+							// hide all episodes
+							$("#sidebar ul li").each(function(id, li){
+								$(li).css("display", "none");
+							});
+							$.each(results_json, function(result_id) {
+								// show only returned episodes
+								var episode = "#" + results_json[result_id];
+								$(episode).css("display", "block");
+							});
+						}
+					});
+				}
+			} else {
+				// reset episode list
+				$("#sidebar ul li").each(function(id, li){
+					$(li).css("display", "block");
+				});
+			}
+		}, 200);
 	});
 });
 

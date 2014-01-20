@@ -280,6 +280,37 @@ td.event a i {
 	color: #aaa;
 	margin: 0;
 }
+
+/* Search Styles */
+.search-form {
+	position: absolute;
+	right: 14px;
+	top: 11px;
+}
+.search-field {
+	background: transparent url("../img/search-white.png") no-repeat scroll 5px center;
+	background-size: 24px 24px;
+	border: none;
+	cursor: pointer;
+	height: 37px;
+	margin: 3px 0;
+	padding: 0 0 0 34px;
+	position: relative;
+	-webkit-transition: width 400ms ease, background 400ms ease;
+	transition:         width 400ms ease, background 400ms ease;
+	width: 0;
+}
+.search-field:focus {
+	background-color: #fff;
+	cursor: text;
+	outline: 0;
+	width: 230px;
+	background-image: url("../img/search-black.png");
+}
+input[type="search"] {
+  -webkit-appearance: textfield;
+}
+
 @media all and (max-width: 1024px) { 
 	.sidebar.toggled {
 		left: 0;
