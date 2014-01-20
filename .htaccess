@@ -1,4 +1,5 @@
 RewriteEngine On
 
 RewriteRule ^episode\/(\d+\.?\d*)$ index.php?episode=$1
+RewriteRule ^robots.txt$ robots.php
 RewriteRule ^sitemap.xml$ sitemap.php
