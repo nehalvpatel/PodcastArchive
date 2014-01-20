@@ -40,11 +40,12 @@ $(document).ready(function() {
 					previous_search = search_value;
 					
 					$.getJSON(domain + "search.php?query=" + search_value, function(results_json){
+						// hide all episodes
+						$("#sidebar ul li").each(function(id, li){
+							$(li).css("display", "none");
+						});
+						
 						if (results_json.length > 0) {
-							// hide all episodes
-							$("#sidebar ul li").each(function(id, li){
-								$(li).css("display", "none");
-							});
 							$.each(results_json, function(result_id) {
 								// show only returned episodes
 								var episode = "#" + results_json[result_id];
