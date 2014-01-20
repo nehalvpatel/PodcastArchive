@@ -30,7 +30,7 @@ $(document).ready(function() {
 	// live search
 	var search_timer;
 	var previous_search;
-	$("#search-field").keyup(function() {
+	$("#search-field").on("input", function() {
 		clearTimeout(search_timer);
 		var search_value = this.value;
 		

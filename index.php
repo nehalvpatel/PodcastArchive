@@ -164,6 +164,7 @@
 	<body itemscope itemtype="http://schema.org/WebPage">
 		<aside class="sidebar">
 			<nav id="sidebar">
+				<div class="search-form"><input class="search-field" type="search" id="search-field" name="search" placeholder="Search" results="5"></div>
 				<h3>Episodes</h3>
 				<ul>
 <?php
@@ -182,9 +183,6 @@
 			<header>
 				<a href="#" class="toggle-menu icon-reorder"></a>
 				<h1>Painkiller Already Archive</h1>
-				<div class="search-form">
-					<input type="search" id="search-field" class="search-field" name="query" placeholder="Search">
-				</div>
 			</header>
 			<div id="container">
 				<h2>Painkiller Already #<?php echo $current_episode->getNumber(); ?></h2>
