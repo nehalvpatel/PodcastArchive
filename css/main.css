@@ -82,6 +82,9 @@ h3 {
 	transition: opacity 0.2s ease-out;
 	font-size: 24px;
 }
+.toggle-menu:focus {
+	outline: none;
+}
 .toggle-menu:hover {
 	color: white
 }
@@ -290,6 +293,9 @@ td.event a i {
 	border-radius: 15px;
 	border-style: none;
 	padding: 5px 10px 5px 10px;
+}
+.search-field:focus {
+	outline: none;
 }
 input[type="search"] {
   -webkit-appearance: textfield;
