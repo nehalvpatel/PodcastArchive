@@ -189,6 +189,7 @@
 				<div class="info">
 					<span class="published"><i class="icon-time"></i><small><time datetime="<?php echo $current_episode->getDate(); ?>"><?php echo date("F d, Y", strtotime($current_episode->getDate())); ?></time></small></span>
 					<?php if ($current_episode->getReddit() != "") { ?><a class="comments" href="http://www.reddit.com/comments/<?php echo $current_episode->getReddit(); ?>"><i class="icon-comments"></i><small id="comments" data-reddit="<?php echo $current_episode->getReddit(); ?>">Comments</small></a><?php echo PHP_EOL; } ?>
+					<?php if ($current_episode->getTimelineAuthor() != "") { ?><span class="author"><small>Timeline Author: <?php echo $current_episode->getTimelineAuthor();?></small></span><?php } ?>
 				</div>
 				<div itemprop="video" itemscope itemtype="http://schema.org/VideoObject">
 					<meta itemprop="name" content="Painkiller Already #<?php echo $current_episode->getNumber(); ?>">

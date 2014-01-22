@@ -173,6 +173,14 @@
 			return $this->updateValue("Reddit", $reddit);
 		}
 		
+		public function getTimelineAuthor() {
+			return $this->episode_data["Timeline Author"];
+		}
+		
+		public function setTimelineAuthor($timelineAuthor) {
+			return $this->updateValue("Timline Author", $timelineAuthor);
+		}
+		
 		public function getTimestamps() {
 			return $this->episode_data["Timestamps"];
 		}
