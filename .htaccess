@@ -1,5 +1,13 @@
 RewriteEngine On
 
+# navigation
 RewriteRule ^episode\/(\d+\.?\d*)$ index.php?episode=$1
+
+# search engines
 RewriteRule ^robots.txt$ robots.php
 RewriteRule ^sitemap.xml$ sitemap.php
+
+# icons
+RewriteRule ^(favicon(-[\d]*x[\d]*){0,1}\.(ico|png))$ img/favicons/$1 [PT]
+RewriteRule ^(mstile(-[\d]*x[\d]*)\.png)$ img/favicons/$1 [PT]
+RewriteRule ^(apple-touch-icon(-[\d]*x[\d]*){0,1}(-precomposed){0,1}\.png)$ img/favicons/$1 [PT]
