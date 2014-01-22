@@ -197,19 +197,20 @@ td.event a i {
 	font-size: 10pt;
 	padding-left: 8px;
 }
-.info {
-	margin-bottom: 20px
-}
 .info small {
 	margin-left: 5px
 }
-.published i, .comments i {
+.info i {
 	font-size: 15px;
 }
-.comments {
+.comments, .author {
 	text-decoration: none;
 	color: inherit;
-	margin-left: 5px;
+	margin-left: 10px;
+}
+#rock-hardplace {
+	height: 20px;
+	clear: both;
 }
 #player {
 	width: 100%;
@@ -328,5 +329,8 @@ input[type="search"] {
 	}
 	.people {
 		width: 100%;
+	}
+	.comments, .author {
+		float: right;
 	}
 }

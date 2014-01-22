@@ -268,7 +268,8 @@ ul.icons li [class*=" icon-"] {
   .btn .icon-spin.icon-large {
     height: .75em;
   }
-}.icon-time:before		{ content: "\f021"; }
-.icon-comments:before		{ content: "\f022"; }
-.icon-external-link:before		{ content: "\f023"; }
-.icon-reorder:before		{ content: "\f024"; }
+}.icon-user:before		{ content: "\f021"; }
+.icon-time:before		{ content: "\f022"; }
+.icon-comments:before		{ content: "\f023"; }
+.icon-external-link:before		{ content: "\f024"; }
+.icon-reorder:before		{ content: "\f025"; }
