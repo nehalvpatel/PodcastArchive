@@ -158,8 +158,8 @@
 ?>
 		
 		<!-- CSS -->
-		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css">
-		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/fontawesome.css">
+		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css?ver=<?php echo $commit_count; ?>">
+		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/fontawesome.css?ver=<?php echo $commit_count; ?>">
 	</head>
 	<body itemscope itemtype="http://schema.org/WebPage">
 		<aside class="sidebar">
@@ -341,6 +341,6 @@
 		<script type="text/javascript">
 			var domain = "<?php echo $domain; ?>";
 		</script>
-		<script type="text/javascript" src="<?php echo $domain; ?>js/main.js"></script>
+		<script type="text/javascript" src="<?php echo $domain; ?>js/main.js?ver=<?php echo $commit_count; ?>"></script>
 	</body>
 </html>
