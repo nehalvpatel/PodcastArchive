@@ -291,7 +291,7 @@
 				$timeline_element_percentage = $timeline_element_quotent * 100;
 ?>
 						<a class="timelink" href="https://www.youtube.com/watch?v=<?php echo $current_episode->getYouTube(); ?>#t=<?php echo $timeline_element[0]; ?>" data-timestamp="<?php echo $timeline_element[0]; ?>">
-							<div class="topic" style="width:<?php echo $timeline_element_percentage; ?>%" onmouseover="appear('<?php echo $i; ?>');" onmouseout="disappear('<?php echo $i; ?>');">
+							<div class="topic" style="width: <?php echo $timeline_element_percentage; ?>%">
 								<div class="tooltip<?php echo ($timeline_element[0] > ($current_episode->getLength()) / 2) ? " right" : null; ?>" id="<?php echo $i; ?>">
 									<div class="triangle"></div>
 									<span><?php echo $timeline_element[1]; ?></span>

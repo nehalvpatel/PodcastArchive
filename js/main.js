@@ -25,6 +25,16 @@ $(document).ready(function() {
 		return false;
 	});
 	
+	// show horizontal timeline tooltip on hover
+	$("body").on({
+		mouseenter: function(){
+			document.getElementById($(this).children(".tooltip").attr("id")).style.display = "block";
+		},
+		mouseleave: function(){
+			document.getElementById($(this).children(".tooltip").attr("id")).style.display = "none";
+		}
+	}, ".topic"); 
+	
 	// live search
 	var search_timer;
 	var previous_search;
@@ -179,7 +189,7 @@ function updateContent(episode_data) {
 		var $line = $("<div>", {id: "line"});
 		$.each(episode_data["Timeline"]["Timestamps"], function(i, timestamp_data) {
 			var $timelink = $("<a>", {class: "timelink", href: "https://www.youtube.com/watch?v=" + episode_data["YouTube"] + "#t=" + timestamp_data["Seconds"], "data-timestamp": timestamp_data["Seconds"]});
-			var $topic = $("<div>", {class: "topic", style: "width:" + timestamp_data["Width"] + "%", "onmouseover": "appear('" + timestamp_data["ID"] + "');", "onmouseout": "disappear('" + timestamp_data["ID"] + "');"});
+			var $topic = $("<div>", {class: "topic", style: "width: " + timestamp_data["Width"] + "%"});
 			var $tooltip = $("<div>", {class: "tooltip", id: timestamp_data["ID"], style: "display: none"});
 			var $triangle = $("<div>", {class: "triangle"});
 			var $span = $("<span>").text(timestamp_data["Value"]);
@@ -316,11 +326,3 @@ $(function(){
 		$(".sidebar").toggleClass("toggled");
 	});
 });
-
-// horizontal timeline
-function disappear(id){
-	document.getElementById(id).style.display = "none";
-}
-function appear(id){
-	document.getElementById(id).style.display = "block";
-}
