@@ -116,6 +116,9 @@ function updateContent(episode_data) {
 	// change header
 	$("#container h2").text("Painkiller Already #" + episode_data["Number"]);
 	
+	// update current episode
+	$("nav ul").attr("data-current", episode_data["Identifier"]);
+	
 	// change date published
 	$(".published time").attr("datetime", episode_data["DateTime"]);
 	$(".published time").text(episode_data["Date"]);
