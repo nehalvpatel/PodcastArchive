@@ -21,11 +21,11 @@ $(document).ready(function() {
 	
 	// capture timestamp click events
 	$("body").on("click", "a.timelink", function() {
-		seekYT($(this).data("timestamp"));
+		seekYT($(this).attr("data-timestamp"));
 		
 		// track in analytics
 		if (typeof _gaq !== "undefined") {
-			_gaq.push(["_trackEvent", "Timeline", "Seek", $("nav ul").data("current"), $(this).data("timestamp")]);
+			_gaq.push(["_trackEvent", "Timeline", "Seek", $("nav ul").attr("data-current"), $(this).attr("data-timestamp")]);
 		}
 		
 		return false;
