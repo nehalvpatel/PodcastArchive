@@ -22,6 +22,12 @@ $(document).ready(function() {
 	// capture timestamp click events
 	$("body").on("click", "a.timelink", function() {
 		seekYT($(this).data("timestamp"));
+		
+		// track in analytics
+		if (typeof _gaq !== "undefined") {
+			_gaq.push(["_trackEvent", "Timeline", "Seek", $("nav ul").data("current"), $(this).data("timestamp")]);
+		}
+		
 		return false;
 	});
 	
@@ -46,6 +52,11 @@ $(document).ready(function() {
 			if ($.trim(search_value) != "") {
 				if (previous_search != search_value) {
 					previous_search = search_value;
+					
+					// track search in analytics
+					if (typeof _gaq !== "undefined") {
+						_gaq.push(["_trackEvent", "Search", "Search", search_value]);
+					}
 					
 					$.getJSON(domain + "search.php?query=" + search_value, function(results_json){
 						// hide all episodes
@@ -296,10 +307,18 @@ function onPlayerReady(event) {
 	// episode click interceptor
 	$("nav a").click(function(e) {
 		if (hasPushstate) {
+			// cancel navigation
 			e.preventDefault();
 			
+			// add page to history
 			href = $(this).attr("href");
 			history.pushState(null, null, href);
+			
+			// track page view
+			if (typeof _gaq !== "undefined") {
+				_gaq.push(["_trackPageview", "/" + href.replace(domain, "")]);
+			}
+			
 			loadContent(href);
 		}
 	});

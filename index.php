@@ -166,7 +166,7 @@
 			<nav id="sidebar">
 				<div class="search-form"><input class="search-field" type="search" id="search-field" name="search" placeholder="Search" results="5"></div>
 				<h3>Episodes</h3>
-				<ul>
+				<ul data-current="<?php echo $current_episode->getIdentifier(); ?>">
 <?php
 	foreach ($Podcast->getEpisodes() as $episode) {
 ?>
