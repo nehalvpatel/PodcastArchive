@@ -74,35 +74,6 @@ $(document).ready(function() {
 	});
 });
 
-// setup pushState
-var cached_data = [];
-$(function() {
-	// check if available
-	var hasPushstate = !!(window.history && history.pushState);
-	
-	// episode click interceptor
-	$("nav a").click(function(e) {
-		if (hasPushstate) {
-			e.preventDefault();
-			
-			href = $(this).attr("href");
-			history.pushState(null, null, href);
-			loadContent(href);
-		}
-	});
-	
-	// add popstate listener to catch back and forward navigation
-	if (hasPushstate) {
-		window.addEventListener("load", function() {
-			setTimeout(function() {
-				window.addEventListener("popstate", function() {
-					loadContent(location.href);
-				});
-			}, 0);
-		});
-	}
-});
-
 // download data for new episode or use cache if possible
 function loadContent(url) {
 	if (cached_data.hasOwnProperty(url) == 1) {
@@ -309,8 +280,36 @@ function onYouTubePlayerAPIReady() {
 	player = new YT.Player("player", {
 		height: "400",
 		width: "650",
-		videoId: playerContainer.getAttribute("data-youtube")
+		videoId: playerContainer.getAttribute("data-youtube"),
+		events: {
+			"onReady": onPlayerReady
+		}
 	});
+}
+
+// setup pushState
+var cached_data = [];
+function onPlayerReady(event) {
+	// check if pushState is available
+	var hasPushstate = !!(window.history && history.pushState);
+	
+	// episode click interceptor
+	$("nav a").click(function(e) {
+		if (hasPushstate) {
+			e.preventDefault();
+			
+			href = $(this).attr("href");
+			history.pushState(null, null, href);
+			loadContent(href);
+		}
+	});
+	
+	// add popstate listener to catch back and forward navigation
+	if (hasPushstate) {
+		window.addEventListener("popstate", function() {
+			loadContent(location.href);
+		});
+	}
 }
 
 // click timestamp to seek video
