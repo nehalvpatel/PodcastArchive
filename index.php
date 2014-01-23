@@ -192,7 +192,7 @@
 					<?php if ($current_episode->getTimelineAuthor() != "") { ?><a class="author" title="Timeline Author" href="http://www.reddit.com/user/<?php echo $current_episode->getTimelineAuthor(); ?>"><i class="icon-user"></i><small><?php echo $current_episode->getTimelineAuthor(); ?></small></a><?php } ?>
 				</div>
 				<div id="rock-hardplace"></div>
-				<div itemprop="video" itemscope itemtype="http://schema.org/VideoObject">
+				<div id="video" itemprop="video" itemscope itemtype="http://schema.org/VideoObject">
 					<meta itemprop="name" content="Painkiller Already #<?php echo $current_episode->getNumber(); ?>">
 					<meta itemprop="description" content="Guests: <?php echo $guests_list; ?>">
 					<meta itemprop="thumbnailUrl" content="http://img.youtube.com/vi/<?php echo $current_episode->getYouTube(); ?>/hqdefault.jpg">
@@ -244,7 +244,7 @@
 <?php
 		}
 ?>
-				<div style="clear: both;"></div>
+				<div id="timeline-clear"></div>
 <?php
 		
 		/*		This is a complicated code. In here we are trying to create a new array based off the old array of the timeline values.

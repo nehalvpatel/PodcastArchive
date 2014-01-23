@@ -218,6 +218,9 @@ td.event a i {
 	margin-bottom: 20px;
 	display: block;
 }
+#timeline-clear {
+	clear: both;
+}
 
 /* Table Timeline Styles */
 #timeline-table {
