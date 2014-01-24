@@ -247,6 +247,12 @@ function updateContent(episode_data) {
 	
 	// update sponsors box
 	$("#timeline-clear").before(generatePeople("sponsors", "Sponsors", episode_data["People"]));
+	
+	// close sidebar if open
+	var $sidebar = $(".sidebar")
+	if ($sidebar.hasClass("toggled")) {
+		$sidebar.removeClass("toggled");
+	}
 }
 
 // fetch reddit comment count
