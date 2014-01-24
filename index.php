@@ -160,6 +160,13 @@
 		<!-- CSS -->
 		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css?ver=<?php echo $commit_count; ?>">
 		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/fontawesome.css?ver=<?php echo $commit_count; ?>">
+		
+		<!-- IE8 -->
+		<!--[if lt IE 9]>
+			<link rel="stylesheet" href="<?php echo $domain; ?>css/fontawesome-ie7.css">
+			<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.js"></script>
+			<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
+		<![endif]-->
 	</head>
 	<body itemscope itemtype="http://schema.org/WebPage">
 		<aside class="sidebar">
@@ -337,10 +344,18 @@
 				</div>
 			</div>
 		</section>
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-		<script type="text/javascript">
-			var domain = "<?php echo $domain; ?>";
-		</script>
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script type="text/javascript">var domain = "<?php echo $domain; ?>";</script>
 		<script type="text/javascript" src="<?php echo $domain; ?>js/main.js?ver=<?php echo $commit_count; ?>"></script>
+		<!--[if lt IE 9]>
+			<script type="text/javascript">
+				$(document).ready(function(){
+					$(".toggle-menu").click(function(){
+						$(".main").css({"display": "none"});
+						$(".main").css({"display": "block"});
+					});
+				});
+			</script>
+		<![endif]-->
 	</body>
 </html>

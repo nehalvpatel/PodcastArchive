@@ -116,7 +116,7 @@ nav ul li a {
 nav ul li a:hover {
 	border-left: 10px solid #bb4d3e;
 }
-nav ul li#active a {
+#active a {
 	background: #bb4d3e;
 	color: #FFFFFF;
 }
@@ -311,7 +311,6 @@ input[type="search"] {
 		z-index: 10;
 	}
 	.sidebar.toggled + .main {
-		overflow: hidden;
 		left: 230px;
 	}
 	.sidebar {

@@ -20,7 +20,7 @@ $(document).ready(function() {
 	}
 	
 	// capture timestamp click events
-	$("body").on("click", "a.timelink", function() {
+	$(document).on("click", "a.timelink", function() {
 		seekYT($(this).attr("data-timestamp"));
 		
 		// track in analytics
@@ -32,7 +32,7 @@ $(document).ready(function() {
 	});
 	
 	// show horizontal timeline tooltip on hover
-	$("body").on({
+	$(document).on({
 		mouseenter: function(){
 			document.getElementById($(this).children(".tooltip").attr("id")).style.display = "block";
 		},
@@ -44,7 +44,7 @@ $(document).ready(function() {
 	// live search
 	var search_timer;
 	var previous_search;
-	$("#search-field").on("input", function() {
+	$("#search-field").on("propertychange input", function() {
 		clearTimeout(search_timer);
 		var search_value = this.value;
 		
@@ -130,8 +130,8 @@ function updateContent(episode_data) {
 	}
 	
 	if (((episode_data["Timeline"]).hasOwnProperty("Author") == 1) && (episode_data["Timeline"]["Author"] != "")) {
-		var $link = $("<a>", {class: "author", title: "Timeline Author", href: "http://www.reddit.com/user/" + episode_data["Timeline"]["Author"]});
-		var $icon = $("<i>", {class: "icon-user"});
+		var $link = $("<a>", {"class": "author", title: "Timeline Author", href: "http://www.reddit.com/user/" + episode_data["Timeline"]["Author"]});
+		var $icon = $("<i>", {"class": "icon-user"});
 		var $author_text = $("<small>");
 		$author_text.text(episode_data["Timeline"]["Author"]);
 		
@@ -148,8 +148,8 @@ function updateContent(episode_data) {
 	}
 	
 	if (episode_data["Reddit"] != "") {
-		var $link = $("<a>", {class: "comments", title: "Discussion Comments", href: "http://www.reddit.com/comments/" + episode_data["Reddit"]});
-		var $icon = $("<i>", {class: "icon-comments"});
+		var $link = $("<a>", {"class": "comments", title: "Discussion Comments", href: "http://www.reddit.com/comments/" + episode_data["Reddit"]});
+		var $icon = $("<i>", {"class": "icon-comments"});
 		var $comment_text = $("<small>", {"data-reddit": episode_data["Reddit"]});
 		$comment_text.text("Comments");
 		
@@ -173,10 +173,10 @@ function updateContent(episode_data) {
 		
 		var $line = $("<div>", {id: "line"});
 		$.each(episode_data["Timeline"]["Timestamps"], function(i, timestamp_data) {
-			var $timelink = $("<a>", {class: "timelink", href: "https://www.youtube.com/watch?v=" + episode_data["YouTube"] + "#t=" + timestamp_data["Seconds"], "data-timestamp": timestamp_data["Seconds"]});
-			var $topic = $("<div>", {class: "topic", style: "width: " + timestamp_data["Width"] + "%"});
-			var $tooltip = $("<div>", {class: "tooltip", id: timestamp_data["ID"], style: "display: none"});
-			var $triangle = $("<div>", {class: "triangle"});
+			var $timelink = $("<a>", {"class": "timelink", href: "https://www.youtube.com/watch?v=" + episode_data["YouTube"] + "#t=" + timestamp_data["Seconds"], "data-timestamp": timestamp_data["Seconds"]});
+			var $topic = $("<div>", {"class": "topic", style: "width: " + timestamp_data["Width"] + "%"});
+			var $tooltip = $("<div>", {"class": "tooltip", id: timestamp_data["ID"], style: "display: none"});
+			var $triangle = $("<div>", {"class": "triangle"});
 			var $span = $("<span>").text(timestamp_data["Value"]);
 			$tooltip.append($triangle);
 			$tooltip.append($span);
@@ -211,9 +211,9 @@ function updateContent(episode_data) {
 		var $tbody = $("<tbody>");
 		$.each(episode_data["Timeline"]["Timestamps"], function(i, timestamp_data) {
 			var $body_row = $("<tr>");
-			var $timestamp = $("<td>", {class: "timestamp"});
-			var $timelink = $("<a>", {class: "timelink", href: "https://www.youtube.com/watch?v=" + episode_data["YouTube"] + "#t=" + timestamp_data["Seconds"], "data-timestamp": timestamp_data["Seconds"]}).text(timestamp_data["HMS"]);
-			var $event = $("<td>", {class: "event"}).text(timestamp_data["Value"]);
+			var $timestamp = $("<td>", {"class": "timestamp"});
+			var $timelink = $("<a>", {"class": "timelink", href: "https://www.youtube.com/watch?v=" + episode_data["YouTube"] + "#t=" + timestamp_data["Seconds"], "data-timestamp": timestamp_data["Seconds"]}).text(timestamp_data["HMS"]);
+			var $event = $("<td>", {"class": "event"}).text(timestamp_data["Value"]);
 			$timestamp.append($timelink);
 			$body_row.append($timestamp);
 			$body_row.append($event);
@@ -263,7 +263,7 @@ function generatePeople(id, name, data) {
 	}
 	
 	if (data.hasOwnProperty(name) == 1) {
-		var $people = $("<div>", {"id": id, class: "people"});
+		var $people = $("<div>", {"id": id, "class": "people"});
 		var $header = $("<h4>").text(name);
 		
 		$people.append($header);
@@ -279,7 +279,7 @@ function generatePeople(id, name, data) {
 // generate person image
 function generatePerson(name, image, url) {
 	var $link = $("<a>", {target: "_blank", href: url, title: name});
-	var $person = $("<div>", {class: "person"});
+	var $person = $("<div>", {"class": "person"});
 	var $avatar = $("<img>", {alt: name, src: domain + image});
 	
 	$person.append($avatar);
