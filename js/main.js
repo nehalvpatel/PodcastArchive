@@ -25,7 +25,7 @@ $(document).ready(function() {
 		
 		// track in analytics
 		if (typeof _gaq !== "undefined") {
-			_gaq.push(["_trackEvent", "Timeline", "Seek", $("nav ul").attr("data-current"), $(this).attr("data-timestamp")]);
+			_gaq.push(["_trackEvent", "Timeline", "Seek", $("nav ul").attr("data-current"), parseInt($(this).attr("data-timestamp"))]);
 		}
 		
 		return false;
