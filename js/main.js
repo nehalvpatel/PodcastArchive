@@ -51,25 +51,34 @@ $(document).ready(function() {
 		search_timer = setTimeout(function() {
 			if ($.trim(search_value) != "") {
 				if (previous_search != search_value) {
-					previous_search = search_value;
-					
 					// track search in analytics
 					if (typeof _gaq !== "undefined") {
 						_gaq.push(["_trackEvent", "Search", "Search", search_value]);
 					}
 					
-					$.getJSON(domain + "search.php?query=" + search_value, function(results_json){
-						// hide all episodes
-						$("#sidebar ul li").each(function(id, li){
-							$(li).css("display", "none");
-						});
-						
-						if (results_json.length > 0) {
-							$.each(results_json, function(result_id) {
-								// show only returned episodes
-								var episode = "li[data-episode='" + results_json[result_id] + "']";
-								$(episode).css("display", "block");
+					$.ajax({
+						url: domain + "search.php",
+						dataType: "json",
+						data: {"query": search_value},
+						async: true,
+						success: function(results_json) {
+							previous_search = search_value;
+							
+							// hide all episodes
+							$("#sidebar ul li").each(function(id, li){
+								$(li).css("display", "none");
 							});
+							
+							if (results_json.length > 0) {
+								$.each(results_json, function(result_id) {
+									// show only returned episodes
+									var episode = "li[data-episode='" + results_json[result_id] + "']";
+									$(episode).css("display", "block");
+								});
+							}
+						},
+						error: function(xhr, textStatus, error) {
+							alert("Looks like search is broken right now. Please message /u/nehalvpatel on reddit.");
 						}
 					});
 				}
@@ -111,7 +120,7 @@ function updateContent(episode_data) {
 	document.title = "Episode #" + episode_data["Number"] + " \u00B7 Painkiller Already Archive";
 	
 	// update video
-	player.loadVideoById(episode_data["YouTube"]);
+	player.cueVideoById(episode_data["YouTube"]);
 	
 	// change header
 	$("#container h2").text("Painkiller Already #" + episode_data["Number"]);
