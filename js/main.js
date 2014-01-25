@@ -66,14 +66,21 @@ $(document).ready(function() {
 							
 							// hide all episodes
 							$("#sidebar ul li").each(function(id, li){
+								$(li).removeAttr("data-timestamp");
 								$(li).css("display", "none");
+								
+								$(".search-result").remove();
 							});
 							
-							if (results_json.length > 0) {
-								$.each(results_json, function(result_id) {
+							if (!jQuery.isEmptyObject(results_json)) {
+								$.each(results_json, function(episode_identifier, episode_timestamp) {
 									// show only returned episodes
-									var episode = "li[data-episode='" + results_json[result_id] + "']";
-									$(episode).css("display", "block");
+									var $episode = $("li[data-episode='" + episode_identifier + "']");
+									var $search_result = $("<span>").addClass("search-result").attr("title", episode_timestamp["Value"]).text(episode_timestamp["Value"]);
+									
+									$episode.attr("data-timestamp", episode_timestamp["Timestamp"]);
+									$episode.children(":first").append($search_result);
+									$episode.css("display", "block");
 								});
 							}
 						},
@@ -87,7 +94,10 @@ $(document).ready(function() {
 				previous_search = "";
 				
 				$("#sidebar ul li").each(function(id, li){
+					$(li).removeAttr("data-timestamp");
 					$(li).css("display", "block");
+					
+					$(".search-result").remove();
 				});
 			}
 		}, 200);
@@ -117,10 +127,18 @@ function loadContent(url) {
 
 // replace old episode data with current episode data
 function updateContent(episode_data) {
+	// get current episode
+	var $current_episode = $("[data-episode='" + episode_data["Identifier"] + "']");
+	
+	// update page title
 	document.title = "Episode #" + episode_data["Number"] + " \u00B7 Painkiller Already Archive";
 	
 	// update video
-	player.cueVideoById(episode_data["YouTube"]);
+	if ($current_episode.attr("data-timestamp")) {
+		player.loadVideoById(episode_data["YouTube"], $current_episode.attr("data-timestamp"));
+	} else {
+		player.cueVideoById(episode_data["YouTube"]);
+	}
 	
 	// change header
 	$("#container h2").text("Painkiller Already #" + episode_data["Number"]);
@@ -129,8 +147,9 @@ function updateContent(episode_data) {
 	$("nav ul").attr("data-current", episode_data["Identifier"]);
 	
 	// change date published
-	$(".published time").attr("datetime", episode_data["DateTime"]);
-	$(".published time").text(episode_data["Date"]);
+	var $published_time = $(".published time");
+	$published_time.attr("datetime", episode_data["DateTime"]);
+	$published_time.text(episode_data["Date"]);
 	
 	// change author name if timestamp is available
 	var $author = $(".author");
@@ -182,7 +201,7 @@ function updateContent(episode_data) {
 		
 		var $line = $("<div>", {id: "line"});
 		$.each(episode_data["Timeline"]["Timestamps"], function(i, timestamp_data) {
-			var $timelink = $("<a>", {"class": "timelink", href: "https://www.youtube.com/watch?v=" + episode_data["YouTube"] + "#t=" + timestamp_data["Seconds"], "data-timestamp": timestamp_data["Seconds"]});
+			var $timelink = $("<a>", {"class": "timelink", href: domain + "episode/" + episode_data["Number"] + "?timestamp=" + timestamp_data["Seconds"], "data-timestamp": timestamp_data["Seconds"]});
 			var $topic = $("<div>", {"class": "topic", style: "width: " + timestamp_data["Width"] + "%"});
 			var $tooltip = $("<div>", {"class": "tooltip", id: timestamp_data["ID"], style: "display: none"});
 			var $triangle = $("<div>", {"class": "triangle"});
@@ -221,7 +240,7 @@ function updateContent(episode_data) {
 		$.each(episode_data["Timeline"]["Timestamps"], function(i, timestamp_data) {
 			var $body_row = $("<tr>");
 			var $timestamp = $("<td>", {"class": "timestamp"});
-			var $timelink = $("<a>", {"class": "timelink", href: "https://www.youtube.com/watch?v=" + episode_data["YouTube"] + "#t=" + timestamp_data["Seconds"], "data-timestamp": timestamp_data["Seconds"]}).text(timestamp_data["HMS"]);
+			var $timelink = $("<a>", {"class": "timelink", href: domain + "episode/" + episode_data["Number"] + "?timestamp=" + timestamp_data["Seconds"], "data-timestamp": timestamp_data["Seconds"]}).text(timestamp_data["HMS"]);
 			var $event = $("<td>", {"class": "event"}).text(timestamp_data["Value"]);
 			$timestamp.append($timelink);
 			$body_row.append($timestamp);
@@ -237,7 +256,7 @@ function updateContent(episode_data) {
 	
 	// update active episode on the sidebar
 	$("nav li").removeAttr("id");
-	$("[data-episode='" + episode_data["Identifier"] + "']").attr("id", "active");
+	$current_episode.attr("id", "active");
 	
 	// update hosts box
 	$("#video").after(generatePeople("hosts", "Hosts", episode_data["People"]));
@@ -316,9 +335,14 @@ function onYouTubePlayerAPIReady() {
 	});
 }
 
-// setup pushState
+// setup pushState and seek to search result
 var cached_data = [];
 function onPlayerReady(event) {
+	// seek to search result
+	if ($.isNumeric(playerContainer.getAttribute("data-timestamp"))) {
+		player.seekTo(playerContainer.getAttribute("data-timestamp"));
+	}
+	
 	// check if pushState is available
 	var hasPushstate = !!(window.history && history.pushState);
 	

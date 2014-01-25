@@ -207,7 +207,7 @@
 					<meta itemprop="contentURL" content="<?php echo htmlspecialchars($current_episode->getContentURL()); ?>">
 					<meta itemprop="embedURL" content="https://www.youtube.com/v/<?php echo $current_episode->getYouTube(); ?>">
 					<meta itemprop="uploadDate" content="<?php echo $current_episode->getPublished(); ?>">
-					<div id="player" data-youtube="<?php echo $current_episode->getYouTube(); ?>"></div>
+					<div id="player" data-timestamp="<?php if ((isset($_GET["timestamp"])) && (is_numeric($_GET["timestamp"]))) { echo $_GET["timestamp"]; } ?>" data-youtube="<?php echo $current_episode->getYouTube(); ?>"></div>
 				</div>
 				<div id="hosts" class="people">
 					<h4>Hosts</h4>
@@ -297,7 +297,7 @@
 				// Multiply by 100 to express in percentage form.
 				$timeline_element_percentage = $timeline_element_quotent * 100;
 ?>
-						<a class="timelink" href="https://www.youtube.com/watch?v=<?php echo $current_episode->getYouTube(); ?>#t=<?php echo $timeline_element[0]; ?>" data-timestamp="<?php echo $timeline_element[0]; ?>">
+						<a class="timelink" href="<?php echo $domain . "episode/" . $current_episode->getNumber() . "?timestamp=" . $timeline_element[0]; ?>" data-timestamp="<?php echo $timeline_element[0]; ?>">
 							<div class="topic" style="width: <?php echo $timeline_element_percentage; ?>%">
 								<div class="tooltip<?php echo ($timeline_element[0] > ($current_episode->getLength()) / 2) ? " right" : null; ?>" id="<?php echo $i; ?>">
 									<div class="triangle"></div>
@@ -329,7 +329,7 @@
 					$seconds = $init % 60;
 ?>
 							<tr>
-								<td class="timestamp"><a class="timelink" href="https://www.youtube.com/watch?v=<?php echo $current_episode->getYouTube(); ?>#t=<?php echo $init; ?>" data-timestamp="<?php echo $init; ?>"><?php printf("%02d:%02d:%02d", $hours, $minutes, $seconds); ?></a></td>
+								<td class="timestamp"><a class="timelink" href="<?php echo $domain . "episode/" . $current_episode->getNumber() . "?timestamp=" . $init; ?>" data-timestamp="<?php echo $init; ?>"><?php echo sprintf("%02d:%02d:%02d", $hours, $minutes, $seconds); ?></a></td>
 								<td class="event"><?php echo $timestamp["Value"]; ?><?php if ($timestamp["Type"] == "Link") { ?><a target="_blank" href="<?php echo $timestamp["URL"]; ?>"><i class="icon-external-link"></i></a><?php } ?></td>
 							</tr>
 <?php

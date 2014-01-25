@@ -1,7 +1,7 @@
 RewriteEngine On
 
 # navigation
-RewriteRule ^episode\/(\d+\.?\d*)$ index.php?episode=$1
+RewriteRule ^episode\/(\d+\.?\d*)$ index.php?episode=$1 [QSA]
 
 # search engines
 RewriteRule ^robots.txt$ robots.php
