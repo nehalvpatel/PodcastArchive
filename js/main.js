@@ -66,10 +66,8 @@ $(document).ready(function() {
 							
 							// hide all episodes
 							$("#sidebar ul li").each(function(id, li){
-								$(li).removeAttr("data-timestamp");
+								resetSearchResults(li);
 								$(li).css("display", "none");
-								
-								$(".search-result").remove();
 							});
 							
 							if (!jQuery.isEmptyObject(results_json)) {
@@ -77,9 +75,11 @@ $(document).ready(function() {
 									// show only returned episodes
 									var $episode = $("li[data-episode='" + episode_identifier + "']");
 									var $search_result = $("<span>").addClass("search-result").attr("title", episode_timestamp["Value"]).text(episode_timestamp["Value"]);
+									var $result_link = $episode.children(":first");
 									
 									$episode.attr("data-timestamp", episode_timestamp["Timestamp"]);
-									$episode.children(":first").append($search_result);
+									$result_link.attr("href", $result_link.attr("href") + "?timestamp=" + episode_timestamp["Timestamp"]);
+									$result_link.append($search_result);
 									$episode.css("display", "block");
 								});
 							}
@@ -94,15 +94,33 @@ $(document).ready(function() {
 				previous_search = "";
 				
 				$("#sidebar ul li").each(function(id, li){
-					$(li).removeAttr("data-timestamp");
+					resetSearchResults(li);
 					$(li).css("display", "block");
-					
-					$(".search-result").remove();
 				});
 			}
 		}, 200);
 	});
 });
+
+// reset search results
+function resetSearchResults(li) {
+	$(li).removeAttr("data-timestamp");
+	$(li).css("display", "block");
+	
+	var $result_link = $(li).children(":first");
+	$result_link.attr("href", cleanURL($result_link.attr("href")));
+	
+	$(".search-result").remove();
+}
+
+// remove parameters from URLs
+function cleanURL(url) {
+	if (url.indexOf("?") > -1) {
+		url = url.slice(0, url.indexOf("?"));
+	}
+	
+	return url;
+}
 
 // download data for new episode or use cache if possible
 function loadContent(url) {
@@ -112,7 +130,7 @@ function loadContent(url) {
 		$.ajax({
 			url: domain + "content.php",
 			dataType: "json",
-			data: {id: url},
+			data: {id: cleanURL(url)},
 			async: true,
 			success: function(json) {
 				cached_data[url] = json;
