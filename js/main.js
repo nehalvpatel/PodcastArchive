@@ -21,7 +21,9 @@ $(document).ready(function() {
 	
 	// capture timestamp click events
 	$(document).on("click", "a.timelink", function() {
-		seekYT($(this).attr("data-timestamp"));
+		// seek to timestamp
+		player.seekTo($(this).attr("data-timestamp"));
+		document.getElementsByTagName("header")[0].scrollIntoView();
 		
 		// track in analytics
 		if (typeof _gaq !== "undefined") {
@@ -128,6 +130,17 @@ function tryDelete(selector) {
 	if ($delete_this.length) {
 		$delete_this.remove();
 	}
+}
+
+// get variables from URL
+function getQueryVariable(variable) {
+	var query = window.location.search.substring(1);
+	var vars = query.split("&");
+	for (var i=0;i<vars.length;i++) {
+		var pair = vars[i].split("=");
+		if(pair[0] == variable){return pair[1];}
+	}
+	return(false);
 }
 
 // download data for new episode or use cache if possible
@@ -350,8 +363,9 @@ function onYouTubePlayerAPIReady() {
 var cached_data = [];
 function onPlayerReady(event) {
 	// seek to search result
-	if ($.isNumeric(playerContainer.getAttribute("data-timestamp"))) {
-		player.seekTo(playerContainer.getAttribute("data-timestamp"));
+	var search_timestamp = getQueryVariable("timestamp");
+	if (search_timestamp) {
+		player.seekTo(search_timestamp);
 	}
 	
 	// check if pushState is available
@@ -382,12 +396,6 @@ function onPlayerReady(event) {
 			loadContent(location.href);
 		});
 	}
-}
-
-// click timestamp to seek video
-function seekYT(timestamp) {
-	player.seekTo(timestamp);
-	document.getElementsByTagName("header")[0].scrollIntoView();
 }
 
 // collapsible sidebar

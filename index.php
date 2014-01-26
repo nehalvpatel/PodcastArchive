@@ -207,7 +207,7 @@
 					<meta itemprop="contentURL" content="<?php echo htmlspecialchars($current_episode->getContentURL()); ?>">
 					<meta itemprop="embedURL" content="https://www.youtube.com/v/<?php echo $current_episode->getYouTube(); ?>">
 					<meta itemprop="uploadDate" content="<?php echo $current_episode->getPublished(); ?>">
-					<div id="player" data-timestamp="<?php if ((isset($_GET["timestamp"])) && (is_numeric($_GET["timestamp"]))) { echo $_GET["timestamp"]; } ?>" data-youtube="<?php echo $current_episode->getYouTube(); ?>"></div>
+					<div id="player" data-youtube="<?php echo $current_episode->getYouTube(); ?>"></div>
 				</div>
 				<div id="hosts" class="people">
 					<h4>Hosts</h4>
