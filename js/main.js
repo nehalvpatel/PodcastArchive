@@ -110,7 +110,7 @@ function resetSearchResults(li) {
 	var $result_link = $(li).children(":first");
 	$result_link.attr("href", cleanURL($result_link.attr("href")));
 	
-	$(".search-result").remove();
+	tryDelete(".search-result");
 }
 
 // remove parameters from URLs
@@ -120,6 +120,14 @@ function cleanURL(url) {
 	}
 	
 	return url;
+}
+
+// delete element if it exists
+function tryDelete(selector) {
+	var $delete_this = $(selector);
+	if ($delete_this.length) {
+		$delete_this.remove();
+	}
 }
 
 // download data for new episode or use cache if possible
@@ -170,10 +178,7 @@ function updateContent(episode_data) {
 	$published_time.text(episode_data["Date"]);
 	
 	// change author name if timestamp is available
-	var $author = $(".author");
-	if ($author.length) {
-		$author.remove();
-	}
+	tryDelete(".author");
 	
 	if (((episode_data["Timeline"]).hasOwnProperty("Author") == 1) && (episode_data["Timeline"]["Author"] != "")) {
 		var $link = $("<a>", {"class": "author", title: "Timeline Author", href: "http://www.reddit.com/user/" + episode_data["Timeline"]["Author"]});
@@ -188,10 +193,7 @@ function updateContent(episode_data) {
 	}
 	
 	// get comment count if possible
-	var $comments = $(".comments");
-	if ($comments.length) {
-		$comments.remove();
-	}
+	tryDelete(".comments");
 	
 	if (episode_data["Reddit"] != "") {
 		var $link = $("<a>", {"class": "comments", title: "Discussion Comments", href: "http://www.reddit.com/comments/" + episode_data["Reddit"]});
@@ -208,10 +210,7 @@ function updateContent(episode_data) {
 	}
 	
 	// update horizontal timeline if possible
-	var $horizontal_timeline = $("#timeline-horizontal");
-	if ($horizontal_timeline.length) {
-		$horizontal_timeline.remove();
-	}
+	tryDelete("#timeline-horizontal");
 	
 	if ((episode_data["Timeline"]).hasOwnProperty("Timestamps") == 1) {
 		var $timeline = $("<div>", {id: "timeline-horizontal"});
@@ -237,10 +236,7 @@ function updateContent(episode_data) {
 	}
 	
 	// update timestamp table if possible
-	var $vertical_timeline = $("#timeline-vertical");
-	if ($vertical_timeline.length) {
-		$vertical_timeline.remove();
-	}
+	tryDelete("#timeline-vertical");
 	
 	if ((episode_data["Timeline"]).hasOwnProperty("Timestamps") == 1) {
 		var $timeline = $("<div>", {id: "timeline-vertical"});
@@ -309,10 +305,7 @@ function setCommentCount(element, reddit_id) {
 
 // generate people containers
 function generatePeople(id, name, data) {
-	var $people = $("#" + id);
-	if ($people.length) {
-		$people.remove();
-	}
+	tryDelete("#" + id);
 	
 	if (data.hasOwnProperty(name) == 1) {
 		var $people = $("<div>", {"id": id, "class": "people"});
