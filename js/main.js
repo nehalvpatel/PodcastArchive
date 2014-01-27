@@ -362,10 +362,16 @@ function onYouTubePlayerAPIReady() {
 	});
 }
 
-// setup pushState and seek to search result
+// setup pushState, handle search, and seek to timestamp
 var cached_data = [];
 function onPlayerReady(event) {
-	// seek to search result
+	// handle search query
+	var search_query = getQueryVariable("query");
+	if (search_query) {
+		$("#search-field").val(search_query).trigger("input");
+	}
+	
+	// seek to timestamp
 	var search_timestamp = getQueryVariable("timestamp");
 	if (search_timestamp) {
 		player.seekTo(search_timestamp);
