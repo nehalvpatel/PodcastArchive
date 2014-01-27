@@ -240,7 +240,7 @@
 					$timeline_array[] = array(
 						"Begin" => $timestamp["Timestamp"],
 						"Value" => $timestamp["Value"],
-						"URL" 	=> $timestamps["URL"]
+						"URL" 	=> $timestamp["URL"]
 					);
 				}
 				
