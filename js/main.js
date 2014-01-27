@@ -269,6 +269,9 @@ function updateContent(episode_data) {
 			var $timestamp = $("<td>", {"class": "timestamp"});
 			var $timelink = $("<a>", {"class": "timelink", href: domain + "episode/" + episode_data["Number"] + "?timestamp=" + timestamp_data["Seconds"], "data-timestamp": timestamp_data["Seconds"]}).text(timestamp_data["HMS"]);
 			var $event = $("<td>", {"class": "event"}).text(timestamp_data["Value"]);
+			if (timestamp_data["URL"] != "") {
+				$event.append($("<a>", {"target": "_blank", "href": timestamp_data["URL"]}).append($("<i>", {"class": "icon-external-link"})));
+			}
 			$timestamp.append($timelink);
 			$body_row.append($timestamp);
 			$body_row.append($event);

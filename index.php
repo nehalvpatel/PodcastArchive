@@ -265,48 +265,19 @@
 					<h4>Timeline</h4>
 					<div id="line">
 <?php
-			$timeline_array = array();
-			// If the first timestamp is far into the episode, add an intro timestamp.
-			if($timestamps[0]["Timestamp"] > 20){
-				$timeline_array[] = array(0, "Intro");
-			}
-			$i = 0;
-			foreach ($timestamps as $timestamp) {
-				// Only allow text timestamps in the horizontal timeline.
-				if($timestamp["Type"] == "Text"){
-					$timeline_array[] = array($timestamp["Timestamp"], $timestamp["Value"]);
-				}
-				// Set the previous array element's finishing time to the currents starting time.
-				if (isset($timeline_array[count($timeline_array) - 2])) {
-					$timeline_array[count($timeline_array) - 2][2] = $timestamp["Timestamp"];
-				}
-				$last_timestamp = $timestamp["Timestamp"];
-			}
-			// The last topic ends when the episode ends.
-			$timeline_array[count($timeline_array) - 1][2] = $current_episode->getLength();
-			
-			// We now start printing the timeline.
-			$toggler = true;
-			foreach ($timeline_array as $timeline_element) {
-				// Find size of timeline element.
-				$timeline_element_size = $timeline_element[2] - $timeline_element[0];
-				
-				// Express the timeline size as a quotent of the full current episode size.
-				$timeline_element_quotent = $timeline_element_size / $current_episode->getLength();
-				
-				// Multiply by 100 to express in percentage form.
-				$timeline_element_percentage = $timeline_element_quotent * 100;
+
+			$timeline_array = $current_episode->getHorizontalTimeline();
+			foreach ($timeline_array as $timeline_key => $timeline_element) {
 ?>
-						<a class="timelink" href="<?php echo $domain . "episode/" . $current_episode->getNumber() . "?timestamp=" . $timeline_element[0]; ?>" data-timestamp="<?php echo $timeline_element[0]; ?>">
-							<div class="topic" style="width: <?php echo $timeline_element_percentage; ?>%">
-								<div class="tooltip<?php echo ($timeline_element[0] > ($current_episode->getLength()) / 2) ? " right" : null; ?>" id="<?php echo $i; ?>">
+						<a class="timelink" href="<?php echo $domain . "episode/" . $current_episode->getNumber() . "?timestamp=" . $timeline_element["Begin"]; ?>" data-timestamp="<?php echo $timeline_element["Begin"]; ?>">
+							<div class="topic" style="width: <?php echo $timeline_element["Percent"]; ?>%">
+								<div class="tooltip<?php echo ($timeline_element["Begin"] > ($current_episode->getYouTubeLength()) / 2) ? " right" : null; ?>" id="<?php echo $timeline_key; ?>">
 									<div class="triangle"></div>
-									<span><?php echo $timeline_element[1]; ?></span>
+									<span><?php echo $timeline_element["Value"]; ?></span>
 								</div>
 							</div>
 						</a>
 <?php
-				$i++;
 			}
 ?>
 					</div>
@@ -330,7 +301,7 @@
 ?>
 							<tr>
 								<td class="timestamp"><a class="timelink" href="<?php echo $domain . "episode/" . $current_episode->getNumber() . "?timestamp=" . $init; ?>" data-timestamp="<?php echo $init; ?>"><?php echo sprintf("%02d:%02d:%02d", $hours, $minutes, $seconds); ?></a></td>
-								<td class="event"><?php echo $timestamp["Value"]; ?><?php if ($timestamp["Type"] == "Link") { ?><a target="_blank" href="<?php echo $timestamp["URL"]; ?>"><i class="icon-external-link"></i></a><?php } ?></td>
+								<td class="event"><?php echo $timestamp["Value"]; ?><?php if ($timestamp["URL"] != "") { ?><a target="_blank" href="<?php echo $timestamp["URL"]; ?>"><i class="icon-external-link"></i></a><?php } ?></td>
 							</tr>
 <?php
 			}

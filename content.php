@@ -45,49 +45,20 @@
 			if (count($timestamps) > 0) {
 				$episode_data["Timeline"]["Author"] = $episode->getTimelineAuthor();
 				
-				$timeline_array = array();
-				// If the first timestamp is far into the episode, add an intro timestamp.
-				if($timestamps[0]["Timestamp"] > 20){
-					$timeline_array[] = array(0, "Intro");
-				}
-				$i = 0;
-				foreach ($timestamps as $timestamp) {
-					// Only allow text timestamps in the horizontal timeline.
-					if($timestamp["Type"] == "Text"){
-						$timeline_array[] = array($timestamp["Timestamp"], $timestamp["Value"]);
-					}
-					// Set the previous array element's finishing time to the currents starting time.
-					if (isset($timeline_array[count($timeline_array) - 2])) {
-						$timeline_array[count($timeline_array) - 2][2] = $timestamp["Timestamp"];
-					}
-					$last_timestamp = $timestamp["Timestamp"];
-				}
-				// The last topic ends when the episode ends.
-				$timeline_array[count($timeline_array) - 1][2] = $episode->getLength();
-				
-				// We now start printing the timeline.
-				$toggler = true;
-				foreach ($timeline_array as $id => $timeline_element) {
-					// Find size of timeline element.
-					$timeline_element_size = $timeline_element[2] - $timeline_element[0];
-					
-					// Express the timeline size as a quotent of the full current episode size.
-					$timeline_element_quotent = $timeline_element_size / $episode->getLength();
-					
-					// Multiply by 100 to express in percentage form.
-					$timeline_element_percentage = $timeline_element_quotent * 100;
-					
-					$init = $timeline_element[0];
+				$timeline_array = $episode->getHorizontalTimeline();
+				foreach ($timeline_array as $timeline_key => $timeline_element) {
+					$init = $timeline_element["Begin"];
 					$hours = floor($init / 3600);
 					$minutes = floor(($init / 60) % 60);
 					$seconds = $init % 60;
 					
 					$timestamp_data = array();
-					$timestamp_data["ID"] = $id;
-					$timestamp_data["Seconds"] = $timeline_element[0];
+					$timestamp_data["ID"] = $timeline_key;
+					$timestamp_data["Seconds"] = $timeline_element["Begin"];
 					$timestamp_data["HMS"] = sprintf("%02d:%02d:%02d", $hours, $minutes, $seconds);
-					$timestamp_data["Value"] = $timeline_element[1];
-					$timestamp_data["Width"] = $timeline_element_percentage;
+					$timestamp_data["Value"] = $timeline_element["Value"];
+					$timestamp_data["URL"] = $timeline_element["URL"];
+					$timestamp_data["Width"] = $timeline_element["Percent"];
 					$episode_data["Timeline"]["Timestamps"][] = $timestamp_data;
 				}
 			}

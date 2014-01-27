@@ -123,6 +123,14 @@
 			return $this->updateValue("Length", $length);
 		}
 		
+		public function getYouTubeLength() {
+			return $this->episode_data["YouTube Length"];
+		}
+		
+		public function setYouTubeLength($youtubelength) {
+			return $this->updateValue("YouTube Length", $youtubelength);
+		}
+		
 		public function getBytes() {
 			return $this->episode_data["Bytes"];
 		}
@@ -185,14 +193,11 @@
 			return $this->episode_data["Timestamps"];
 		}
 		
-		public function addTimestamp($timestamp, $value, $type = "Text", $url = "", $special = "0") {
-			$type = ucfirst(strtolower($type));
-			
+		public function addTimestamp($timestamp, $value, $url = "", $special = "0") {
 			try {
-				$timestamp_query = $this->con->prepare("INSERT INTO `timestamps` (`Episode`, `Type`, `Timestamp`, `Value`, `URL`, `Special`) VALUES (:Episode, :Type, :Timestamp, :Value, :URL, :Special)");
+				$timestamp_query = $this->con->prepare("INSERT INTO `timestamps` (`Episode`, `Timestamp`, `Value`, `URL`, `Special`) VALUES (:Episode, :Timestamp, :Value, :URL, :Special)");
 				$timestamp_query->execute(array(
 					":Episode" => $this->getIdentifier(),
-					":Type" => $type,
 					":Timestamp" => $timestamp,
 					":Value" => $value,
 					":URL" => $url,
@@ -205,6 +210,59 @@
 			} catch (PDOException $e) {
 				return FALSE;
 			}
+		}
+		
+		public function getHorizontalTimeline() {
+			$timestamps = $this->getTimestamps();
+			$timeline_array = array();
+			
+			// If the first timestamp is far into the episode, add an intro timestamp.
+			if ($timestamps[0]["Timestamp"] > 20) {
+				$timeline_array[] = array(
+					"Begin" => 0,
+					"Value" => "Intro",
+					"URL" => ""
+				);
+			}
+			
+			$i = 0;
+			foreach ($timestamps as $timestamp) {
+				// Only allow text timestamps in the horizontal timeline.
+				$timeline_array[] = array(
+					"Begin" => $timestamp["Timestamp"],
+					"Value" => $timestamp["Value"],
+					"URL" => $timestamp["URL"]
+				);
+				
+				// Set the previous array element's finishing time to the currents starting time.
+				if (isset($timeline_array[count($timeline_array) - 2])) {
+					$timeline_array[count($timeline_array) - 2]["End"] = $timestamp["Timestamp"];
+				}
+				
+				$last_timestamp = $timestamp["Timestamp"];
+			}
+			
+			// The last topic ends when the episode ends.
+			$timeline_array[count($timeline_array) - 1]["End"] = $this->getYouTubeLength();
+			
+			// We now start printing the timeline.
+			$toggler = true;
+			foreach ($timeline_array as $timeline_key => $timeline_element) {
+				// Find size of timeline element.
+				$timeline_element_size = $timeline_element["End"] - $timeline_element["Begin"];
+				
+				// Express the timeline size as a quotent of the full current episode size.
+				$timeline_element_quotent = $timeline_element_size / $this->getYouTubeLength();
+				
+				// Multiply by 100 to express in percentage form.
+				$timeline_element_percentage = $timeline_element_quotent * 100;
+				
+				$timeline_array[$timeline_key]["Percent"] = $timeline_element_percentage;
+				
+				$i++;
+			}
+			
+			return $timeline_array;
 		}
 	}
 

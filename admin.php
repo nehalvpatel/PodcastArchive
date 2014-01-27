@@ -14,10 +14,8 @@
 				
 			} elseif ($_POST["form"] == "addtimestamp") {
 				if (isset($_POST["url"]) && !empty($_POST["url"])) {
-					$type = "Link";
 					$url = $_POST["url"];
 				} else {
-					$type = "Text";
 					$url = "";
 				}
 				
@@ -33,7 +31,7 @@
 							$episode = new Episode($con);
 							$episode->initWithNumber($Podcast->trimEpisodeNumber($_POST["episode"]));
 							
-							if ($episode->addTimestamp($timestamp, $_POST["value"], $type, $url, "0") === TRUE) {
+							if ($episode->addTimestamp($timestamp, $_POST["value"], $url, "0") === TRUE) {
 								$success = "Timestamp was successfully added to the database.";
 							}
 						} catch (Exception $e) {
