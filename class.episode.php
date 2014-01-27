@@ -228,7 +228,8 @@
 			if ($timestamps[0]["Timestamp"] > 20) {
 				$timeline_array[] = array(
 					"Begin" => 0,
-					"Value" => "Intro"
+					"Value" => "Intro",
+					"URL" => ""
 				);
 			}
 			
@@ -239,6 +240,7 @@
 					$timeline_array[] = array(
 						"Begin" => $timestamp["Timestamp"],
 						"Value" => $timestamp["Value"],
+						"URL" 	=> $timestamps["URL"]
 					);
 				}
 				
