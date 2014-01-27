@@ -235,14 +235,11 @@
 			
 			// We now find the end time value for each timestamp and add it to the timestamp's array element.
 			foreach ($timestamps as $timestamp) {
-				// Only allow text timestamps in the horizontal timeline.
-				if(empty($timestamps["URL"])){
-					$timeline_array[] = array(
-						"Begin" => $timestamp["Timestamp"],
-						"Value" => $timestamp["Value"],
-						"URL" 	=> $timestamp["URL"]
-					);
-				}
+				$timeline_array[] = array(
+					"Begin" => $timestamp["Timestamp"],
+					"Value" => $timestamp["Value"],
+					"URL" 	=> $timestamp["URL"]
+				);
 				
 				// Set the previous array element's finishing time to the currents starting time.
 				if (isset($timeline_array[count($timeline_array) - 2])) {
