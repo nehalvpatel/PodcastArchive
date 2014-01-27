@@ -228,19 +228,19 @@
 			if ($timestamps[0]["Timestamp"] > 20) {
 				$timeline_array[] = array(
 					"Begin" => 0,
-					"Value" => "Intro",
-					"URL" => ""
+					"Value" => "Intro"
 				);
 			}
 			
-			$i = 0;
+			// We now find the end time value for each timestamp and add it to the timestamp's array element.
 			foreach ($timestamps as $timestamp) {
 				// Only allow text timestamps in the horizontal timeline.
-				$timeline_array[] = array(
-					"Begin" => $timestamp["Timestamp"],
-					"Value" => $timestamp["Value"],
-					"URL" => $timestamp["URL"]
-				);
+				if(empty($timestamps["URL"])){
+					$timeline_array[] = array(
+						"Begin" => $timestamp["Timestamp"],
+						"Value" => $timestamp["Value"],
+					);
+				}
 				
 				// Set the previous array element's finishing time to the currents starting time.
 				if (isset($timeline_array[count($timeline_array) - 2])) {
@@ -249,25 +249,20 @@
 				
 				$last_timestamp = $timestamp["Timestamp"];
 			}
-			
-			// The last topic ends when the episode ends.
+			// The last timestamp ends when the episode ends.
 			$timeline_array[count($timeline_array) - 1]["End"] = $this->getYouTubeLength();
 			
-			// We now start printing the timeline.
-			$toggler = true;
+			
+			// We now find the length of each timestamp as a percentage of the full episode length.
 			foreach ($timeline_array as $timeline_key => $timeline_element) {
 				// Find size of timeline element.
 				$timeline_element_size = $timeline_element["End"] - $timeline_element["Begin"];
 				
-				// Express the timeline size as a quotent of the full current episode size.
-				$timeline_element_quotent = $timeline_element_size / $this->getYouTubeLength();
+				// Express the timeline size as a quotent of the full current episode size. The *1.01 gives us some visual spacing to avoid timeline glitches.
+				$timeline_element_quotent = $timeline_element_size / ($this->getYouTubeLength()*1.01);
 				
-				// Multiply by 100 to express in percentage form.
-				$timeline_element_percentage = $timeline_element_quotent * 100;
-				
-				$timeline_array[$timeline_key]["Percent"] = $timeline_element_percentage;
-				
-				$i++;
+				// Multiply by 100 to express in percentage form and put the value into the $timeline_array array.
+				$timeline_array[$timeline_key]["Percent"] = $timeline_element_quotent * 100;
 			}
 			
 			return $timeline_array;
