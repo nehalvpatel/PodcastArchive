@@ -185,8 +185,16 @@
 			return $this->episode_data["Timeline Author"];
 		}
 		
-		public function setTimelineAuthor($timelineAuthor) {
-			return $this->updateValue("Timline Author", $timelineAuthor);
+		public function setTimelineAuthor($timelineauthor) {
+			return $this->updateValue("Timline Author", $timelineauthor);
+		}
+		
+		public function getTimelineAuthorLink() {
+			return $this->episode_data["Timeline Author Link"];
+		}
+		
+		public function setTimelineAuthorLink($timelineauthorlink) {
+			return $this->updateValue("Timline Author Link", $timelineauthorlink);
 		}
 		
 		public function getTimestamps() {
