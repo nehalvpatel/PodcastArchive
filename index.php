@@ -172,7 +172,7 @@
 	<body itemscope itemtype="http://schema.org/WebPage">
 		<aside class="sidebar">
 			<nav id="sidebar">
-				<div class="search-form"><input class="search-field" type="search" id="search-field" name="search" placeholder="Search" results="5"></div>
+				<div class="search-form"><input class="search-field" type="search" id="search-field" name="search" placeholder="Search" results="0"></div>
 				<h3>Episodes</h3>
 				<ul data-current="<?php echo $current_episode->getIdentifier(); ?>">
 <?php
@@ -210,7 +210,7 @@
 					<meta itemprop="uploadDate" content="<?php echo $current_episode->getPublished(); ?>">
 					<div id="player" data-youtube="<?php echo $current_episode->getYouTube(); ?>"></div>
 				</div>
-				<div id="hosts" class="people">
+				<div id="hosts" class="section people">
 					<h4>Hosts</h4>
 <?php
 
@@ -224,7 +224,7 @@
 	
 	if (count($guests) > 0) {
 ?>
-				<div id="guests" class="people">
+				<div id="guests" class="section people">
 					<h4>Guests</h4>
 <?php
 
@@ -239,7 +239,7 @@
 	
 	if (count($sponsors) > 0) {
 ?>
-				<div id="sponsors" class="people">
+				<div id="sponsors" class="section people">
 					<h4>Sponsors</h4>
 <?php
 
@@ -262,9 +262,9 @@
 		$timestamps = $current_episode->getTimestamps();
 		if (count($timestamps) > 0) {
 ?>
-				<div id="timeline-horizontal">
+				<div id="timeline-horizontal" class="section">
 					<h4>Timeline</h4>
-					<div id="line">
+					<div class="timeline">
 <?php
 
 			$timeline_array = $current_episode->getHorizontalTimeline();
@@ -283,7 +283,7 @@
 ?>
 					</div>
 				</div>
-				<div id="timeline-vertical">
+				<div id="timeline-vertical" class="section">
 					<table id="timeline-table">
 						<thead>
 							<tr>

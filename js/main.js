@@ -1,122 +1,3 @@
-$(document).ready(function() {
-	// add YT script tag
-	var tag = document.createElement("script");
-	var firstScriptTag = document.getElementsByTagName("script")[0];
-	tag.src = "https://www.youtube.com/player_api";
-	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-	
-	// scroll to active episode
-	if (document.getElementById("active")) {
-		$("#sidebar").animate({scrollTop:$("#active").position().top},1000);
-	}
-	
-	// load comment count on load
-	if (document.getElementById("comments")) {
-		setCommentCount($("#comments"), document.getElementById("comments").getAttribute("data-reddit"));
-	}
-	
-	// collapsible sidebar
-	$(".toggle-menu").click(function(e){
-		e.preventDefault();
-		$(".sidebar").toggleClass("toggled");
-	});
-	
-	// capture timestamp click events
-	$(document).on("click", "a.timelink", function() {
-		// seek to timestamp
-		player.seekTo($(this).attr("data-timestamp"));
-		document.getElementsByTagName("header")[0].scrollIntoView();
-		
-		// track in analytics
-		if (typeof _gaq !== "undefined") {
-			_gaq.push(["_trackEvent", "Timeline", "Seek", $("nav ul").attr("data-current"), parseInt($(this).attr("data-timestamp"))]);
-		}
-		
-		return false;
-	});
-	
-	// show horizontal timeline tooltip on hover
-	$(document).on({
-		mouseenter: function(){
-			document.getElementById($(this).children(".tooltip").attr("id")).style.display = "block";
-		},
-		mouseleave: function(){
-			document.getElementById($(this).children(".tooltip").attr("id")).style.display = "none";
-		}
-	}, ".topic"); 
-	
-	// live search
-	var search_timer;
-	var previous_search;
-	$("#search-field").on("propertychange input", function() {
-		clearTimeout(search_timer);
-		var search_value = this.value;
-		
-		search_timer = setTimeout(function() {
-			if ($.trim(search_value) != "") {
-				if (previous_search != search_value) {
-					// track search in analytics
-					if (typeof _gaq !== "undefined") {
-						_gaq.push(["_trackEvent", "Search", "Search", search_value]);
-					}
-					
-					$.ajax({
-						url: domain + "search.php",
-						dataType: "json",
-						data: {"query": search_value},
-						async: true,
-						success: function(results_json) {
-							previous_search = search_value;
-							
-							// hide all episodes
-							$("#sidebar ul li").each(function(id, li){
-								resetSearchResults(li);
-								$(li).css("display", "none");
-							});
-							
-							if (!jQuery.isEmptyObject(results_json)) {
-								$.each(results_json, function(episode_identifier, episode_timestamp) {
-									// show only returned episodes
-									var $episode = $("li[data-episode='" + episode_identifier + "']");
-									var $search_result = $("<span>").addClass("search-result").attr("title", episode_timestamp["Value"]).text(episode_timestamp["Value"]);
-									var $result_link = $episode.children(":first");
-									
-									$episode.attr("data-timestamp", episode_timestamp["Timestamp"]);
-									$result_link.attr("href", $result_link.attr("href") + "?timestamp=" + episode_timestamp["Timestamp"]);
-									$result_link.append($search_result);
-									$episode.css("display", "block");
-								});
-							}
-						},
-						error: function(xhr, textStatus, error) {
-							alert("Looks like search is broken right now. Please message /u/nehalvpatel on reddit.");
-						}
-					});
-				}
-			} else {
-				// reset episode list
-				previous_search = "";
-				
-				$("#sidebar ul li").each(function(id, li){
-					resetSearchResults(li);
-					$(li).css("display", "block");
-				});
-			}
-		}, 200);
-	});
-});
-
-// reset search results
-function resetSearchResults(li) {
-	$(li).removeAttr("data-timestamp");
-	$(li).css("display", "block");
-	
-	var $result_link = $(li).children(":first");
-	$result_link.attr("href", cleanURL($result_link.attr("href")));
-	
-	tryDelete(".search-result");
-}
-
 // remove parameters from URLs
 function cleanURL(url) {
 	if (url.indexOf("?") > -1) {
@@ -132,6 +13,17 @@ function tryDelete(selector) {
 	if ($delete_this.length) {
 		$delete_this.remove();
 	}
+}
+
+// reset search results
+function resetSearchResults(li) {
+	$(li).removeAttr("data-timestamp");
+	$(li).css("display", "block");
+	
+	var $result_link = $(li).children(":first");
+	$result_link.attr("href", cleanURL($result_link.attr("href")));
+	
+	tryDelete(".search-result");
 }
 
 // get variables from URL
@@ -169,67 +61,67 @@ function loadContent(url) {
 // replace old episode data with current episode data
 function updateContent(episode_data) {
 	// get current episode
-	var $current_episode = $("[data-episode='" + episode_data["Identifier"] + "']");
+	var $current_episode = $("[data-episode='" + episode_data.Identifier + "']");
 	
 	// update page title
-	document.title = "Episode #" + episode_data["Number"] + " \u00B7 Painkiller Already Archive";
+	document.title = "Episode #" + episode_data.Number + " \u00B7 Painkiller Already Archive";
 	
 	// update video
 	if ($current_episode.attr("data-timestamp")) {
-		player.loadVideoById(episode_data["YouTube"], $current_episode.attr("data-timestamp"));
+		player.loadVideoById(episode_data.YouTube, $current_episode.attr("data-timestamp"));
 	} else {
-		player.cueVideoById(episode_data["YouTube"]);
+		player.cueVideoById(episode_data.YouTube);
 	}
 	
 	// change header
-	$("#container h2").text("Painkiller Already #" + episode_data["Number"]);
+	$("#container h2").text("Painkiller Already #" + episode_data.Number);
 	
 	// update current episode
-	$("nav ul").attr("data-current", episode_data["Identifier"]);
+	$("nav ul").attr("data-current", episode_data.Identifier);
 	
 	// change date published
 	var $published_time = $(".published time");
-	$published_time.attr("datetime", episode_data["DateTime"]);
-	$published_time.text(episode_data["Date"]);
+	$published_time.attr("datetime", episode_data.DateTime);
+	$published_time.text(episode_data.Date);
 	
 	// change author name if timestamp is available
 	tryDelete(".author");
-	if (((episode_data["Timeline"]).hasOwnProperty("Author") == 1) && (episode_data["Timeline"]["Author"]["Name"] != "")) {
-		var $link = $("<a>", {"class": "author", title: "Timeline Author", href: episode_data["Timeline"]["Author"]["Link"]});
+	if (((episode_data.Timeline).hasOwnProperty("Author") == 1) && (episode_data.Timeline.Author.Name !== "")) {
+		var $link = $("<a>", {"class": "author", title: "Timeline Author", href: episode_data.Timeline.Author.Link});
 		$link.append($("<i>", {"class": "icon-user"}));
-		$link.append($("<small>").text(episode_data["Timeline"]["Author"]["Name"]));
+		$link.append($("<small>").text(episode_data.Timeline.Author.Name));
 		$(".info").append($link);
 	}
 	
 	// get comment count if possible
 	tryDelete(".comments");
-	if (episode_data["Reddit"] != "") {
-		var $link = $("<a>", {"class": "comments", title: "Discussion Comments", href: "http://www.reddit.com/comments/" + episode_data["Reddit"]});
+	if (episode_data.Reddit !== "") {
+		var $comments_link = $("<a>", {"class": "comments", title: "Discussion Comments", href: "http://www.reddit.com/comments/" + episode_data.Reddit});
 		var $icon = $("<i>", {"class": "icon-comments"});
-		var $comment_text = $("<small>", {"data-reddit": episode_data["Reddit"]});
+		var $comment_text = $("<small>", {"data-reddit": episode_data.Reddit});
 		$comment_text.text("Comments");
 		
-		$link.append($icon);
-		$link.append($comment_text);
+		$comments_link.append($icon);
+		$comments_link.append($comment_text);
 		
-		$(".published").after($link);
+		$(".published").after($comments_link);
 		
-		setCommentCount($comment_text, episode_data["Reddit"]);
+		setCommentCount($comment_text, episode_data.Reddit);
 	}
 	
 	// update horizontal timeline if possible
 	tryDelete("#timeline-horizontal");
-	if ((episode_data["Timeline"]).hasOwnProperty("Timestamps") == 1) {
-		var $timeline = $("<div>", {id: "timeline-horizontal"});
-		$timeline.append($("<h4>").text("Timeline"));
+	if ((episode_data.Timeline).hasOwnProperty("Timestamps") == 1) {
+		var $timeline_horizontal = $("<div>", {id: "timeline-horizontal", class: "section"});
+		$timeline_horizontal.append($("<h4>").text("Timeline"));
 		
-		var $line = $("<div>", {id: "line"});
-		$.each(episode_data["Timeline"]["Timestamps"], function(i, timestamp_data) {
-			var $timelink = $("<a>", {"class": "timelink", href: domain + "episode/" + episode_data["Number"] + "?timestamp=" + timestamp_data["Seconds"], "data-timestamp": timestamp_data["Seconds"]});
-			var $topic = $("<div>", {"class": "topic", style: "width: " + timestamp_data["Width"] + "%"});
-			var $tooltip = $("<div>", {"class": "tooltip", id: timestamp_data["ID"], style: "display: none"});
+		var $line = $("<div>", {class: "timeline"});
+		$.each(episode_data.Timeline.Timestamps, function(timestamp_id, timestamp_data) {
+			var $timelink = $("<a>", {"class": "timelink", href: domain + "episode/" + episode_data.Number + "?timestamp=" + timestamp_data.Seconds, "data-timestamp": timestamp_data.Seconds});
+			var $topic = $("<div>", {"class": "topic", style: "width: " + timestamp_data.Width + "%"});
+			var $tooltip = $("<div>", {"class": "tooltip", id: timestamp_data.ID, style: "display: none"});
 			var $triangle = $("<div>", {"class": "triangle"});
-			var $span = $("<span>").text(timestamp_data["Value"]);
+			var $span = $("<span>").text(timestamp_data.Value);
 			$tooltip.append($triangle);
 			$tooltip.append($span);
 			$topic.append($tooltip);
@@ -237,15 +129,15 @@ function updateContent(episode_data) {
 			$line.append($timelink);
 		});
 		
-		$timeline.append($line);
+		$timeline_horizontal.append($line);
 		
-		$("#timeline-clear").after($timeline);
+		$("#timeline-clear").after($timeline_horizontal);
 	}
 	
 	// update timestamp table if possible
 	tryDelete("#timeline-vertical");
-	if ((episode_data["Timeline"]).hasOwnProperty("Timestamps") == 1) {
-		var $timeline = $("<div>", {id: "timeline-vertical"});
+	if ((episode_data.Timeline).hasOwnProperty("Timestamps") == 1) {
+		var $timeline_vertical = $("<div>", {id: "timeline-vertical", class: "section"});
 		var $table = $("<table>", {id: "timeline-table"});
 		var $thead = $("<thead>");
 		var $head_row = $("<tr>");
@@ -257,13 +149,13 @@ function updateContent(episode_data) {
 		$table.append($thead);
 		
 		var $tbody = $("<tbody>");
-		$.each(episode_data["Timeline"]["Timestamps"], function(i, timestamp_data) {
+		$.each(episode_data.Timeline.Timestamps, function(timestamp_id, timestamp_data) {
 			var $body_row = $("<tr>");
 			var $timestamp = $("<td>", {"class": "timestamp"});
-			var $timelink = $("<a>", {"class": "timelink", href: domain + "episode/" + episode_data["Number"] + "?timestamp=" + timestamp_data["Seconds"], "data-timestamp": timestamp_data["Seconds"]}).text(timestamp_data["HMS"]);
-			var $event = $("<td>", {"class": "event"}).text(timestamp_data["Value"]);
-			if (timestamp_data["URL"] != "") {
-				$event.append($("<a>", {"target": "_blank", "href": timestamp_data["URL"]}).append($("<i>", {"class": "icon-external-link"})));
+			var $timelink = $("<a>", {"class": "timelink", href: domain + "episode/" + episode_data.Number + "?timestamp=" + timestamp_data.Seconds, "data-timestamp": timestamp_data.Seconds}).text(timestamp_data.HMS);
+			var $event = $("<td>", {"class": "event"}).text(timestamp_data.Value);
+			if (timestamp_data.URL !== "") {
+				$event.append($("<a>", {"target": "_blank", "href": timestamp_data.URL}).append($("<i>", {"class": "icon-external-link"})));
 			}
 			$timestamp.append($timelink);
 			$body_row.append($timestamp);
@@ -272,9 +164,9 @@ function updateContent(episode_data) {
 		});
 		
 		$table.append($tbody);
-		$timeline.append($table);
+		$timeline_vertical.append($table);
 		
-		$("#container").append($timeline);
+		$("#container").append($timeline_vertical);
 	}
 	
 	// update active episode on the sidebar
@@ -282,16 +174,16 @@ function updateContent(episode_data) {
 	$current_episode.attr("id", "active");
 	
 	// update hosts box
-	$("#video").after(generatePeople("hosts", "Hosts", episode_data["People"]));
+	$("#video").after(generatePeople("hosts", "Hosts", episode_data.People));
 	
 	// update guests box
-	$("#hosts").after(generatePeople("guests", "Guests", episode_data["People"]));
+	$("#hosts").after(generatePeople("guests", "Guests", episode_data.People));
 	
 	// update sponsors box
-	$("#timeline-clear").before(generatePeople("sponsors", "Sponsors", episode_data["People"]));
+	$("#timeline-clear").before(generatePeople("sponsors", "Sponsors", episode_data.People));
 	
 	// close sidebar if open
-	var $sidebar = $(".sidebar")
+	var $sidebar = $(".sidebar");
 	if ($sidebar.hasClass("toggled")) {
 		$sidebar.removeClass("toggled");
 	}
@@ -304,7 +196,7 @@ function setCommentCount(element, reddit_id) {
 		dataType: "json",
 		async: true,
 		success: function(data) {
-			element.text(data[0]["data"]["children"][0]["data"]["num_comments"] + " Comments");
+			element.text(data[0].data.children[0].data.num_comments + " Comments");
 		},
 		error: function(xhr, textStatus, error) {
 			element.text("Comments");
@@ -316,16 +208,16 @@ function setCommentCount(element, reddit_id) {
 function generatePeople(id, name, data) {
 	tryDelete("#" + id);
 	if (data.hasOwnProperty(name) == 1) {
-		var $people = $("<div>", {"id": id, "class": "people"});
+		var $people = $("<div>", {"id": id, "class": "section people"});
 		var $header = $("<h4>").text(name);
 		
 		$people.append($header);
 		
-		$.each(data[name], function(i, person_data) {
-			$people.append(generatePerson(person_data["Name"], person_data["Image"], person_data["URL"]));
+		$.each(data[name], function(person_id, person_data) {
+			$people.append(generatePerson(person_data.Name, person_data.Image, person_data.URL));
 		});
 		
-		return $people
+		return $people;
 	}
 }
 
@@ -370,7 +262,7 @@ function onPlayerReady(event) {
 		
 		// track in analytics
 		if (typeof _gaq !== "undefined") {
-			_gaq.push(["_trackEvent", "Timeline", "Seek", $("nav ul").attr("data-current"), parseInt(search_timestamp)]);
+			_gaq.push(["_trackEvent", "Timeline", "Seek", $("nav ul").attr("data-current"), parseInt(search_timestamp, 10)]);
 		}
 	}
 	
@@ -403,3 +295,101 @@ function onPlayerReady(event) {
 		});
 	}
 }
+
+$(document).ready(function() {
+	// add YT script tag
+	var tag = document.createElement("script");
+	var firstScriptTag = document.getElementsByTagName("script")[0];
+	tag.src = "https://www.youtube.com/player_api";
+	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+	
+	// scroll to active episode
+	if (document.getElementById("active")) {
+		$("#sidebar").animate({scrollTop:$("#active").position().top},1000);
+	}
+	
+	// load comment count on load
+	if (document.getElementById("comments")) {
+		setCommentCount($("#comments"), document.getElementById("comments").getAttribute("data-reddit"));
+	}
+	
+	// collapsible sidebar
+	$(".toggle-menu").click(function(e){
+		e.preventDefault();
+		$(".sidebar").toggleClass("toggled");
+	});
+	
+	// capture timestamp click events
+	$(document).on("click", "a.timelink", function() {
+		// seek to timestamp
+		player.seekTo($(this).attr("data-timestamp"));
+		document.getElementsByTagName("header")[0].scrollIntoView();
+		
+		// track in analytics
+		if (typeof _gaq !== "undefined") {
+			_gaq.push(["_trackEvent", "Timeline", "Seek", $("nav ul").attr("data-current"), parseInt($(this).attr("data-timestamp"), 10)]);
+		}
+		
+		return false;
+	});
+	
+	// live search
+	var search_timer;
+	var previous_search;
+	$("#search-field").on("propertychange input", function() {
+		clearTimeout(search_timer);
+		var search_value = this.value;
+		
+		search_timer = setTimeout(function() {
+			if ($.trim(search_value) !== "") {
+				if (previous_search != search_value) {
+					// track search in analytics
+					if (typeof _gaq !== "undefined") {
+						_gaq.push(["_trackEvent", "Search", "Search", search_value]);
+					}
+					
+					$.ajax({
+						url: domain + "search.php",
+						dataType: "json",
+						data: {"query": search_value},
+						async: true,
+						success: function(results_json) {
+							previous_search = search_value;
+							
+							// hide all episodes
+							$("#sidebar ul li").each(function(id, li){
+								resetSearchResults(li);
+								$(li).css("display", "none");
+							});
+							
+							if (!jQuery.isEmptyObject(results_json)) {
+								$.each(results_json, function(episode_identifier, episode_timestamp) {
+									// show only returned episodes
+									var $episode = $("li[data-episode='" + episode_identifier + "']");
+									var $search_result = $("<span>").addClass("search-result").attr("title", episode_timestamp.Value).text(episode_timestamp.Value);
+									var $result_link = $episode.children(":first");
+									
+									$episode.attr("data-timestamp", episode_timestamp.Timestamp);
+									$result_link.attr("href", $result_link.attr("href") + "?timestamp=" + episode_timestamp.Timestamp);
+									$result_link.append($search_result);
+									$episode.css("display", "block");
+								});
+							}
+						},
+						error: function(xhr, textStatus, error) {
+							alert("Looks like search is broken right now. Please message /u/nehalvpatel on reddit.");
+						}
+					});
+				}
+			} else {
+				// reset episode list
+				previous_search = "";
+				
+				$("#sidebar ul li").each(function(id, li){
+					resetSearchResults(li);
+					$(li).css("display", "block");
+				});
+			}
+		}, 200);
+	});
+});
