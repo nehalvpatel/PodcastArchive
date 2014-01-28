@@ -43,7 +43,8 @@
 			$episode_data["Timeline"] = array();
 			$timestamps = $episode->getTimestamps();
 			if (count($timestamps) > 0) {
-				$episode_data["Timeline"]["Author"] = $episode->getTimelineAuthor();
+				$episode_data["Timeline"]["Author"]["Name"] = $episode->getTimelineAuthor();
+				$episode_data["Timeline"]["Author"]["Link"] = $episode->getTimelineAuthorLink();
 				
 				$timeline_array = $episode->getHorizontalTimeline();
 				foreach ($timeline_array as $timeline_key => $timeline_element) {

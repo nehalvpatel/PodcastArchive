@@ -194,22 +194,15 @@ function updateContent(episode_data) {
 	
 	// change author name if timestamp is available
 	tryDelete(".author");
-	
-	if (((episode_data["Timeline"]).hasOwnProperty("Author") == 1) && (episode_data["Timeline"]["Author"] != "")) {
-		var $link = $("<a>", {"class": "author", title: "Timeline Author", href: "http://www.reddit.com/user/" + episode_data["Timeline"]["Author"]});
-		var $icon = $("<i>", {"class": "icon-user"});
-		var $author_text = $("<small>");
-		$author_text.text(episode_data["Timeline"]["Author"]);
-		
-		$link.append($icon);
-		$link.append($author_text);
-		
+	if (((episode_data["Timeline"]).hasOwnProperty("Author") == 1) && (episode_data["Timeline"]["Author"]["Name"] != "")) {
+		var $link = $("<a>", {"class": "author", title: "Timeline Author", href: episode_data["Timeline"]["Author"]["Link"]});
+		$link.append($("<i>", {"class": "icon-user"}));
+		$link.append($("<small>").text(episode_data["Timeline"]["Author"]["Name"]));
 		$(".info").append($link);
 	}
 	
 	// get comment count if possible
 	tryDelete(".comments");
-	
 	if (episode_data["Reddit"] != "") {
 		var $link = $("<a>", {"class": "comments", title: "Discussion Comments", href: "http://www.reddit.com/comments/" + episode_data["Reddit"]});
 		var $icon = $("<i>", {"class": "icon-comments"});
@@ -226,7 +219,6 @@ function updateContent(episode_data) {
 	
 	// update horizontal timeline if possible
 	tryDelete("#timeline-horizontal");
-	
 	if ((episode_data["Timeline"]).hasOwnProperty("Timestamps") == 1) {
 		var $timeline = $("<div>", {id: "timeline-horizontal"});
 		$timeline.append($("<h4>").text("Timeline"));
@@ -252,7 +244,6 @@ function updateContent(episode_data) {
 	
 	// update timestamp table if possible
 	tryDelete("#timeline-vertical");
-	
 	if ((episode_data["Timeline"]).hasOwnProperty("Timestamps") == 1) {
 		var $timeline = $("<div>", {id: "timeline-vertical"});
 		var $table = $("<table>", {id: "timeline-table"});
@@ -324,7 +315,6 @@ function setCommentCount(element, reddit_id) {
 // generate people containers
 function generatePeople(id, name, data) {
 	tryDelete("#" + id);
-	
 	if (data.hasOwnProperty(name) == 1) {
 		var $people = $("<div>", {"id": id, "class": "people"});
 		var $header = $("<h4>").text(name);
