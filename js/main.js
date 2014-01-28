@@ -1,8 +1,4 @@
-var playerContainer;
 $(document).ready(function() {
-	// get YT player container
-	playerContainer = document.getElementById("player");
-	
 	// add YT script tag
 	var tag = document.createElement("script");
 	var firstScriptTag = document.getElementsByTagName("script")[0];
@@ -18,6 +14,12 @@ $(document).ready(function() {
 	if (document.getElementById("comments")) {
 		setCommentCount($("#comments"), document.getElementById("comments").getAttribute("data-reddit"));
 	}
+	
+	// collapsible sidebar
+	$(".toggle-menu").click(function(e){
+		e.preventDefault();
+		$(".sidebar").toggleClass("toggled");
+	});
 	
 	// capture timestamp click events
 	$(document).on("click", "a.timelink", function() {
@@ -355,7 +357,7 @@ function onYouTubePlayerAPIReady() {
 	player = new YT.Player("player", {
 		height: "400",
 		width: "650",
-		videoId: playerContainer.getAttribute("data-youtube"),
+		videoId: document.getElementById("player").getAttribute("data-youtube"),
 		events: {
 			"onReady": onPlayerReady
 		}
@@ -411,11 +413,3 @@ function onPlayerReady(event) {
 		});
 	}
 }
-
-// collapsible sidebar
-$(function(){
-	$(".toggle-menu").click(function(e){
-		e.preventDefault();
-		$(".sidebar").toggleClass("toggled");
-	});
-});
