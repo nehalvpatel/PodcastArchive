@@ -267,11 +267,10 @@
 					<div class="timeline">
 <?php
 
-			$timeline_array = $current_episode->getHorizontalTimeline();
-			foreach ($timeline_array as $timeline_key => $timeline_element) {
+			foreach ($timestamps as $timeline_key => $timeline_element) {
 ?>
-						<a class="timelink" href="<?php echo $domain . "episode/" . $current_episode->getNumber() . "?timestamp=" . $timeline_element["Begin"]; ?>" data-timestamp="<?php echo $timeline_element["Begin"]; ?>">
-							<div class="topic" style="width: <?php echo $timeline_element["Percent"]; ?>%">
+						<a class="timelink" href="<?php echo $domain . "episode/" . $current_episode->getNumber() . "?timestamp=" . $timeline_element["Begin"]; ?>" data-begin="<?php echo $timeline_element["Begin"]; ?>" data-end="<?php echo $timeline_element["End"]; ?>">
+							<div class="topic" style="width: <?php echo $timeline_element["Width"]; ?>%">
 								<div class="tooltip<?php echo ($timeline_element["Begin"] > ($current_episode->getYouTubeLength()) / 2) ? " right" : null; ?>" id="<?php echo $timeline_key; ?>">
 									<div class="triangle"></div>
 									<span><?php echo $timeline_element["Value"]; ?></span>
@@ -295,13 +294,9 @@
 <?php
 		
 			foreach ($timestamps as $timestamp) {
-					$init = $timestamp["Timestamp"];
-					$hours = floor($init / 3600);
-					$minutes = floor(($init / 60) % 60);
-					$seconds = $init % 60;
 ?>
 							<tr>
-								<td class="timestamp"><a class="timelink" href="<?php echo $domain . "episode/" . $current_episode->getNumber() . "?timestamp=" . $init; ?>" data-timestamp="<?php echo $init; ?>"><?php echo sprintf("%02d:%02d:%02d", $hours, $minutes, $seconds); ?></a></td>
+								<td class="timestamp"><a class="timelink" href="<?php echo $domain . "episode/" . $current_episode->getNumber() . "?timestamp=" . $timestamp["Begin"]; ?>" data-begin="<?php echo $timestamp["Begin"]; ?>" data-end="<?php echo $timestamp["End"]; ?>"><?php echo $timestamp["HMS"]; ?></a></td>
 								<td class="event"><?php echo $timestamp["Value"]; ?><?php if ($timestamp["URL"] != "") { ?><a target="_blank" href="<?php echo $timestamp["URL"]; ?>"><i class="icon-external-link"></i></a><?php } ?></td>
 							</tr>
 <?php

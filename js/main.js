@@ -17,7 +17,7 @@ function tryDelete(selector) {
 
 // reset search results
 function resetSearchResults(li) {
-	$(li).removeAttr("data-timestamp");
+	$(li).removeAttr("data-begin");
 	$(li).css("display", "block");
 	
 	var $result_link = $(li).children(":first");
@@ -67,8 +67,8 @@ function updateContent(episode_data) {
 	document.title = "Episode #" + episode_data.Number + " \u00B7 Painkiller Already Archive";
 	
 	// update video
-	if ($current_episode.attr("data-timestamp")) {
-		player.loadVideoById(episode_data.YouTube, $current_episode.attr("data-timestamp"));
+	if ($current_episode.attr("data-begin")) {
+		player.loadVideoById(episode_data.YouTube, $current_episode.attr("data-begin"));
 	} else {
 		player.cueVideoById(episode_data.YouTube);
 	}
@@ -117,9 +117,12 @@ function updateContent(episode_data) {
 		
 		var $line = $("<div>", {"class": "timeline"});
 		$.each(episode_data.Timeline.Timestamps, function(timestamp_id, timestamp_data) {
-			var $timelink = $("<a>", {"class": "timelink", "href": domain + "episode/" + episode_data.Number + "?timestamp=" + timestamp_data.Seconds, "data-timestamp": timestamp_data.Seconds});
+			var $timelink = $("<a>", {"class": "timelink", "href": domain + "episode/" + episode_data.Number + "?timestamp=" + timestamp_data.Begin, "data-begin": timestamp_data.Begin, "data-end": timestamp_data.End});
 			var $topic = $("<div>", {"class": "topic"}).css({"width": timestamp_data.Width + "%"});
-			var $tooltip = $("<div>", {"class": "tooltip", "id": timestamp_data.ID});
+			var $tooltip = $("<div>", {"class": "tooltip", "id": timestamp_id});
+			if (timestamp_data.Begin > (episode_data.YouTubeLength / 2)) {
+				$tooltip.addClass("right");
+			}
 			var $triangle = $("<div>", {"class": "triangle"});
 			var $span = $("<span>").text(timestamp_data.Value);
 			$tooltip.append($triangle);
@@ -152,7 +155,7 @@ function updateContent(episode_data) {
 		$.each(episode_data.Timeline.Timestamps, function(timestamp_id, timestamp_data) {
 			var $body_row = $("<tr>");
 			var $timestamp = $("<td>", {"class": "timestamp"});
-			var $timelink = $("<a>", {"class": "timelink", "href": domain + "episode/" + episode_data.Number + "?timestamp=" + timestamp_data.Seconds, "data-timestamp": timestamp_data.Seconds}).text(timestamp_data.HMS);
+			var $timelink = $("<a>", {"class": "timelink", "href": domain + "episode/" + episode_data.Number + "?timestamp=" + timestamp_data.Begin, "data-begin": timestamp_data.Begin, "data-end": timestamp_data.End}).text(timestamp_data.HMS);
 			var $event = $("<td>", {"class": "event"}).text(timestamp_data.Value);
 			if (timestamp_data.URL !== "") {
 				$event.append($("<a>", {"target": "_blank", "href": timestamp_data.URL}).append($("<i>", {"class": "icon-external-link"})));
@@ -241,14 +244,15 @@ function onYouTubePlayerAPIReady() {
 		width: "650",
 		videoId: document.getElementById("player").getAttribute("data-youtube"),
 		events: {
-			"onReady": onPlayerReady
+			"onReady": onPlayerReady,
+			"onStateChange": onPlayerStateChange
 		}
 	});
 }
 
 // setup pushState, handle search, and seek to timestamp
 var cached_data = [];
-function onPlayerReady(event) {
+function onPlayerReady() {
 	// handle search query
 	var search_query = getQueryVariable("query");
 	if (search_query) {
@@ -296,6 +300,47 @@ function onPlayerReady(event) {
 	}
 }
 
+// toggle timestamp checker
+function onPlayerStateChange() {
+	if (player.getPlayerState() === 1) {
+		time_updater = setInterval(updateTime, 1000);
+	} else {
+		time_updater = null;
+	}
+}
+
+// repeatedly check timestamp
+var video_time = 0;
+var time_updater = null;
+function updateTime() {
+	var old_time = video_time;
+	if (player && player.getCurrentTime) {
+		video_time = player.getCurrentTime();
+	}
+	if (video_time !== old_time) {
+		onProgress(video_time);
+	}
+}
+
+// highlight active timestamp
+function onProgress(currentTime) {
+	$(".timelink").each(function(timelink_id, timelink){
+		if ((currentTime > $(timelink).attr("data-begin")) && (currentTime < $(timelink).attr("data-end"))) {
+			if ($(timelink).parent().prop("tagName").toLowerCase() == "td") {
+				$(timelink).parent().parent().css({"font-weight": "bold"});
+			} else {
+				$(timelink).children(":first").css({"background": "#414040"});
+			}
+		} else {
+			if ($(timelink).parent().prop("tagName").toLowerCase() == "td") {
+				$(timelink).parent().parent().css({"font-weight": ""});
+			} else {
+				$(timelink).children(":first").css({"background": ""});
+			}
+		}
+	});
+}
+
 $(document).ready(function() {
 	// add YT script tag
 	var tag = document.createElement("script");
@@ -322,12 +367,12 @@ $(document).ready(function() {
 	// capture timestamp click events
 	$(document).on("click", "a.timelink", function() {
 		// seek to timestamp
-		player.seekTo($(this).attr("data-timestamp"));
+		player.seekTo($(this).attr("data-begin"));
 		document.getElementsByTagName("header")[0].scrollIntoView();
 		
 		// track in analytics
 		if (typeof _gaq !== "undefined") {
-			_gaq.push(["_trackEvent", "Timeline", "Seek", $("nav ul").attr("data-current"), parseInt($(this).attr("data-timestamp"), 10)]);
+			_gaq.push(["_trackEvent", "Timeline", "Seek", $("nav ul").attr("data-current"), parseInt($(this).attr("data-begin"), 10)]);
 		}
 		
 		return false;
@@ -369,7 +414,7 @@ $(document).ready(function() {
 									var $search_result = $("<span>").addClass("search-result").attr("title", episode_timestamp.Value).text(episode_timestamp.Value);
 									var $result_link = $episode.children(":first");
 									
-									$episode.attr("data-timestamp", episode_timestamp.Timestamp);
+									$episode.attr("data-begin", episode_timestamp.Timestamp);
 									$result_link.attr("href", $result_link.attr("href") + "?timestamp=" + episode_timestamp.Timestamp);
 									$result_link.append($search_result);
 									$episode.css("display", "block");

@@ -24,6 +24,7 @@
 			$episode_data["Date"] = date("F d, Y", strtotime($episode->getDate()));
 			$episode_data["Reddit"] = $episode->getReddit();
 			$episode_data["YouTube"] = $episode->getYouTube();
+			$episode_data["YouTubeLength"] = $episode->getYouTubeLength();
 			
 			$hosts = json_decode($episode->getHosts(), true);
 			foreach ($hosts as $host_id) {
@@ -45,23 +46,7 @@
 			if (count($timestamps) > 0) {
 				$episode_data["Timeline"]["Author"]["Name"] = $episode->getTimelineAuthor();
 				$episode_data["Timeline"]["Author"]["Link"] = $episode->getTimelineAuthorLink();
-				
-				$timeline_array = $episode->getHorizontalTimeline();
-				foreach ($timeline_array as $timeline_key => $timeline_element) {
-					$init = $timeline_element["Begin"];
-					$hours = floor($init / 3600);
-					$minutes = floor(($init / 60) % 60);
-					$seconds = $init % 60;
-					
-					$timestamp_data = array();
-					$timestamp_data["ID"] = $timeline_key;
-					$timestamp_data["Seconds"] = $timeline_element["Begin"];
-					$timestamp_data["HMS"] = sprintf("%02d:%02d:%02d", $hours, $minutes, $seconds);
-					$timestamp_data["Value"] = $timeline_element["Value"];
-					$timestamp_data["URL"] = $timeline_element["URL"];
-					$timestamp_data["Width"] = $timeline_element["Percent"];
-					$episode_data["Timeline"]["Timestamps"][] = $timestamp_data;
-				}
+				$episode_data["Timeline"]["Timestamps"] = $timestamps;
 			}
 			
 			echo json_encode($episode_data);

@@ -54,7 +54,62 @@
 		public function reloadTimestamps() {
 			$timestamps_query = $this->con->prepare("SELECT * FROM `timestamps` WHERE `Episode` = :Episode ORDER BY `Timestamp` ASC");
 			$timestamps_query->execute(array(":Episode" => $this->getIdentifier()));
-			$this->episode_data["Timestamps"] = $timestamps_query->fetchAll();
+			$timestamps = $timestamps_query->fetchAll();
+			
+			if (count($timestamps) > 0) {
+				$timeline_array = array();
+				
+				// If the first timestamp is far into the episode, add an intro timestamp.
+				if ($timestamps[0]["Timestamp"] > 20) {
+					$timeline_array[] = array(
+						"HMS" => "00:00:00",
+						"Value" => "Intro",
+						"URL" => "",
+						"Begin" => 0
+					);
+				}
+				
+				// We now find the end time value for each timestamp and add it to the timestamp's array element.
+				foreach ($timestamps as $timestamp) {
+					$init = $timestamp["Timestamp"];
+					$hours = floor($init / 3600);
+					$minutes = floor(($init / 60) % 60);
+					$seconds = $init % 60;
+					
+					$timeline_array[] = array(
+						"HMS" => sprintf("%02d:%02d:%02d", $hours, $minutes, $seconds),
+						"Value" => $timestamp["Value"],
+						"URL" 	=> $timestamp["URL"],
+						"Begin" => $timestamp["Timestamp"]
+					);
+					
+					// Set the previous array element's finishing time to the currents starting time.
+					if (isset($timeline_array[count($timeline_array) - 2])) {
+						$timeline_array[count($timeline_array) - 2]["End"] = $timestamp["Timestamp"];
+					}
+					
+					$last_timestamp = $timestamp["Timestamp"];
+				}
+				
+				// The last timestamp ends when the episode ends.
+				$timeline_array[count($timeline_array) - 1]["End"] = $this->getYouTubeLength();
+				
+				// We now find the length of each timestamp as a percentage of the full episode length.
+				foreach ($timeline_array as $timeline_key => $timeline_element) {
+					// Find size of timeline element.
+					$timeline_element_size = $timeline_element["End"] - $timeline_element["Begin"];
+					
+					// Express the timeline size as a quotent of the full current episode size. The * 1.01 gives us some visual spacing to avoid timeline glitches.
+					$timeline_element_quotent = $timeline_element_size / ($this->getYouTubeLength() * 1.01);
+					
+					// Multiply by 100 to express in percentage form and put the value into the $timeline_array array.
+					$timeline_array[$timeline_key]["Width"] = $timeline_element_quotent * 100;
+				}
+				
+				$this->episode_data["Timestamps"] = $timeline_array;
+			} else {
+				$this->episode_data["Timestamps"] = array();
+			}
 		}
 		
 		private function updateValue($field, $value) {
@@ -218,53 +273,6 @@
 			} catch (PDOException $e) {
 				return FALSE;
 			}
-		}
-		
-		public function getHorizontalTimeline() {
-			$timestamps = $this->getTimestamps();
-			$timeline_array = array();
-			
-			// If the first timestamp is far into the episode, add an intro timestamp.
-			if ($timestamps[0]["Timestamp"] > 20) {
-				$timeline_array[] = array(
-					"Begin" => 0,
-					"Value" => "Intro",
-					"URL" => ""
-				);
-			}
-			
-			// We now find the end time value for each timestamp and add it to the timestamp's array element.
-			foreach ($timestamps as $timestamp) {
-				$timeline_array[] = array(
-					"Begin" => $timestamp["Timestamp"],
-					"Value" => $timestamp["Value"],
-					"URL" 	=> $timestamp["URL"]
-				);
-				
-				// Set the previous array element's finishing time to the currents starting time.
-				if (isset($timeline_array[count($timeline_array) - 2])) {
-					$timeline_array[count($timeline_array) - 2]["End"] = $timestamp["Timestamp"];
-				}
-				
-				$last_timestamp = $timestamp["Timestamp"];
-			}
-			// The last timestamp ends when the episode ends.
-			$timeline_array[count($timeline_array) - 1]["End"] = $this->getYouTubeLength();
-			
-			
-			// We now find the length of each timestamp as a percentage of the full episode length.
-			foreach ($timeline_array as $timeline_key => $timeline_element) {
-				// Find size of timeline element.
-				$timeline_element_size = $timeline_element["End"] - $timeline_element["Begin"];
-				
-				// Express the timeline size as a quotent of the full current episode size. The *1.01 gives us some visual spacing to avoid timeline glitches.
-				$timeline_element_quotent = $timeline_element_size / ($this->getYouTubeLength()*1.01);
-				
-				// Multiply by 100 to express in percentage form and put the value into the $timeline_array array.
-				$timeline_array[$timeline_key]["Percent"] = $timeline_element_quotent * 100;
-			}
-			
-			return $timeline_array;
 		}
 	}
 
