@@ -87,7 +87,7 @@ function updateContent(episode_data) {
 	// change author name if timestamp is available
 	tryDelete(".author");
 	if (((episode_data.Timeline).hasOwnProperty("Author") == 1) && (episode_data.Timeline.Author.Name !== "")) {
-		var $link = $("<a>", {"class": "author", title: "Timeline Author", href: episode_data.Timeline.Author.Link});
+		var $link = $("<a>", {"class": "author", "title": "Timeline Author", "href": episode_data.Timeline.Author.Link});
 		$link.append($("<i>", {"class": "icon-user"}));
 		$link.append($("<small>").text(episode_data.Timeline.Author.Name));
 		$(".info").append($link);
@@ -96,7 +96,7 @@ function updateContent(episode_data) {
 	// get comment count if possible
 	tryDelete(".comments");
 	if (episode_data.Reddit !== "") {
-		var $comments_link = $("<a>", {"class": "comments", title: "Discussion Comments", href: "http://www.reddit.com/comments/" + episode_data.Reddit});
+		var $comments_link = $("<a>", {"class": "comments", "title": "Discussion Comments", "href": "http://www.reddit.com/comments/" + episode_data.Reddit});
 		var $icon = $("<i>", {"class": "icon-comments"});
 		var $comment_text = $("<small>", {"data-reddit": episode_data.Reddit});
 		$comment_text.text("Comments");
@@ -112,14 +112,14 @@ function updateContent(episode_data) {
 	// update horizontal timeline if possible
 	tryDelete("#timeline-horizontal");
 	if ((episode_data.Timeline).hasOwnProperty("Timestamps") == 1) {
-		var $timeline_horizontal = $("<div>", {id: "timeline-horizontal", class: "section"});
+		var $timeline_horizontal = $("<div>", {"id": "timeline-horizontal", "class": "section"});
 		$timeline_horizontal.append($("<h4>").text("Timeline"));
 		
-		var $line = $("<div>", {class: "timeline"});
+		var $line = $("<div>", {"class": "timeline"});
 		$.each(episode_data.Timeline.Timestamps, function(timestamp_id, timestamp_data) {
-			var $timelink = $("<a>", {"class": "timelink", href: domain + "episode/" + episode_data.Number + "?timestamp=" + timestamp_data.Seconds, "data-timestamp": timestamp_data.Seconds});
-			var $topic = $("<div>", {"class": "topic", style: "width: " + timestamp_data.Width + "%"});
-			var $tooltip = $("<div>", {"class": "tooltip", id: timestamp_data.ID, style: "display: none"});
+			var $timelink = $("<a>", {"class": "timelink", "href": domain + "episode/" + episode_data.Number + "?timestamp=" + timestamp_data.Seconds, "data-timestamp": timestamp_data.Seconds});
+			var $topic = $("<div>", {"class": "topic"}).css({"width": timestamp_data.Width + "%"});
+			var $tooltip = $("<div>", {"class": "tooltip", "id": timestamp_data.ID});
 			var $triangle = $("<div>", {"class": "triangle"});
 			var $span = $("<span>").text(timestamp_data.Value);
 			$tooltip.append($triangle);
@@ -137,8 +137,8 @@ function updateContent(episode_data) {
 	// update timestamp table if possible
 	tryDelete("#timeline-vertical");
 	if ((episode_data.Timeline).hasOwnProperty("Timestamps") == 1) {
-		var $timeline_vertical = $("<div>", {id: "timeline-vertical", class: "section"});
-		var $table = $("<table>", {id: "timeline-table"});
+		var $timeline_vertical = $("<div>", {"id": "timeline-vertical", "class": "section"});
+		var $table = $("<table>", {"id": "timeline-table"});
 		var $thead = $("<thead>");
 		var $head_row = $("<tr>");
 		var $time_column = $("<th>").text("Time");
@@ -152,7 +152,7 @@ function updateContent(episode_data) {
 		$.each(episode_data.Timeline.Timestamps, function(timestamp_id, timestamp_data) {
 			var $body_row = $("<tr>");
 			var $timestamp = $("<td>", {"class": "timestamp"});
-			var $timelink = $("<a>", {"class": "timelink", href: domain + "episode/" + episode_data.Number + "?timestamp=" + timestamp_data.Seconds, "data-timestamp": timestamp_data.Seconds}).text(timestamp_data.HMS);
+			var $timelink = $("<a>", {"class": "timelink", "href": domain + "episode/" + episode_data.Number + "?timestamp=" + timestamp_data.Seconds, "data-timestamp": timestamp_data.Seconds}).text(timestamp_data.HMS);
 			var $event = $("<td>", {"class": "event"}).text(timestamp_data.Value);
 			if (timestamp_data.URL !== "") {
 				$event.append($("<a>", {"target": "_blank", "href": timestamp_data.URL}).append($("<i>", {"class": "icon-external-link"})));
@@ -223,9 +223,9 @@ function generatePeople(id, name, data) {
 
 // generate person image
 function generatePerson(name, image, url) {
-	var $link = $("<a>", {target: "_blank", href: url, title: name});
+	var $link = $("<a>", {"target": "_blank", "href": url, title: name});
 	var $person = $("<div>", {"class": "person"});
-	var $avatar = $("<img>", {alt: name, src: domain + image});
+	var $avatar = $("<img>", {"alt": name, "src": domain + image});
 	
 	$person.append($avatar);
 	$link.append($person);

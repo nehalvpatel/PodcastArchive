@@ -135,17 +135,13 @@ nav ul li a:hover {
 }
 .people a {
 	display: inline-block;
-	margin-bottom: 10px;
-	margin-right: 10px;
+	margin: 0 10px 10px 0;
 	vertical-align: top;
 }
 .people {
-	padding: 10px 10px 0 10px;
+	padding: 10px 0 0 10px;
 	float: left;
 	margin-right: 20px;
-}
-.people a:last-child {
-	margin-right: 0;
 }
 .person {
 	padding: 4px;
@@ -163,10 +159,8 @@ thead tr th {
 	padding-bottom: 10px;
 }
 td.timestamp {
-	padding-top: 3px;
-	padding-bottom: 3px;
 	width: 35px;
-	padding: 0 10px 0 10px;
+	padding: 3px 10px 3px 10px;
 	border-right-width: 1px;
 	border-right-style: solid;
 	border-top-width: 1px;
@@ -179,8 +173,7 @@ td.timestamp a:hover {
 	color: white;
 }
 td.event {
-	padding-top: 3px;
-	padding-left: 10px;
+	padding: 3px 0 0 10px;
 	border-top-width: 1px;
 	border-top-style: solid;
 }
