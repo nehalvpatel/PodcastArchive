@@ -18,7 +18,7 @@
 	<tr>
 		<th>Identifier</th>
 		<th>Link to Archive</th>
-		<th>Link to Youtube</th>
+		<th>Link to YouTube</th>
 		<th>Add / Edit Timeline</th>
 	</tr>
 <?php
@@ -26,8 +26,8 @@
 ?>
 	<tr>
 		<td><?php echo $episode["Identifier"]; ?></td>
-		<td><a href="<?php echo $domain; ?>/episodes/<?php echo $episode["Number"]; ?>">Archive Link</a></td>
-		<td><a href="http://www.youtube.com/watch?v=<?php echo $episode["Youtube"]; ?>">Youtube Link</a></td>
+		<td><a href="<?php echo $domain; ?>episode/<?php echo $episode["Number"]; ?>">Archive Link</a></td>
+		<td><a href="https://www.youtube.com/watch?v=<?php echo $episode["YouTube"]; ?>">YouTube Link</a></td>
 <?php
 	if(in_array($episode["Identifier"], $timelined_episodes)){
 ?>
