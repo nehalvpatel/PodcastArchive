@@ -54,7 +54,7 @@ h1 {
 	right: 0;
 }
 #container {
-	padding: 20px 20px 0 20px;
+	padding: 20px 20px 20px 20px;
 }
 h2 {
 	margin: 0;
@@ -124,7 +124,7 @@ nav ul li a:hover {
 .section {
 	background: #BB4D3E;
 	padding: 10px 10px 10px 10px;
-	margin-bottom: 20px;
+	margin-top: 20px;
 }
 .section h4 {
 	margin: 0 10px 0 0;
@@ -204,7 +204,6 @@ td.event a i {
 #player {
 	width: 100%;
 	vertical-align: top;
-	margin-bottom: 20px;
 	display: block;
 }
 #timeline-clear {
@@ -329,6 +328,7 @@ input[type="search"] {
 	}
 	.people {
 		width: 100%;
+		margin-right: 0;
 	}
 	.comments, .author {
 		float: right;

@@ -333,9 +333,9 @@ function onProgress(currentTime) {
 			}
 		} else {
 			if ($(timelink).parent().prop("tagName").toLowerCase() == "td") {
-				$(timelink).parent().parent().css({"font-weight": ""});
+				$(timelink).parent().parent().css({"font-weight": null});
 			} else {
-				$(timelink).children(":first").css({"background": ""});
+				$(timelink).children(":first").css({"background": null});
 			}
 		}
 	});
