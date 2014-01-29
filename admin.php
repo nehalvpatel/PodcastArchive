@@ -72,14 +72,25 @@
 						$success = "Timeline was successfully added to the database.";
 					}
 				}
+			} elseif($_POST['form'] == "addadminaccount"){
+				if($Admin->addAdminAccount($_POST['username'], $_POST['password'])){
+					$success = "Admin account has been successfully added.";
+				} else {
+					$errors = $Admin->getErrors();
+				}
+			} elseif($_POST['form'] == "changeadminpassword"){
+				if($Admin->changeAdminPassword($_POST['username'], $_POST['previouspassword'], $_POST['newpassword'])){
+					$success = "Admin password has been succcessfully changed.";
+				} else {
+					$errors = $Admin->getErrors();
+				}
 			}
 		} else { // User is not currently logged in.
 			if ($_POST["form"] == "login") {
-				$result = $Admin->doLogin($_POST["username"], $_POST["password"]);
-				if ($result === true) {
+				if ($Admin->doLogin($_POST["username"], $_POST["password"])) {
 					$_SESSION["admin"] = $_POST["username"];
 				} else {
-					$errors = $result;
+					$errors = $Admin->getErrors();
 				}
 			}
 		}
@@ -93,29 +104,32 @@
 		<link rel="stylesheet" type="text/css" href="css/admin.css">
 	</head>
 	<body>
-		<div id="top_bar">
-			<h1>Admin Panel</h1>
+		<h1>Admin Panel</h1>
+		<div id="navigation">
+			<ul>
 <?php
-	if ($Admin->isLoggedIn()) {
+	if($Admin->isLoggedIn()){
 ?>
-			<p>Welcome to the admin panel!</p>
+				<li><a href="index.php">Home</a></li>
+				<li><a href="admin.php?module=viewepisodes">View Episodes</a></li>
+				<li><a href="admin.php?module=addepisode">Add Episode</a></li>
+				<li><a href="https://www.google.com/analytics/web/#report/visitors-overview/a46640110w77695213p80320716/">View Statistics</a></li>
+				<li><a href="admin.php?module=adminaccounts">Admin Accounts</a></li>
+<?php
+	} else {
+?>
+				<li class="active"><a href="admin.php">Login</a></li>
 <?php
 	}
 ?>
-		</div>
-		<div id="navigation">
-			<ul>
-				<li><a href="admin.php?module=addtimestamp">Add Timestamp</a></li>
-				<li><a href="admin.php?module=addtimeline">Add Timeline</a></li>
 			</ul>
 		</div>
+		<div id="main">
 <?php // Success and Error handling.
 	if (isset($success)) {
 ?>
 		<div class="success">
-			<p><?php
-		echo $success;
-?></p>
+			<p><?php echo $success; ?></p>
 		</div>
 <?php
 	}
@@ -124,28 +138,28 @@
 		foreach ($errors as $error) {
 ?>
 		<div class="error">
-			<p><?php
-			echo $error;
-?></p>
+			<p><?php echo $error; ?></p>
 		</div>
 <?php
 		}
 	}
 	
-	if (isset($_GET["module"]) && $Admin->isLoggedIn()) {
-		switch ($_GET["module"]) {
-			case "addepisode":
-				require("templates/addepisode.php");
-				break;
-			case "addtimestamp":
-				require("templates/addtimestamp.php");
-				break;
-			case "addtimeline":
-				require("templates/addtimeline.php");
-				break;
-			default:
-				require("template/admin_general");
-				break;
+	if ($Admin->isLoggedIn()) {
+		if(isset($_GET["module"])){
+			switch ($_GET["module"]) {
+				case "viewepisodes":
+					require("templates/viewepisodes.php");
+					break;
+				case "adminaccounts":
+					require("templates/adminaccounts.php");
+					break;
+				case "addtimeline":
+					require("templates/addtimeline.php");
+					break;
+				case "edittimeline":
+					require("templates/edittimeline.php");
+					break;
+			}
 		}
 	}
 	
@@ -154,5 +168,6 @@
 	}
 	
 ?>
+		</div>
 	</body>
 </html>

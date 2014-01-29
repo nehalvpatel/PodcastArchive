@@ -2,9 +2,14 @@
 
 	class Admin {
 		private $con;
+		private $errors = array();
 		
 		public function __construct($con) {
 			$this->con = $con;
+		}
+		
+		public function getErrors(){
+			return $this->errors;
 		}
 		
 		public function validateTimestamp($timestamp) {
@@ -32,25 +37,66 @@
 		}
 		
 		public function doLogin($username, $password){
-			$errors = array();
 			if (empty($username) || empty($password)) {
-				$errors[] = "Please make sure all fields were filled in.";
+				$this->errors[] = "Please make sure all fields were filled in.";
 			} else {
 				$query = $this->con->prepare("SELECT `username` FROM `admins` WHERE `username` = :username AND `password` = :password");
 				$query->execute(
 					array(
-						":username" => $_POST["username"],
-						":password" => hash("sha512", $_POST["password"] . "305yh83],>")
+						":username" => $username,
+						":password" => hash("sha512", $password . "305yh83],>")
 					)
 				);
 				$results = $query->fetchAll();
 				if(count($results)>0){
 					return true;
 				} else {
-					$errors[] = "Incorrect username or password.";
+					$this->errors[] = "Incorrect username or password.";
 				}
 				
-				return $errors;
+				return false;
+			}
+		}
+		
+		public function addAdminAccount($username, $password){
+			if (empty($username) || empty($password)) {
+				$this->errors[] = "Please make sure all fields were filled in.";
+			} else {
+				$query = $this->con->prepare("INSERT INTO `admins` (`username`, `password`) VALUES (:username, :password)");
+				$result = $query->execute(
+					array(
+						":username" => $username,
+						":password" => hash("sha512", $password . "305yh83],>")
+					)
+				);
+				if($result === true){
+					return true;
+				} else {
+					$this->errors[] = "An error occured with the result of the MySQL query.";
+				}
+				
+				return false;
+			}
+		}
+		public function changeAdminPassword($username, $previouspassword, $newpassword){
+			if (empty($username) || empty($previouspassword) || empty($newpassword)) {
+				$this->errors[] = "Please make sure all fields were filled in.";
+			} else {
+				$query = $this->con->prepare("UPDATE `admins` SET `password` = :newpassword WHERE `username` = :username AND `password` = :previouspassword");
+				$result = $query->execute(
+					array(
+						":username" => $username,
+						":newpassword" => hash("sha512", $newpassword . "305yh83],>"),
+						":previouspassword" => hash("sha512", $previouspassword . "305yh83],>")
+					)
+				);
+				if($result === true){
+					return true;
+				} else {
+					$this->errors[] = "An error occured with the result of the MySQL query.";
+				}
+				
+				return false;
 			}
 		}
 	}

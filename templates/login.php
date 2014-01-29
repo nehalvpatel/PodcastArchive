@@ -1,19 +1,14 @@
-<div id="login">
+<h2>Login</h2>
+<div id="form">
 	<div id="title">
-		<h1>Login to the Admin Panel</h1>
+		<h3>Login to the Admin Panel</h3>
 	</div>
-	<div id="form">
+	<div id="fields">
 		<form method="POST">
-			<div class="input">
-				<input type="text" name="username" placeholder="Username">
-			</div>
-			<div class="input">
-				<input type="password" name="password" placeholder="Password">
-			</div>
+			<input type="text" name="username" placeholder="Username">
+			<input type="password" name="password" placeholder="Password">
 			<input type="hidden" name="form" value="login">
-			<div class="input">
-				<input type="submit" value="Login">
-			</div>
+			<input type="submit" value="Login">
 		</form>
 	</div>
 </div>

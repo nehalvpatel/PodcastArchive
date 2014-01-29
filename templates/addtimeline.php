@@ -1,23 +1,13 @@
-<div class="module">
-	<div class="module_title">
-		<h2>Add Timeline</h2>
+<h2>Add Timeline</h2>
+<div id="form">
+	<div id="title">
+		<h3>Add Timeline to Episode #<?php echo $_GET['episode']; ?></h3>
 	</div>
-	<div class="module_body">
+	<div id="fields">
 		<form method="POST">
-			<table>
-				<tbody>
-					<tr>
-						<td><label for="episode">Episode</label></td>
-						<td><input type="text" required id="episode" name="episode" placeholder="Example: 156"></td>
-					</tr>
-					<tr>
-						<td><label for="timeline_textbox">Timeline</label></td>
-						<td><textarea required id="timeline_textbox" name="timeline"></textarea></td>
-					</tr>
-				</tbody>
-			</table>
+			<textarea name="timeline" placeholder="Insert Timeline Here"></textarea>
 			<input type="hidden" name="form" value="addtimeline">
-			<input type="submit" name="submit" id="submit" value="Add Timeline">
+			<input type="submit" value="Add Timeline">
 		</form>
 	</div>
 </div>
