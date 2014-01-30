@@ -40,7 +40,7 @@
 					}
 				}
 			} elseif ($_POST["form"] == "addtimeline") {
-				$episode_input = $_POST["episode"];
+				$episode_input = $_GET["episode"];
 				$value = $_POST["timeline"];
 				
 				if((empty($episode_input) && $episode_input !== "0") || empty($value)){
