@@ -158,6 +158,12 @@ nav ul li a:hover {
 thead tr th {
 	padding-bottom: 10px;
 }
+.active-timestamp-horizontal {
+	background: #414040 !important;
+}
+.active-timestamp-vertical {
+	font-weight: bold;
+}
 td.timestamp {
 	width: 35px;
 	padding: 3px 10px 3px 10px;

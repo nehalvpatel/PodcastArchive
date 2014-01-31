@@ -327,15 +327,15 @@ function onProgress(currentTime) {
 	$(".timelink").each(function(timelink_id, timelink){
 		if ((currentTime > $(timelink).attr("data-begin")) && (currentTime < $(timelink).attr("data-end"))) {
 			if ($(timelink).parent().prop("tagName").toLowerCase() == "td") {
-				$(timelink).parent().parent().css({"font-weight": "bold"});
+				$(timelink).parent().parent().addClass("active-timestamp-vertical");
 			} else {
-				$(timelink).children(":first").css({"background": "#414040"});
+				$(timelink).children(":first").addClass("active-timestamp-horizontal");
 			}
 		} else {
 			if ($(timelink).parent().prop("tagName").toLowerCase() == "td") {
-				$(timelink).parent().parent().css({"font-weight": null});
+				$(timelink).parent().parent().removeClass("active-timestamp-vertical");
 			} else {
-				$(timelink).children(":first").css({"background": null});
+				$(timelink).children(":first").removeClass("active-timestamp-horizontal");
 			}
 		}
 	});
