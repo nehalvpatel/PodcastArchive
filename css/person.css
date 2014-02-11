@@ -1,21 +1,48 @@
-#image{
-	height: 320px;
+#image {
+	max-height: 100%;
 	width: 320px;
 	padding: 10px;
-	background: #BB4D3E;
+	background: #333;
 	float: left;
 }
-#details{
-	width: 600px;
-	height: 320px;
-	float: left;
+#person-image {
+	max-width: 100%;
+	vertical-align: top;
 }
-#overview, #social-icons{
-	width: 600px;
+#details {
+	display: table;
+	padding-left: 20px;
+}
+#overview, #social-icons {
 	padding: 10px;
-	margin-left: 10px;
 	background: #BB4D3E;
 }
-#social-icons{
-	margin-top: 10px;
+#person-name {
+	margin-bottom: 10px;
+}
+#person-overview {
+	margin: 0;
+}
+#social-icons {
+	margin-top: 20px;
+}
+#social-icons a {
+	display: inline-block;
+}
+#social-icons img {
+	vertical-align: top;
+}
+#container {
+	overflow: hidden;
+}
+@media all and (max-width: 1024px) {
+	#image, #details {
+		width: 100%;
+	}
+	#image {
+		text-align: center;
+	}
+	#details {
+		padding: 20px 0px 0px 0px;
+	}
 }

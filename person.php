@@ -5,7 +5,7 @@
 	
 	if(isset($_GET["person"])){
 		$Person = new Person($con);
-		$Person->initWithName($_GET['person']);
+		$Person->initWithID($_GET["person"]);
 	}
 	if (isset($_SERVER["HTTP_USER_AGENT"]) && (strpos($_SERVER["HTTP_USER_AGENT"], "MSIE") !== false)) header("X-UA-Compatible: IE=edge,chrome=1");
 	
@@ -86,33 +86,33 @@
 			</header>
 			<div id="container">
 				<div id="image">
-					<img src="img/people/<?php echo $Person->getID(); ?>a.png" />
+					<img id="person-image" alt="<?php echo $Person->getName(); ?>" title="<?php echo $Person->getName(); ?>" src="<?php echo $domain; ?>img/people/<?php echo $Person->getID(); ?>a.png" />
 				</div>
 				<div id="details">
 					<div id="overview">
-						<h2><?php echo $Person->getName(); ?></h2>
-						<p><?php echo $Person->getOverview(); ?></p>
+						<h2 id="person-name"><?php echo $Person->getName(); ?></h2>
+						<p id="person-overview"><?php echo $Person->getOverview(); ?></p>
 					</div>
 					<div id="social-icons">
 <?php
 	if($Person->getFacebook() != ""){
 ?>
-						<a href="http://www.facebook.com/<?php echo $Person->getFacebook(); ?>"><img src="img/facebook.png" /></a>
+						<a href="http://www.facebook.com/<?php echo $Person->getFacebook(); ?>"><img src="<?php echo $domain; ?>img/facebook.png" /></a>
 <?php
 	}
 	if($Person->getTwitter() != ""){
 ?>
-						<a href="http://www.twitter.com/<?php echo $Person->getTwitter(); ?>"><img src="img/twitter.png" /></a>
+						<a href="http://www.twitter.com/<?php echo $Person->getTwitter(); ?>"><img src="<?php echo $domain; ?>img/twitter.png" /></a>
 <?php
 	}
 	if($Person->getTwitch() != ""){
 ?>
-						<a href="http://www.twitch.tv/<?php echo $Person->getTwitch(); ?>"><img src="img/twitch.png" /></a>
+						<a href="http://www.twitch.tv/<?php echo $Person->getTwitch(); ?>"><img src="<?php echo $domain; ?>img/twitch.png" /></a>
 <?php
 	}
 	if($Person->getReddit() != ""){
 ?>
-						<a href="http://www.reddit.com/user/<?php echo $Person->getReddit(); ?>"><img src="img/reddit.png" /></a>
+						<a href="http://www.reddit.com/user/<?php echo $Person->getReddit(); ?>"><img src="<?php echo $domain; ?>img/reddit.png" /></a>
 <?php
 	}
 ?>
