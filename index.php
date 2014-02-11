@@ -215,7 +215,7 @@
 <?php
 
 	foreach ($hosts as $host) {
-?><a target="_blank" href="<?php echo $host->getURL(); ?>" title="<?php echo $host->getName(); ?>"><div class="person"><img alt="<?php echo $host->getName(); ?>" src="<?php echo $domain . $host->getImage(); ?>"></div></a><?php
+?><a target="_blank" href="<?php echo $host->getURL(); ?>" title="<?php echo $host->getName(); ?>"><div class="person"><img alt="<?php echo $host->getName(); ?>" src="<?php echo $domain . "img/people/" . $host->getID(); ?>.png"></div></a><?php
 	}
 	
 ?>
@@ -229,7 +229,7 @@
 <?php
 
 	foreach ($guests as $guest) {
-?><a target="_blank" href="<?php echo $guest->getURL(); ?>" title="<?php echo $guest->getName(); ?>"><div class="person"><img alt="<?php echo $guest->getName(); ?>" src="<?php echo $domain . $guest->getImage(); ?>"></div></a><?php		
+?><a target="_blank" href="<?php echo $guest->getURL(); ?>" title="<?php echo $guest->getName(); ?>"><div class="person"><img alt="<?php echo $guest->getName(); ?>" src="<?php echo $domain . "img/people/" . $guest->getID(); ?>.png"></div></a><?php		
 	}
 
 ?>
@@ -244,7 +244,7 @@
 <?php
 
 		foreach ($sponsors as $sponsor) {
-?><a target="_blank" href="<?php echo $sponsor->getURL(); ?>" title="<?php echo $sponsor->getName(); ?>"><div class="person"><img alt="<?php echo $sponsor->getName(); ?>" src="<?php echo $domain . $sponsor->getImage(); ?>"></div></a><?php		
+?><a target="_blank" href="<?php echo $sponsor->getURL(); ?>" title="<?php echo $sponsor->getName(); ?>"><div class="person"><img alt="<?php echo $sponsor->getName(); ?>" src="<?php echo $domain . "img/people/" . $sponsor->getID(); ?>.png"></div></a><?php		
 		}
 
 ?>
