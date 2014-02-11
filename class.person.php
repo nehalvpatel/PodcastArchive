@@ -87,14 +87,6 @@
 			return $this->updateValue("RealName", $realname);
 		}
 		
-		public function getImage() {
-			return $this->person_data["Image"];
-		}
-		
-		public function setImage($image) {
-			return $this->updateValue("Image", $image);
-		}
-		
 		public function getURL() {
 			return $this->person_data["URL"];
 		}

@@ -217,7 +217,7 @@ function generatePeople(id, name, data) {
 		$people.append($header);
 		
 		$.each(data[name], function(person_id, person_data) {
-			$people.append(generatePerson(person_data.Name, person_data.Image, person_data.URL));
+			$people.append(generatePerson(person_data.ID, person_data.Name, person_data.URL));
 		});
 		
 		return $people;
@@ -225,10 +225,10 @@ function generatePeople(id, name, data) {
 }
 
 // generate person image
-function generatePerson(name, image, url) {
+function generatePerson(id, name, url) {
 	var $link = $("<a>", {"target": "_blank", "href": url, title: name});
 	var $person = $("<div>", {"class": "person"});
-	var $avatar = $("<img>", {"alt": name, "src": domain + image});
+	var $avatar = $("<img>", {"alt": name, "src": domain + "img/people/" + id + ".png"});
 	
 	$person.append($avatar);
 	$link.append($person);

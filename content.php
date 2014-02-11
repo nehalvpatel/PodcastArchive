@@ -59,8 +59,8 @@
 		$person->initWithID($id);
 		
 		$person_data = array();
+		$person_data["ID"] = $person->getID();
 		$person_data["Name"] = $person->getName();
-		$person_data["Image"] = $person->getImage();
 		$person_data["URL"] = $person->getURL();
 		
 		return $person_data;
