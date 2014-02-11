@@ -102,6 +102,54 @@
 		public function setURL($url) {
 			return $this->updateValue("URL", $url);
 		}
+		
+		public function getFacebook() {
+			return $this->person_data["Facebook"];
+		}
+		
+		public function setFacebook($facebook) {
+			return $this->updateValue("Facebook", $facebook);
+		}
+		
+		public function getTwitter() {
+			return $this->person_data["Twitter"];
+		}
+		
+		public function setTwitter($twitter) {
+			return $this->updateValue("Twitter", $twitter);
+		}
+		
+		public function getTwitch() {
+			return $this->person_data["Twitch"];
+		}
+		
+		public function setTwitch($twitch) {
+			return $this->updateValue("Twitch", $twich);
+		}
+		
+		public function getYoutube() {
+			return $this->person_data["Youtube"];
+		}
+		
+		public function setYoutube($youtube) {
+			return $this->updateValue("Youtube", $youtube);
+		}
+		
+		public function getReddit() {
+			return $this->person_data["Reddit"];
+		}
+		
+		public function setReddit($reddit) {
+			return $this->updateValue("Reddit", $reddit);
+		}
+		
+		public function getOverview() {
+			return $this->person_data["Overview"];
+		}
+		
+		public function setOverview($overview) {
+			return $this->updateValue("Overview", $overview);
+		}
 	}
 
 ?>

@@ -1,0 +1,21 @@
+#image{
+	height: 320px;
+	width: 320px;
+	padding: 10px;
+	background: #BB4D3E;
+	float: left;
+}
+#details{
+	width: 600px;
+	height: 320px;
+	float: left;
+}
+#overview, #social-icons{
+	width: 600px;
+	padding: 10px;
+	margin-left: 10px;
+	background: #BB4D3E;
+}
+#social-icons{
+	margin-top: 10px;
+}
