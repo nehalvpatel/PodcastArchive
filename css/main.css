@@ -208,6 +208,7 @@ td.event a i {
 	clear: both;
 }
 #player {
+	height: 400px;
 	width: 100%;
 	vertical-align: top;
 	display: block;

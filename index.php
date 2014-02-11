@@ -169,7 +169,7 @@
 			<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
 		<![endif]-->
 	</head>
-	<body itemscope itemtype="http://schema.org/WebPage">
+	<body>
 		<aside class="sidebar">
 			<nav id="sidebar">
 				<div class="search-form"><input class="search-field" type="search" id="search-field" name="search" placeholder="Search" results="0"></div>
@@ -200,15 +200,8 @@
 					<?php if ($current_episode->getTimelineAuthor() != "") { ?><a class="author" title="Timeline Author" href="<?php echo $current_episode->getTimelineAuthorLink(); ?>"><i class="icon-user"></i><small><?php echo $current_episode->getTimelineAuthor(); ?></small></a><?php } ?>
 				</div>
 				<div id="rock-hardplace"></div>
-				<div id="video" itemprop="video" itemscope itemtype="http://schema.org/VideoObject">
-					<meta itemprop="name" content="Painkiller Already #<?php echo $current_episode->getNumber(); ?>">
-					<meta itemprop="description" content="Guests: <?php echo $guests_list; ?>">
-					<meta itemprop="thumbnailUrl" content="http://img.youtube.com/vi/<?php echo $current_episode->getYouTube(); ?>/hqdefault.jpg">
-					<meta itemprop="duration" content="<?php echo $current_episode->getDuration(); ?>">
-					<meta itemprop="contentURL" content="<?php echo htmlspecialchars($current_episode->getContentURL()); ?>">
-					<meta itemprop="embedURL" content="https://www.youtube.com/v/<?php echo $current_episode->getYouTube(); ?>">
-					<meta itemprop="uploadDate" content="<?php echo $current_episode->getPublished(); ?>">
-					<div id="player" data-youtube="<?php echo $current_episode->getYouTube(); ?>"></div>
+				<div id="video">
+					<iframe src="//www.youtube.com/embed/<?php echo $current_episode->getYouTube(); ?>?enablejsapi=1&start=<?php if (isset($_GET["timestamp"])) { echo $_GET["timestamp"]; } ?>" frameborder="0" allowfullscreen id="player"></iframe>
 				</div>
 				<div id="hosts" class="section people">
 					<h4>Hosts</h4>

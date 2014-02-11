@@ -240,9 +240,6 @@ function generatePerson(id, name, url) {
 var player;
 function onYouTubePlayerAPIReady() {
 	player = new YT.Player("player", {
-		height: "400",
-		width: "650",
-		videoId: document.getElementById("player").getAttribute("data-youtube"),
 		events: {
 			"onReady": onPlayerReady,
 			"onStateChange": onPlayerStateChange
@@ -262,8 +259,6 @@ function onPlayerReady() {
 	// seek to timestamp
 	var search_timestamp = getQueryVariable("timestamp");
 	if (search_timestamp) {
-		player.seekTo(search_timestamp);
-		
 		// track in analytics
 		if (typeof _gaq !== "undefined") {
 			_gaq.push(["_trackEvent", "Timeline", "Seek", $("nav ul").attr("data-current"), parseInt(search_timestamp, 10)]);

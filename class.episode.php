@@ -202,16 +202,6 @@
 			return "T" . $hours . "H" . $minutes . "M" . $seconds . "S";
 		}
 		
-		public function getContentURL() {
-			$vid_info = file_get_contents("http://www.youtube.com/get_video_info?&video_id=" . $this->getYouTube());
-			parse_str($vid_info, $vid_bits);
-			
-			$formats = explode(",", $vid_bits["url_encoded_fmt_stream_map"]);
-			
-			parse_str($formats[0], $format_bits);
-			return urldecode($format_bits["url"]) . "&signature=" . $format_bits["sig"];
-		}
-		
 		public function getYouTube() {
 			return $this->episode_data["YouTube"];
 		}
