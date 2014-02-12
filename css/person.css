@@ -1,16 +1,17 @@
 #image {
 	max-height: 100%;
-	width: 320px;
 	padding: 10px;
 	background: #333;
 	float: left;
+	text-align: center;
 }
 #person-image {
+	width: 320px;
 	max-width: 100%;
 	vertical-align: top;
 }
 #details {
-	display: table;
+	overflow: auto;
 	padding-left: 20px;
 }
 #overview, #social-icons {
