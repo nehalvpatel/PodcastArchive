@@ -1,19 +1,7 @@
 <?php
 
-	require_once("config.php");
-	require_once("class.person.php");
-	
-	if (isset($_GET["person"])) {
-		try {
-			$Person = new Person($con);
-			$Person->initWithID($_GET["person"]);
-		} catch (Exception $e) {
-			die("No person found");
-		}
-	} else {
-		die("No person found");
-	}
-	
+	require_once("../config.php");
+
 	if (isset($_SERVER["HTTP_USER_AGENT"]) && (strpos($_SERVER["HTTP_USER_AGENT"], "MSIE") !== false)) header("X-UA-Compatible: IE=edge,chrome=1");
 	
 ?>
@@ -25,7 +13,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<meta name="description" content="The article description.">
 		<link rel="search" type="application/opensearchdescription+xml" href="<?php echo $domain; ?>opensearchdescription.xml" title="Painkiller Already Archive">
-		<title>Person <?php echo $Person->getName(); ?> &middot; Painkiller Already Archive</title>
+		<title>404 Page not Found &middot; Painkiller Already Archive</title>
 		
 		<!-- Icons -->
 		<link rel="apple-touch-icon" sizes="57x57" href="<?php echo $domain; ?>apple-touch-icon-57x57.png">
@@ -56,11 +44,25 @@
 		<meta property="twitter:creator" content="@nehalvpatel">
 		<meta property="twitter:domain" content="www.painkilleralready.info">
 		
-		<!-- CSS -->
-		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css?ver=<?php echo $commit_count; ?>">
-		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/person.css?ver=<?php echo $commit_count; ?>">
-		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/fontawesome.css?ver=<?php echo $commit_count; ?>">
-		
+		<!-- CSS ######################################## INCORRECT LINKING ############################################################################## -->
+		<link rel="stylesheet" type="text/css" href="http://painkilleralready.info/css/main.css?ver=<?php echo $commit_count; ?>">
+		<link rel="stylesheet" type="text/css" href="http://painkilleralready.info/css/fontawesome.css?ver=<?php echo $commit_count; ?>">
+		<style>
+			#error{
+				text-align:center;
+				color: #777;
+				margin-top: 50px;
+			}
+			#error h2{
+				font-size: 3em;
+			}
+			#error h3{
+				background: transparent;
+			}
+			#error a{
+				text-decoration: none;
+			}
+		</style>
 		<!-- IE8 -->
 		<!--[if lt IE 9]>
 			<link rel="stylesheet" href="<?php echo $domain; ?>css/fontawesome-ie7.css">
@@ -92,45 +94,12 @@
 				<h1>Painkiller Already Archive</h1>
 			</header>
 			<div id="container">
-				<div id="image">
-					<img id="person-image" alt="<?php echo $Person->getName(); ?>" title="<?php echo $Person->getName(); ?>" src="<?php echo $domain; ?>img/people/<?php echo $Person->getID(); ?>a.png" />
-				</div>
-				<div id="details">
-					<div id="overview">
-						<h2 id="person-name"><?php echo $Person->getName(); ?></h2>
-						<p id="person-overview"><?php echo $Person->getOverview(); ?></p>
-					</div>
-					<div id="social-icons">
-<?php
-	if($Person->getFacebook() != ""){
-?>
-						<a href="http://www.facebook.com/<?php echo $Person->getFacebook(); ?>"><img src="<?php echo $domain; ?>img/facebook.png" /></a>
-<?php
-	}
-	if($Person->getTwitter() != ""){
-?>
-						<a href="http://www.twitter.com/<?php echo $Person->getTwitter(); ?>"><img src="<?php echo $domain; ?>img/twitter.png" /></a>
-<?php
-	}
-	if($Person->getTwitch() != ""){
-?>
-						<a href="http://www.twitch.tv/<?php echo $Person->getTwitch(); ?>"><img src="<?php echo $domain; ?>img/twitch.png" /></a>
-<?php
-	}
-	if($Person->getReddit() != ""){
-?>
-						<a href="http://www.reddit.com/user/<?php echo $Person->getReddit(); ?>"><img src="<?php echo $domain; ?>img/reddit.png" /></a>
-<?php
-	}
-?>
-					</div>
-				</div>
-				<div style="clear:both"></div>
-				<div id="youtube_videos">
-					<h2>Youtube Videos</h2>
+				<div id="error">
+					<h2>Can't Find It!</h2>
+					<p>The page you were looking for could not be found.</p>
+					<a href="<?php echo $domain; ?>index.php"><h3>Home Page</h3></a>
 				</div>
 			</div>
-
 		</section>
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 		<script type="text/javascript">var domain = "<?php echo $domain; ?>";</script>

@@ -14,7 +14,7 @@
 	overflow: auto;
 	padding-left: 20px;
 }
-#overview, #social-icons {
+#overview, #social-icons, #youtube_videos {
 	padding: 10px;
 	background: #BB4D3E;
 }
@@ -24,9 +24,10 @@
 #person-overview {
 	margin: 0;
 }
-#social-icons {
+#social-icons, #youtube_videos {
 	margin-top: 20px;
 }
+
 #social-icons a {
 	display: inline-block;
 }

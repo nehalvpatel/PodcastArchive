@@ -172,7 +172,7 @@
 	<body>
 		<aside class="sidebar">
 			<nav id="sidebar">
-				<div class="search-form"><input class="search-field" type="search" id="search-field" name="search" placeholder="Search" results="0"></div>
+				<div class="search-form"><input class="search-field" type="search" id="search-field" name="search" placeholder="Search"></div>
 				<h3>Episodes</h3>
 				<ul data-current="<?php echo $current_episode->getIdentifier(); ?>">
 <?php

@@ -292,9 +292,13 @@ td.event a i {
 }
 .search-field {
 	width: 100%;
-	border-radius: 15px;
 	border-style: none;
 	padding: 5px 10px 5px 10px;
+	background: #555;
+}
+.search-field:focus {
+	background: #777;
+	outline: 0;
 }
 .search-result {
 	text-overflow: ellipsis;
