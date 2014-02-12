@@ -22,4 +22,14 @@
 <?php
 	}
 ?>
+<?php
+	foreach ($Podcast->getPeople() as $person) {
+?>
+	<url>
+		<loc><?php echo $domain; ?>person/<?php echo $person["ID"]; ?></loc>
+		<changefreq>monthly</changefreq>
+	</url>
+<?php
+	}
+?>
 </urlset>

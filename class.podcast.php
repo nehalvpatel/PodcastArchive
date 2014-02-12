@@ -259,7 +259,7 @@
 		}
 		
 		public function getEpisodes() {
-			$info_query = $this->con->prepare("SELECT * FROM `" . $this->getTable() . "` ORDER BY `Identifier` DESC");
+			$info_query = $this->con->prepare("SELECT * FROM `" . $this->getTable() . "` ORDER BY `Identifier` ASC");
 			$info_query->execute();
 			$info_results = $info_query->fetchAll();
 			
@@ -272,6 +272,20 @@
 			}
 			
 			return $episodes;
+		}
+		
+		public function getPeople() {
+			$info_query = $this->con->prepare("SELECT * FROM `people` ORDER BY `ID` ASC");
+			$info_query->execute();
+			$info_results = $info_query->fetchAll();
+			
+			$people = array();
+			foreach ($info_results as $info) {
+				$people[$info["ID"]] = $info;
+				
+			}
+			
+			return $people;
 		}
 		
 		public function parseFeed($feed) {
