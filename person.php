@@ -3,10 +3,17 @@
 	require_once("config.php");
 	require_once("class.person.php");
 	
-	if(isset($_GET["person"])){
-		$Person = new Person($con);
-		$Person->initWithID($_GET["person"]);
+	if (isset($_GET["person"])) {
+		try {
+			$Person = new Person($con);
+			$Person->initWithID($_GET["person"]);
+		} catch (Exception $e) {
+			die("No person found");
+		}
+	} else {
+		die("No person found");
 	}
+	
 	if (isset($_SERVER["HTTP_USER_AGENT"]) && (strpos($_SERVER["HTTP_USER_AGENT"], "MSIE") !== false)) header("X-UA-Compatible: IE=edge,chrome=1");
 	
 ?>
@@ -61,7 +68,7 @@
 			<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
 		<![endif]-->
 	</head>
-	<body itemscope itemtype="http://schema.org/WebPage">
+	<body>
 		<aside class="sidebar">
 			<nav id="sidebar">
 				<div class="search-form"><input class="search-field" type="search" id="search-field" name="search" placeholder="Search" results="0"></div>
@@ -69,11 +76,30 @@
 				<ul>
 <?php
 	foreach ($Podcast->getEpisodes() as $episode) {
+		$show_episode = false;
+		
+		$hosts = json_decode($episode["Hosts"]);
+		if (in_array($Person->getID(), $hosts)) {
+			$show_episode = true;
+		}
+		
+		$guests = json_decode($episode["Guests"]);
+		if (in_array($Person->getID(), $guests)) {
+			$show_episode = true;
+		}
+		
+		$sponsors = json_decode($episode["Sponsors"]);
+		if (in_array($Person->getID(), $sponsors)) {
+			$show_episode = true;
+		}
+		
+		if ($show_episode === TRUE) {
 ?>
-					<li>
+					<li data-episode="<?php echo $episode["Identifier"]; ?>">
 						<a href="<?php echo $domain; ?>episode/<?php echo $episode["Number"]; ?>">#<?php echo $episode["Number"]; ?></a>
 					</li>
 <?php
+		}
 	}
 ?>
 				</ul>
