@@ -76,30 +76,11 @@
 				<ul>
 <?php
 	foreach ($Podcast->getEpisodes() as $episode) {
-		$show_episode = false;
-		
-		$hosts = json_decode($episode["Hosts"]);
-		if (in_array($Person->getID(), $hosts)) {
-			$show_episode = true;
-		}
-		
-		$guests = json_decode($episode["Guests"]);
-		if (in_array($Person->getID(), $guests)) {
-			$show_episode = true;
-		}
-		
-		$sponsors = json_decode($episode["Sponsors"]);
-		if (in_array($Person->getID(), $sponsors)) {
-			$show_episode = true;
-		}
-		
-		if ($show_episode === TRUE) {
 ?>
 					<li data-episode="<?php echo $episode["Identifier"]; ?>">
 						<a href="<?php echo $domain; ?>episode/<?php echo $episode["Number"]; ?>">#<?php echo $episode["Number"]; ?></a>
 					</li>
 <?php
-		}
 	}
 ?>
 				</ul>
