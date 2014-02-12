@@ -226,7 +226,7 @@ function generatePeople(id, name, data) {
 
 // generate person image
 function generatePerson(id, name, url) {
-	var $link = $("<a>", {"target": "_blank", "href": url, title: name});
+	var $link = $("<a>", {"target": "_blank", "href": domain + "person/" + id, title: name});
 	var $person = $("<div>", {"class": "person"});
 	var $avatar = $("<img>", {"alt": name, "src": domain + "img/people/" + id + ".png"});
 	

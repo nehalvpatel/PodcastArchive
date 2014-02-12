@@ -259,7 +259,7 @@
 		}
 		
 		public function getEpisodes() {
-			$info_query = $this->con->prepare("SELECT * FROM `" . $this->getTable() . "` ORDER BY `Identifier` ASC");
+			$info_query = $this->con->prepare("SELECT * FROM `" . $this->getTable() . "` ORDER BY `Identifier` DESC");
 			$info_query->execute();
 			$info_results = $info_query->fetchAll();
 			
