@@ -24,7 +24,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<meta name="description" content="The article description.">
-		<link rel="search" type="application/opensearchdescription+xml" href="<?php echo $domain; ?>opensearchdescription.xml" title="Painkiller Already Archive">
+		<link rel="canonical" href="<?php echo $domain . "person/" . $Person->getID(); ?>">
 		<title><?php echo $Person->getName(); ?> &middot; Painkiller Already Archive</title>
 		
 		<!-- Icons -->
@@ -48,13 +48,15 @@
 		<link rel="publisher" href="https://plus.google.com/107397414095793132493">
 		
 		<!-- Open Graph -->
-		<meta property="og:image" content="<?php echo $domain; ?>img/pka.png">
+		<meta property="og:image" content="<?php echo $domain; ?>img/people/<?php echo $Person->getID(); ?>a.png">
 		<meta property="og:site_name" content="Painkiller Already Archive">
-		
-		<!-- Twitter -->
-		<meta property="twitter:site" content="@PKA_Archive">
-		<meta property="twitter:creator" content="@nehalvpatel">
-		<meta property="twitter:domain" content="www.painkilleralready.info">
+		<meta property="og:type" content="profile">
+		<meta property="og:title" content="<?php echo $Person->getName(); ?>">
+		<meta property="fb:profile_id" content="<?php echo $Person->getFacebook(); ?>">
+		<meta property="profile:first_name" content="<?php echo $Person->getFirstName(); ?>">
+		<meta property="profile:last_name" content="<?php echo $Person->getLastName(); ?>">
+		<meta property="profile:username" content="<?php echo $Person->getName(); ?>">
+		<meta property="profile:gender" content="<?php echo ($Person->getGender() != "1" ? "female" : "male") ?>">
 		
 		<!-- CSS -->
 		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css?ver=<?php echo $commit_count; ?>">
@@ -104,7 +106,7 @@
 						<h2 class="detail-header">Social</h2>
 <?php
 	if ($Person->getFacebook() != "") {
-?><a href="http://www.facebook.com/<?php echo $Person->getFacebook(); ?>"><img alt="Facebook" title="Facebook" src="<?php echo $domain; ?>img/facebook.png"></a><?php
+?><a href="https://www.facebook.com/<?php echo $Person->getFacebook(); ?>"><img alt="Facebook" title="Facebook" src="<?php echo $domain; ?>img/facebook.png"></a><?php
 	}
 	if ($Person->getTwitter() != "") {
 ?><a href="https://twitter.com/account/redirect_by_id/<?php echo $Person->getTwitter(); ?>"><img alt="Twitter" title="Twitter" src="<?php echo $domain; ?>img/twitter.png"></a><?php

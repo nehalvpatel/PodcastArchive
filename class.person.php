@@ -71,6 +71,14 @@
 			return $this->person_data["ID"];
 		}
 		
+		public function getGender() {
+			return $this->person_data["Gender"];
+		}
+		
+		public function setGender($gender) {
+			return $this->updateValue("Gender", $gender);
+		}
+		
 		public function getName() {
 			return $this->person_data["Name"];
 		}

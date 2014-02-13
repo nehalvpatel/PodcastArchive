@@ -99,7 +99,7 @@
 		<!-- Open Graph -->
 		<meta property="og:image" content="<?php echo $domain; ?>img/pka.png">
 		<meta property="og:site_name" content="Painkiller Already Archive">
-		
+
 <?php
 		if ($source == "get") {
 ?>
@@ -113,6 +113,17 @@
 		<meta property="music:album:track" content="<?php echo $current_episode->getNumber(); ?>">
 		<meta property="music:duration" content="<?php echo $current_episode->getLength(); ?>">
 <?php
+			foreach ($hosts as $host) {
+?>
+		<meta property="music:musician" content="<?php echo $domain; ?>person/<?php echo $host->getID(); ?>">
+<?php
+			}
+		
+			foreach ($guests as $guest) {
+?>
+		<meta property="music:musician" content="<?php echo $domain; ?>person/<?php echo $guest->getID(); ?>">
+<?php
+			}
 		} else {
 ?>
 		<meta property="og:type" content="music.album">
