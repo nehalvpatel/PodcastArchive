@@ -23,7 +23,7 @@
 		<!-- Meta -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<meta name="description" content="The article description.">
+		<meta name="description" content="<?php echo $Person->getOverview(); ?>">
 		<link rel="canonical" href="<?php echo $domain . "person/" . $Person->getID(); ?>">
 		<title><?php echo $Person->getName(); ?> &middot; Painkiller Already Archive</title>
 		
@@ -52,6 +52,8 @@
 		<meta property="og:site_name" content="Painkiller Already Archive">
 		<meta property="og:type" content="profile">
 		<meta property="og:title" content="<?php echo $Person->getName(); ?>">
+		<meta property="og:description" content="<?php echo $Person->getOverview(); ?>">
+		<meta property="og:url" content="<?php echo $domain . "person/" . $Person->getID(); ?>">
 		<meta property="fb:profile_id" content="<?php echo $Person->getFacebook(); ?>">
 		<meta property="profile:first_name" content="<?php echo $Person->getFirstName(); ?>">
 		<meta property="profile:last_name" content="<?php echo $Person->getLastName(); ?>">
