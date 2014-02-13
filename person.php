@@ -25,7 +25,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<meta name="description" content="The article description.">
 		<link rel="search" type="application/opensearchdescription+xml" href="<?php echo $domain; ?>opensearchdescription.xml" title="Painkiller Already Archive">
-		<title>Person <?php echo $Person->getName(); ?> &middot; Painkiller Already Archive</title>
+		<title><?php echo $Person->getName(); ?> &middot; Painkiller Already Archive</title>
 		
 		<!-- Icons -->
 		<link rel="apple-touch-icon" sizes="57x57" href="<?php echo $domain; ?>apple-touch-icon-57x57.png">
@@ -97,40 +97,35 @@
 				</div>
 				<div id="details">
 					<div id="overview">
-						<h2 id="person-name"><?php echo $Person->getName(); ?></h2>
+						<h2 class="detail-header"><?php echo $Person->getName(); ?></h2>
 						<p id="person-overview"><?php echo $Person->getOverview(); ?></p>
 					</div>
 					<div id="social-icons">
+						<h2 class="detail-header">Social</h2>
 <?php
-	if($Person->getFacebook() != ""){
-?>
-						<a href="http://www.facebook.com/<?php echo $Person->getFacebook(); ?>"><img src="<?php echo $domain; ?>img/facebook.png" /></a>
-<?php
+	if ($Person->getFacebook() != "") {
+?><a href="http://www.facebook.com/<?php echo $Person->getFacebook(); ?>"><img alt="Facebook" title="Facebook" src="<?php echo $domain; ?>img/facebook.png"></a><?php
 	}
-	if($Person->getTwitter() != ""){
-?>
-						<a href="http://www.twitter.com/<?php echo $Person->getTwitter(); ?>"><img src="<?php echo $domain; ?>img/twitter.png" /></a>
-<?php
+	if ($Person->getTwitter() != "") {
+?><a href="https://twitter.com/account/redirect_by_id/<?php echo $Person->getTwitter(); ?>"><img alt="Twitter" title="Twitter" src="<?php echo $domain; ?>img/twitter.png"></a><?php
 	}
-	if($Person->getTwitch() != ""){
-?>
-						<a href="http://www.twitch.tv/<?php echo $Person->getTwitch(); ?>"><img src="<?php echo $domain; ?>img/twitch.png" /></a>
-<?php
+	if ($Person->getYouTube() != "") {
+?><a href="https://www.youtube.com/channel/<?php echo $Person->getYouTube(); ?>"><img alt="YouTube" title="YouTube" src="<?php echo $domain; ?>img/youtube.png"></a><?php
 	}
-	if($Person->getReddit() != ""){
-?>
-						<a href="http://www.reddit.com/user/<?php echo $Person->getReddit(); ?>"><img src="<?php echo $domain; ?>img/reddit.png" /></a>
-<?php
+	if ($Person->getReddit() != "") {
+?><a href="http://www.reddit.com/user/<?php echo $Person->getReddit(); ?>"><img alt="reddit" title="reddit" src="<?php echo $domain; ?>img/reddit.png"></a><?php
+	}
+	if ($Person->getTwitch() != "") {
+?><a href="http://www.twitch.tv/<?php echo $Person->getTwitch(); ?>"><img alt="Twitch" title="Twitch" src="<?php echo $domain; ?>img/twitch.png"></a><?php
 	}
 ?>
 					</div>
 				</div>
-				<div style="clear:both"></div>
+				<div style="clear:both;"></div>
 				<div id="youtube_videos">
-					<h2>Youtube Videos</h2>
+					<h2>YouTube Videos</h2>
 				</div>
 			</div>
-
 		</section>
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 		<script type="text/javascript">var domain = "<?php echo $domain; ?>";</script>

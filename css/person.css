@@ -18,7 +18,8 @@
 	padding: 10px;
 	background: #BB4D3E;
 }
-#person-name {
+.detail-header {
+	display: block;
 	margin-bottom: 10px;
 }
 #person-overview {
@@ -27,8 +28,11 @@
 #social-icons, #youtube_videos {
 	margin-top: 20px;
 }
-
+#social-icons {
+	padding: 10px 0 0 10px;
+}
 #social-icons a {
+	margin: 0 10px 10px 0;
 	display: inline-block;
 }
 #social-icons img {

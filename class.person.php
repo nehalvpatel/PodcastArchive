@@ -79,20 +79,20 @@
 			return $this->updateValue("Name", $name);
 		}
 		
-		public function getRealName() {
-			return $this->person_data["RealName"];
+		public function getFirstName() {
+			return $this->person_data["FirstName"];
 		}
 		
-		public function setRealName($realname) {
-			return $this->updateValue("RealName", $realname);
+		public function setFirstName($firstname) {
+			return $this->updateValue("FirstName", $firstname);
 		}
 		
-		public function getURL() {
-			return $this->person_data["URL"];
+		public function getLastName() {
+			return $this->person_data["LastName"];
 		}
 		
-		public function setURL($url) {
-			return $this->updateValue("URL", $url);
+		public function setLastName($lastname) {
+			return $this->updateValue("LastName", $lastname);
 		}
 		
 		public function getFacebook() {
@@ -116,15 +116,23 @@
 		}
 		
 		public function setTwitch($twitch) {
-			return $this->updateValue("Twitch", $twich);
+			return $this->updateValue("Twitch", $twitch);
 		}
 		
-		public function getYoutube() {
-			return $this->person_data["Youtube"];
+		public function getGooglePlus() {
+			return $this->person_data["GooglePlus"];
 		}
 		
-		public function setYoutube($youtube) {
-			return $this->updateValue("Youtube", $youtube);
+		public function setGooglePlus($googleplus) {
+			return $this->updateValue("GooglePlus", $googleplus);
+		}
+		
+		public function getYouTube() {
+			return $this->person_data["YouTube"];
+		}
+		
+		public function setYouTube($youtube) {
+			return $this->updateValue("YouTube", $youtube);
 		}
 		
 		public function getReddit() {
@@ -133,6 +141,14 @@
 		
 		public function setReddit($reddit) {
 			return $this->updateValue("Reddit", $reddit);
+		}
+		
+		public function getURL() {
+			return $this->person_data["URL"];
+		}
+		
+		public function setURL($url) {
+			return $this->updateValue("URL", $url);
 		}
 		
 		public function getOverview() {
