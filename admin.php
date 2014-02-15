@@ -31,7 +31,7 @@
 							$episode = new Episode($con);
 							$episode->initWithNumber($Podcast->trimEpisodeNumber($_POST["episode"]));
 							
-							if ($episode->addTimestamp($timestamp, $_POST["value"], $url, "0") === TRUE) {
+							if ($episode->addTimestamp($timestamp, $_POST["value"], $url) === TRUE) {
 								$success = "Timestamp was successfully added to the database.";
 							}
 						} catch (Exception $e) {
@@ -61,7 +61,7 @@
 								$errors[] = "The timestamp is invalid.";
 							} else {
 								$timestamp = $Admin->convertTimestamp($time);
-								$episode->addTimestamp($timestamp, $event, "Text");
+								$episode->addTimestamp($timestamp, $event);
 							}
 						}
 					} catch (Exception $e) {
