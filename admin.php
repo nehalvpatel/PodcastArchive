@@ -43,7 +43,7 @@
 				$episode_input = $_GET["episode"];
 				$value = $_POST["timeline"];
 				
-				if((empty($episode_input) && $episode_input !== "0") || empty($value)){
+				if ((empty($episode_input) && $episode_input !== "0") || empty($value)) {
 					$errors[] = "Please make sure all fields were filled in.";
 				} else {
 					try {
@@ -72,14 +72,14 @@
 						$success = "Timeline was successfully added to the database.";
 					}
 				}
-			} elseif($_POST['form'] == "addadminaccount"){
-				if($Admin->addAdminAccount($_POST['username'], $_POST['password'])){
+			} elseif ($_POST["form"] == "addadminaccount") {
+				if ($Admin->addAdminAccount($_POST["username"], $_POST["password"])) {
 					$success = "Admin account has been successfully added.";
 				} else {
 					$errors = $Admin->getErrors();
 				}
-			} elseif($_POST['form'] == "changeadminpassword"){
-				if($Admin->changeAdminPassword($_POST['username'], $_POST['previouspassword'], $_POST['newpassword'])){
+			} elseif ($_POST["form"] == "changeadminpassword") {
+				if ($Admin->changeAdminPassword($_POST["username"], $_POST["previouspassword"], $_POST["newpassword"])) {
 					$success = "Admin password has been succcessfully changed.";
 				} else {
 					$errors = $Admin->getErrors();
@@ -108,7 +108,7 @@
 		<div id="navigation">
 			<ul>
 <?php
-	if($Admin->isLoggedIn()){
+	if ($Admin->isLoggedIn()) {
 ?>
 				<li><a href="index.php">Home</a></li>
 				<li><a href="admin.php?module=viewepisodes">View Episodes</a></li>
@@ -145,7 +145,7 @@
 	}
 	
 	if ($Admin->isLoggedIn()) {
-		if(isset($_GET["module"])){
+		if (isset($_GET["module"])) {
 			switch ($_GET["module"]) {
 				case "viewepisodes":
 					require("templates/viewepisodes.php");

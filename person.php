@@ -107,20 +107,23 @@
 					<div id="social-icons">
 						<h2 class="detail-header">Social</h2>
 <?php
+	if ($Person->getYouTube() != "") {
+?><a href="https://www.youtube.com/channel/<?php echo $Person->getYouTube(); ?>"><img alt="YouTube" title="YouTube" src="<?php echo $domain; ?>img/youtube.png"></a><?php
+	}
+	if ($Person->getTwitch() != "") {
+?><a href="http://www.twitch.tv/<?php echo $Person->getTwitch(); ?>"><img alt="Twitch" title="Twitch" src="<?php echo $domain; ?>img/twitch.png"></a><?php
+	}
 	if ($Person->getFacebook() != "") {
 ?><a href="https://www.facebook.com/<?php echo $Person->getFacebook(); ?>"><img alt="Facebook" title="Facebook" src="<?php echo $domain; ?>img/facebook.png"></a><?php
 	}
 	if ($Person->getTwitter() != "") {
 ?><a href="https://twitter.com/account/redirect_by_id/<?php echo $Person->getTwitter(); ?>"><img alt="Twitter" title="Twitter" src="<?php echo $domain; ?>img/twitter.png"></a><?php
 	}
-	if ($Person->getYouTube() != "") {
-?><a href="https://www.youtube.com/channel/<?php echo $Person->getYouTube(); ?>"><img alt="YouTube" title="YouTube" src="<?php echo $domain; ?>img/youtube.png"></a><?php
-	}
 	if ($Person->getReddit() != "") {
 ?><a href="http://www.reddit.com/user/<?php echo $Person->getReddit(); ?>"><img alt="reddit" title="reddit" src="<?php echo $domain; ?>img/reddit.png"></a><?php
 	}
-	if ($Person->getTwitch() != "") {
-?><a href="http://www.twitch.tv/<?php echo $Person->getTwitch(); ?>"><img alt="Twitch" title="Twitch" src="<?php echo $domain; ?>img/twitch.png"></a><?php
+	if ($Person->getGooglePlus() != "") {
+?><a href="https://plus.google.com/<?php echo $Person->getGooglePlus(); ?>"><img alt="Google Plus" title="Google Plus" src="<?php echo $domain; ?>img/googleplus.png"></a><?php
 	}
 ?>
 					</div>
