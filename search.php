@@ -4,10 +4,11 @@
 	
 	$search_results = array();
 	if ((isset($_GET["query"])) && (!empty($_GET["query"]))) {
-		$search_query = $con->prepare("SELECT DISTINCT `Episode`, `Timestamp`, `Value` from `timestamps` WHERE MATCH(`Value`) AGAINST (:Value)");
+		$search_query = $con->prepare("SELECT DISTINCT `Episode`, `Timestamp`, `Value` FROM `timestamps` WHERE REPLACE(`Value`, :Replace, '') LIKE :Value");
 		$search_query->execute(
 			array(
-				":Value" => trim($_GET["query"])
+				":Replace" => "'",
+				":Value" => "%" . str_replace("'", "", trim($_GET["query"])) . "%"
 			)
 		);
 		
