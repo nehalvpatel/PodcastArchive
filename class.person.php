@@ -216,7 +216,7 @@
 		
 		public function getRecentYouTubeVideos() {
 			if ($this->getYouTube() != "") {
-				$youtube_results = json_decode(file_get_contents("https://gdata.youtube.com/feeds/users/" . $this->getYouTube() . "/uploads?alt=json&max-results=5"), true);
+				$youtube_results = json_decode(file_get_contents("https://gdata.youtube.com/feeds/users/" . $this->getYouTube() . "/uploads?alt=json&max-results=6"), true);
 				
 				$youtube_videos = array();
 				foreach ($youtube_results["feed"]["entry"] as $video_result) {
