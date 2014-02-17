@@ -360,9 +360,9 @@ input[type="search"] {
 /* Break YouTube videos to 1 column */
 @media all and (max-width: 720px) {
 	.video {
-		width: -webkit-calc(100% - 10px);
-		width: -moz-calc(100% - 10px);
-		width: calc(100% - 10px);
+		width: -webkit-calc(100% - 10px) !important;
+		width: -moz-calc(100% - 10px) !important;
+		width: calc(100% - 10px) !important;
 	}
 }
 
