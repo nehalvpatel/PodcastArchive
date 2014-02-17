@@ -180,7 +180,7 @@
 			<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
 		<![endif]-->
 	</head>
-	<body>
+	<body data-type="Episode">
 		<aside class="sidebar">
 			<nav id="sidebar">
 				<div class="search-form"><input class="search-field" type="search" id="search-field" name="search" placeholder="Search"></div>

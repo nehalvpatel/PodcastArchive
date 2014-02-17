@@ -268,30 +268,32 @@ function onPlayerReady() {
 	// check if pushState is available
 	var hasPushstate = !!(window.history && history.pushState);
 	
-	// episode click interceptor
-	$("nav a").click(function(e) {
-		if (hasPushstate) {
-			// cancel navigation
-			e.preventDefault();
-			
-			// add page to history
-			href = $(this).attr("href");
-			history.pushState(null, null, href);
-			
-			// track page view
-			if (typeof _gaq !== "undefined") {
-				_gaq.push(["_trackPageview", "/" + href.replace(domain, "")]);
+	if ($("body").attr("data-type") == "Episode") {
+		// episode click interceptor
+		$("nav a").click(function(e) {
+			if (hasPushstate) {
+				// cancel navigation
+				e.preventDefault();
+				
+				// add page to history
+				href = $(this).attr("href");
+				history.pushState(null, null, href);
+				
+				// track page view
+				if (typeof _gaq !== "undefined") {
+					_gaq.push(["_trackPageview", "/" + href.replace(domain, "")]);
+				}
+				
+				loadContent(href);
 			}
-			
-			loadContent(href);
-		}
-	});
-	
-	// add popstate listener to catch back and forward navigation
-	if (hasPushstate) {
-		window.addEventListener("popstate", function() {
-			loadContent(location.href);
 		});
+		
+		// add popstate listener to catch back and forward navigation
+		if (hasPushstate) {
+			window.addEventListener("popstate", function() {
+				loadContent(location.href);
+			});
+		}
 	}
 }
 

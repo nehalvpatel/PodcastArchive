@@ -16,50 +16,6 @@
 	
 	if (isset($_SERVER["HTTP_USER_AGENT"]) && (strpos($_SERVER["HTTP_USER_AGENT"], "MSIE") !== false)) header("X-UA-Compatible: IE=edge,chrome=1");
 	
-	$social_links = array();
-	if ($Person->getYouTube() != "") {
-		$social_link = array();
-		$social_link["Name"] = "YouTube";
-		$social_link["Link"] = "https://www.youtube.com/channel/" . $Person->getYouTube();
-		$social_link["Image"] = "youtube.png";
-		$social_links[] = $social_link;
-	}
-	if ($Person->getTwitch() != "") {
-		$social_link = array();
-		$social_link["Name"] = "Twitch";
-		$social_link["Link"] = "http://www.twitch.tv/" . $Person->getTwitch();
-		$social_link["Image"] = "twitch.png";
-		$social_links[] = $social_link;
-	}
-	if ($Person->getFacebook() != "") {
-		$social_link = array();
-		$social_link["Name"] = "Facebook";
-		$social_link["Link"] = "https://www.facebook.com/" . $Person->getFacebook();
-		$social_link["Image"] = "facebook.png";
-		$social_links[] = $social_link;
-	}
-	if ($Person->getTwitter() != "") {
-		$social_link = array();
-		$social_link["Name"] = "Twitter";
-		$social_link["Link"] = "https://twitter.com/account/redirect_by_id/" . $Person->getTwitter();
-		$social_link["Image"] = "twitter.png";
-		$social_links[] = $social_link;
-	}
-	if ($Person->getReddit() != "") {
-		$social_link = array();
-		$social_link["Name"] = "reddit";
-		$social_link["Link"] = "http://www.reddit.com/user/" . $Person->getReddit();
-		$social_link["Image"] = "reddit.png";
-		$social_links[] = $social_link;
-	}
-	if ($Person->getGooglePlus() != "") {
-		$social_link = array();
-		$social_link["Name"] = "Google Plus";
-		$social_link["Link"] = "https://plus.google.com/" . $Person->getGooglePlus();
-		$social_link["Image"] = "googleplus.png";
-		$social_links[] = $social_link;
-	}
-	
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -166,12 +122,12 @@
 						<p><?php echo $Person->getOverview(); ?></p>
 					</div>
 <?php
-	if (count($social_links) > 0) {
+	if (count($Person->getSocialLinks()) > 0) {
 ?>
 					<div id="social-icons" class="section items">
 						<h2 class="section-header">Social</h2>
 <?php
-		foreach ($social_links as $social_link) {
+		foreach ($Person->getSocialLinks() as $social_link) {
 ?>
 						<a class="item" href="<?php echo $social_link["Link"]; ?>"><img alt="<?php echo $social_link["Name"]; ?>" title="<?php echo $social_link["Name"]; ?>" src="<?php echo $domain; ?>img/<?php echo $social_link["Image"]; ?>"></a>
 <?php

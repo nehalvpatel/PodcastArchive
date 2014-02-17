@@ -166,6 +166,53 @@
 		public function setOverview($overview) {
 			return $this->updateValue("Overview", $overview);
 		}
+		
+		public function getSocialLinks() {
+			$social_links = array();
+			if ($this->getYouTube() != "") {
+				$social_link = array();
+				$social_link["Name"] = "YouTube";
+				$social_link["Link"] = "https://www.youtube.com/channel/" . $this->getYouTube();
+				$social_link["Image"] = "youtube.png";
+				$social_links[] = $social_link;
+			}
+			if ($this->getTwitch() != "") {
+				$social_link = array();
+				$social_link["Name"] = "Twitch";
+				$social_link["Link"] = "http://www.twitch.tv/" . $this->getTwitch();
+				$social_link["Image"] = "twitch.png";
+				$social_links[] = $social_link;
+			}
+			if ($this->getFacebook() != "") {
+				$social_link = array();
+				$social_link["Name"] = "Facebook";
+				$social_link["Link"] = "https://www.facebook.com/" . $this->getFacebook();
+				$social_link["Image"] = "facebook.png";
+				$social_links[] = $social_link;
+			}
+			if ($this->getTwitter() != "") {
+				$social_link = array();
+				$social_link["Name"] = "Twitter";
+				$social_link["Link"] = "https://twitter.com/account/redirect_by_id/" . $this->getTwitter();
+				$social_link["Image"] = "twitter.png";
+				$social_links[] = $social_link;
+			}
+			if ($this->getReddit() != "") {
+				$social_link = array();
+				$social_link["Name"] = "reddit";
+				$social_link["Link"] = "http://www.reddit.com/user/" . $this->getReddit();
+				$social_link["Image"] = "reddit.png";
+				$social_links[] = $social_link;
+			}
+			if ($this->getGooglePlus() != "") {
+				$social_link = array();
+				$social_link["Name"] = "Google Plus";
+				$social_link["Link"] = "https://plus.google.com/" . $this->getGooglePlus();
+				$social_link["Image"] = "googleplus.png";
+				$social_links[] = $social_link;
+			}
+			return $social_links;
+		}
 	}
 
 ?>
