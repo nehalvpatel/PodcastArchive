@@ -398,6 +398,14 @@ input[type="search"] {
 	#details {
 		padding: 20px 0px 0px 0px;
 	}
+	.video-thumbnail {
+		width: 100%;
+		max-height: 200px;
+		margin: 0 0 10px 0;
+	}
+	.video-details {
+		margin-top: 5px;
+	}
 	
 	/* Horizontal Timeline Styles */
 	#timeline-horizontal {

@@ -157,7 +157,7 @@
 						<span class="video-title"><?php echo $video["Title"]; ?></span>
 						<div class="video-details">
 							<span class="video-timestamp"><i class="icon-time"></i> <?php echo $video["Duration"]; ?></span>
-							<span class="video-comments"><i class="icon-comments"></i> <?php echo $video["Comments"]; ?> Comment<?php echo ($video["Comments"] != 1 ? "s" : "") ?></div></span>
+							<span class="video-comments"><i class="icon-comments"></i> <?php echo number_format($video["Comments"]); ?> Comment<?php echo ($video["Comments"] != 1 ? "s" : "") ?></div></span>
 					</a>
 <?php
 		}
