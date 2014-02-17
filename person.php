@@ -150,12 +150,13 @@
 <?php
 		foreach ($recent_videos as $video) {
 ?>
-					<a href="<?php echo $video["Link"]; ?>" class="video">
+					<a href="<?php echo htmlspecialchars($video["Link"]); ?>" class="video">
 						<img alt="<?php echo $video["Title"]; ?>" title="<?php echo $video["Title"]; ?>" class="video-thumbnail" src="<?php echo $video["Thumbnail"]; ?>">
 						<span class="video-title"><?php echo $video["Title"]; ?></span>
 						<div class="video-details">
 							<span class="video-timestamp"><i class="icon-time"></i> <?php echo $video["Duration"]; ?></span>
-							<span class="video-comments"><i class="icon-comments"></i> <?php echo number_format($video["Comments"]); ?> Comment<?php echo ($video["Comments"] != 1 ? "s" : "") ?></div></span>
+							<span class="video-comments"><i class="icon-comments"></i> <?php echo number_format($video["Comments"]); ?> Comment<?php echo ($video["Comments"] != 1 ? "s" : "") ?></span>
+						</div>
 					</a>
 <?php
 		}
