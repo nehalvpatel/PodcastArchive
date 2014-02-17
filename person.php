@@ -128,9 +128,7 @@
 						<h2 class="section-header">Social</h2>
 <?php
 		foreach ($Person->getSocialLinks() as $social_link) {
-?>
-						<a class="item" href="<?php echo $social_link["Link"]; ?>"><img alt="<?php echo $social_link["Name"]; ?>" title="<?php echo $social_link["Name"]; ?>" src="<?php echo $domain; ?>img/<?php echo $social_link["Image"]; ?>"></a>
-<?php
+?><a class="item" href="<?php echo $social_link["Link"]; ?>"><img alt="<?php echo $social_link["Name"]; ?>" title="<?php echo $social_link["Name"]; ?>" src="<?php echo $domain; ?>img/<?php echo $social_link["Image"]; ?>"></a><?php
 		}
 ?>
 					</div>

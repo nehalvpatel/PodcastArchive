@@ -219,7 +219,7 @@
 <?php
 
 	foreach ($hosts as $host) {
-?><a class="item" target="_blank" href="<?php echo $domain . "person/" . $host->getID(); ?>" title="<?php echo $host->getName(); ?>"><div class="person"><img class="person-image" alt="<?php echo $host->getName(); ?>" src="<?php echo $domain . "img/people/" . $host->getID(); ?>.png"></div></a><?php
+?><a class="item" target="_blank" href="<?php echo $domain . "person/" . $host->getID(); ?>" title="<?php echo $host->getName(); ?>"><img alt="<?php echo $host->getName(); ?>" src="<?php echo $domain . "img/people/" . $host->getID(); ?>.png"></a><?php
 	}
 	
 ?>
@@ -233,7 +233,7 @@
 <?php
 
 	foreach ($guests as $guest) {
-?><a class="item" target="_blank" href="<?php echo $domain . "person/" . $guest->getID(); ?>" title="<?php echo $guest->getName(); ?>"><div class="person"><img class="person-image" alt="<?php echo $guest->getName(); ?>" src="<?php echo $domain . "img/people/" . $guest->getID(); ?>.png"></div></a><?php		
+?><a class="item" target="_blank" href="<?php echo $domain . "person/" . $guest->getID(); ?>" title="<?php echo $guest->getName(); ?>"><img alt="<?php echo $guest->getName(); ?>" src="<?php echo $domain . "img/people/" . $guest->getID(); ?>.png"></a><?php		
 	}
 
 ?>
@@ -248,7 +248,7 @@
 <?php
 
 		foreach ($sponsors as $sponsor) {
-?><a class="item" target="_blank" href="<?php echo $domain . "person/" . $sponsor->getID(); ?>" title="<?php echo $sponsor->getName(); ?>"><div class="person"><img class="person-image" alt="<?php echo $sponsor->getName(); ?>" src="<?php echo $domain . "img/people/" . $sponsor->getID(); ?>.png"></div></a><?php		
+?><a class="item" target="_blank" href="<?php echo $domain . "person/" . $sponsor->getID(); ?>" title="<?php echo $sponsor->getName(); ?>"><img alt="<?php echo $sponsor->getName(); ?>" src="<?php echo $domain . "img/people/" . $sponsor->getID(); ?>.png"></a><?php		
 		}
 
 ?>

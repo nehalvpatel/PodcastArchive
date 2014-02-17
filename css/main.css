@@ -143,20 +143,16 @@ nav ul li a:hover {
 	display: inline-block;
 	margin: 0 10px 10px 0;
 	vertical-align: top;
+	padding: 4px;
+	background: #333;
+	width: 46px;
 }
 .items {
 	padding: 10px 0 0 10px;
 	float: left;
 	margin-right: 20px;
 }
-.person {
-	padding: 4px;
-	background: #333;
-	width: 46px;
-	display: inline-block;
-	vertical-align: top;
-}
-.person-image, #social-icons img {
+.items img {
 	vertical-align: top;
 	max-width: 100%;
 }
