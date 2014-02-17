@@ -210,16 +210,16 @@
 					<?php if ($current_episode->getReddit() != "") { ?><a class="comments" title="Discussion Comments" href="http://www.reddit.com/comments/<?php echo $current_episode->getReddit(); ?>"><i class="icon-comments"></i><small id="comments" data-reddit="<?php echo $current_episode->getReddit(); ?>">Comments</small></a><?php echo PHP_EOL; } ?>
 					<?php if ($current_episode->getTimelineAuthor() != "") { ?><a class="author" title="Timeline Author" href="<?php echo $current_episode->getTimelineAuthorLink(); ?>"><i class="icon-user"></i><small><?php echo $current_episode->getTimelineAuthor(); ?></small></a><?php } ?>
 				</div>
-				<div id="rock-hardplace"></div>
+				<div id="rock-hardplace" class="clear"></div>
 				<div id="video">
 					<iframe src="//www.youtube.com/embed/<?php echo $current_episode->getYouTube(); ?>?enablejsapi=1&start=<?php if (isset($_GET["timestamp"])) { echo $_GET["timestamp"]; } ?>" frameborder="0" allowfullscreen id="player"></iframe>
 				</div>
-				<div id="hosts" class="section people">
-					<h4>Hosts</h4>
+				<div id="hosts" class="section items">
+					<h4 class="section-header">Hosts</h4>
 <?php
 
 	foreach ($hosts as $host) {
-?><a target="_blank" href="<?php echo $domain . "person/" . $host->getID(); ?>" title="<?php echo $host->getName(); ?>"><div class="person"><img alt="<?php echo $host->getName(); ?>" src="<?php echo $domain . "img/people/" . $host->getID(); ?>.png"></div></a><?php
+?><a class="item" target="_blank" href="<?php echo $domain . "person/" . $host->getID(); ?>" title="<?php echo $host->getName(); ?>"><div class="person"><img class="person-image" alt="<?php echo $host->getName(); ?>" src="<?php echo $domain . "img/people/" . $host->getID(); ?>.png"></div></a><?php
 	}
 	
 ?>
@@ -228,12 +228,12 @@
 	
 	if (count($guests) > 0) {
 ?>
-				<div id="guests" class="section people">
-					<h4>Guests</h4>
+				<div id="guests" class="section items">
+					<h4 class="section-header">Guests</h4>
 <?php
 
 	foreach ($guests as $guest) {
-?><a target="_blank" href="<?php echo $domain . "person/" . $guest->getID(); ?>" title="<?php echo $guest->getName(); ?>"><div class="person"><img alt="<?php echo $guest->getName(); ?>" src="<?php echo $domain . "img/people/" . $guest->getID(); ?>.png"></div></a><?php		
+?><a class="item" target="_blank" href="<?php echo $domain . "person/" . $guest->getID(); ?>" title="<?php echo $guest->getName(); ?>"><div class="person"><img class="person-image" alt="<?php echo $guest->getName(); ?>" src="<?php echo $domain . "img/people/" . $guest->getID(); ?>.png"></div></a><?php		
 	}
 
 ?>
@@ -243,12 +243,12 @@
 	
 	if (count($sponsors) > 0) {
 ?>
-				<div id="sponsors" class="section people">
-					<h4>Sponsors</h4>
+				<div id="sponsors" class="section items">
+					<h4 class="section-header">Sponsors</h4>
 <?php
 
 		foreach ($sponsors as $sponsor) {
-?><a target="_blank" href="<?php echo $domain . "person/" . $sponsor->getID(); ?>" title="<?php echo $sponsor->getName(); ?>"><div class="person"><img alt="<?php echo $sponsor->getName(); ?>" src="<?php echo $domain . "img/people/" . $sponsor->getID(); ?>.png"></div></a><?php		
+?><a class="item" target="_blank" href="<?php echo $domain . "person/" . $sponsor->getID(); ?>" title="<?php echo $sponsor->getName(); ?>"><div class="person"><img class="person-image" alt="<?php echo $sponsor->getName(); ?>" src="<?php echo $domain . "img/people/" . $sponsor->getID(); ?>.png"></div></a><?php		
 		}
 
 ?>
@@ -256,7 +256,7 @@
 <?php
 		}
 ?>
-				<div id="timeline-clear"></div>
+				<div id="timeline-clear" class="clear"></div>
 <?php
 		
 		/*		This is a complicated code. In here we are trying to create a new array based off the old array of the timeline values.
@@ -267,7 +267,7 @@
 		if (count($timestamps) > 0) {
 ?>
 				<div id="timeline-horizontal" class="section">
-					<h4>Timeline</h4>
+					<h4 class="section-header">Timeline</h4>
 					<div class="timeline">
 <?php
 

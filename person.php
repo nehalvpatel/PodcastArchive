@@ -16,6 +16,50 @@
 	
 	if (isset($_SERVER["HTTP_USER_AGENT"]) && (strpos($_SERVER["HTTP_USER_AGENT"], "MSIE") !== false)) header("X-UA-Compatible: IE=edge,chrome=1");
 	
+	$social_links = array();
+	if ($Person->getYouTube() != "") {
+		$social_link = array();
+		$social_link["Name"] = "YouTube";
+		$social_link["Link"] = "https://www.youtube.com/channel/" . $Person->getYouTube();
+		$social_link["Image"] = "youtube.png";
+		$social_links[] = $social_link;
+	}
+	if ($Person->getTwitch() != "") {
+		$social_link = array();
+		$social_link["Name"] = "Twitch";
+		$social_link["Link"] = "http://www.twitch.tv/" . $Person->getTwitch();
+		$social_link["Image"] = "twitch.png";
+		$social_links[] = $social_link;
+	}
+	if ($Person->getFacebook() != "") {
+		$social_link = array();
+		$social_link["Name"] = "Facebook";
+		$social_link["Link"] = "https://www.facebook.com/" . $Person->getFacebook();
+		$social_link["Image"] = "facebook.png";
+		$social_links[] = $social_link;
+	}
+	if ($Person->getTwitter() != "") {
+		$social_link = array();
+		$social_link["Name"] = "Twitter";
+		$social_link["Link"] = "https://twitter.com/account/redirect_by_id/" . $Person->getTwitter();
+		$social_link["Image"] = "twitter.png";
+		$social_links[] = $social_link;
+	}
+	if ($Person->getReddit() != "") {
+		$social_link = array();
+		$social_link["Name"] = "reddit";
+		$social_link["Link"] = "http://www.reddit.com/user/" . $Person->getReddit();
+		$social_link["Image"] = "reddit.png";
+		$social_links[] = $social_link;
+	}
+	if ($Person->getGooglePlus() != "") {
+		$social_link = array();
+		$social_link["Name"] = "Google Plus";
+		$social_link["Link"] = "https://plus.google.com/" . $Person->getGooglePlus();
+		$social_link["Image"] = "googleplus.png";
+		$social_links[] = $social_link;
+	}
+	
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -62,7 +106,6 @@
 		
 		<!-- CSS -->
 		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css?ver=<?php echo $commit_count; ?>">
-		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/person.css?ver=<?php echo $commit_count; ?>">
 		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/fontawesome.css?ver=<?php echo $commit_count; ?>">
 		
 		<!-- IE8 -->
@@ -76,13 +119,31 @@
 		<aside class="sidebar">
 			<nav id="sidebar">
 				<div class="search-form"><input class="search-field" type="search" id="search-field" name="search" placeholder="Search"></div>
-				<h3 id="episodes_title">Episodes</h3>
+				<h3>Episodes</h3>
 				<ul>
 <?php
+	$host_count = 0;
+	$guest_count = 0;
+	$sponsor_count = 0;
 	foreach ($Podcast->getEpisodes() as $episode) {
+		$highlight_episode = false;
+		if (in_array($Person->getID(), json_decode($episode["Hosts"], true))) {
+			$highlight_episode = true;
+			$host_count++;
+		}
+		
+		if (in_array($Person->getID(), json_decode($episode["Guests"], true))) {
+			$highlight_episode = true;
+			$guest_count++;
+		}
+		
+		if (in_array($Person->getID(), json_decode($episode["Sponsors"], true))) {
+			$highlight_episode = true;
+			$sponsor_count++;
+		}
 ?>
 					<li data-episode="<?php echo $episode["Identifier"]; ?>">
-						<a href="<?php echo $domain; ?>episode/<?php echo $episode["Number"]; ?>">#<?php echo $episode["Number"]; ?></a>
+						<a class="<?php if ($highlight_episode) { echo "highlighted-episode"; } ?>" href="<?php echo $domain; ?>episode/<?php echo $episode["Number"]; ?>">#<?php echo $episode["Number"]; ?></a>
 					</li>
 <?php
 	}
@@ -97,40 +158,37 @@
 			</header>
 			<div id="container">
 				<div id="image">
-					<img id="person-image" alt="<?php echo $Person->getName(); ?>" title="<?php echo $Person->getName(); ?>" src="<?php echo $domain; ?>img/people/<?php echo $Person->getID(); ?>a.png" />
+					<img id="person-image" class="person-image" alt="<?php echo $Person->getName(); ?>" title="<?php echo $Person->getName(); ?>" src="<?php echo $domain; ?>img/people/<?php echo $Person->getID(); ?>a.png" />
 				</div>
 				<div id="details">
-					<div id="overview">
-						<h2 class="detail-header"><?php echo $Person->getName(); ?></h2>
-						<p id="person-overview"><?php echo $Person->getOverview(); ?></p>
+					<div id="overview" class="section">
+						<h2 class="section-header"><?php echo $Person->getName(); ?></h2>
+						<p><?php echo $Person->getOverview(); ?></p>
 					</div>
-					<div id="social-icons">
-						<h2 class="detail-header">Social</h2>
 <?php
-	if ($Person->getYouTube() != "") {
-?><a href="https://www.youtube.com/channel/<?php echo $Person->getYouTube(); ?>"><img alt="YouTube" title="YouTube" src="<?php echo $domain; ?>img/youtube.png"></a><?php
-	}
-	if ($Person->getTwitch() != "") {
-?><a href="http://www.twitch.tv/<?php echo $Person->getTwitch(); ?>"><img alt="Twitch" title="Twitch" src="<?php echo $domain; ?>img/twitch.png"></a><?php
-	}
-	if ($Person->getFacebook() != "") {
-?><a href="https://www.facebook.com/<?php echo $Person->getFacebook(); ?>"><img alt="Facebook" title="Facebook" src="<?php echo $domain; ?>img/facebook.png"></a><?php
-	}
-	if ($Person->getTwitter() != "") {
-?><a href="https://twitter.com/account/redirect_by_id/<?php echo $Person->getTwitter(); ?>"><img alt="Twitter" title="Twitter" src="<?php echo $domain; ?>img/twitter.png"></a><?php
-	}
-	if ($Person->getReddit() != "") {
-?><a href="http://www.reddit.com/user/<?php echo $Person->getReddit(); ?>"><img alt="reddit" title="reddit" src="<?php echo $domain; ?>img/reddit.png"></a><?php
-	}
-	if ($Person->getGooglePlus() != "") {
-?><a href="https://plus.google.com/<?php echo $Person->getGooglePlus(); ?>"><img alt="Google Plus" title="Google Plus" src="<?php echo $domain; ?>img/googleplus.png"></a><?php
-	}
+	if (count($social_links) > 0) {
+?>
+					<div id="social-icons" class="section items">
+						<h2 class="section-header">Social</h2>
+<?php
+		foreach ($social_links as $social_link) {
+?>
+						<a class="item" href="<?php echo $social_link["Link"]; ?>"><img alt="<?php echo $social_link["Name"]; ?>" title="<?php echo $social_link["Name"]; ?>" src="<?php echo $domain; ?>img/<?php echo $social_link["Image"]; ?>"></a>
+<?php
+		}
 ?>
 					</div>
+<?php
+	}
+?>
+					<div id="stats" class="section">
+						<h2 class="section-header">Stats</h2>
+						<p><?php echo ($Person->getGender() != "1" ? "She" : "He") ?> has hosted <strong><?php echo $host_count; ?></strong> episode<?php echo ($host_count != 1 ? "s" : "") ?>, been a guest on <strong><?php echo $guest_count; ?></strong> episode<?php echo ($guest_count != 1 ? "s" : "") ?>, and sponsored <strong><?php echo $sponsor_count; ?></strong> episode<?php echo ($sponsor_count != 1 ? "s" : "") ?>.</p>
+					</div>
 				</div>
-				<div style="clear:both;"></div>
-				<div id="youtube_videos">
-					<h2>YouTube Videos</h2>
+				<div class="clear"></div>
+				<div id="youtube-videos" class="section">
+					<h2 class="section-header">YouTube Videos</h2>
 				</div>
 			</div>
 		</section>

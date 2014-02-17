@@ -113,7 +113,7 @@ function updateContent(episode_data) {
 	tryDelete("#timeline-horizontal");
 	if ((episode_data.Timeline).hasOwnProperty("Timestamps") == 1) {
 		var $timeline_horizontal = $("<div>", {"id": "timeline-horizontal", "class": "section"});
-		$timeline_horizontal.append($("<h4>").text("Timeline"));
+		$timeline_horizontal.append($("<h4>").addClass("section-header").text("Timeline"));
 		
 		var $line = $("<div>", {"class": "timeline"});
 		$.each(episode_data.Timeline.Timestamps, function(timestamp_id, timestamp_data) {
@@ -211,8 +211,8 @@ function setCommentCount(element, reddit_id) {
 function generatePeople(id, name, data) {
 	tryDelete("#" + id);
 	if (data.hasOwnProperty(name) == 1) {
-		var $people = $("<div>", {"id": id, "class": "section people"});
-		var $header = $("<h4>").text(name);
+		var $people = $("<div>", {"id": id, "class": "section items"});
+		var $header = $("<h4>").addClass("section-header").text(name);
 		
 		$people.append($header);
 		
@@ -226,9 +226,9 @@ function generatePeople(id, name, data) {
 
 // generate person image
 function generatePerson(id, name, url) {
-	var $link = $("<a>", {"target": "_blank", "href": domain + "person/" + id, title: name});
+	var $link = $("<a>", {"class": "item", "target": "_blank", "href": domain + "person/" + id, title: name});
 	var $person = $("<div>", {"class": "person"});
-	var $avatar = $("<img>", {"alt": name, "src": domain + "img/people/" + id + ".png"});
+	var $avatar = $("<img>", {"class": "person-image", "alt": name, "src": domain + "img/people/" + id + ".png"});
 	
 	$person.append($avatar);
 	$link.append($person);
