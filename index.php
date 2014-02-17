@@ -259,7 +259,8 @@
 				<div id="timeline-clear" class="clear"></div>
 <?php
 		
-		/*		This is a complicated code. In here we are trying to create a new array based off the old array of the timeline values.
+		/*
+		*		This is a complicated code. In here we are trying to create a new array based off the old array of the timeline values.
 		*		We want the new array to be a multi-dimensional array. Each element contains the timeline timestamp (time in seconds), the value (timeline label) and the timestamp of the next topic.
 		*		This is so we can find the time of the beginning & the end of each topic and will help create the graphical timeline.
 		*/

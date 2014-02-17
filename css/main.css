@@ -201,6 +201,33 @@ nav ul li a:hover {
 	float: none;
 	margin-right: 0px;
 }
+.video {
+	display: block;
+	color: white;
+	background: #333;
+	text-decoration: none;
+	margin-bottom: 10px;
+	padding: 10px;
+	overflow: auto;
+}
+.video:last-child {
+	margin-bottom: 0px;
+}
+.video-thumbnail {
+	margin-right: 10px;
+	float: left;
+	width: 150px;
+}
+.video-title {
+	font-weight: bold;
+	font-size: 13.5pt;
+}
+.video-details {
+	font-size: 10pt;
+}
+.video-comments {
+	margin-left: 5px;
+}
 
 /* Horizontal Timeline Styles */
 .timeline {

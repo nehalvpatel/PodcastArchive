@@ -213,6 +213,33 @@
 			}
 			return $social_links;
 		}
+		
+		public function getRecentYouTubeVideos() {
+			if ($this->getYouTube() != "") {
+				$youtube_results = json_decode(file_get_contents("https://gdata.youtube.com/feeds/users/" . $this->getYouTube() . "/uploads?alt=json&max-results=5"), true);
+				
+				$youtube_videos = array();
+				foreach ($youtube_results["feed"]["entry"] as $video_result) {
+					$youtube_video = array();
+					$youtube_video["Title"] = $video_result["title"]["\$t"];
+					$youtube_video["Link"] = $video_result["link"][0]["href"];
+					$youtube_video["Comments"] = $video_result["gd\$comments"]["gd\$feedLink"]["countHint"];
+					$youtube_video["Thumbnail"] = $video_result["media\$group"]["media\$thumbnail"][0]["url"];
+					
+					$init = $video_result["media\$group"]["yt\$duration"]["seconds"];
+					$hours = floor($init / 3600);
+					$minutes = floor(($init / 60) % 60);
+					$seconds = $init % 60;
+					$youtube_video["Duration"] = sprintf("%02d:%02d:%02d", $hours, $minutes, $seconds);
+						
+					$youtube_videos[] = $youtube_video;
+				}
+				
+				return $youtube_videos;
+			} else {
+				return array();
+			}
+		}
 	}
 
 ?>

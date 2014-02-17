@@ -143,9 +143,29 @@
 					</div>
 				</div>
 				<div class="clear"></div>
+<?php
+	$recent_videos = $Person->getRecentYouTubeVideos();
+	if (count($recent_videos) > 0) {
+?>
 				<div id="youtube-videos" class="section">
-					<h2 class="section-header">YouTube Videos</h2>
+					<h2 class="section-header">Recent YouTube Videos</h2>
+<?php
+		foreach ($recent_videos as $video) {
+?>
+					<a href="<?php echo $video["Link"]; ?>" class="video">
+						<img alt="<?php echo $video["Title"]; ?>" title="<?php echo $video["Title"]; ?>" class="video-thumbnail" src="<?php echo $video["Thumbnail"]; ?>">
+						<span class="video-title"><?php echo $video["Title"]; ?></span>
+						<div class="video-details">
+							<span class="video-timestamp"><i class="icon-time"></i> <?php echo $video["Duration"]; ?></span>
+							<span class="video-comments"><i class="icon-comments"></i> <?php echo $video["Comments"]; ?> Comment<?php echo ($video["Comments"] != 1 ? "s" : "") ?></div></span>
+					</a>
+<?php
+		}
+?>
 				</div>
+<?php
+	}
+?>
 			</div>
 		</section>
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
