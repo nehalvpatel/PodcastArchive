@@ -241,6 +241,22 @@ nav ul li a:hover {
 	background: rgba(0,0,0,.5);
 	display: none;
 }
+.error {
+	text-align:center;
+	color: #777;
+	margin-top: 50px;
+	text-shadow: 2px 2px 2px #333;
+}
+.error img {
+	max-width: 747px;
+	width: 100%;
+}
+.error h2{
+	font-size: 3em;
+}
+.error h3{
+	background: transparent;
+}
 
 /* Horizontal Timeline Styles */
 .timeline {

@@ -1,6 +1,6 @@
 <?php
 
-	require_once("../config.php");
+	require_once("config.php");
 
 	if (isset($_SERVER["HTTP_USER_AGENT"]) && (strpos($_SERVER["HTTP_USER_AGENT"], "MSIE") !== false)) header("X-UA-Compatible: IE=edge,chrome=1");
 	
@@ -11,9 +11,8 @@
 		<!-- Meta -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<meta name="description" content="The article description.">
 		<link rel="search" type="application/opensearchdescription+xml" href="<?php echo $domain; ?>opensearchdescription.xml" title="Painkiller Already Archive">
-		<title>404 Page not Found &middot; Painkiller Already Archive</title>
+		<title>404 &middot; Painkiller Already Archive</title>
 		
 		<!-- Icons -->
 		<link rel="apple-touch-icon" sizes="57x57" href="<?php echo $domain; ?>apple-touch-icon-57x57.png">
@@ -44,25 +43,10 @@
 		<meta property="twitter:creator" content="@nehalvpatel">
 		<meta property="twitter:domain" content="www.painkilleralready.info">
 		
-		<!-- CSS ######################################## INCORRECT LINKING ############################################################################## -->
-		<link rel="stylesheet" type="text/css" href="http://painkilleralready.info/css/main.css?ver=<?php echo $commit_count; ?>">
-		<link rel="stylesheet" type="text/css" href="http://painkilleralready.info/css/fontawesome.css?ver=<?php echo $commit_count; ?>">
-		<style>
-			#error{
-				text-align:center;
-				color: #777;
-				margin-top: 50px;
-			}
-			#error h2{
-				font-size: 3em;
-			}
-			#error h3{
-				background: transparent;
-			}
-			#error a{
-				text-decoration: none;
-			}
-		</style>
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css?ver=<?php echo $commit_count; ?>">
+		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/fontawesome.css?ver=<?php echo $commit_count; ?>">
+		
 		<!-- IE8 -->
 		<!--[if lt IE 9]>
 			<link rel="stylesheet" href="<?php echo $domain; ?>css/fontawesome-ie7.css">
@@ -70,11 +54,11 @@
 			<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
 		<![endif]-->
 	</head>
-	<body>
+	<body data-type="Episode">
 		<aside class="sidebar">
 			<nav id="sidebar">
 				<div class="search-form"><input class="search-field" type="search" id="search-field" name="search" placeholder="Search"></div>
-				<h3 id="episodes_title">Episodes</h3>
+				<h3>Episodes</h3>
 				<ul>
 <?php
 	foreach ($Podcast->getEpisodes() as $episode) {
@@ -94,13 +78,14 @@
 				<h1>Painkiller Already Archive</h1>
 			</header>
 			<div id="container">
-				<div id="error">
-					<h2>Can't Find It!</h2>
+				<div class="error">
+					<img alt="Lefty" title="Lefty" src="<?php echo $domain; ?>img/404.png">
+					<h2>Blame the Government</h2>
 					<p>The page you were looking for could not be found.</p>
-					<a href="<?php echo $domain; ?>index.php"><h3>Home Page</h3></a>
 				</div>
 			</div>
 		</section>
+		<div id="loader"></div>
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 		<script type="text/javascript">var domain = "<?php echo $domain; ?>";</script>
 		<script type="text/javascript" src="<?php echo $domain; ?>js/main.js?ver=<?php echo $commit_count; ?>"></script>
