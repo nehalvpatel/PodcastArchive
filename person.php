@@ -76,6 +76,9 @@
 			<nav id="sidebar">
 				<div class="search-form"><input class="search-field" type="search" id="search-field" name="search" placeholder="Search"></div>
 				<h3>Episodes</h3>
+				<div id="search-error" class="error">
+					<p>There was an error with the search engine.<br><br>Please message /u/nehalvpatel on reddit.</p>
+				</div>
 				<ul>
 <?php
 	$host_count = 0;

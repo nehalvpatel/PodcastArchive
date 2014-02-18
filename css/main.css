@@ -244,10 +244,10 @@ nav ul li a:hover {
 .error {
 	text-align:center;
 	color: #777;
-	margin-top: 50px;
 	text-shadow: 2px 2px 2px #333;
 }
 .error img {
+	margin-bottom: 50px;
 	max-width: 747px;
 	width: 100%;
 }
@@ -256,6 +256,12 @@ nav ul li a:hover {
 }
 .error h3{
 	background: transparent;
+}
+#search-error {
+	display: none;
+}
+#search-error p {
+	padding: 20px;
 }
 
 /* Horizontal Timeline Styles */

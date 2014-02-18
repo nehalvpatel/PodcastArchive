@@ -15,10 +15,24 @@ function tryDelete(selector) {
 	}
 }
 
+function hideAllEpisodes() {
+	$("#sidebar ul li").each(function(id, li){
+		resetSearchResults(li);
+		$(li).hide();
+	});
+}
+
+function showAllEpisodes() {
+	$("#sidebar ul li").each(function(id, li){
+		resetSearchResults(li);
+		$(li).show();
+	});
+}
+
 // reset search results
 function resetSearchResults(li) {
 	$(li).removeAttr("data-begin");
-	$(li).css("display", "block");
+	$(li).show();
 	
 	var $result_link = $(li).children(":first");
 	$result_link.attr("href", cleanURL($result_link.attr("href")));
@@ -394,6 +408,8 @@ $(document).ready(function() {
 						_gaq.push(["_trackEvent", "Search", "Search", search_value]);
 					}
 					
+					$("#search-error").hide();
+					
 					$.ajax({
 						url: domain + "search.php",
 						dataType: "json",
@@ -403,10 +419,7 @@ $(document).ready(function() {
 							previous_search = search_value;
 							
 							// hide all episodes
-							$("#sidebar ul li").each(function(id, li){
-								resetSearchResults(li);
-								$(li).css("display", "none");
-							});
+							hideAllEpisodes();
 							
 							if (!jQuery.isEmptyObject(results_json)) {
 								$.each(results_json, function(episode_identifier, episode_timestamp) {
@@ -418,12 +431,13 @@ $(document).ready(function() {
 									$episode.attr("data-begin", episode_timestamp.Timestamp);
 									$result_link.attr("href", $result_link.attr("href") + "?timestamp=" + episode_timestamp.Timestamp);
 									$result_link.append($search_result);
-									$episode.css("display", "block");
+									$episode.show();
 								});
 							}
 						},
 						error: function(xhr, textStatus, error) {
-							alert("Looks like search is broken right now. Please message /u/nehalvpatel on reddit.");
+							$("#search-error").show();
+							hideAllEpisodes();
 						}
 					});
 				}
@@ -431,10 +445,8 @@ $(document).ready(function() {
 				// reset episode list
 				previous_search = "";
 				
-				$("#sidebar ul li").each(function(id, li){
-					resetSearchResults(li);
-					$(li).css("display", "block");
-				});
+				$("#search-error").hide();
+				showAllEpisodes();
 			}
 		}, 200);
 	});
