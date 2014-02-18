@@ -39,6 +39,7 @@ function getQueryVariable(variable) {
 
 // download data for new episode or use cache if possible
 function loadContent(url) {
+	$("#loader").show();
 	if (cached_data.hasOwnProperty(url) == 1) {
 		updateContent(cached_data[url]);
 	} else {
@@ -190,6 +191,9 @@ function updateContent(episode_data) {
 	if ($sidebar.hasClass("toggled")) {
 		$sidebar.removeClass("toggled");
 	}
+	
+	// hide loader
+	$("#loader").hide();
 }
 
 // fetch reddit comment count
