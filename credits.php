@@ -3,7 +3,6 @@
 	require_once("config.php");
 
 	if (isset($_SERVER["HTTP_USER_AGENT"]) && (strpos($_SERVER["HTTP_USER_AGENT"], "MSIE") !== false)) header("X-UA-Compatible: IE=edge,chrome=1");
-	
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,8 +10,9 @@
 		<!-- Meta -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link rel="search" type="application/opensearchdescription+xml" href="<?php echo $domain; ?>opensearchdescription.xml" title="Painkiller Already Archive">
-		<title>404 &middot; Painkiller Already Archive</title>
+		<meta name="description" content="">
+		<link rel="canonical" href="">
+		<title>Developers and Contributors &middot; Painkiller Already Archive</title>
 		
 		<!-- Icons -->
 		<link rel="apple-touch-icon" sizes="57x57" href="<?php echo $domain; ?>apple-touch-icon-57x57.png">
@@ -34,17 +34,9 @@
 		<!-- Google+ -->
 		<link rel="publisher" href="https://plus.google.com/107397414095793132493">
 		
-		<!-- Open Graph -->
-		<meta property="og:image" content="<?php echo $domain; ?>img/pka.png">
-		<meta property="og:site_name" content="Painkiller Already Archive">
-		
-		<!-- Twitter -->
-		<meta property="twitter:site" content="@PKA_Archive">
-		<meta property="twitter:creator" content="@nehalvpatel">
-		<meta property="twitter:domain" content="www.painkilleralready.info">
-		
 		<!-- CSS -->
 		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css?ver=<?php echo $commit_count; ?>">
+		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/credits.css?ver=<?php echo $commit_count; ?>">
 		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/fontawesome.css?ver=<?php echo $commit_count; ?>">
 		
 		<!-- IE8 -->
@@ -54,14 +46,25 @@
 			<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
 		<![endif]-->
 	</head>
-	<body data-type="Episode">
+	<body>
 <?php include_once("templates/header.php"); ?>
 			<div id="container">
-				<div class="error">
-					<img alt="Lefty" title="Lefty" src="<?php echo $domain; ?>img/404.png">
-					<h2>Blame the Government</h2>
-					<p>The page you were looking for could not be found.</p>
-				</div>
+				<p>Thank you to everyone for making this website such a huge success. This website would not have become what it is without the immense effort our developers and contributors donate.</p>
+				<p>Thank you to the following developers:</p>
+				<ul>
+					<li>Nehal Patel, for his amazing website development and engineering skills, knowledge and abilities.</li>
+					<li>PoweredMinecart, for his great work in user interface, design and timelines.</li>
+				</ul>
+				<p>Thank you to the following contributors:</p>
+				<ul>
+					<li>ThePKAHistorian, for his superior work ethic and timelining work.</li>
+					<li>IrishDelta, for his superior work ethic and timelining work.</li>
+					<li>gotmilk55, for his timelining work.</li>
+					<li>Shizzable, for his help in data entry and timelining work.</li>
+					<li>BandWagonEffect, for his timelining work.</li>
+					<li>Spacemoses, for his timelining work.</li>
+					<li>Minimee321, for his timelining work.</li>
+					<li>mynewemporer, for his timelining work.</li>
 			</div>
 <?php include_once("templates/footer.php"); ?>
 	</body>

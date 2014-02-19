@@ -1,0 +1,41 @@
+input[type=radio]{
+	margin-left: 15px;
+}
+textarea{
+	padding: 5px;
+	width: 300px;
+	height: 200px;
+}
+#explanation{
+	margin-left: 15px;
+}
+#otherwise{
+	margin:0 0 15px 15px;
+}
+input[type=submit]{
+	display: block;
+	padding: 5px 7px;
+}
+
+/* Error and Success Styles */
+.success-message, .error-message {
+	border: 1px solid;
+	margin: 10px 0;
+	padding: 10px 10px 10px 50px;
+	background-repeat: no-repeat;
+	background-position: 10px center;
+	-moz-border-radius: .5em;
+	-webkit-border-radius: .5em;
+	border-radius: .5em;
+	width: 450px;
+}
+.success-message {
+	color: #4F8A10;
+	background-color: #DFF2BF;
+	background-image: url('../img/success.png');
+}
+.error-message {
+	color: #D8000C;
+	background-color: #FFBABA;
+	background-image: url('../img/error.png');
+}

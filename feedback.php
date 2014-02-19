@@ -1,9 +1,26 @@
 <?php
 
 	require_once("config.php");
+	if(!empty($_POST)){
+		$errors = array();
+		if(strlen($_POST["issue"] > 100 || strlen($_POST["explanation"]) > 3000)){
+			$errors[] = "Please make sure that your inputs aren't too large.";
+		}
+		if(empty($errors)){
+			$query = $con->prepare("INSERT INTO `feedback` (`issue`,`explanation`) VALUES (:issue, :explanation)");
+			$result = $query->execute(array(
+				"issue" 		=> $_POST["issue"],
+				"explanation" 	=> $_POST["explanation"]
+			));
+			if($result){
+				$success = "Thank you, your feedback has been received and out administrators will now work to solve the problem shortly.";
+			} else {
+				$errors[] = "There was a MySQL error, please try again.";
+			}
+		}
+	}
 
 	if (isset($_SERVER["HTTP_USER_AGENT"]) && (strpos($_SERVER["HTTP_USER_AGENT"], "MSIE") !== false)) header("X-UA-Compatible: IE=edge,chrome=1");
-	
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,8 +28,9 @@
 		<!-- Meta -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link rel="search" type="application/opensearchdescription+xml" href="<?php echo $domain; ?>opensearchdescription.xml" title="Painkiller Already Archive">
-		<title>404 &middot; Painkiller Already Archive</title>
+		<meta name="description" content="">
+		<link rel="canonical" href="">
+		<title>Developers and Contributors &middot; Painkiller Already Archive</title>
 		
 		<!-- Icons -->
 		<link rel="apple-touch-icon" sizes="57x57" href="<?php echo $domain; ?>apple-touch-icon-57x57.png">
@@ -34,17 +52,9 @@
 		<!-- Google+ -->
 		<link rel="publisher" href="https://plus.google.com/107397414095793132493">
 		
-		<!-- Open Graph -->
-		<meta property="og:image" content="<?php echo $domain; ?>img/pka.png">
-		<meta property="og:site_name" content="Painkiller Already Archive">
-		
-		<!-- Twitter -->
-		<meta property="twitter:site" content="@PKA_Archive">
-		<meta property="twitter:creator" content="@nehalvpatel">
-		<meta property="twitter:domain" content="www.painkilleralready.info">
-		
 		<!-- CSS -->
 		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css?ver=<?php echo $commit_count; ?>">
+		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/feedback.css?ver=<?php echo $commit_count; ?>">
 		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/fontawesome.css?ver=<?php echo $commit_count; ?>">
 		
 		<!-- IE8 -->
@@ -54,13 +64,50 @@
 			<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
 		<![endif]-->
 	</head>
-	<body data-type="Episode">
+	<body>
 <?php include_once("templates/header.php"); ?>
 			<div id="container">
-				<div class="error">
-					<img alt="Lefty" title="Lefty" src="<?php echo $domain; ?>img/404.png">
-					<h2>Blame the Government</h2>
-					<p>The page you were looking for could not be found.</p>
+				<p>Thank you for helping us improve our website. We apologise for any way our website may have inconvenienced you.</p>
+				<div class="section">
+<?php // Success and Error handling.
+	if (isset($success)) {
+?>
+		<div class="success-message">
+			<p><?php echo $success; ?></p>
+		</div>
+<?php
+	}
+	
+	if (!empty($errors)) {
+		foreach ($errors as $error) {
+?>
+		<div class="error-message">
+			<p><?php echo $error; ?></p>
+		</div>
+<?php
+		}
+	}
+?>
+					<h2 class="section-header">Feedback Form</h2>
+					<form method="post">
+						<p>My issue relates to:<p>
+						<input type="radio" name="issue" value="timeline_typo" id="timeline_typo"/>
+						<label for="timeline_typo">A spelling/grammar/punctuation/timing mistake in the website's timelines.</label>
+						<br />
+						<input type="radio" name="issue" value="browser_rendering" id="browser_rendering"/>
+						<label for="browser_rendering">A problem with browser rendering (the website doesn't look right).</label>
+						<br />
+						<input type="radio" name="issue" value="website_content" id="website_content"/>
+						<label for="website_content">A problem with the content on our website.</label>
+						<div id="otherwise">
+							Otherwise, please specify:
+							<br />
+							<textarea name="issue_specified"></textarea>
+						</div>
+						<p>Please Explain the Issue</p>
+						<textarea name="explanation" id="explanation"></textarea>
+						<input type="submit" value="Submit Feedback" />
+					</form>
 				</div>
 			</div>
 <?php include_once("templates/footer.php"); ?>

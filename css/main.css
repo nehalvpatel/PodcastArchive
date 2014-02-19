@@ -390,6 +390,26 @@ input[type="search"] {
 	-webkit-appearance: textfield;
 }
 
+/* Footer Styles */
+#footer-links{
+	margin: 0 0 5px 0;
+	padding: 0;
+	text-align: center;
+}
+#footer-links li{
+	display: inline;
+	list-style: none;
+	margin: 0 10px;
+}
+#footer-links li a{
+	color: #666;
+	text-decoration: none;
+	font-size: 0.8em;
+}
+#footer-links li a:hover{
+	color: #777;
+}
+
 /* Break YouTube videos to 1 column */
 @media all and (max-width: 720px) {
 	.video {

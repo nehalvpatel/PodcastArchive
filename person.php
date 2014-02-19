@@ -14,8 +14,28 @@
 		die("No person found");
 	}
 	
+	$host_count = 0;
+	$guest_count = 0;
+	$sponsor_count = 0;
+	$highlighted_episodes = array();
+	foreach ($Podcast->getEpisodes() as $num=>$episode) {
+		$highlighted_episodes[$num] = false;
+		if (in_array($Person->getID(), json_decode($episode["Hosts"], true))) {
+			$highlighted_episodes[$num] = true;
+			$host_count++;
+		}
+		
+		if (in_array($Person->getID(), json_decode($episode["Guests"], true))) {
+			$highlighted_episodes[$num] = true;
+			$guest_count++;
+		}
+		
+		if (in_array($Person->getID(), json_decode($episode["Sponsors"], true))) {
+			$highlighted_episodes[$num] = true;
+			$sponsor_count++;
+		}
+	}
 	if (isset($_SERVER["HTTP_USER_AGENT"]) && (strpos($_SERVER["HTTP_USER_AGENT"], "MSIE") !== false)) header("X-UA-Compatible: IE=edge,chrome=1");
-	
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -72,49 +92,7 @@
 		<![endif]-->
 	</head>
 	<body>
-		<aside class="sidebar">
-			<nav id="sidebar">
-				<div class="search-form"><input class="search-field" type="search" id="search-field" name="search" placeholder="Search"></div>
-				<h3>Episodes</h3>
-				<div id="search-error" class="error">
-					<p>There was an error with the search engine.<br><br>Please message /u/nehalvpatel on reddit.</p>
-				</div>
-				<ul>
-<?php
-	$host_count = 0;
-	$guest_count = 0;
-	$sponsor_count = 0;
-	foreach ($Podcast->getEpisodes() as $episode) {
-		$highlight_episode = false;
-		if (in_array($Person->getID(), json_decode($episode["Hosts"], true))) {
-			$highlight_episode = true;
-			$host_count++;
-		}
-		
-		if (in_array($Person->getID(), json_decode($episode["Guests"], true))) {
-			$highlight_episode = true;
-			$guest_count++;
-		}
-		
-		if (in_array($Person->getID(), json_decode($episode["Sponsors"], true))) {
-			$highlight_episode = true;
-			$sponsor_count++;
-		}
-?>
-					<li data-episode="<?php echo $episode["Identifier"]; ?>">
-						<a class="<?php if ($highlight_episode) { echo "highlighted-episode"; } ?>" href="<?php echo $domain; ?>episode/<?php echo $episode["Number"]; ?>">#<?php echo $episode["Number"]; ?></a>
-					</li>
-<?php
-	}
-?>
-				</ul>
-			</nav>
-		</aside>
-		<section class="main">
-			<header>
-				<a href="#" class="toggle-menu icon-reorder"></a>
-				<h1>Painkiller Already Archive</h1>
-			</header>
+<?php include_once("templates/header.php"); ?>
 			<div id="container">
 				<div id="image">
 					<img id="person-image" class="person-image" alt="<?php echo $Person->getName(); ?>" title="<?php echo $Person->getName(); ?>" src="<?php echo $domain; ?>img/people/<?php echo $Person->getID(); ?>a.png" />
@@ -170,19 +148,6 @@
 	}
 ?>
 			</div>
-		</section>
-		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-		<script type="text/javascript">var domain = "<?php echo $domain; ?>";</script>
-		<script type="text/javascript" src="<?php echo $domain; ?>js/main.js?ver=<?php echo $commit_count; ?>"></script>
-		<!--[if lt IE 9]>
-			<script type="text/javascript">
-				$(document).ready(function(){
-					$(".toggle-menu").click(function(){
-						$(".main").css({"display": "none"});
-						$(".main").css({"display": "block"});
-					});
-				});
-			</script>
-		<![endif]-->
+<?php include_once("templates/footer.php"); ?>
 	</body>
 </html>
