@@ -58,7 +58,7 @@
 							$event = trim($explosion[1]);
 							
 							if ($Admin->validateTimestamp($time) === FALSE) {
-								$errors[] = "The timestamp is invalid.";
+								$errors[] = "A timestamp is invalid.";
 							} else {
 								$timestamp = $Admin->convertTimestamp($time);
 								$episode->addTimestamp($timestamp, $event);

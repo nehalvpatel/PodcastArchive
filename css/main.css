@@ -380,9 +380,6 @@ td.event a i {
 	background: #777;
 }
 .search-result {
-	text-overflow: ellipsis;
-	overflow: hidden;
-	white-space: nowrap;
 	width: 175px;
 	display: block;
 	font-size: smaller;
