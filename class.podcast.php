@@ -273,6 +273,16 @@
 			
 			return $episodes;
 		}
+		public function getTimelinedEpisodes(){
+			$info_query = $this->con->prepare("SELECT DISTINCT `episode` FROM `timestamps`");
+			$info_query->execute();
+			$episodes = array();
+			foreach($info_query->fetchAll() as $episode_array){
+				$episodes[] = $episode_array["episode"];
+			}
+			
+			return $episodes;
+		}
 		
 		public function getPeople() {
 			$info_query = $this->con->prepare("SELECT * FROM `people` ORDER BY `ID` ASC");

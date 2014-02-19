@@ -108,6 +108,18 @@ nav ul li a {
 nav ul li a:hover {
 	border-left: 10px solid #BB4D3E;
 }
+span#timelined{
+	background: #3a3a3a;
+	color: #666;
+	border-radius: 3px;
+	margin: 70px;
+	padding: 2px 3px;
+	font-size: 0.6em;
+}
+#active span{
+	background: #A0493E;
+	color: #aaa;
+}
 #active a:first-child {
 	background: #BB4D3E;
 	color: #FFFFFF;
