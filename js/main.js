@@ -34,8 +34,7 @@ function resetSearchResults(li) {
 	$(li).removeAttr("data-begin");
 	$(li).show();
 	
-	var $result_link = $(li).children(":first");
-	$result_link.attr("href", cleanURL($result_link.attr("href")));
+	$(li).children().slice(1).remove();
 	
 	tryDelete(".search-result");
 }
@@ -82,8 +81,9 @@ function updateContent(episode_data) {
 	document.title = "Episode #" + episode_data.Number + " \u00B7 Painkiller Already Archive";
 	
 	// update video
-	if ($current_episode.attr("data-begin")) {
-		player.loadVideoById(episode_data.YouTube, $current_episode.attr("data-begin"));
+	var search_timestamp = getQueryVariable("timestamp");
+	if (search_timestamp) {
+		player.loadVideoById(episode_data.YouTube, search_timestamp);
 	} else {
 		player.cueVideoById(episode_data.YouTube);
 	}
@@ -288,7 +288,7 @@ function onPlayerReady() {
 	
 	if ($("body").attr("data-type") == "Episode") {
 		// episode click interceptor
-		$("nav a").click(function(e) {
+		$(document).on("click", "nav a", function(e) {
 			if (hasPushstate) {
 				// cancel navigation
 				e.preventDefault();
@@ -422,15 +422,23 @@ $(document).ready(function() {
 							hideAllEpisodes();
 							
 							if (!jQuery.isEmptyObject(results_json)) {
-								$.each(results_json, function(episode_identifier, episode_timestamp) {
+								$.each(results_json, function(episode_identifier, episode_timestamps) {
 									// show only returned episodes
 									var $episode = $("li[data-episode='" + episode_identifier + "']");
-									var $search_result = $("<span>").addClass("search-result").attr("title", episode_timestamp.Value).text(episode_timestamp.Value);
-									var $result_link = $episode.children(":first");
 									
-									$episode.attr("data-begin", episode_timestamp.Timestamp);
-									$result_link.attr("href", $result_link.attr("href") + "?timestamp=" + episode_timestamp.Timestamp);
-									$result_link.append($search_result);
+									$.each(episode_timestamps, function(timestamp_id, episode_timestamp) {
+										var $result_link = $episode.children(":first");
+										
+										var $search_result = $("<a>").attr("href", "#");
+										$search_result.attr("data-begin", episode_timestamp.Timestamp);
+										$search_result.attr("href", $result_link.attr("href") + "?timestamp=" + episode_timestamp.Timestamp);
+										
+										var $search_text = $("<span>").addClass("search-result").attr("title", episode_timestamp.Value).html("<strong>" + episode_timestamp.HMS + "</strong> - <span>" + episode_timestamp.Value + "</span>");
+										$search_result.append($search_text);
+										
+										$episode.append($search_result);
+									});
+									
 									$episode.show();
 								});
 							}

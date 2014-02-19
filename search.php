@@ -4,7 +4,7 @@
 	
 	$search_results = array();
 	if ((isset($_GET["query"])) && (!empty($_GET["query"]))) {
-		$search_query = $con->prepare("SELECT DISTINCT `Episode`, `Timestamp`, `Value` FROM `timestamps` WHERE REPLACE(`Value`, :Replace, '') LIKE :Value");
+		$search_query = $con->prepare("SELECT `Episode`, `Timestamp`, `Value` FROM `timestamps` WHERE REPLACE(`Value`, :Replace, '') LIKE :Value");
 		$search_query->execute(
 			array(
 				":Replace" => "'",
@@ -17,7 +17,13 @@
 			$timestamp_data["Timestamp"] = $result["Timestamp"];
 			$timestamp_data["Value"] = $result["Value"];
 			
-			$search_results[$result["Episode"]] = $timestamp_data;
+			$init = $result["Timestamp"];
+			$hours = floor($init / 3600);
+			$minutes = floor(($init / 60) % 60);
+			$seconds = $init % 60;
+			$timestamp_data["HMS"] = sprintf("%02d:%02d:%02d", $hours, $minutes, $seconds);
+			
+			$search_results[$result["Episode"]][] = $timestamp_data;
 		}
 	} else {
 		$search_query = $con->prepare("SELECT * FROM `episodes`");

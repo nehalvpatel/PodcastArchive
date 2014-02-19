@@ -108,7 +108,7 @@ nav ul li a {
 nav ul li a:hover {
 	border-left: 10px solid #BB4D3E;
 }
-#active a {
+#active a:first-child {
 	background: #BB4D3E;
 	color: #FFFFFF;
 }
@@ -386,6 +386,7 @@ td.event a i {
 	width: 175px;
 	display: block;
 	font-size: smaller;
+	font-weight: normal;
 }
 input[type="search"] {
 	-moz-appearance: textfield;
