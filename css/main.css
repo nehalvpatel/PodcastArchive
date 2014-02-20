@@ -117,7 +117,7 @@ nav ul li a:hover {
 	float: right;
 	margin: 2px 15px 0 0;
 }
-#active span{
+#active .timelined {
 	background: #A0493E;
 	color: #aaa;
 }
