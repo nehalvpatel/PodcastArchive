@@ -85,9 +85,11 @@
 		}
 	}
 ?>
-				<h2 id="page-title">Feedback</h2>
-				<div class="section" id="feedback">
+				<div id="page-title">
+					<h2>Feedback</h2>
 					<p>Thank you for helping us improve our website. We apologise for any way our website may have inconvenienced you.</p>
+				</div>
+				<div class="section" id="feedback">
 					<form method="POST">
 						<h3>Issue</h3>
 						<div>

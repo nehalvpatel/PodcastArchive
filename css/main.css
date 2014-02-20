@@ -144,8 +144,11 @@ nav ul li a:hover {
 	padding: 20px 20px 20px 20px;
 }
 #page-title {
-	padding: 5px 0 5px 10px;
+	padding: 10px;
 	background: #555555;
+}
+#page-title p {
+	margin-top: 5px;
 }
 .section {
 	background: #BB4D3E;

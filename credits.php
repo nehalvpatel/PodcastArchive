@@ -46,9 +46,11 @@
 	</head>
 	<body>
 <?php include_once("templates/header.php"); ?>
-				<h2 id="page-title">Developers and Contributors</h2>
-				<div class="section" id="credits">
+				<div id="page-title">
+					<h2>Developers and Contributors</h2>
 					<p>Thank you to everyone for making this website such a huge success. This website would not have become what it is without the immense effort our developers and contributors donate.</p>
+				</div>
+				<div class="section" id="credits">
 					<h3>Developers</h3>
 					<ul id="developers">
 						<li>Nehal Patel, for his amazing website development and engineering skills, knowledge and abilities.</li>
