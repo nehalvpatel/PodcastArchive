@@ -28,9 +28,8 @@
 		<!-- Meta -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<meta name="description" content="">
-		<link rel="canonical" href="">
-		<title>Developers and Contributors &middot; Painkiller Already Archive</title>
+		<link rel="canonical" href="<?php echo $domain; ?>feedback">
+		<title>Feedback &middot; Painkiller Already Archive</title>
 		
 		<!-- Icons -->
 		<link rel="apple-touch-icon" sizes="57x57" href="<?php echo $domain; ?>apple-touch-icon-57x57.png">
@@ -54,7 +53,6 @@
 		
 		<!-- CSS -->
 		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css?ver=<?php echo $commit_count; ?>">
-		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/feedback.css?ver=<?php echo $commit_count; ?>">
 		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/fontawesome.css?ver=<?php echo $commit_count; ?>">
 		
 		<!-- IE8 -->
@@ -65,11 +63,10 @@
 		<![endif]-->
 	</head>
 	<body>
-<?php include_once("templates/header.php"); ?>
-			<div id="container">
-				<p>Thank you for helping us improve our website. We apologise for any way our website may have inconvenienced you.</p>
-				<div class="section">
-<?php // Success and Error handling.
+<?php
+
+	include_once("templates/header.php");
+	
 	if (isset($success)) {
 ?>
 		<div class="success-message">
@@ -88,28 +85,31 @@
 		}
 	}
 ?>
-					<h2 class="section-header">Feedback Form</h2>
-					<form method="post">
-						<p>My issue relates to:<p>
-						<input type="radio" name="issue" value="timeline_typo" id="timeline_typo"/>
-						<label for="timeline_typo">A spelling/grammar/punctuation/timing mistake in the website's timelines.</label>
-						<br />
-						<input type="radio" name="issue" value="browser_rendering" id="browser_rendering"/>
-						<label for="browser_rendering">A problem with browser rendering (the website doesn't look right).</label>
-						<br />
-						<input type="radio" name="issue" value="website_content" id="website_content"/>
-						<label for="website_content">A problem with the content on our website.</label>
-						<div id="otherwise">
-							Otherwise, please specify:
-							<br />
-							<textarea name="issue_specified"></textarea>
+				<h2 id="page-title">Feedback</h2>
+				<div class="section">
+					<p>Thank you for helping us improve our website. We apologise for any way our website may have inconvenienced you.</p>
+					<form method="POST">
+						<h3>Issue</h3>
+						<div>
+							<input type="radio" name="issue" value="timeline_typo" id="timeline_typo">
+							<label for="timeline_typo">A spelling/grammar/punctuation/timing mistake in the website's timelines.</label>
+							<br>
+							<input type="radio" name="issue" value="browser_rendering" id="browser_rendering">
+							<label for="browser_rendering">A problem with browser rendering (the website doesn't look right).</label>
+							<br>
+							<input type="radio" name="issue" value="website_content" id="website_content">
+							<label for="website_content">A problem with the content on our website.</label>
+							<br>
+							<input type="radio" name="issue" value="other" id="otherwise">
+							<label for="otherwise">Other</label>
 						</div>
-						<p>Please Explain the Issue</p>
-						<textarea name="explanation" id="explanation"></textarea>
-						<input type="submit" value="Submit Feedback" />
+						<h3>Explain</h3>
+						<div>
+							<textarea name="explanation" id="explanation" rows="5"></textarea>
+						</div>
+						<input type="submit" value="Submit Feedback">
 					</form>
 				</div>
-			</div>
 <?php include_once("templates/footer.php"); ?>
 	</body>
 </html>

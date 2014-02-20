@@ -10,8 +10,7 @@
 		<!-- Meta -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<meta name="description" content="">
-		<link rel="canonical" href="">
+		<link rel="canonical" href="<?php echo $domain; ?>credits">
 		<title>Developers and Contributors &middot; Painkiller Already Archive</title>
 		
 		<!-- Icons -->
@@ -36,7 +35,6 @@
 		
 		<!-- CSS -->
 		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css?ver=<?php echo $commit_count; ?>">
-		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/credits.css?ver=<?php echo $commit_count; ?>">
 		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/fontawesome.css?ver=<?php echo $commit_count; ?>">
 		
 		<!-- IE8 -->
@@ -48,24 +46,26 @@
 	</head>
 	<body>
 <?php include_once("templates/header.php"); ?>
-			<div id="container">
-				<p>Thank you to everyone for making this website such a huge success. This website would not have become what it is without the immense effort our developers and contributors donate.</p>
-				<p>Thank you to the following developers:</p>
-				<ul>
-					<li>Nehal Patel, for his amazing website development and engineering skills, knowledge and abilities.</li>
-					<li>PoweredMinecart, for his great work in user interface, design and timelines.</li>
-				</ul>
-				<p>Thank you to the following contributors:</p>
-				<ul>
-					<li>ThePKAHistorian, for his superior work ethic and timelining work.</li>
-					<li>IrishDelta, for his superior work ethic and timelining work.</li>
-					<li>gotmilk55, for his timelining work.</li>
-					<li>Shizzable, for his help in data entry and timelining work.</li>
-					<li>BandWagonEffect, for his timelining work.</li>
-					<li>Spacemoses, for his timelining work.</li>
-					<li>Minimee321, for his timelining work.</li>
-					<li>mynewemporer, for his timelining work.</li>
-			</div>
+				<h2 id="page-title">Developers and Contributors</h2>
+				<div class="section">
+					<p>Thank you to everyone for making this website such a huge success. This website would not have become what it is without the immense effort our developers and contributors donate.</p>
+					<h3>Developers</h3>
+					<ul>
+						<li>Nehal Patel, for his amazing website development and engineering skills, knowledge and abilities.</li>
+						<li>PoweredMinecart, for his great work in user interface, design and timelines.</li>
+					</ul>
+					<h3>Contributors</h3>
+					<ul>
+						<li>ThePKAHistorian, for his superior work ethic and timelining work.</li>
+						<li>IrishDelta, for his superior work ethic and timelining work.</li>
+						<li>gotmilk55, for his timelining work.</li>
+						<li>Shizzable, for his help in data entry and timelining work.</li>
+						<li>BandWagonEffect, for his timelining work.</li>
+						<li>Spacemoses, for his timelining work.</li>
+						<li>Minimee321, for his timelining work.</li>
+						<li>mynewemporer, for his timelining work.</li>
+					</ul>
+				</div>
 <?php include_once("templates/footer.php"); ?>
 	</body>
 </html>

@@ -9,6 +9,9 @@ RewriteCond %{REQUEST_URI} ^(.*)/p\/([0-9]+)$
 RewriteRule ^p\/([0-9]+)$ %1/person/$1 [R=301,L]
 RewriteRule ^person\/([0-9]+)$ person.php?person=$1 [QSA]
 
+RewriteRule ^credits$ credits.php [QSA]
+RewriteRule ^feedback$ feedback.php [QSA]
+
 # error pages
 ErrorDocument 404 /404.php
 

@@ -12,6 +12,14 @@
 		<loc><?php echo $domain; ?></loc>
 		<changefreq>weekly</changefreq>
 	</url>
+	<url>
+		<loc><?php echo $domain; ?>credits</loc>
+		<changefreq>weekly</changefreq>
+	</url>
+	<url>
+		<loc><?php echo $domain; ?>feedback</loc>
+		<changefreq>weekly</changefreq>
+	</url>
 <?php
 	foreach ($Podcast->getEpisodes() as $episode) {
 ?>

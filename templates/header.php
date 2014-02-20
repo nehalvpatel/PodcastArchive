@@ -11,7 +11,7 @@
 	foreach ($Podcast->getEpisodes() as $episode) {
 ?>
 					<li data-episode="<?php echo $episode["Identifier"]; ?>"<?php if ((isset($_GET["episode"])) && ($episode["Number"] == $_GET["episode"])) { echo ' id="active"'; } ?>>
-						<a href="<?php echo $domain; ?>episode/<?php echo $episode["Number"]; ?>" class="<?php if(isset($highlighted_episodes)){if ($highlighted_episodes[$episode["Identifier"]]) { echo "highlighted-episode"; }} ?>">#<?php echo $episode["Number"]; ?><?php if(in_array($episode["Identifier"], $timelined_episodes)){ ?><span id="timelined">TIMELINED</span><?php } ?></a>
+						<a href="<?php echo $domain; ?>episode/<?php echo $episode["Number"]; ?>" class="<?php if(isset($highlighted_episodes)){if ($highlighted_episodes[$episode["Identifier"]]) { echo "highlighted-episode"; }} ?>">#<?php echo $episode["Number"]; ?><?php if(in_array($episode["Identifier"], $timelined_episodes)){ ?><span class="timelined">TIMELINED</span><?php } ?></a>
 					</li>
 <?php
 	}

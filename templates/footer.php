@@ -1,6 +1,6 @@
 				<ul id="footer-links">
-					<li><a href="<?php echo $domain; ?>credits.php">Developers and Contributors</a></li>
-					<li><a href="<?php echo $domain; ?>feedback.php">Provide us with Feedback</a></li>
+					<li><a href="<?php echo $domain; ?>credits">Developers and Contributors</a></li>
+					<li><a href="<?php echo $domain; ?>feedback">Provide us with Feedback</a></li>
 				</ul>
 			</div>
 		</section>
