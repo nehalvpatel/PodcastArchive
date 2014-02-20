@@ -1,4 +1,5 @@
 RewriteEngine On
+Options All -Indexes
 
 # navigation
 RewriteCond %{REQUEST_URI} ^(.*)/e\/(\d+\.?\d*)$
