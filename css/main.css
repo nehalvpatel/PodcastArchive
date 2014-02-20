@@ -174,9 +174,7 @@ nav ul li a:hover {
 	display: inline-block;
 	margin: 0 10px 10px 0;
 	vertical-align: top;
-	padding: 4px;
 	background: #333;
-	width: 46px;
 }
 .items {
 	padding: 10px 0 0 10px;
@@ -185,7 +183,8 @@ nav ul li a:hover {
 }
 .items img {
 	vertical-align: top;
-	max-width: 100%;
+	max-width: 50px;
+	padding: 4px;
 }
 #image {
 	max-height: 100%;
@@ -296,9 +295,6 @@ nav ul li a:hover {
 }
 form div {
 	margin: 10px 0 10px;
-}
-input[type=radio] {
-	margin-left: 15px;
 }
 textarea {
 	display: block;
@@ -439,7 +435,7 @@ input[type="search"] {
 
 /* Footer Styles */
 #footer-links{
-	margin: 10px 0 -10px 0;
+	margin: 10px 0 -5px 0;
 	text-align: center;
 }
 #footer-links li{
