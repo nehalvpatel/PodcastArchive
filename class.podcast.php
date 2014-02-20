@@ -29,6 +29,7 @@
 		// meta
 		private $prefix;
 		private $name;
+		private $title;
 		private $description;
 		
 		// author
@@ -121,6 +122,14 @@
 		
 		public function setName($name) {
 			$this->name = $name;
+		}
+		
+		public function getTitle() {
+			return $this->title;	
+		}
+		
+		public function setTitle($title) {
+			$this->title = $title;
 		}
 		
 		public function getDescription() {

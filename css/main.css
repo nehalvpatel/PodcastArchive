@@ -156,9 +156,6 @@ nav ul li a:hover {
 	margin: 0 10px 10px 0;
 	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
-.section p {
-	margin: 0 0 10px 0;
-}
 .section h3 {
 	margin: 0 -10px;
 }
@@ -166,6 +163,9 @@ nav ul li a:hover {
 	margin: 10px 0;
 	padding-left: 30px;
 	list-style-type: square;
+}
+#credits p, #feedback p {
+	margin: 0 0 10px 0;
 }
 #contributors {
 	margin-bottom: 0;

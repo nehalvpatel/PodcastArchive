@@ -78,7 +78,7 @@ function updateContent(episode_data) {
 	var $current_episode = $("[data-episode='" + episode_data.Identifier + "']");
 	
 	// update page title
-	document.title = "Episode #" + episode_data.Number + " \u00B7 Painkiller Already Archive";
+	document.title = "Episode #" + episode_data.Number + " \u00B7 " + site_title;
 	
 	// update video
 	var search_timestamp = getQueryVariable("timestamp");
@@ -89,7 +89,7 @@ function updateContent(episode_data) {
 	}
 	
 	// change header
-	$("#container h2").text("Painkiller Already #" + episode_data.Number);
+	$("#container h2").text(site_name + " #" + episode_data.Number);
 	
 	// update current episode
 	$("nav ul").attr("data-current", episode_data.Identifier);
@@ -184,7 +184,7 @@ function updateContent(episode_data) {
 		$table.append($tbody);
 		$timeline_vertical.append($table);
 		
-		$("#container").append($timeline_vertical);
+		$("#footer-links").before($timeline_vertical);
 	}
 	
 	// update active episode on the sidebar

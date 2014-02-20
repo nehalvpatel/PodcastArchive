@@ -45,7 +45,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<meta name="description" content="<?php echo $Person->getOverview(); ?>">
 		<link rel="canonical" href="<?php echo $domain . "person/" . $Person->getID(); ?>">
-		<title><?php echo $Person->getName(); ?> &middot; Painkiller Already Archive</title>
+		<title><?php echo $Person->getName(); ?> &middot; <?php echo $Podcast->getTitle(); ?></title>
 		
 		<!-- Icons -->
 		<link rel="apple-touch-icon" sizes="57x57" href="<?php echo $domain; ?>apple-touch-icon-57x57.png">
@@ -69,7 +69,7 @@
 		
 		<!-- Open Graph -->
 		<meta property="og:image" content="<?php echo $domain; ?>img/people/<?php echo $Person->getID(); ?>a.png">
-		<meta property="og:site_name" content="Painkiller Already Archive">
+		<meta property="og:site_name" content="<?php echo $Podcast->getTitle(); ?>">
 		<meta property="og:type" content="profile">
 		<meta property="og:title" content="<?php echo $Person->getName(); ?>">
 		<meta property="og:description" content="<?php echo $Person->getOverview(); ?>">

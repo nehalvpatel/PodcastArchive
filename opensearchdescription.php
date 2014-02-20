@@ -8,8 +8,8 @@
 	
 ?>
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
-	<ShortName>Painkiller Already Archive</ShortName>
-	<Description>Search Painkiller Already episodes</Description>
+	<ShortName><?php echo $Podcast->getTitle(); ?></ShortName>
+	<Description>Search <?php echo $Podcast->getName(); ?> episodes</Description>
 	<Url type="text/html" method="get" template="<?php echo $domain; ?>?query={searchTerms}" />
 	<Image width="16" height="16"><?php echo $domain; ?>favicon.ico</Image>
 	<InputEncoding>UTF-8</InputEncoding>

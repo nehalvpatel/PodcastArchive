@@ -22,6 +22,6 @@
 		<section class="main">
 			<header>
 				<a href="#" class="toggle-menu icon-reorder"></a>
-				<h1>Painkiller Already Archive</h1>
+				<h1><?php echo $Podcast->getTitle(); ?></h1>
 			</header>
 			<div id="container">

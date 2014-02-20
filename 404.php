@@ -11,8 +11,8 @@
 		<!-- Meta -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link rel="search" type="application/opensearchdescription+xml" href="<?php echo $domain; ?>opensearchdescription.xml" title="Painkiller Already Archive">
-		<title>404 &middot; Painkiller Already Archive</title>
+		<link rel="search" type="application/opensearchdescription+xml" href="<?php echo $domain; ?>opensearchdescription.xml" title="<?php echo $Podcast->getTitle(); ?>">
+		<title>404 &middot; <?php echo $Podcast->getTitle(); ?></title>
 		
 		<!-- Icons -->
 		<link rel="apple-touch-icon" sizes="57x57" href="<?php echo $domain; ?>apple-touch-icon-57x57.png">
@@ -33,15 +33,6 @@
 		
 		<!-- Google+ -->
 		<link rel="publisher" href="https://plus.google.com/107397414095793132493">
-		
-		<!-- Open Graph -->
-		<meta property="og:image" content="<?php echo $domain; ?>img/pka.png">
-		<meta property="og:site_name" content="Painkiller Already Archive">
-		
-		<!-- Twitter -->
-		<meta property="twitter:site" content="@PKA_Archive">
-		<meta property="twitter:creator" content="@nehalvpatel">
-		<meta property="twitter:domain" content="www.painkilleralready.info">
 		
 		<!-- CSS -->
 		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css?ver=<?php echo $commit_count; ?>">

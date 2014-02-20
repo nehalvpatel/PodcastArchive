@@ -8,6 +8,7 @@
 	$Podcast = new Podcast($con);
 	
 	$Podcast->setName("Painkiller Already");
+	$Podcast->setTitle($Podcast->getName() . " Archive");
 	$Podcast->setDescription("Four gamers discuss games, current events, and tell a few stories.");
 	$Podcast->setPrefix("PKA");
 	
@@ -22,7 +23,8 @@
 	$Podcast->setAuthorName("Nehal Patel");
 	$Podcast->setAuthorEmail("nehal@itspatel.com");
 	
-	$domain = "http://" . $_SERVER["HTTP_HOST"] . str_replace(basename($_SERVER["PHP_SELF"]), "", $_SERVER["PHP_SELF"]);
+	$base_domain = rtrim($_SERVER["HTTP_HOST"] . str_replace(basename($_SERVER["PHP_SELF"]), "", $_SERVER["PHP_SELF"]), "/");
+	$domain = "http://" . $base_domain . "/";
 	
 	ob_start();
 	passthru("git rev-list --count HEAD");

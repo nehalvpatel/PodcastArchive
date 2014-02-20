@@ -11,7 +11,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<link rel="canonical" href="<?php echo $domain; ?>credits">
-		<title>Developers and Contributors &middot; Painkiller Already Archive</title>
+		<title>Developers and Contributors &middot; <?php echo $Podcast->getTitle(); ?></title>
 		
 		<!-- Icons -->
 		<link rel="apple-touch-icon" sizes="57x57" href="<?php echo $domain; ?>apple-touch-icon-57x57.png">
@@ -47,7 +47,7 @@
 	<body>
 <?php include_once("templates/header.php"); ?>
 				<h2 id="page-title">Developers and Contributors</h2>
-				<div class="section">
+				<div class="section" id="credits">
 					<p>Thank you to everyone for making this website such a huge success. This website would not have become what it is without the immense effort our developers and contributors donate.</p>
 					<h3>Developers</h3>
 					<ul id="developers">

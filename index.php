@@ -73,8 +73,8 @@
 		<meta name="description" content="<?php if ($source == "latest") { echo $Podcast->getDescription(); } else { echo "Guests: " . $guests_list; } ?>">
 		<link rel="canonical" href="<?php echo $canonical; ?>">
 		<link rel="alternate" type="application/rss+xml" title="<?php echo $Podcast->getName(); ?>" href="http://feeds.feedburner.com/<?php echo $Podcast->getFeedburner(); ?>">
-		<link rel="search" type="application/opensearchdescription+xml" href="<?php echo $domain; ?>opensearchdescription.xml" title="Painkiller Already Archive">
-		<title><?php if($source == "get") { echo "Episode #" . $current_episode->getNumber() . " &middot; "; } ?>Painkiller Already Archive</title>
+		<link rel="search" type="application/opensearchdescription+xml" href="<?php echo $domain; ?>opensearchdescription.xml" title="<?php echo $Podcast->getTitle(); ?>">
+		<title><?php if($source == "get") { echo "Episode #" . $current_episode->getNumber() . " &middot; "; } ?><?php echo $Podcast->getTitle(); ?></title>
 		
 		<!-- Icons -->
 		<link rel="apple-touch-icon" sizes="57x57" href="<?php echo $domain; ?>apple-touch-icon-57x57.png">
@@ -98,13 +98,13 @@
 		
 		<!-- Open Graph -->
 		<meta property="og:image" content="<?php echo $domain; ?>img/pka.png">
-		<meta property="og:site_name" content="Painkiller Already Archive">
+		<meta property="og:site_name" content="<?php echo $Podcast->getTitle(); ?>">
 
 <?php
 		if ($source == "get") {
 ?>
 		<meta property="og:type" content="music.song">
-		<meta property="og:title" content="Painkiller Already #<?php echo $current_episode->getNumber(); ?>">
+		<meta property="og:title" content="<?php echo $Podcast->getName(); ?> #<?php echo $current_episode->getNumber(); ?>">
 		<meta property="og:description" content="Guests: <?php echo $guests_list; ?>">
 		<meta property="og:url" content="<?php echo $domain; ?>episode/<?php echo $current_episode->getNumber(); ?>">
 		<meta property="og:audio" content="http://media.blubrry.com/painkilleralready/archive.org/download/<?php echo $current_episode->getIdentifier(); ?>/<?php echo str_replace("_", "-", strtolower($current_episode->getIdentifier())); ?>.mp3">
@@ -127,7 +127,7 @@
 		} else {
 ?>
 		<meta property="og:type" content="music.album">
-		<meta property="og:title" content="Painkiller Already">
+		<meta property="og:title" content="<?php echo $Podcast->getName(); ?>">
 		<meta property="og:description" content="<?php echo $Podcast->getDescription(); ?>">
 		<meta property="og:url" content="<?php echo $domain; ?>">
 		<meta property="music:release_date" content="2010-04-19">
@@ -145,13 +145,13 @@
 		<!-- Twitter -->
 		<meta property="twitter:site" content="@PKA_Archive">
 		<meta property="twitter:creator" content="@nehalvpatel">
-		<meta property="twitter:domain" content="www.painkilleralready.info">
+		<meta property="twitter:domain" content="<?php echo $base_domain; ?>">
 <?php
 
 		if ($source == "get") {
 ?>
 		<meta property="twitter:card" content="player">
-		<meta property="twitter:title" content="Painkiller Already #<?php echo $current_episode->getNumber(); ?>">
+		<meta property="twitter:title" content="<?php echo $Podcast->getName(); ?> #<?php echo $current_episode->getNumber(); ?>">
 		<meta property="twitter:description" content="Guests: <?php echo $guests_list; ?>">
 		<meta property="twitter:image:src" content="http://i1.ytimg.com/vi/<?php echo $current_episode->getYouTube(); ?>/hqdefault.jpg">
 		<meta property="twitter:player" content="https://www.youtube.com/embed/<?php echo $current_episode->getYouTube(); ?>">
@@ -182,7 +182,7 @@
 	</head>
 	<body data-type="Episode">
 <?php include_once("templates/header.php"); ?>
-				<h2>Painkiller Already #<?php echo $current_episode->getNumber(); ?></h2>
+				<h2><?php echo $Podcast->getName(); ?> #<?php echo $current_episode->getNumber(); ?></h2>
 				<div class="info">
 					<span class="published" title="Date Published"><i class="icon-time"></i><small><time datetime="<?php echo $current_episode->getDate(); ?>"><?php echo date("F d, Y", strtotime($current_episode->getDate())); ?></time></small></span>
 					<?php if ($current_episode->getReddit() != "") { ?><a class="comments" title="Discussion Comments" href="http://www.reddit.com/comments/<?php echo $current_episode->getReddit(); ?>"><i class="icon-comments"></i><small id="comments" data-reddit="<?php echo $current_episode->getReddit(); ?>">Comments</small></a><?php echo PHP_EOL; } ?>

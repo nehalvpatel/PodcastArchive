@@ -29,7 +29,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<link rel="canonical" href="<?php echo $domain; ?>feedback">
-		<title>Feedback &middot; Painkiller Already Archive</title>
+		<title>Feedback &middot; <?php echo $Podcast->getTitle(); ?></title>
 		
 		<!-- Icons -->
 		<link rel="apple-touch-icon" sizes="57x57" href="<?php echo $domain; ?>apple-touch-icon-57x57.png">
@@ -86,7 +86,7 @@
 	}
 ?>
 				<h2 id="page-title">Feedback</h2>
-				<div class="section">
+				<div class="section" id="feedback">
 					<p>Thank you for helping us improve our website. We apologise for any way our website may have inconvenienced you.</p>
 					<form method="POST">
 						<h3>Issue</h3>
