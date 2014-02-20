@@ -50,12 +50,12 @@
 				<div class="section">
 					<p>Thank you to everyone for making this website such a huge success. This website would not have become what it is without the immense effort our developers and contributors donate.</p>
 					<h3>Developers</h3>
-					<ul>
+					<ul id="developers">
 						<li>Nehal Patel, for his amazing website development and engineering skills, knowledge and abilities.</li>
 						<li>PoweredMinecart, for his great work in user interface, design and timelines.</li>
 					</ul>
 					<h3>Contributors</h3>
-					<ul>
+					<ul id="contributors">
 						<li>ThePKAHistorian, for his superior work ethic and timelining work.</li>
 						<li>IrishDelta, for his superior work ethic and timelining work.</li>
 						<li>gotmilk55, for his timelining work.</li>

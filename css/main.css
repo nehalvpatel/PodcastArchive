@@ -159,10 +159,16 @@ nav ul li a:hover {
 .section p {
 	margin: 0 0 10px 0;
 }
+.section h3 {
+	margin: 0 -10px;
+}
 .section ul {
 	margin: 10px 0;
 	padding-left: 30px;
 	list-style-type: square;
+}
+#contributors {
+	margin-bottom: 0;
 }
 .item {
 	display: inline-block;
