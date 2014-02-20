@@ -163,15 +163,9 @@ nav ul li a:hover {
 	margin: 0 -10px;
 }
 .section ul {
-	margin: 10px 0;
+	margin: 10px 0 0;
 	padding-left: 30px;
 	list-style-type: square;
-}
-#credits p, #feedback p {
-	margin: 0 0 10px 0;
-}
-#contributors {
-	margin-bottom: 0;
 }
 .item {
 	display: inline-block;
@@ -297,7 +291,10 @@ nav ul li a:hover {
 	padding: 20px;
 }
 form div {
-	margin: 10px 0 10px;
+	margin: 10px 0 0;
+}
+form label {
+	word-break: break-all;
 }
 textarea {
 	display: block;
@@ -308,6 +305,7 @@ input[type=submit] {
 	display: block;
 	padding: 5px 7px;
 	width: 100%;
+	margin-top: 20px;
 }
 
 /* Horizontal Timeline Styles */

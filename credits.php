@@ -50,14 +50,16 @@
 					<h2>Developers and Contributors</h2>
 					<p>Thank you to everyone for making this website such a huge success. This website would not have become what it is without the immense effort our developers and contributors donate.</p>
 				</div>
-				<div class="section" id="credits">
+				<div class="section">
 					<h3>Developers</h3>
-					<ul id="developers">
+					<ul>
 						<li>Nehal Patel, for his amazing website development and engineering skills, knowledge and abilities.</li>
 						<li>PoweredMinecart, for his great work in user interface, design and timelines.</li>
 					</ul>
+				</div>
+				<div class="section">
 					<h3>Contributors</h3>
-					<ul id="contributors">
+					<ul>
 						<li>ThePKAHistorian, for his superior work ethic and timelining work.</li>
 						<li>IrishDelta, for his superior work ethic and timelining work.</li>
 						<li>gotmilk55, for his timelining work.</li>

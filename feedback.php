@@ -89,8 +89,8 @@
 					<h2>Feedback</h2>
 					<p>Thank you for helping us improve our website. We apologise for any way our website may have inconvenienced you.</p>
 				</div>
-				<div class="section" id="feedback">
-					<form method="POST">
+				<form method="POST">
+					<div class="section">
 						<h3>Issue</h3>
 						<div>
 							<input type="radio" name="issue" value="timeline_typo" id="timeline_typo">
@@ -105,13 +105,15 @@
 							<input type="radio" name="issue" value="other" id="otherwise">
 							<label for="otherwise">Other</label>
 						</div>
+					</div>
+					<div class="section">
 						<h3>Explain</h3>
 						<div>
 							<textarea name="explanation" id="explanation" rows="5"></textarea>
 						</div>
-						<input type="submit" value="Submit Feedback">
-					</form>
-				</div>
+					</div>
+					<input type="submit" value="Submit Feedback">
+				</form>
 <?php include_once("templates/footer.php"); ?>
 	</body>
 </html>
