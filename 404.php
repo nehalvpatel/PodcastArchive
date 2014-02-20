@@ -56,13 +56,11 @@
 	</head>
 	<body data-type="Episode">
 <?php include_once("templates/header.php"); ?>
-			<div id="container">
 				<div class="error">
 					<img alt="Lefty" title="Lefty" src="<?php echo $domain; ?>img/404.png">
 					<h2>Blame the Government</h2>
 					<p>The page you were looking for could not be found.</p>
 				</div>
-			</div>
 <?php include_once("templates/footer.php"); ?>
 	</body>
 </html>

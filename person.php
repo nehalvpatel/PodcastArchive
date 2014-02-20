@@ -93,7 +93,6 @@
 	</head>
 	<body>
 <?php include_once("templates/header.php"); ?>
-			<div id="container">
 				<div id="image">
 					<img id="person-image" class="person-image" alt="<?php echo $Person->getName(); ?>" title="<?php echo $Person->getName(); ?>" src="<?php echo $domain; ?>img/people/<?php echo $Person->getID(); ?>a.png" />
 				</div>
@@ -144,10 +143,6 @@
 ?>
 					<div class="clear"></div>
 				</div>
-<?php
-	}
-?>
-			</div>
-<?php include_once("templates/footer.php"); ?>
+<?php } include_once("templates/footer.php"); ?>
 	</body>
 </html>

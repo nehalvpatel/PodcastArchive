@@ -182,7 +182,6 @@
 	</head>
 	<body data-type="Episode">
 <?php include_once("templates/header.php"); ?>
-			<div id="container">
 				<h2>Painkiller Already #<?php echo $current_episode->getNumber(); ?></h2>
 				<div class="info">
 					<span class="published" title="Date Published"><i class="icon-time"></i><small><time datetime="<?php echo $current_episode->getDate(); ?>"><?php echo date("F d, Y", strtotime($current_episode->getDate())); ?></time></small></span>
@@ -287,7 +286,6 @@
 		}
 ?>
 				</div>
-			</div>
 <?php include_once("templates/footer.php"); ?>
 	</body>
 </html>

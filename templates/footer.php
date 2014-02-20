@@ -1,7 +1,8 @@
-		<ul id="footer-links">
-			<li><a href="<?php echo $domain; ?>credits.php">Developers and Contributors</a></li>
-			<li><a href="<?php echo $domain; ?>feedback.php">Provide us with Feedback</a></li>
-		</ul>
+				<ul id="footer-links">
+					<li><a href="<?php echo $domain; ?>credits.php">Developers and Contributors</a></li>
+					<li><a href="<?php echo $domain; ?>feedback.php">Provide us with Feedback</a></li>
+				</ul>
+			</div>
 		</section>
 		<div id="loader"></div>
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
