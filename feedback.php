@@ -13,7 +13,7 @@
 				"explanation" 	=> $_POST["explanation"]
 			));
 			if($result){
-				$success = "Thank you, your feedback has been received and out administrators will now work to solve the problem shortly.";
+				$success = "Thank you, your feedback has been received and our administrators will now work to solve the problem shortly.";
 			} else {
 				$errors[] = "There was a MySQL error, please try again.";
 			}
