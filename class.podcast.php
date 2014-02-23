@@ -264,7 +264,12 @@
 			$latest_query->execute();
 			$latest_results = $latest_query->fetchAll();
 			
-			return $latest_results[0]["Identifier"];
+			return $latest_results[0];
+		}
+		
+		public function getRandomEpisode() {
+			$episodes = $this->getEpisodes();
+			return $episodes[array_rand($episodes)];
 		}
 		
 		public function getEpisodes() {
@@ -277,7 +282,6 @@
 				$info["Length"] = gmdate("H:i:s", $info["Length"]);
 				
 				$episodes[$info["Identifier"]] = $info;
-				
 			}
 			
 			return $episodes;

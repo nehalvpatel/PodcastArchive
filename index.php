@@ -2,7 +2,7 @@
 
 	require_once("config.php");
 	
-	if (isset($_GET["episode"]) && is_numeric($_GET["episode"])) {
+	if ((isset($_GET["episode"])) && (is_numeric($_GET["episode"]))) {
 		try {
 			$current_episode = new Episode($con);
 			$current_episode->initWithNumber($Podcast->trimEpisodeNumber($_GET["episode"]));
@@ -10,13 +10,15 @@
 			$source = "get";
 		} catch (Exception $e) {
 			$current_episode = new Episode($con);
-			$current_episode->initWithIdentifier($Podcast->getLatestEpisode());
+			$current_episode->initWithIdentifier($Podcast->getLatestEpisode()["Identifier"]);
 			$canonical = $domain;
 			$source = "latest";
 		}
+	} elseif ((isset($_GET["episode"])) && ($_GET["episode"] == "?")) {
+		header("Location: " . $domain . "episode/" . $Podcast->getRandomEpisode()["Number"]);
 	} else {
 		$current_episode = new Episode($con);
-		$current_episode->initWithIdentifier($Podcast->getLatestEpisode());
+		$current_episode->initWithIdentifier($Podcast->getLatestEpisode()["Identifier"]);
 		$canonical = $domain;
 		$source = "latest";
 	}
@@ -282,10 +284,11 @@
 ?>
 						</tbody>
 					</table>
+				</div>
 <?php
 		}
+		
+		include_once("templates/footer.php");
 ?>
-				</div>
-<?php include_once("templates/footer.php"); ?>
 	</body>
 </html>

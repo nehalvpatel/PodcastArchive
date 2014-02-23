@@ -69,6 +69,13 @@ h3 {
 	text-transform: uppercase;
 	font-size: 90%;
 }
+.random-button {
+	text-decoration: none;
+}
+.random-button i {
+	margin: 6px -5px 0 0 !important;
+	font-size: 10pt !important;
+}
 .toggle-menu {
 	text-decoration: none;
 	float: left;
@@ -111,7 +118,6 @@ nav ul li a:hover {
 .timelined {
 	background: #3a3a3a;
 	color: #666;
-	border-radius: 3px;
 	padding: 2px 3px;
 	font-size: 0.6em;
 	float: right;
@@ -339,7 +345,6 @@ input[type=submit] {
 .tooltip {
 	width: 300px;
 	padding: 3px;
-	border-radius: 4px;
 	background: black;
 	position: relative;
 	top: 40px;

@@ -288,7 +288,7 @@ function onPlayerReady() {
 	
 	if ($("body").attr("data-type") == "Episode") {
 		// episode click interceptor
-		$(document).on("click", "nav a", function(e) {
+		$(document).on("click", "ul a", function(e) {
 			if (hasPushstate) {
 				// cancel navigation
 				e.preventDefault();

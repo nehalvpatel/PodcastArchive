@@ -6,6 +6,8 @@ RewriteCond %{REQUEST_URI} ^(.*)/e\/(\d+\.?\d*)$
 RewriteRule ^e\/(\d+\.?\d*)$ %1/episode/$1 [R=301,L]
 RewriteRule ^episode\/(\d+\.?\d*)$ index.php?episode=$1 [QSA]
 
+RewriteRule ^(e|episode)\/\\?$ index.php?episode=? [QSA]
+
 RewriteCond %{REQUEST_URI} ^(.*)/p\/([0-9]+)$
 RewriteRule ^p\/([0-9]+)$ %1/person/$1 [R=301,L]
 RewriteRule ^person\/([0-9]+)$ person.php?person=$1 [QSA]
