@@ -70,11 +70,15 @@ h3 {
 	font-size: 90%;
 }
 .random-button {
+	display: inline-block;
+	margin: 4px -8px 0 0 !important;
+	padding: 0 !important;
 	text-decoration: none;
 }
 .random-button i {
-	margin: 6px -5px 0 0 !important;
-	font-size: 10pt !important;
+	font-size: 12px;
+	vertical-align: top;
+	padding: 4px;
 }
 .toggle-menu {
 	text-decoration: none;
@@ -121,7 +125,7 @@ nav ul li a:hover {
 	padding: 2px 3px;
 	font-size: 0.6em;
 	float: right;
-	margin: 2px 15px 0 0;
+	margin: 2px 12px 0 0;
 }
 #active .timelined {
 	background: #A0493E;

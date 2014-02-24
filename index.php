@@ -14,7 +14,7 @@
 			$canonical = $domain;
 			$source = "latest";
 		}
-	} elseif ((isset($_GET["episode"])) && ($_GET["episode"] == "?")) {
+	} elseif ((isset($_GET["episode"])) && ($_GET["episode"] == "random")) {
 		header("Location: " . $domain . "episode/" . $Podcast->getRandomEpisode()["Number"]);
 	} else {
 		$current_episode = new Episode($con);
