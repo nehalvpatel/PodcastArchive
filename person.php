@@ -42,6 +42,7 @@
 	<head>
 		<!-- Meta -->
 		<meta charset="utf-8">
+		<meta name="apple-mobile-web-app-title" content="<?php echo $Podcast->getTitle(); ?>">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<meta name="description" content="<?php echo $Person->getOverview(); ?>">
 		<link rel="canonical" href="<?php echo $domain . "person/" . $Person->getID(); ?>">

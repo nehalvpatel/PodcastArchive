@@ -10,8 +10,8 @@
 	<head>
 		<!-- Meta -->
 		<meta charset="utf-8">
+		<meta name="apple-mobile-web-app-title" content="<?php echo $Podcast->getTitle(); ?>">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link rel="search" type="application/opensearchdescription+xml" href="<?php echo $domain; ?>opensearchdescription.xml" title="<?php echo $Podcast->getTitle(); ?>">
 		<title>404 &middot; <?php echo $Podcast->getTitle(); ?></title>
 		
 		<!-- Icons -->

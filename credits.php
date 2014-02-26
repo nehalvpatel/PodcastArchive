@@ -9,6 +9,7 @@
 	<head>
 		<!-- Meta -->
 		<meta charset="utf-8">
+		<meta name="apple-mobile-web-app-title" content="<?php echo $Podcast->getTitle(); ?>">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<link rel="canonical" href="<?php echo $domain; ?>credits">
 		<title>Developers and Contributors &middot; <?php echo $Podcast->getTitle(); ?></title>
