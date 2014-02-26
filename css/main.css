@@ -39,25 +39,27 @@ h1 {
 	padding: 0 20px;
 	line-height: 2;
 	position: relative;
-	transition: all 0.2s ease-out;
 	overflow: hidden;
+	-o-text-overflow: ellipsis;
 	text-overflow: ellipsis;
 }
 
 /* Sidebar */
 .sidebar, .main {
-	transition: all 0.2s ease-out;
 	overflow-x: hidden;
 	overflow-y: scroll;
 	-webkit-overflow-scrolling: touch;
 	position: absolute;
 	top: 0;
 	bottom: 0;
+	-webkit-transition: all 0.2s ease-out;
+	-moz-transition: all 0.2s ease-out;
+	-o-transition: all 0.2s ease-out;
+	transition: all 0.2s ease-out;
 }
 .sidebar {
 	width: 230px;
 	background: #333;
-	left: 0;
 	overflow: hidden;
 }
 h3 {
@@ -88,8 +90,6 @@ h3 {
 	position: absolute;
 	left: 0;
 	z-index: -1;
-	opacity: 0;
-	transition: opacity 0.2s ease-out;
 	font-size: 24px;
 }
 .toggle-menu:hover {
@@ -304,6 +304,7 @@ form div {
 	margin: 10px 0 0;
 }
 form label {
+	-ms-word-break: break-all;
 	word-break: break-all;
 }
 textarea {
@@ -321,10 +322,9 @@ input[type=submit] {
 /* Horizontal Timeline Styles */
 .timeline {
 	height: 35px;
+	-webkit-transition: margin-bottom 0.1s ease-out;
 	-moz-transition: margin-bottom 0.1s ease-out;
 	-o-transition: margin-bottom 0.1s ease-out;
-	-webkit-transition: margin-bottom 0.1s ease-out;
-	-ms-transition: margin-bottom 0.1s ease-out;
 	transition: margin-bottom 0.1s ease-out;
 }
 .timeline:hover {
@@ -408,6 +408,8 @@ td.event {
 	padding: 3px 0 0 10px;
 	border-top-width: 1px;
 	border-top-style: solid;
+	-ms-word-break: break-word;
+	word-break: break-word;
 }
 td.event a {
 	color: inherit;
@@ -494,23 +496,30 @@ input[type="search"] {
 @media (max-width: 1024px) {
 	/* Sidebar */
 	.sidebar.toggled {
-		left: 0;
-		z-index: 10;
+		-ms-transform: translateX(0px);
+		-webkit-transform: translateX(0px);
+		transform: translateX(0px);
 	}
 	.sidebar.toggled + .main {
-		left: 230px;
+		-ms-transform: translateX(0px);
+		-webkit-transform: translateX(0px);
+		transform: translateX(0px);
 	}
 	.sidebar {
-		left: -230px;
+		-ms-transform: translateX(-230px);
+		-webkit-transform: translateX(-230px);
+		transform: translateX(-230px);
 	}
 	.toggle-menu {
 		z-index: 1;
-		opacity: 1;
 	}
 	
 	/* Content */
 	.main {
-		left: 0;
+		-ms-transform: translateX(-230px);
+		-webkit-transform: translateX(-230px);
+		transform: translateX(-230px);
+		right: -230px;
 	}
 	h1 {
 		left: 40px;
@@ -555,7 +564,7 @@ input[type="search"] {
 
 /* Break YouTube videos to 3 columns */
 @media (min-width: 1025px) and (max-width: 1400px) {
-	.video{
+	.video {
 		width: -webkit-calc((100% / 3) - 10px - (100% * 0.00005));
 		width: -moz-calc((100% / 3) - 10px - (100% * 0.00005));
 		width: calc((100% / 3) - 10px - (100% * 0.00005));
