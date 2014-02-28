@@ -40,8 +40,12 @@ function resetSearchResults(li) {
 }
 
 // get variables from URL
-function getQueryVariable(variable) {
-	var query = window.location.search.substring(1);
+function getQueryVariable(variable, query_url) {
+	query_url = typeof query_url !== 'undefined' ? query_url : window.location;
+	
+	var query_link = document.createElement("a");
+	query_link.href = query_url;
+	var query = query_link.search.substring(1);
 	var vars = query.split("&");
 	for (var i=0;i<vars.length;i++) {
 		var pair = vars[i].split("=");
@@ -53,8 +57,11 @@ function getQueryVariable(variable) {
 // download data for new episode or use cache if possible
 function loadContent(url) {
 	$("#loader").show();
+	
+	var search_timestamp = getQueryVariable("timestamp", url);
+	
 	if (cached_data.hasOwnProperty(url) == 1) {
-		updateContent(cached_data[url]);
+		updateContent(cached_data[url], search_timestamp);
 	} else {
 		$.ajax({
 			url: domain + "content.php",
@@ -66,7 +73,7 @@ function loadContent(url) {
 					cached_data[url] = content;
 				}
 				
-				updateContent(content);
+				updateContent(content, search_timestamp);
 			},
 			error: function(xhr, textStatus, error) {
 				window.location.href = url;
@@ -76,12 +83,11 @@ function loadContent(url) {
 }
 
 // replace old episode data with current episode data
-function updateContent(episode_data) {
+function updateContent(episode_data, search_timestamp) {
 	// get current episode
 	var $current_episode = $("[data-episode='" + episode_data.Identifier + "']");
 	
 	// update video
-	var search_timestamp = getQueryVariable("timestamp");
 	if (search_timestamp) {
 		player.loadVideoById(episode_data.YouTube, search_timestamp);
 	} else {
@@ -208,7 +214,12 @@ function updateContent(episode_data) {
 	
 	// add page to history and update page title
 	document.title = "Episode #" + episode_data.Number + " \u00B7 " + site_title;
-	history.pushState(null, null, episode_data.Link);
+	
+	if (search_timestamp) {
+		history.pushState(null, null, episode_data.Link + "?timestamp=" + search_timestamp);
+	} else {
+		history.pushState(null, null, episode_data.Link);
+	}
 	
 	// hide loader
 	$("#loader").hide();
@@ -384,6 +395,9 @@ $(document).ready(function() {
 		// seek to timestamp
 		player.seekTo($(this).attr("data-begin"));
 		document.getElementsByTagName("header")[0].scrollIntoView();
+		
+		// add URL to history
+		history.pushState(null, null, window.location.protocol + "//" + window.location.hostname + window.location.pathname + "?timestamp=" + $(this).attr("data-begin"));
 		
 		// track in analytics
 		if (typeof _gaq !== "undefined") {
