@@ -61,9 +61,12 @@ function loadContent(url) {
 			dataType: "json",
 			data: {id: cleanURL(url)},
 			async: true,
-			success: function(json) {
-				cached_data[url] = json;
-				updateContent(json);
+			success: function(content) {
+				if ($.parseJSON(content.Cache) === true) {
+					cached_data[url] = content;
+				}
+				
+				updateContent(content);
 			},
 			error: function(xhr, textStatus, error) {
 				window.location.href = url;
@@ -76,9 +79,6 @@ function loadContent(url) {
 function updateContent(episode_data) {
 	// get current episode
 	var $current_episode = $("[data-episode='" + episode_data.Identifier + "']");
-	
-	// update page title
-	document.title = "Episode #" + episode_data.Number + " \u00B7 " + site_title;
 	
 	// update video
 	var search_timestamp = getQueryVariable("timestamp");
@@ -132,7 +132,7 @@ function updateContent(episode_data) {
 		
 		var $line = $("<div>", {"class": "timeline"});
 		$.each(episode_data.Timeline.Timestamps, function(timestamp_id, timestamp_data) {
-			var $timelink = $("<a>", {"class": "timelink", "href": domain + "episode/" + episode_data.Number + "?timestamp=" + timestamp_data.Begin, "data-begin": timestamp_data.Begin, "data-end": timestamp_data.End});
+			var $timelink = $("<a>", {"class": "timelink", "href": episode_data.Link + "?timestamp=" + timestamp_data.Begin, "data-begin": timestamp_data.Begin, "data-end": timestamp_data.End});
 			var $topic = $("<div>", {"class": "topic"}).css({"width": timestamp_data.Width + "%"});
 			var $tooltip = $("<div>", {"class": "tooltip", "id": timestamp_id});
 			if (timestamp_data.Begin > (episode_data.YouTubeLength / 2)) {
@@ -170,7 +170,7 @@ function updateContent(episode_data) {
 		$.each(episode_data.Timeline.Timestamps, function(timestamp_id, timestamp_data) {
 			var $body_row = $("<tr>");
 			var $timestamp = $("<td>", {"class": "timestamp"});
-			var $timelink = $("<a>", {"class": "timelink", "href": domain + "episode/" + episode_data.Number + "?timestamp=" + timestamp_data.Begin, "data-begin": timestamp_data.Begin, "data-end": timestamp_data.End}).text(timestamp_data.HMS);
+			var $timelink = $("<a>", {"class": "timelink", "href": episode_data.Link + "?timestamp=" + timestamp_data.Begin, "data-begin": timestamp_data.Begin, "data-end": timestamp_data.End}).text(timestamp_data.HMS);
 			var $event = $("<td>", {"class": "event"}).text(timestamp_data.Value);
 			if (timestamp_data.URL !== "") {
 				$event.append($("<a>", {"target": "_blank", "href": timestamp_data.URL}).append($("<i>", {"class": "icon-external-link"})));
@@ -205,6 +205,10 @@ function updateContent(episode_data) {
 	if ($sidebar.hasClass("toggled")) {
 		$sidebar.removeClass("toggled");
 	}
+	
+	// add page to history and update page title
+	document.title = "Episode #" + episode_data.Number + " \u00B7 " + site_title;
+	history.pushState(null, null, episode_data.Link);
 	
 	// hide loader
 	$("#loader").hide();
@@ -286,14 +290,12 @@ function onPlayerReady() {
 	
 	if ($("body").attr("data-type") == "Episode") {
 		// episode click interceptor
-		$(document).on("click", "ul a", function(e) {
+		$(document).on("click", "nav a", function(e) {
 			if (hasPushstate) {
 				// cancel navigation
 				e.preventDefault();
 				
-				// add page to history
 				href = $(this).attr("href");
-				history.pushState(null, null, href);
 				
 				// track page view
 				if (typeof _gaq !== "undefined") {

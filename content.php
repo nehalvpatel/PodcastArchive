@@ -10,7 +10,20 @@
 			
 			if (strpos($id, $domain) !== FALSE) {
 				$id = str_replace($domain . "episode/", "", $id);
-				$id = $Podcast->getPrefix() . "_" . $Podcast->padEpisodeNumber($id);
+				
+				if (strpos($Podcast->getPrefix(), $id) === FALSE) {
+					if (is_numeric($id)) {
+						$id = $Podcast->getPrefix() . "_" . $Podcast->padEpisodeNumber($id);
+					}
+				} else {
+					$id = $Podcast->getPrefix() . "_" . $Podcast->padEpisodeNumber($id);
+				}
+			}
+			
+			$cache = true;
+			if ($id == "random") {
+				$id = $Podcast->getRandomEpisode()["Identifier"];
+				$cache = false;
 			}
 			
 			$episode = new Episode($con);
@@ -25,6 +38,8 @@
 			$episode_data["Reddit"] = $episode->getReddit();
 			$episode_data["YouTube"] = $episode->getYouTube();
 			$episode_data["YouTubeLength"] = $episode->getYouTubeLength();
+			$episode_data["Cache"] = $cache;
+			$episode_data["Link"] = $domain . "episode/" . $episode->getNumber();
 			
 			$hosts = json_decode($episode->getHosts(), true);
 			foreach ($hosts as $host_id) {
