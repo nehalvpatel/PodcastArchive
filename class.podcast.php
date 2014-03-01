@@ -311,6 +311,20 @@
 			return $people;
 		}
 		
+		public function getDevelopers() {
+			$developers_query = $this->con->prepare("SELECT `ID` FROM `admins` WHERE `Type` = '0'");
+			$developers_query->execute();
+			
+			return $developers_query->fetchAll();
+		}
+		
+		public function getContributors() {
+			$contributors_query = $this->con->prepare("SELECT `ID` FROM `admins` WHERE `Type` = '1'");
+			$contributors_query->execute();
+			
+			return $contributors_query->fetchAll();
+		}
+		
 		public function parseFeed($feed) {
 			$xml = simplexml_load_string($feed);
 			

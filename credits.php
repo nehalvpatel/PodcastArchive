@@ -47,21 +47,27 @@
 				<div class="section">
 					<h3>Developers</h3>
 					<ul>
-						<li>Nehal Patel, for his amazing website development and engineering skills, knowledge and abilities.</li>
-						<li>PoweredMinecart, for his great work in user interface, design and timelines.</li>
+<?php
+	foreach ($Podcast->getDevelopers() as $developer_id) {
+		$developer = new Author($con, $developer_id["ID"]);
+?>
+						<li><a href="<?php echo $developer->getDisplayLink(); ?>"><?php echo $developer->getDisplayName(); ?></a>, <?php echo $developer->getPraise(); ?>.</li>
+<?php
+	}
+?>
 					</ul>
 				</div>
 				<div class="section">
 					<h3>Contributors</h3>
 					<ul>
-						<li>ThePKAHistorian, for his superior work ethic and timelining work.</li>
-						<li>IrishDelta, for his superior work ethic and timelining work.</li>
-						<li>gotmilk55, for his timelining work.</li>
-						<li>Shizzable, for his help in data entry and timelining work.</li>
-						<li>BandWagonEffect, for his timelining work.</li>
-						<li>Spacemoses, for his timelining work.</li>
-						<li>Minimee321, for his timelining work.</li>
-						<li>mynewemporer, for his timelining work.</li>
+<?php
+	foreach ($Podcast->getContributors() as $contributor_id) {
+		$contributor = new Author($con, $contributor_id["ID"]);
+?>
+						<li><a href="<?php echo $contributor->getDisplayLink(); ?>"><?php echo $contributor->getDisplayName(); ?></a>, <?php echo $contributor->getPraise(); ?>.</li>
+<?php
+	}
+?>
 					</ul>
 				</div>
 <?php include_once("templates/footer.php"); ?>

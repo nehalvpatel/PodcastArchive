@@ -175,6 +175,10 @@ nav ul li a:hover {
 	padding-left: 30px;
 	list-style-type: square;
 }
+.section li a {
+	color: white;
+	font-weight: bold;
+}
 .item {
 	display: inline-block;
 	margin: 0 10px 10px 0;

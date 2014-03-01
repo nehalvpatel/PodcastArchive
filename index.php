@@ -63,6 +63,10 @@
 		$sponsors[] = $sponsor_profile;
 	}
 	
+	if ($current_episode->getTimelineAuthor() != "0") {
+		$author = new Author($con, $current_episode->getTimelineAuthor());
+	}
+	
 	if (isset($_SERVER["HTTP_USER_AGENT"]) && (strpos($_SERVER["HTTP_USER_AGENT"], "MSIE") !== false)) header("X-UA-Compatible: IE=edge,chrome=1");
 	
 ?>
@@ -182,7 +186,7 @@
 				<div class="info">
 					<span class="published" title="Date Published"><i class="icon-time"></i><small><time datetime="<?php echo $current_episode->getDate(); ?>"><?php echo date("F d, Y", strtotime($current_episode->getDate())); ?></time></small></span>
 					<?php if ($current_episode->getReddit() != "") { ?><a class="comments" title="Discussion Comments" href="http://www.reddit.com/comments/<?php echo $current_episode->getReddit(); ?>"><i class="icon-comments"></i><small id="comments" data-reddit="<?php echo $current_episode->getReddit(); ?>">Comments</small></a><?php echo PHP_EOL; } ?>
-					<?php if ($current_episode->getTimelineAuthor() != "") { ?><a class="author" title="Timeline Author" href="<?php echo $current_episode->getTimelineAuthorLink(); ?>"><i class="icon-user"></i><small><?php echo $current_episode->getTimelineAuthor(); ?></small></a><?php } ?>
+					<?php if ($current_episode->getTimelineAuthor() != "0") { ?><a class="author" title="Timeline Author" href="<?php echo $author->getDisplayLink(); ?>"><i class="icon-user"></i><small><?php echo $author->getDisplayName(); ?></small></a><?php } ?>
 				</div>
 				<div id="rock-hardplace" class="clear"></div>
 				<div id="video">

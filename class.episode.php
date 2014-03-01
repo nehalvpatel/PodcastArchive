@@ -227,19 +227,11 @@
 		}
 		
 		public function getTimelineAuthor() {
-			return $this->episode_data["Timeline Author"];
+			return $this->episode_data["TimelineAuthor"];
 		}
 		
 		public function setTimelineAuthor($timelineauthor) {
-			return $this->updateValue("Timline Author", $timelineauthor);
-		}
-		
-		public function getTimelineAuthorLink() {
-			return $this->episode_data["Timeline Author Link"];
-		}
-		
-		public function setTimelineAuthorLink($timelineauthorlink) {
-			return $this->updateValue("Timline Author Link", $timelineauthorlink);
+			return $this->updateValue("TimelineAuthor", $timelineauthor);
 		}
 		
 		public function getTimestamps() {

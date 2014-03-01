@@ -1,6 +1,6 @@
 <?php
 	require_once("config.php");
-	$query = $con->query("SELECT `Identifier`, `Number`, `Youtube` FROM `episodes` ORDER BY `Identifier` DESC");
+	$query = $con->query("SELECT `Identifier`, `Number`, `YouTube` FROM `episodes` ORDER BY `Identifier` DESC");
 	$query->execute();
 	$episodes = $query->fetchAll();
 	
