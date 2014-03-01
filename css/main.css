@@ -268,7 +268,7 @@ nav ul li a:hover {
 	margin-top: 5px;
 }
 .video-comments {
-	margin-left: 5px;
+	float: right;
 }
 #loader {
 	width: 100%;
