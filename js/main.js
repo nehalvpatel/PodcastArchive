@@ -55,13 +55,13 @@ function getQueryVariable(variable, query_url) {
 }
 
 // download data for new episode or use cache if possible
-function loadContent(url) {
+function loadContent(url, back_forward) {
 	$("#loader").show();
 	
 	var search_timestamp = getQueryVariable("timestamp", url);
 	
 	if (cached_data.hasOwnProperty(url) == 1) {
-		updateContent(cached_data[url], search_timestamp);
+		updateContent(cached_data[url], search_timestamp, back_forward);
 	} else {
 		$.ajax({
 			url: domain + "content.php",
@@ -73,7 +73,7 @@ function loadContent(url) {
 					cached_data[url] = content;
 				}
 				
-				updateContent(content, search_timestamp);
+				updateContent(content, search_timestamp, back_forward);
 			},
 			error: function(xhr, textStatus, error) {
 				window.location.href = url;
@@ -83,7 +83,7 @@ function loadContent(url) {
 }
 
 // replace old episode data with current episode data
-function updateContent(episode_data, search_timestamp) {
+function updateContent(episode_data, search_timestamp, back_forward) {
 	// get current episode
 	var $current_episode = $("[data-episode='" + episode_data.Identifier + "']");
 	
@@ -215,10 +215,12 @@ function updateContent(episode_data, search_timestamp) {
 	// add page to history and update page title
 	document.title = "Episode #" + episode_data.Number + " \u00B7 " + site_title;
 	
-	if (search_timestamp) {
-		history.pushState(null, null, episode_data.Link + "?timestamp=" + search_timestamp);
-	} else {
-		history.pushState(null, null, episode_data.Link);
+	if (!back_forward) {
+		if (search_timestamp) {
+			history.pushState(null, null, episode_data.Link + "?timestamp=" + search_timestamp);
+		} else {
+			history.pushState(null, null, episode_data.Link);
+		}
 	}
 	
 	// hide loader
@@ -296,13 +298,13 @@ function onPlayerReady() {
 		}
 	}
 	
-	// check if pushState is available
-	var hasPushstate = !!(window.history && history.pushState);
-	
 	if ($("body").attr("data-type") == "Episode") {
-		// episode click interceptor
-		$(document).on("click", "nav a", function(e) {
-			if (hasPushstate) {
+		var first_load = true;
+		
+		// check if pushState is available
+		if (!!(window.history && history.pushState)) {
+			// episode click interceptor
+			$(document).on("click", "nav a", function(e) {
 				// cancel navigation
 				e.preventDefault();
 				
@@ -313,14 +315,18 @@ function onPlayerReady() {
 					_gaq.push(["_trackPageview", "/" + href.replace(domain, "")]);
 				}
 				
-				loadContent(href);
-			}
-		});
-		
-		// add popstate listener to catch back and forward navigation
-		if (hasPushstate) {
+				loadContent(href, false);
+				
+				// change the fact that this is not the original page load
+				first_load = false;
+			});
+			
+			// add popstate listener to catch back and forward navigation
 			window.addEventListener("popstate", function() {
-				loadContent(location.href);
+				// only do something if it's not the first page load
+				if (!first_load) {
+					loadContent(location.href, true);
+				}
 			});
 		}
 	}
