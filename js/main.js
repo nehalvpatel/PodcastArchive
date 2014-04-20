@@ -161,8 +161,7 @@ function updateContent(episode_data, search_timestamp, back_forward) {
 	// update timestamp table if possible
 	tryDelete("#timeline-vertical");
 	if ((episode_data.Timeline).hasOwnProperty("Timestamps") == 1) {
-		var $timeline_vertical = $("<div>", {"id": "timeline-vertical", "class": "section"});
-		var $table = $("<table>", {"id": "timeline-table"});
+		var $timeline_vertical = $("<table>", {"id": "timeline-vertical", "class": "section"});
 		var $thead = $("<thead>");
 		var $head_row = $("<tr>");
 		var $time_column = $("<th>").text("Time");
@@ -170,16 +169,18 @@ function updateContent(episode_data, search_timestamp, back_forward) {
 		$head_row.append($time_column);
 		$head_row.append($event_column);
 		$thead.append($head_row);
-		$table.append($thead);
+		$timeline_vertical.append($thead);
 		
 		var $tbody = $("<tbody>");
 		$.each(episode_data.Timeline.Timestamps, function(timestamp_id, timestamp_data) {
 			var $body_row = $("<tr>");
 			var $timestamp = $("<td>", {"class": "timestamp"});
 			var $timelink = $("<a>", {"class": "timelink", "href": episode_data.Link + "?timestamp=" + timestamp_data.Begin, "data-begin": timestamp_data.Begin, "data-end": timestamp_data.End}).text(timestamp_data.HMS);
-			var $event = $("<td>", {"class": "event"}).text(timestamp_data.Value);
+			var $event = $("<td>", {"class": "event"});
 			if (timestamp_data.URL !== "") {
-				$event.append($("<a>", {"target": "_blank", "href": timestamp_data.URL}).append($("<i>", {"class": "icon-external-link"})));
+				$event.append($("<a>", {"target": "_blank", "href": timestamp_data.URL}).text(timestamp_data.Value));
+			} else {
+				$event.text(timestamp_data.Value);
 			}
 			$timestamp.append($timelink);
 			$body_row.append($timestamp);
@@ -187,8 +188,7 @@ function updateContent(episode_data, search_timestamp, back_forward) {
 			$tbody.append($body_row);
 		});
 		
-		$table.append($tbody);
-		$timeline_vertical.append($table);
+		$timeline_vertical.append($tbody);
 		
 		$("#footer-links").before($timeline_vertical);
 	}

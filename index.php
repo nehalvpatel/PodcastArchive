@@ -259,30 +259,28 @@
 ?>
 					</div>
 				</div>
-				<div id="timeline-vertical" class="section">
-					<table id="timeline-table">
-						<thead>
-							<tr>
-								<th>Time</th>
-								<th>Event</th>
-							</tr>
-						</thead>
-						<tbody>
+				<table id="timeline-vertical" class="section">
+					<thead>
+						<tr>
+							<th>Time</th>
+							<th>Event</th>
+						</tr>
+					</thead>
+					<tbody>
 <?php
 		
 			foreach ($timestamps as $timestamp) {
 ?>
-							<tr>
-								<td class="timestamp"><a class="timelink" href="<?php echo $domain . "episode/" . $current_episode->getNumber() . "?timestamp=" . $timestamp["Begin"]; ?>" data-begin="<?php echo $timestamp["Begin"]; ?>" data-end="<?php echo $timestamp["End"]; ?>"><?php echo $timestamp["HMS"]; ?></a></td>
-								<td class="event"><?php echo $timestamp["Value"]; ?><?php if ($timestamp["URL"] != "") { ?><a target="_blank" href="<?php echo $timestamp["URL"]; ?>"><i class="icon-external-link"></i></a><?php } ?></td>
-							</tr>
+						<tr>
+							<td class="timestamp"><a class="timelink" href="<?php echo $domain . "episode/" . $current_episode->getNumber() . "?timestamp=" . $timestamp["Begin"]; ?>" data-begin="<?php echo $timestamp["Begin"]; ?>" data-end="<?php echo $timestamp["End"]; ?>"><?php echo $timestamp["HMS"]; ?></a></td>
+							<td class="event"><?php if ($timestamp["URL"] != "") { ?><a target="_blank" href="<?php echo $timestamp["URL"]; ?>"><?php echo $timestamp["Value"]; ?></a><?php } else { echo $timestamp["Value"]; } ?></td>
+						</tr>
 <?php
 			}
 		
 ?>
-						</tbody>
-					</table>
-				</div>
+					</tbody>
+				</table>
 <?php
 		}
 		
