@@ -190,7 +190,7 @@
 				</div>
 				<div id="rock-hardplace" class="clear"></div>
 				<div id="video">
-					<iframe src="//www.youtube.com/embed/<?php echo $current_episode->getYouTube(); ?>?enablejsapi=1&amp;start=<?php if (isset($_GET["timestamp"])) { echo $_GET["timestamp"]; } ?>" allowfullscreen id="player"></iframe>
+					<iframe src="https://www.youtube.com/embed/<?php echo $current_episode->getYouTube(); ?>?enablejsapi=1&amp;start=<?php if (isset($_GET["timestamp"])) { echo $_GET["timestamp"]; } ?>" allowfullscreen id="player"></iframe>
 				</div>
 				<div id="hosts" class="section items">
 					<h4 class="section-header">Hosts</h4>
