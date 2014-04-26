@@ -67,6 +67,11 @@
 		$author = new Author($con, $current_episode->getTimelineAuthor());
 	}
 	
+	$reviews = array();
+	foreach ($current_episode->getReviews() as $review) {
+		$reviews[$review["person"]] = $review["review"];
+	}
+	
 	if (isset($_SERVER["HTTP_USER_AGENT"]) && (strpos($_SERVER["HTTP_USER_AGENT"], "MSIE") !== false)) header("X-UA-Compatible: IE=edge,chrome=1");
 	
 ?>
@@ -193,48 +198,45 @@
 				<div id="video">
 					<iframe src="https://www.youtube.com/embed/<?php echo $current_episode->getYouTube(); ?>?enablejsapi=1&amp;start=<?php if (isset($_GET["timestamp"])) { echo $_GET["timestamp"]; } ?>" allowfullscreen id="player"></iframe>
 				</div>
-				<div id="hosts" class="section items">
-					<h4 class="section-header">Hosts</h4>
+				<div id="people" class="section items">
+					<h4 class="section-header">People</h4>
+					
+<?php foreach ($hosts as $host) { ?>
+					<div class="person<?php echo (isset($reviews[$host->getID()])) ? "_large" : null; ?>">
+						<a class="item" target="_blank" href="<?php echo $domain . "person/" . $host->getID(); ?>">
+							<img alt="<?php echo $host->getName(); ?>" title="<?php echo $host->getName(); ?>" src="<?php echo $domain . "img/people/" . $host->getID(); ?>.png">
+						</a>
+						<?php echo (isset($reviews[$host->getID()])) ? "<p>".$reviews[$host->getID()]."</p>" : null; ?>
+					</div>
 <?php
-
-	foreach ($hosts as $host) {
-?><a class="item" target="_blank" href="<?php echo $domain . "person/" . $host->getID(); ?>"><img alt="<?php echo $host->getName(); ?>" title="<?php echo $host->getName(); ?>" src="<?php echo $domain . "img/people/" . $host->getID(); ?>.png"></a><?php
 	}
-	
-?>
-				</div>
-<?php
 	
 	if (count($guests) > 0) {
-?>
-				<div id="guests" class="section items">
-					<h4 class="section-header">Guests</h4>
-<?php
+		foreach ($guests as $guest) { ?>
+					<div class="person<?php echo (isset($reviews[$guest->getID()])) ? "_large" : null; ?>">
+						<a class="item" target="_blank" href="<?php echo $domain . "person/" . $guest->getID(); ?>">
+							<img alt="<?php echo $guest->getName(); ?>" title="<?php echo $guest->getName(); ?>" src="<?php echo $domain . "img/people/" . $guest->getID(); ?>.png">
+						</a>
+						<?php echo (isset($reviews[$guest->getID()])) ? "<p>".$reviews[$guest->getID()]."</p>" : null; ?>
+					</div>
+<?php		
+		}
 
-	foreach ($guests as $guest) {
-?><a class="item" target="_blank" href="<?php echo $domain . "person/" . $guest->getID(); ?>"><img alt="<?php echo $guest->getName(); ?>" title="<?php echo $guest->getName(); ?>" src="<?php echo $domain . "img/people/" . $guest->getID(); ?>.png"></a><?php		
-	}
-
-?>
-				</div>
-<?php
 	}
 	
 	if (count($sponsors) > 0) {
-?>
-				<div id="sponsors" class="section items">
-					<h4 class="section-header">Sponsors</h4>
-<?php
-
-		foreach ($sponsors as $sponsor) {
-?><a class="item" target="_blank" href="<?php echo $domain . "person/" . $sponsor->getID(); ?>"><img alt="<?php echo $sponsor->getName(); ?>" title="<?php echo $sponsor->getName(); ?>" src="<?php echo $domain . "img/people/" . $sponsor->getID(); ?>.png"></a><?php		
+		foreach ($sponsors as $sponsor) { ?>
+					<div class="person<?php echo (isset($reviews[$sponsor->getID()])) ? "_large" : null; ?>">
+						<a class="item" target="_blank" href="<?php echo $domain . "person/" . $sponsor->getID(); ?>">
+							<img alt="<?php echo $sponsor->getName(); ?>" title="<?php echo $sponsor->getName(); ?>" src="<?php echo $domain . "img/people/" . $sponsor->getID(); ?>.png">
+						</a>
+						<?php echo (isset($reviews[$sponsor->getID()])) ? "<p>".$reviews[$sponsor->getID()]."</p>" : null; ?>
+					</div>
+<?php	
 		}
-
+	}
 ?>
 				</div>
-<?php
-		}
-?>
 				<div id="timeline-clear" class="clear"></div>
 <?php
 		$timestamps = $current_episode->getTimestamps();

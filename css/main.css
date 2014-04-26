@@ -197,12 +197,25 @@ nav ul li a:hover {
 	max-width: 50px;
 	padding: 4px;
 }
-#image {
-	max-height: 100%;
-	padding: 10px;
+.person{
+	float: left;
+}
+.person_large{
+	height: 100px;
+	width: 250px;
 	background: #333;
 	float: left;
-	text-align: center;
+	margin: 0 10px 10px 0;
+}
+#image {
+	max-height: 100%;
+	text-align: center;	
+	display: inline;
+}
+.person_large p{
+	display: inline-block;
+	padding: 5px 0;
+	font-size: 0.8em;
 }
 #person-image {
 	max-width: 100%;

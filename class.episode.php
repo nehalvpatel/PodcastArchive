@@ -130,6 +130,16 @@
 			}
 		}
 		
+		public function getReviews() {
+			$query = $this->con->prepare("SELECT * FROM `reviews` WHERE `episode` = :episode");
+			$query->execute(
+				array(
+					"episode" => $this->episode_data["Identifier"]
+				)
+			);
+			return $query->fetchAll();
+		}
+		
 		public function getIdentifier() {
 			return $this->episode_data["Identifier"];
 		}
