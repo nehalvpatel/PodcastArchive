@@ -1,0 +1,40 @@
+{
+    "name": "painkilleralready/painkilleralready",
+    "description": "A website for the organisation and archivisation of episodes of the Painkiller Already podcast.",
+    "keywords": ["pka", "podcast", "painkiller already"],
+    "homepage": "https://github.com/PainkillerAlready/PainkillerAlready",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nehal Patel",
+            "email": "nehal@itspatel.com",
+            "homepage": "http://www.itspatel.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Dean Wunder",
+            "email": "deanwunder@gmail.com",
+            "homepage": "http://www.reddit.com/user/PoweredMinecart",
+            "role": "Developer"
+        }
+    ],
+
+    "minimum-stability": "stable",
+
+    "require": {
+        "php": ">=5.5.0",
+        "bcosca/fatfree": "dev-master",
+        "nehalvpatel/tripod": "dev-master"
+    },
+
+    "require-dev": {
+        "squizlabs/php_codesniffer": "1.*"
+    },
+
+    "autoload": {
+        "psr-0": {
+            "PainkillerAlready\\": "src/"
+        }
+    }
+}

@@ -64,7 +64,7 @@ function loadContent(url, back_forward) {
 		updateContent(cached_data[url], search_timestamp, back_forward);
 	} else {
 		$.ajax({
-			url: domain + "content.php",
+			url: domain + "content",
 			dataType: "json",
 			data: {id: cleanURL(url)},
 			async: true,
@@ -298,7 +298,7 @@ function onPlayerReady() {
 		}
 	}
 	
-	if ($("body").attr("data-type") == "Episode") {
+	if ($("body").attr("data-type") == "episode") {
 		var first_load = true;
 		
 		// check if pushState is available
@@ -431,7 +431,7 @@ $(document).ready(function() {
 					$("#search-error").hide();
 					
 					$.ajax({
-						url: domain + "search.php",
+						url: domain + "search",
 						dataType: "json",
 						data: {"query": search_value},
 						async: true,

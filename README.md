@@ -1,1 +1,0 @@
-Remove the .sample extension from mysql.php and update the username and password

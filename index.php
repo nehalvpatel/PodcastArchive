@@ -1,291 +1,342 @@
 <?php
 
-	require_once("config.php");
-	
-	if ((isset($_GET["episode"])) && (is_numeric($_GET["episode"]))) {
-		try {
-			$current_episode = new Episode($con);
-			$current_episode->initWithNumber($Podcast->trimEpisodeNumber($_GET["episode"]));
-			$canonical = $domain . "episode/" . $current_episode->getNumber();
-			$source = "get";
-		} catch (Exception $e) {
-			$current_episode = new Episode($con);
-			$current_episode->initWithIdentifier($Podcast->getLatestEpisode()["Identifier"]);
-			$canonical = $domain;
-			$source = "latest";
-		}
-	} elseif ((isset($_GET["episode"])) && ($_GET["episode"] == "random")) {
-		header("Location: " . $domain . "episode/" . $Podcast->getRandomEpisode()["Number"]);
-	} else {
-		$current_episode = new Episode($con);
-		$current_episode->initWithIdentifier($Podcast->getLatestEpisode()["Identifier"]);
-		$canonical = $domain;
-		$source = "latest";
-	}
-	
-	$hosts = array();
-	$hosts_list = array();
-	foreach (json_decode($current_episode->getHosts(), true) as $host) {
-		$host_profile = new Person($con);
-		$host_profile->initWithID($host);
-		
-		$hosts[] = $host_profile;
-		$hosts_list[] = $host_profile->getName();
-	}
-	$hosts_list = join(", ", $hosts_list);
-	
-	$guests = array();
-	$guests_list = array();
-	foreach (json_decode($current_episode->getGuests(), true) as $guest) {
-		$guest_profile = new Person($con);
-		$guest_profile->initWithID($guest);
-		
-		$guests[] = $guest_profile;
-		$guests_list[] = $guest_profile->getName();
-	}
-	
-	if (count($guests_list) == 0) {
-		$guests_list = "Nobody";
-	} else {
-		if (count($guests_list) > 2) {
-			$guests_list[count($guests_list) - 1] = "and " . $guests_list[count($guests_list) - 1];
-			$guests_list = join(", ", $guests_list);
-		} else {
-			$guests_list = join(" and ", $guests_list);
-		}
-	}
-	
-	$sponsors = array();
-	foreach (json_decode($current_episode->getSponsors(), true) as $sponsor) {
-		$sponsor_profile = new Person($con);
-		$sponsor_profile->initWithID($sponsor);
-		
-		$sponsors[] = $sponsor_profile;
-	}
-	
-	if ($current_episode->getTimelineAuthor() != "0") {
-		$author = new Author($con, $current_episode->getTimelineAuthor());
-	}
-	
-	if (isset($_SERVER["HTTP_USER_AGENT"]) && (strpos($_SERVER["HTTP_USER_AGENT"], "MSIE") !== false)) header("X-UA-Compatible: IE=edge,chrome=1");
-	
-?>
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<!-- Meta -->
-		<meta charset="utf-8">
-		<meta name="apple-mobile-web-app-title" content="<?php echo $Podcast->getTitle(); ?>">
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<meta name="description" content="<?php if ($source == "latest") { echo $Podcast->getDescription(); } else { echo "Guests: " . $guests_list; } ?>">
-		<link rel="canonical" href="<?php echo $canonical; ?>">
-		<link rel="alternate" type="application/rss+xml" title="<?php echo $Podcast->getName(); ?>" href="http://feeds.feedburner.com/<?php echo $Podcast->getFeedburner(); ?>">
-		<link rel="search" type="application/opensearchdescription+xml" href="<?php echo $domain; ?>opensearchdescription.xml" title="<?php echo $Podcast->getTitle(); ?>">
-		<title><?php if($source == "get") { echo "Episode #" . $current_episode->getNumber() . " &middot; "; } ?><?php echo $Podcast->getTitle(); ?></title>
-		
-		<!-- Icons -->
-		<link rel="apple-touch-icon" sizes="57x57" href="<?php echo $domain; ?>apple-touch-icon-57x57.png">
-		<link rel="apple-touch-icon" sizes="114x114" href="<?php echo $domain; ?>apple-touch-icon-114x114.png">
-		<link rel="apple-touch-icon" sizes="72x72" href="<?php echo $domain; ?>apple-touch-icon-72x72.png">
-		<link rel="apple-touch-icon" sizes="144x144" href="<?php echo $domain; ?>apple-touch-icon-144x144.png">
-		<link rel="apple-touch-icon" sizes="60x60" href="<?php echo $domain; ?>apple-touch-icon-60x60.png">
-		<link rel="apple-touch-icon" sizes="120x120" href="<?php echo $domain; ?>apple-touch-icon-120x120.png">
-		<link rel="apple-touch-icon" sizes="76x76" href="<?php echo $domain; ?>apple-touch-icon-76x76.png">
-		<link rel="apple-touch-icon" sizes="152x152" href="<?php echo $domain; ?>apple-touch-icon-152x152.png">
-		<link rel="icon" sizes="196x196" type="image/png" href="<?php echo $domain; ?>favicon-196x196.png">
-		<link rel="icon" sizes="160x160" type="image/png" href="<?php echo $domain; ?>favicon-160x160.png">
-		<link rel="icon" sizes="96x96" type="image/png" href="<?php echo $domain; ?>favicon-96x96.png">
-		<link rel="icon" sizes="32x32" type="image/png" href="<?php echo $domain; ?>favicon-32x32.png">
-		<link rel="icon" sizes="16x16" type="image/png" href="<?php echo $domain; ?>favicon-16x16.png">
-		<meta name="msapplication-TileColor" content="#ffffff">
-		<meta name="msapplication-TileImage" content="<?php echo $domain; ?>mstile-144x144.png">
-		
-		<!-- Google+ -->
-		<link rel="publisher" href="https://plus.google.com/107397414095793132493">
-		
-		<!-- Open Graph -->
-		<meta property="og:image" content="<?php echo $domain; ?>img/pka.png">
-		<meta property="og:site_name" content="<?php echo $Podcast->getTitle(); ?>">
+require_once("vendor/autoload.php");
+require_once("vendor/bcosca/fatfree/lib/base.php");
 
-<?php
-		if ($source == "get") {
-?>
-		<meta property="og:type" content="music.song">
-		<meta property="og:title" content="<?php echo $Podcast->getName(); ?> #<?php echo $current_episode->getNumber(); ?>">
-		<meta property="og:description" content="Guests: <?php echo $guests_list; ?>">
-		<meta property="og:url" content="<?php echo $domain; ?>episode/<?php echo $current_episode->getNumber(); ?>">
-		<meta property="og:audio" content="http://media.blubrry.com/painkilleralready/archive.org/download/<?php echo $current_episode->getIdentifier(); ?>/<?php echo str_replace("_", "-", strtolower($current_episode->getIdentifier())); ?>.mp3">
-		<meta property="og:audio:type" content="audio/vnd.facebook.bridge">
-		<meta property="music:album" content="<?php echo $domain; ?>">
-		<meta property="music:album:track" content="<?php echo $current_episode->getNumber(); ?>">
-		<meta property="music:duration" content="<?php echo $current_episode->getLength(); ?>">
-<?php
-			foreach ($hosts as $host) {
-?>
-		<meta property="music:musician" content="<?php echo $domain; ?>person/<?php echo $host->getID(); ?>">
-<?php
-			}
-		
-			foreach ($guests as $guest) {
-?>
-		<meta property="music:musician" content="<?php echo $domain; ?>person/<?php echo $guest->getID(); ?>">
-<?php
-			}
-		} else {
-?>
-		<meta property="og:type" content="music.album">
-		<meta property="og:title" content="<?php echo $Podcast->getName(); ?>">
-		<meta property="og:description" content="<?php echo $Podcast->getDescription(); ?>">
-		<meta property="og:url" content="<?php echo $domain; ?>">
-		<meta property="music:release_date" content="2010-04-19">
-<?php
-			foreach ($Podcast->getEpisodes() as $episode) {
-?>
-		<meta property="music:song" content="<?php echo $domain; ?>episode/<?php echo $episode["Number"]; ?>">
-		<meta property="music:song:disc" content="1">
-		<meta property="music:song:track" content="<?php echo $episode["Number"]; ?>"> 
-<?php
-			}
-		}
-?>
-		
-		<!-- Twitter -->
-		<meta property="twitter:site" content="@PKA_Archive">
-		<meta property="twitter:creator" content="@nehalvpatel">
-		<meta property="twitter:domain" content="<?php echo $base_domain; ?>">
-<?php
+F3::set("DB", new DB\SQL("mysql:host=" . apache_getenv("DB_HOST") . ";dbname=" . apache_getenv("DB_NAME") . ";charset=utf8", apache_getenv("DB_USER"), apache_getenv("DB_PASS")));
 
-		if ($source == "get") {
-?>
-		<meta property="twitter:card" content="player">
-		<meta property="twitter:title" content="<?php echo $Podcast->getName(); ?> #<?php echo $current_episode->getNumber(); ?>">
-		<meta property="twitter:description" content="Guests: <?php echo $guests_list; ?>">
-		<meta property="twitter:image:src" content="http://i1.ytimg.com/vi/<?php echo $current_episode->getYouTube(); ?>/hqdefault.jpg">
-		<meta property="twitter:player" content="https://www.youtube.com/embed/<?php echo $current_episode->getYouTube(); ?>">
-		<meta property="twitter:player:height" content="1280">
-		<meta property="twitter:player:width" content="720">
-<?php
-		} else {
-?>
-		<meta property="twitter:card" content="summary">
-		<meta property="twitter:title" content="<?php echo $Podcast->getName(); ?>">
-		<meta property="twitter:description" content="<?php echo $Podcast->getDescription(); ?>">
-		<meta property="twitter:image:src" content="<?php echo $domain; ?>img/pka.png">
-<?php
-		}
-		
-?>
-		
-		<!-- CSS -->
-		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css?ver=<?php echo $commit_count; ?>">
-        <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans:400,700">
-		<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/3.0.2/css/font-awesome.min.css">
-	</head>
-	<body data-type="Episode">
-<?php include_once("templates/header.php"); ?>
-				<h2><?php echo $Podcast->getName(); ?> #<?php echo $current_episode->getNumber(); ?></h2>
-				<div class="info">
-					<span class="published" title="Date Published"><i class="icon-time"></i><small><time datetime="<?php echo $current_episode->getDate(); ?>"><?php echo date("F d, Y", strtotime($current_episode->getDate())); ?></time></small></span>
-					<?php if ($current_episode->getReddit() != "") { ?><a class="comments" title="Discussion Comments" href="http://www.reddit.com/comments/<?php echo $current_episode->getReddit(); ?>"><i class="icon-comments"></i><small id="comments" data-reddit="<?php echo $current_episode->getReddit(); ?>">Comments</small></a><?php echo PHP_EOL; } ?>
-					<?php if ($current_episode->getTimelineAuthor() != "0") { ?><a class="author" title="Timeline Author" href="<?php echo $author->getDisplayLink(); ?>"><i class="icon-user"></i><small><?php echo $author->getDisplayName(); ?></small></a><?php } ?>
-				</div>
-				<div id="rock-hardplace" class="clear"></div>
-				<div id="video">
-					<iframe src="https://www.youtube.com/embed/<?php echo $current_episode->getYouTube(); ?>?enablejsapi=1&amp;start=<?php if (isset($_GET["timestamp"])) { echo $_GET["timestamp"]; } ?>" allowfullscreen id="player"></iframe>
-				</div>
-				<div id="hosts" class="section items">
-					<h4 class="section-header">Hosts</h4>
-<?php
+F3::set("Core", new \Tripod\Podcast(F3::get("DB")));
+F3::set("Utilities", new \Tripod\Utilities());
+F3::set("DEBUG", 3);
 
-	foreach ($hosts as $host) {
-?><a class="item" target="_blank" href="<?php echo $domain . "person/" . $host->getID(); ?>"><img alt="<?php echo $host->getName(); ?>" title="<?php echo $host->getName(); ?>" src="<?php echo $domain . "img/people/" . $host->getID(); ?>.png"></a><?php
-	}
-	
-?>
-				</div>
-<?php
-	
-	if (count($guests) > 0) {
-?>
-				<div id="guests" class="section items">
-					<h4 class="section-header">Guests</h4>
-<?php
+F3::get("Core")->setName("Painkiller Already");
+F3::get("Core")->setDescription("Four gamers discuss games, current events, and tell a few stories.");
+F3::get("Core")->setPrefix("PKA");
+F3::set("feedburner", "Painkiller_Already");
 
-	foreach ($guests as $guest) {
-?><a class="item" target="_blank" href="<?php echo $domain . "person/" . $guest->getID(); ?>"><img alt="<?php echo $guest->getName(); ?>" title="<?php echo $guest->getName(); ?>" src="<?php echo $domain . "img/people/" . $guest->getID(); ?>.png"></a><?php		
-	}
+F3::set("base_domain", F3::get("Utilities")->getBaseDomain());
+F3::set("commit_count", F3::get("Utilities")->getCommitCount());
+F3::set("description", F3::get("Core")->getDescription());
+F3::set("domain", F3::get("Utilities")->getDomain());
+F3::set("episodes", F3::get("Core")->getEpisodes());
+F3::set("people", F3::get("Core")->getPeople());
 
-?>
-				</div>
-<?php
-	}
-	
-	if (count($sponsors) > 0) {
-?>
-				<div id="sponsors" class="section items">
-					<h4 class="section-header">Sponsors</h4>
-<?php
+F3::set("gplus", "107397414095793132493");
+F3::set("twitter", "PKA_Archive");
+F3::set("creator", "nehalvpatel");
 
-		foreach ($sponsors as $sponsor) {
-?><a class="item" target="_blank" href="<?php echo $domain . "person/" . $sponsor->getID(); ?>"><img alt="<?php echo $sponsor->getName(); ?>" title="<?php echo $sponsor->getName(); ?>" src="<?php echo $domain . "img/people/" . $sponsor->getID(); ?>.png"></a><?php		
-		}
+// add 404 page
 
-?>
-				</div>
-<?php
-		}
-?>
-				<div id="timeline-clear" class="clear"></div>
-<?php
-		$timestamps = $current_episode->getTimestamps();
-		if (count($timestamps) > 0) {
-?>
-				<div id="timeline-horizontal" class="section">
-					<h4 class="section-header">Timeline</h4>
-					<div class="timeline">
-<?php
+F3::route("GET /",
+    function($f3) {
+        F3::set("type", "episode");
+        F3::set("current_episode", F3::get("episodes")[count(F3::get("episodes")) - 1]);
+        F3::set("canonical", F3::get("domain") . "episode/" . F3::get("current_episode")->getNumber());
+        F3::set("title", F3::get("Core")->getName());
+        F3::set("source", "latest");
+        
+        if (F3::get("current_episode")->getTimelined() === true) {
+            F3::set("timeline_author", F3::get("current_episode")->getTimelineAuthor());
+        }
+        
+        $template = new Template;
+        echo $template->render("views/base.tpl");
+    }
+, 60);
 
-			foreach ($timestamps as $timeline_key => $timeline_element) {
-?>
-						<a class="timelink" href="<?php echo $domain . "episode/" . $current_episode->getNumber() . "?timestamp=" . $timeline_element["Begin"]; ?>" data-begin="<?php echo $timeline_element["Begin"]; ?>" data-end="<?php echo $timeline_element["End"]; ?>">
-							<div class="topic" style="width: <?php echo $timeline_element["Width"]; ?>%">
-								<div class="tooltip<?php echo ($timeline_element["Begin"] > ($current_episode->getYouTubeLength()) / 2) ? " right" : null; ?>" id="<?php echo $timeline_key; ?>">
-									<div class="triangle"></div>
-									<span><?php echo $timeline_element["Value"]; ?></span>
-								</div>
-							</div>
-						</a>
-<?php
-			}
-?>
-					</div>
-				</div>
-				<table id="timeline-vertical" class="section">
-					<thead>
-						<tr>
-							<th>Time</th>
-							<th>Event</th>
-						</tr>
-					</thead>
-					<tbody>
-<?php
-		
-			foreach ($timestamps as $timestamp) {
-?>
-						<tr>
-							<td class="timestamp"><a class="timelink" href="<?php echo $domain . "episode/" . $current_episode->getNumber() . "?timestamp=" . $timestamp["Begin"]; ?>" data-begin="<?php echo $timestamp["Begin"]; ?>" data-end="<?php echo $timestamp["End"]; ?>"><?php echo $timestamp["HMS"]; ?></a></td>
-							<td class="event"><?php if ($timestamp["URL"] != "") { ?><a target="_blank" href="<?php echo $timestamp["URL"]; ?>"><?php echo $timestamp["Value"]; ?></a><?php } else { echo $timestamp["Value"]; } ?></td>
-						</tr>
-<?php
-			}
-		
-?>
-					</tbody>
-				</table>
-<?php
-		}
-		
-		include_once("templates/footer.php");
-?>
-	</body>
-</html>
+F3::route("GET /episode/@number",
+    function($f3, $params) {
+        F3::set("type", "episode");
+        
+        if ($params["number"] == "random") {
+            F3::set("current_episode", F3::get("episodes")[array_rand(F3::get("episodes"))]);
+            F3::reroute("/episode/" . F3::get("current_episode")->getNumber());
+        } else {
+            if (!is_numeric($params["number"])) {
+                $f3->error(404);
+            } else {
+                foreach (F3::get("episodes") as $episode) {
+                    if ($params["number"] == $episode->getNumber()) {
+                        F3::set("current_episode", $episode);
+                    }
+                }
+            }
+        }
+        
+        $guests = F3::get("current_episode")->getGuests();
+        if (count($guests) == 0) {
+            F3::set("guests_list", "Nobody");
+        } else {
+            if (count($guests) > 2) {
+                $guests[count($guests) - 1] = "and " . strval($guests[count($guests) - 1]);
+                F3::set("guests_list", join(", ", array_map("strval", $guests)));
+            } else {
+                F3::set("guests_list", join(" and ", array_map("strval", $guests)));
+            }
+        }
+        
+        if (F3::get("current_episode")->getTimelined() === true) {
+            F3::set("timeline_author", F3::get("current_episode")->getTimelineAuthor());
+        }
+        
+        F3::set("description", "Guests: " . F3::get("guests_list"));
+        F3::set("canonical", F3::get("domain") . "episode/" . F3::get("current_episode")->getNumber());
+        F3::set("title", "Episode #" . F3::get("current_episode")->getNumber() . " &middot; " . F3::get("Core")->getName());
+        F3::set("source", "get");
+        
+        $template = new Template;
+        echo $template->render("views/base.tpl");
+    }
+, 60);
+
+F3::route("GET /person/@number",
+    function($f3, $params) {
+        F3::set("type", "person");
+        
+        if ($params["number"] == "random") {
+            F3::set("current_person", F3::get("people")[array_rand(F3::get("people"))]);
+            F3::reroute("/person/" . F3::get("current_person")->getID());
+        } else {
+            if (!is_numeric($params["number"])) {
+                $f3->error(404);
+            } else {
+                foreach (F3::get("people") as $person) {
+                    if ($params["number"] == $person->getID()) {
+                        F3::set("current_person", $person);
+                    }
+                }
+            }
+        }
+        
+        $host_count = 0;
+        $guest_count = 0;
+        $sponsor_count = 0;
+        foreach (F3::get("episodes") as $episode) {
+            foreach ($episode->getHosts() as $host) {
+                if ($host->getID() == F3::get("current_person")->getID()) {
+                    $episode->setHighlighted(true);
+                    $host_count++;
+                }
+            }
+            
+            foreach ($episode->getGuests() as $guest) {
+                if ($guest->getID() == F3::get("current_person")->getID()) {
+                    $episode->setHighlighted(true);
+                    $guest_count++;
+                }
+            }
+            
+            foreach ($episode->getSponsors() as $sponsor) {
+                if ($sponsor->getID() == F3::get("current_person")->getID()) {
+                    $episode->setHighlighted(true);
+                    $sponsor_count++;
+                }
+            }
+        }
+        
+        F3::set("host_count", $host_count);
+        F3::set("guest_count", $guest_count);
+        F3::set("sponsor_count", $sponsor_count);
+        F3::set("recent_videos", F3::get("current_person")->getRecentYouTubeVideos());
+        F3::set("social_links", F3::get("current_person")->getSocialLinks());
+        
+        F3::set("description", F3::get("current_person")->getOverview());
+        F3::set("canonical", F3::get("domain") . "episode/" . F3::get("current_person")->getID());
+        F3::set("title", F3::get("current_person")->getName() . " &middot; " . F3::get("Core")->getName());
+        
+        $template = new Template;
+        echo $template->render("views/base.tpl");
+    }
+, 60);
+
+F3::route("GET /content",
+    function($f3) {
+        if (isset($_GET["id"])) {
+            $id = trim($_GET["id"]);
+
+            if (!empty($id)) {
+                $id = urldecode($id);
+
+                if (strpos($id, F3::get("domain")) !== FALSE) {
+                    $id = str_replace(F3::get("domain") . "episode/", "", $id);
+                    
+                    if (strpos(F3::get("Core")->getPrefix(), $id) === FALSE) {
+                        if (is_numeric($id)) {
+                            $id = F3::get("Core")->getPrefix() . "_" . F3::get("Utilities")->padEpisodeNumber($id);
+                        }
+                    } else {
+                        $id = F3::get("Core")->getPrefix() . "_" . F3::get("Utilities")->padEpisodeNumber($id);
+                    }
+                }
+                
+                $cache = true;
+                if ($id == "random") {
+                    $episode = F3::get("episodes")[array_rand(F3::get("episodes"))];
+                    $cache = false;
+                } else {
+                    $episode = new \Tripod\Episode($id, F3::get("DB"));
+                }
+                
+                $episode_data = array();
+
+                $episode_data["Identifier"] = $episode->getIdentifier();
+                $episode_data["Number"] = $episode->getNumber();
+                $episode_data["DateTime"] = $episode->getDate();
+                $episode_data["Date"] = date("F d, Y", strtotime($episode->getDate()));
+                $episode_data["Reddit"] = $episode->getReddit();
+                $episode_data["YouTube"] = $episode->getYouTube();
+                $episode_data["YouTubeLength"] = $episode->getYouTubeLength();
+                $episode_data["Cache"] = $cache;
+                $episode_data["Link"] = F3::get("domain") . "episode/" . $episode->getNumber();
+                
+                foreach ($episode->getHosts() as $host) {
+                    $host_data = array();
+                    $host_data["ID"] = $host->getID();
+                    $host_data["Name"] = $host->getName();
+                    $host_data["URL"] = $host->getURL();
+                    
+                    $episode_data["People"]["Hosts"][] = $host_data;
+                }
+                
+                foreach ($episode->getGuests() as $guest) {
+                    $guest_data = array();
+                    $guest_data["ID"] = $guest->getID();
+                    $guest_data["Name"] = $guest->getName();
+                    $guest_data["URL"] = $guest->getURL();
+                    
+                    $episode_data["People"]["Guests"][] = $guest_data;
+                }
+                
+                foreach ($episode->getSponsors() as $sponsor) {
+                    $sponsor_data = array();
+                    $sponsor_data["ID"] = $sponsor->getID();
+                    $sponsor_data["Name"] = $sponsor->getName();
+                    $sponsor_data["URL"] = $sponsor->getURL();
+                    
+                    $episode_data["People"]["Sponsors"][] = $sponsor_data;
+                }
+
+                $episode_data["Timeline"] = array();
+                if ($episode->getTimelined()) {
+                    $author = $episode->getTimelineAuthor();
+                    $episode_data["Timeline"]["Author"]["Name"] = $author->getDisplayName();
+                    $episode_data["Timeline"]["Author"]["Link"] = $author->getDisplayLink();
+                    
+                    $episode_data["Timeline"]["Timestamps"] = array();
+                    foreach ($episode->getTimestamps() as $timestamp) {
+                        $timestamp_data = array();
+                        $timestamp_data["HMS"] = $timestamp->getTime();
+                        $timestamp_data["Value"] = $timestamp->getValue();
+                        $timestamp_data["URL"] = $timestamp->getURL();
+                        $timestamp_data["Begin"] = $timestamp->getBegin();
+                        $timestamp_data["End"] = $timestamp->getEnd();
+                        $timestamp_data["Width"] = $timestamp->getWidth();
+                        
+                        $episode_data["Timeline"]["Timestamps"][] = $timestamp_data;
+                    }
+                }
+
+                echo json_encode($episode_data);
+            }
+        }
+    }
+, 60);
+
+F3::route("GET /search",
+    function($f3) {
+        if (!isset($_GET["query"])) {
+            echo json_encode(F3::get("Core")->getSearchResults(""));
+        } else {
+            echo json_encode(F3::get("Core")->getSearchResults($_GET["query"]));
+        }
+    }
+, 60);
+
+F3::route("GET /credits",
+    function($f3) {
+        F3::set("type", "credits");
+        F3::set("canonical", F3::get("domain") . "credits");
+        F3::set("title", "Developers and Contributors &middot; " . F3::get("Core")->getName());
+        
+        $developers = array();
+        $contributors = array();
+        foreach (F3::get("Core")->getAuthors() as $author) {
+            if ($author->getType() == "0") {
+                $developers[] = $author;
+            } else {
+                $contributors[] = $author;
+            }
+        }
+        F3::set("developers", $developers);
+        F3::set("contributors", $contributors);
+        
+        $template = new Template;
+        echo $template->render("views/base.tpl");
+    }
+, 60);
+
+F3::route("GET /feedback",
+    function($f3) {
+        F3::set("type", "feedback");
+        F3::set("canonical", F3::get("domain") . "feedback");
+        F3::set("title", "Feedback &middot; " . F3::get("Core")->getName());
+        
+        $template = new Template;
+        echo $template->render("views/base.tpl");
+    }
+, 60);
+
+F3::route("POST /feedback",
+    function($f3) {
+        F3::set("type", "feedback");
+        F3::set("canonical", F3::get("domain") . "feedback");
+        F3::set("title", "Feedback &middot; " . F3::get("Core")->getName());
+        
+        if ((strlen($_POST["issue"] > 100)) || (strlen($_POST["explanation"]) > 3000)) {
+            $errors[] = "Please make sure that your inputs aren't too large.";
+        }
+        
+        if (empty($errors)) {
+            $feedback_query = F3::get("DB")->prepare("INSERT INTO `feedback` (`issue`, `explanation`) VALUES (:issue, :explanation)");
+            $feedback_query->bindValue(":issue", $_POST["issue"]);
+            $feedback_query->bindValue(":explanation", $_POST["explanation"]);
+            $feedback_result = $feedback_query->execute();
+            
+            if ($feedback_result) {
+                F3::set("success", "Thank you, your feedback has been received and our administrators will now work to solve the problem shortly.");
+            } else {
+                $errors[] = "There was a MySQL error, please try again.";
+            }
+        }
+        
+        if (!empty($errors)) {
+            F3::set("errors", $errors);
+        }
+        
+        $template = new Template;
+        echo $template->render("views/base.tpl");
+    }
+);
+
+F3::route("GET /opensearchdescription.xml",
+    function($f3) {
+        $template = new Template;
+        echo $template->render("views/opensearchdescription.tpl", "application/xml");
+    }
+, 60);
+
+F3::route("GET /robots.txt",
+    function($f3) {
+        $template = new Template;
+        echo $template->render("views/robots.tpl", "text/plain");
+    }
+, 60);
+
+F3::route("GET /sitemap.xml",
+    function($f3) {
+        $template = new Template;
+        echo $template->render("views/sitemap.tpl", "application/xml");
+    }
+, 60);
+
+F3::run();
