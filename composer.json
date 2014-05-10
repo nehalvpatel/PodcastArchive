@@ -23,9 +23,10 @@
     "minimum-stability": "stable",
 
     "require": {
-        "php": ">=5.5.0",
+        "php": ">=5.4.0",
         "bcosca/fatfree": "dev-master",
-        "nehalvpatel/tripod": "dev-master"
+        "nehalvpatel/tripod": "dev-master",
+        "ircmaxell/password-compat": "dev-master"
     },
 
     "require-dev": {
