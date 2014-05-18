@@ -292,27 +292,43 @@ F3::route("POST /feedback",
         F3::set("canonical", F3::get("domain") . "feedback");
         F3::set("title", "Feedback &middot; " . F3::get("Core")->getName());
         
-        if ((strlen($_POST["issue"] > 100)) || (strlen($_POST["explanation"]) > 3000)) {
-            $errors[] = "Please make sure that your inputs aren't too large.";
-        }
-        
-        if (empty($errors)) {
-            $feedback_query = F3::get("DB")->prepare("INSERT INTO `feedback` (`issue`, `explanation`) VALUES (:issue, :explanation)");
-            $feedback_query->bindValue(":issue", $_POST["issue"]);
-            $feedback_query->bindValue(":explanation", $_POST["explanation"]);
-            $feedback_result = $feedback_query->execute();
-            
-            if ($feedback_result) {
-                F3::set("success", "Thank you, your feedback has been received and our administrators will now work to solve the problem shortly.");
-            } else {
-                $errors[] = "There was a MySQL error, please try again.";
-            }
-        }
-        
-        if (!empty($errors)) {
-            F3::set("errors", $errors);
-        }
-        
+		if (isset($_POST["issue"], $_POST["explanation"]) && !empty($_POST["issue"]) && !empty($_POST["explanation"])) {		
+			$issueTypes = array(
+				"timeline_typo",
+				"browser_rendering",
+				"website_content",
+				"other"
+			);
+			
+			if (!in_array($_POST["issue"], $issueTypes)) {
+				$errors[] = "Please select a valid issue type.";
+			}
+			
+			if (strlen($_POST["explanation"]) > 3000) {
+				$errors[] = "Please make sure that your explanation isn't too long.";
+			}
+			
+			if (empty($errors)) {
+				$feedback_query = F3::get("DB")->prepare("INSERT INTO `feedback` (`issue`, `explanation`) VALUES (:issue, :explanation)");
+				$feedback_query->bindValue(":issue", $_POST["issue"]);
+				$feedback_query->bindValue(":explanation", $_POST["explanation"]);
+				$feedback_result = $feedback_query->execute();
+				
+				if ($feedback_result) {
+					F3::set("success", "Thank you, your feedback has been received and our administrators will now work to solve the problem shortly.");
+				} else {
+					$errors[] = "There was a MySQL error, please try again.";
+				}
+			}					
+		}
+		else {
+			$errors[] = "Please make sure you selected an issue and filled out the explanation.";
+		}
+				
+		if (!empty($errors)) {
+			F3::set("errors", $errors);
+		}
+			
         $template = new Template;
         echo $template->render("views/base.tpl");
     }
