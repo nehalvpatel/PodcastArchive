@@ -25,7 +25,16 @@ F3::set("gplus", "107397414095793132493");
 F3::set("twitter", "PKA_Archive");
 F3::set("creator", "nehalvpatel");
 
-// add 404 page
+F3::set("ONERROR",
+	function ($f3) {
+		F3::set("canonical", F3::get("domain") . "404");
+		F3::set("title", "&middot; " . F3::get("Core")->getName());
+		F3::set("type", "Episode");
+		
+		$template = new Template;
+		echo $template->render("views/onerror.tpl");
+	}
+, 60);
 
 F3::route("GET /",
     function($f3) {
