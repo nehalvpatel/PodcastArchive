@@ -27,12 +27,12 @@ F3::set("creator", "nehalvpatel");
 
 F3::set("ONERROR",
 	function ($f3) {
-		F3::set("canonical", F3::get("domain") . "404");
-		F3::set("title", "&middot; " . F3::get("Core")->getName());
-		F3::set("type", "Episode");
+		F3::set("type", "error");
+		F3::set("canonical", F3::get("domain") . "error");
+		F3::set("title", F3::get("ERROR.code") . " &middot; " . F3::get("Core")->getName());
 		
 		$template = new Template;
-		echo $template->render("views/onerror.tpl");
+		echo $template->render("views/base.tpl");
 	}
 , 60);
 
