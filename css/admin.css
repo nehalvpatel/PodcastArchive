@@ -26,6 +26,9 @@ h2{
 	box-shadow: -4px -4px 12px 0px rgba(50, 50, 50, 0.5);
 	min-height: 300px;
 }
+#text {
+	margin: 10px 6px;
+}
 
 /* Navication Styles */
 #navigation {

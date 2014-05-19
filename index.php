@@ -364,4 +364,104 @@ F3::route("GET /sitemap.xml",
     }
 , 60);
 
+F3::route(
+	array(
+		"GET /admin",
+		"GET /admin.php"
+	),
+	function ($f3) {
+		session_start();
+		F3::set("page", "Login");
+		F3::set("title", "Admin Panel");
+		if (isset($_SESSION["admin"], $_SESSION["id"]) && $_SESSION["admin"] != null && (int)$_SESSION["id"] <= 0) {
+			F3::set("loggedIn", true);
+			header("Location: /admin/home");
+		}
+		else {
+			F3::set("loggedIn", false);
+		}
+		$errors = array();
+		
+		F3::set("errors", $errors);
+		$template = new Template;
+		echo $template->render("views/admin/base.tpl");
+	}
+, 60);
+
+F3::route("GET /admin/home",
+	function ($f3) {
+		session_start();
+		F3::set("page", "Home");
+		F3::set("title", "Admin Panel");		
+		$errors = array();
+		
+		if (isset($_SESSION["admin"], $_SESSION["id"]) && $_SESSION["admin"] != null && (int)$_SESSION["id"] > 0) {
+			F3::set("loggedIn", true);
+			
+			F3::set("type", "home");
+			F3::set("username", $_SESSION["admin"]);
+		}
+		else {
+			F3::set("loggedIn", false);
+			header("Location: /admin/login");
+		}
+		
+		F3::set("errors", $errors);
+		$template = new Template;
+		echo $template->render("views/admin/base.tpl");
+	}
+, 60);
+
+F3::route(
+	array(
+		"POST /admin/login",
+		"GET /admin/login"
+	),
+	function ($f3) {
+		session_start();
+		F3::set("page", "Login");
+		F3::set("title", "Admin Panel");
+		$errors = array();
+		
+		if (isset($_SESSION["admin"], $_SESSION["id"]) && $_SESSION["admin"] != null && (int)$_SESSION["id"] > 0) {
+			F3::set("loggedIn", true);
+			$errors[] = "You are already logged in.";
+		}
+		else {
+			F3::set("loggedIn", false);			
+			if (isset($_POST["username"], $_POST["password"]) && !empty($_POST["username"]) && !empty($_POST["password"])) {
+				$username = trim($_POST["username"]);
+				$password = $_POST["password"];
+				
+				$loginQuery = F3::get("DB")->prepare("SELECT `ID`,`Username`,`Password` FROM `admins` WHERE `Username`=:user");
+				$loginQuery->bindValue(":user", $username);
+				$loginQuery->execute();
+				$loginData = $loginQuery->fetchAll();
+				if (count($loginData) <= 0) {
+					$errors[] = "Invalid username or password.";
+				}
+				else {
+					if (password_verify($password, $loginData[0]["Password"])) {
+						$_SESSION["admin"] = $loginData[0]["Username"];
+						$_SESSION["id"] = $loginData[0]["ID"];
+						header("Location: /admin/home");
+					}
+					else {
+						$errors[] = "Invalid username or password.";
+					}
+				}
+			}
+			else {
+				if (count($_POST) > 0) {
+					$errors[] = "Please fill out both your username and password.";
+				}
+			}
+		}
+		
+		F3::set("errors", $errors);
+		$template = new Template;
+		echo $template->render("views/admin/base.tpl");
+	}
+);
+
 F3::run();
