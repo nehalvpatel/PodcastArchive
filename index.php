@@ -364,11 +364,7 @@ F3::route("GET /sitemap.xml",
     }
 , 60);
 
-F3::route(
-	array(
-		"GET /admin",
-		"GET /admin.php"
-	),
+F3::route("GET /admin",
 	function ($f3) {
 		session_start();
 		F3::set("page", "Login");
@@ -404,6 +400,29 @@ F3::route("GET /admin/home",
 		else {
 			F3::set("loggedIn", false);
 			header("Location: /admin/login");
+		}
+		
+		F3::set("errors", $errors);
+		$template = new Template;
+		echo $template->render("views/admin/base.tpl");
+	}
+, 60);
+
+F3::route("GET /admin/logout",
+	function ($f3) {
+		session_start();
+		F3::set("page", "Logout");
+		F3::set("title", "Admin Panel");
+		$errors = array();
+		
+		F3::set("loggedIn", false);
+		if (isset($_SESSION["admin"], $_SESSION["id"]) && $_SESSION["admin"] != null && (int)$_SESSION["id"] > 0) {
+			$_SESSION = array();
+			session_destroy();
+			F3::set("success", "You have been logged out.");
+		}
+		else {
+			$errors[] = "You are not logged in.";
 		}
 		
 		F3::set("errors", $errors);
