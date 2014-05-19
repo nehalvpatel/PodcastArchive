@@ -11,11 +11,11 @@
 			<ul>
 			<check if="{{ @loggedIn }}">
 				<true>
-					<li><a href="{{ @domain }}admin/home">Home</a></li>
-					<li><a href="{{ @domain }}admin/viewepisodes">View Episodes</a></li>
+					<li><a href="{{ @domain }}admin/home">Home</a></li>					
 					<li><a href="{{ @domain }}admin/addepisode">Add Episode</a></li>
+					<li><a href="{{ @domain }}admin/viewepisodes">View Episodes</a></li>
 					<li><a href="https://www.google.com/analytics/web/#report/visitors-overview/a46640110w77695213p80320716/">View Statistics</a></li>
-					<li><a href="{{ @domain }}admin/accounts">Admin Accounts</a></li>
+					<li><a href="{{ @domain }}admin/accounts">Account Settings</a></li>
 					<li><a href="{{ @domain }}admin/logout">Logout</a></li>
 				</true>
 				<false>

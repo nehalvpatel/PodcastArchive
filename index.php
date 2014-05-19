@@ -433,6 +433,141 @@ F3::route("GET /admin/logout",
 
 F3::route(
 	array(
+		"GET /admin/accounts",
+		"POST /admin/accounts"
+	),
+	function ($f3) {
+		session_start();
+		F3::set("page", "Accounts");
+		F3::set("title", "Admin Panel");		
+		$errors = array();
+		
+		if (isset($_SESSION["admin"], $_SESSION["id"]) && $_SESSION["admin"] != null && (int)$_SESSION["id"] > 0) {
+			F3::set("loggedIn", true);			
+			F3::set("type", "accounts");
+			F3::set("adminType", $_SESSION["type"]);
+			F3::set("username", $_SESSION["admin"]);
+			
+			if (isset($_POST["form"]) && in_array($_POST["form"], array("add", "change"))) {
+				if ($_POST["form"] == "add") {
+					if ($_SESSION["type"] == 0) {
+						if (isset($_POST["username"], $_POST["password"], $_POST["type"]) && !empty($_POST["username"]) && !empty($_POST["password"])) {
+							$username = trim($_POST["username"]);
+							$password = $_POST["password"];
+							$type = (int)$_POST["type"];
+							
+							if (empty($username)) {
+								$errors[] = "You cannot leave the username blank.";
+							}
+							
+							if (empty($password)) {
+								$errors[] = "You cannot leave the password blank.";
+							}
+							
+							if ($type != 0 && $type != 1) {
+								$errors[] = "Please choose a valid account type.";
+							}
+							
+							if (count($errors) == 0) {
+								$checkQuery = F3::get("DB")->prepare("SELECT `Username` FROM `admins` WHERE `Username`=:user");
+								$checkQuery->bindValue(":user", $username);
+								$checkQuery->execute();
+								
+								if (count($checkQuery->fetchAll()) > 0) {
+									$errors[] = "That username is already in use.";
+								}
+								else {
+									$addQuery = F3::get("DB")->prepare("INSERT INTO `admins` (`ID`,`Type`,`Username`,`Password`) VALUES (NULL, :type, :user, :pass)");
+									$addQuery->bindValue(":type", $type);
+									$addQuery->bindValue(":user", $username);
+									$addQuery->bindValue(":pass", password_hash($password, PASSWORD_BCRYPT));
+									$addQuery->execute();
+									
+									if ($addQuery) {
+										F3::set("success", "New account was added.");
+									}
+									else {
+										$errors[] = "There was a MySQL error, please try again.";
+									}
+								}
+							}
+						}
+						else {
+							$errors[] = "Please make sure to fill out all the fields.";
+						}
+					}
+					else {
+						$errors[] = "You are not allowed to do that.";
+					}
+				}
+				elseif ($_POST["form"] == "change") {
+					if ($_SESSION["type"] == 0) {
+						if (isset($_POST["username"], $_POST["password"]) && !empty($_POST["username"]) && !empty($_POST["password"])) {
+							$username = trim($_POST["username"]);
+							$password = password_hash($_POST["password"], PASSWORD_BCRYPT);
+							
+							$updateQuery = F3::get("DB")->prepare("UPDATE `admins` SET `Password`=:pass WHERE `Username`=:user");
+							$updateQuery->bindValue(":pass", $password);
+							$updateQuery->bindValue(":user", $username);
+							$updateQuery->execute();
+							
+							if ($updateQuery->rowCount() > 0) {
+								F3::set("success", "Password updated for specified user.");
+							}
+							else {
+								$errors[] = "Couldn't find the specified user.";
+							}
+						}
+						else {
+							$errors[] = "Please make sure to fill out both fields.";
+						}
+					}
+					else {
+						if (isset($_POST["oldpass"], $_POST["newpass"]) && !empty($_POST["oldpass"]) && !empty($_POST["newpass"])) {
+							$currentPass = $_POST["oldpass"];
+							$newPass = password_hash($_POST["newpass"], PASSWORD_BCRYPT);
+							
+							$curQuery = F3::get("DB")->prepare("SELECT `Password` FROM `admins` WHERE `ID`=:id");
+							$curQuery->bindValue(":id", $_SESSION["id"]);
+							$curQuery->execute();
+							$queryResults = $curQuery->fetchAll();
+							if (password_verify($currentPass, $queryResults[0]["Password"])) {
+								$updateQuery = F3::get("DB")->prepare("UPDATE `admins` SET `Password`=:pass WHERE `ID`=:id");
+								$updateQuery->bindValue(":pass", $newPass);
+								$updateQuery->bindValue(":id", $_SESSION["id"]);
+								$updateQuery->execute();
+								
+								if ($updateQuery) {
+									F3::set("success", "Your password was changed.");
+								}
+								else {
+									$errors[] = "There was a MySQL error, please try again.";
+								}
+							}
+							else {
+								$errors[] = "Your current password is incorrect.";
+							}
+						}
+						else {
+							$errors[] = "Please make sure to fill out both fields.";
+						}
+					}
+				}
+			}
+		}
+		else {
+			F3::set("loggedIn", false);
+			header("Location: /admin/login");
+		}
+		
+		F3::set("errors", $errors);
+		$template = new Template;
+		echo $template->render("views/admin/base.tpl");
+	}
+);
+
+F3::route(
+	array(
 		"POST /admin/login",
 		"GET /admin/login"
 	),
@@ -452,7 +587,7 @@ F3::route(
 				$username = trim($_POST["username"]);
 				$password = $_POST["password"];
 				
-				$loginQuery = F3::get("DB")->prepare("SELECT `ID`,`Username`,`Password` FROM `admins` WHERE `Username`=:user");
+				$loginQuery = F3::get("DB")->prepare("SELECT `ID`,`Type`,`Username`,`Password` FROM `admins` WHERE `Username`=:user");
 				$loginQuery->bindValue(":user", $username);
 				$loginQuery->execute();
 				$loginData = $loginQuery->fetchAll();
@@ -463,6 +598,10 @@ F3::route(
 					if (password_verify($password, $loginData[0]["Password"])) {
 						$_SESSION["admin"] = $loginData[0]["Username"];
 						$_SESSION["id"] = $loginData[0]["ID"];
+						$_SESSION["type"] = $loginData[0]["Type"];
+						if ($_SESSION["type"] === null) {
+							$_SESSION["type"] = 1;
+						}
 						header("Location: /admin/home");
 					}
 					else {
