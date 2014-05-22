@@ -213,7 +213,7 @@ function updateContent(episode_data, search_timestamp, back_forward) {
 	}
 	
 	// add page to history and update page title
-	document.title = "Episode #" + episode_data.Number + " \u00B7 " + site_title;
+	document.title = "Episode #" + episode_data.Number + " \u00B7 " + site_name;
 	
 	if (!back_forward) {
 		if (search_timestamp) {

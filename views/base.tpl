@@ -74,7 +74,7 @@
         </section>
         <div id="loader"></div>
         <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-        <script type="application/javascript">var domain = "{{ @domain }}";var site_name = "{{ @Core->getName() }}";var site_title = "{{ @title }}";</script>
+        <script type="application/javascript">var domain = "{{ @domain }}";var site_name = "{{ @Core->getName() }}";</script>
         <script type="application/javascript" src="<?php echo $domain; ?>js/main.js?ver={{ @commit_count }}"></script>
     </body>
 </html>
