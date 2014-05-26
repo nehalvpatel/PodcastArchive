@@ -10,7 +10,7 @@ F3::set("Utilities", new \Tripod\Utilities());
 F3::set("DEBUG", 3);
 
 F3::get("Core")->setName("Painkiller Already");
-F3::get("Core")->setDescription("Four gamers discuss games, current events, and tell a few stories.");
+F3::get("Core")->setDescription("Three gamers discuss games, current events, and tell a few stories.");
 F3::get("Core")->setPrefix("PKA");
 F3::set("feedburner", "Painkiller_Already");
 
