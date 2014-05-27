@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+{{ "<?" }}xml version="1.0" encoding="utf-8"{{ "?>" }}
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
     <ShortName>{{ @Core->getName() }}</ShortName>
     <Description>Search {{ @Core->getName() }} episodes</Description>
