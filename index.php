@@ -71,6 +71,10 @@ F3::route("GET /episode/@number",
                 }
             }
         }
+		
+		if (!F3::exists("current_episode")) {
+			$f3->error(404);
+		}
         
         $guests = F3::get("current_episode")->getGuests();
         if (count($guests) == 0) {
@@ -117,6 +121,10 @@ F3::route("GET /person/@number",
             }
         }
         
+		if (!F3::exists("current_person")) {
+			$f3->error(404);
+		}
+		
         $host_count = 0;
         $guest_count = 0;
         $sponsor_count = 0;
