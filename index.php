@@ -29,7 +29,7 @@ F3::set("ONERROR",
 	function ($f3) {
 		F3::set("type", "error");
 		F3::set("canonical", F3::get("domain") . "error");
-		F3::set("title", F3::get("ERROR.code") . " &middot; " . F3::get("Core")->getName());
+		F3::set("title", F3::get("ERROR.code") . " · " . F3::get("Core")->getName());
 		
 		$template = new Template;
 		echo $template->render("views/base.tpl");
@@ -94,7 +94,7 @@ F3::route("GET /episode/@number",
         
         F3::set("description", "Guests: " . F3::get("guests_list"));
         F3::set("canonical", F3::get("domain") . "episode/" . F3::get("current_episode")->getNumber());
-        F3::set("title", "Episode #" . F3::get("current_episode")->getNumber() . " &middot; " . F3::get("Core")->getName());
+        F3::set("title", "Episode #" . F3::get("current_episode")->getNumber() . " · " . F3::get("Core")->getName());
         F3::set("source", "get");
         
         $template = new Template;
@@ -159,7 +159,7 @@ F3::route("GET /person/@number",
         
         F3::set("description", F3::get("current_person")->getOverview());
         F3::set("canonical", F3::get("domain") . "episode/" . F3::get("current_person")->getID());
-        F3::set("title", F3::get("current_person")->getName() . " &middot; " . F3::get("Core")->getName());
+        F3::set("title", F3::get("current_person")->getName() . " · " . F3::get("Core")->getName());
         
         $template = new Template;
         echo $template->render("views/base.tpl");
@@ -273,7 +273,7 @@ F3::route("GET /credits",
     function($f3) {
         F3::set("type", "credits");
         F3::set("canonical", F3::get("domain") . "credits");
-        F3::set("title", "Developers and Contributors &middot; " . F3::get("Core")->getName());
+        F3::set("title", "Developers and Contributors · " . F3::get("Core")->getName());
         
         $developers = array();
         $contributors = array();
@@ -296,7 +296,7 @@ F3::route("GET /feedback",
     function($f3) {
         F3::set("type", "feedback");
         F3::set("canonical", F3::get("domain") . "feedback");
-        F3::set("title", "Feedback &middot; " . F3::get("Core")->getName());
+        F3::set("title", "Feedback · " . F3::get("Core")->getName());
         
         $template = new Template;
         echo $template->render("views/base.tpl");
@@ -307,7 +307,7 @@ F3::route("POST /feedback",
     function($f3) {
         F3::set("type", "feedback");
         F3::set("canonical", F3::get("domain") . "feedback");
-        F3::set("title", "Feedback &middot; " . F3::get("Core")->getName());
+        F3::set("title", "Feedback · " . F3::get("Core")->getName());
         
 		if (isset($_POST["issue"], $_POST["explanation"]) && !empty($_POST["issue"]) && !empty($_POST["explanation"])) {		
 			$issueTypes = array(
