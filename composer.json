@@ -1,15 +1,15 @@
 {
-    "name": "painkilleralready/painkilleralready",
+    "name": "nehalvpatel/painkilleralready",
     "description": "A website for the organisation and archivisation of episodes of the Painkiller Already podcast.",
     "keywords": ["pka", "podcast", "painkiller already"],
-    "homepage": "https://github.com/PainkillerAlready/PainkillerAlready",
+    "homepage": "https://github.com/nehalvpatel/PainkillerAlready",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
             "name": "Nehal Patel",
             "email": "nehal@itspatel.com",
-            "homepage": "http://www.itspatel.com",
+            "homepage": "http://www.nehalpatel.me",
             "role": "Developer"
         },
         {
