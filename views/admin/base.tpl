@@ -39,7 +39,7 @@
 		</check>
 		<check if="{{ @loggedIn }}">
 			<true>
-				<include href="{{ 'views/admin/' . @type . '.tpl' }}" />
+				<include href="{{ '../views/admin/' . @type . '.tpl' }}" />
 			</true>
 			<false>
 				<h2>Login</h2>

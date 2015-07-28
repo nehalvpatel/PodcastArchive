@@ -1,5 +1,5 @@
-                <include if="{{ isset(@success) }}" href="views/feedback/success.tpl" />
-                <include if="{{ isset(@errors) }}" href="views/feedback/errors.tpl" />
+                <include if="{{ isset(@success) }}" href="../views/feedback/success.tpl" />
+                <include if="{{ isset(@errors) }}" href="../views/feedback/errors.tpl" />
                 <div id="page-title">
                     <h2>Feedback</h2>
                     <p>Thank you for helping us improve our website. We apologise for any way our website may have inconvenienced you.</p>

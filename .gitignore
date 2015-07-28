@@ -9,9 +9,7 @@ phpunit.xml
 
 # Ignore composer generated files
 composer.phar
-composer.lock
-composer-test.lock
 /vendor
 
 # Ignore temporary framework files
-/tmp
+/public/tmp

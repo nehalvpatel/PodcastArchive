@@ -35,7 +35,7 @@
         <meta property="og:image" content="{{ @domain }}img/pka.png">
         <meta property="og:site_name" content="{{ @Core->getName() }}">
         
-        <include href="views/meta.tpl" />
+        <include href="../views/meta.tpl" />
         
         <!-- CSS -->
         <link rel="stylesheet" type="text/css" href="{{ @domain }}css/main.css?ver={{ @commit_count }}">
@@ -65,7 +65,7 @@
                 <h1>{{ @Core->getName() }}</h1>
             </header>
             <div id="container">
-                <include href="{{ 'views/' . @type . '.tpl' }}" />
+                <include href="{{ '../views/' . @type . '.tpl' }}" />
                 <ul id="footer-links">
                     <li><a href="{{ @domain }}credits">Developers and Contributors</a></li>
                     <li><a href="{{ @domain }}feedback">Provide us with Feedback</a></li>

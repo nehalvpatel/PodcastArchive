@@ -1,7 +1,7 @@
 <?php
 
-require_once("vendor/autoload.php");
-require_once("vendor/bcosca/fatfree/lib/base.php");
+require_once("../vendor/autoload.php");
+require_once("../vendor/bcosca/fatfree/lib/base.php");
 
 F3::set("DB", new DB\SQL("mysql:host=" . apache_getenv("DB_HOST") . ";dbname=" . apache_getenv("DB_NAME") . ";charset=utf8", apache_getenv("DB_USER"), apache_getenv("DB_PASS")));
 
@@ -15,7 +15,13 @@ F3::get("Core")->setPrefix("PKA");
 F3::set("feedburner", "Painkiller_Already");
 
 F3::set("base_domain", F3::get("Utilities")->getBaseDomain());
-F3::set("commit_count", F3::get("Utilities")->getCommitCount());
+
+$fh = fopen("../commits.txt", "r");
+while ($line = fgets($fh)) {
+	F3::set("commit_count", $line);
+}
+fclose($fh);
+
 F3::set("description", F3::get("Core")->getDescription());
 F3::set("domain", F3::get("Utilities")->getDomain());
 F3::set("episodes", F3::get("Core")->getEpisodes());
@@ -32,7 +38,7 @@ F3::set("ONERROR",
 		F3::set("title", F3::get("ERROR.code") . " · " . F3::get("Core")->getName());
 		
 		$template = new Template;
-		echo $template->render("views/base.tpl");
+		echo $template->render("../views/base.tpl");
 	}
 , 60);
 
@@ -49,7 +55,7 @@ F3::route("GET /",
         }
         
         $template = new Template;
-        echo $template->render("views/base.tpl");
+        echo $template->render("../views/base.tpl");
     }
 , 60);
 
@@ -98,7 +104,7 @@ F3::route("GET /episode/@number",
         F3::set("source", "get");
         
         $template = new Template;
-        echo $template->render("views/base.tpl");
+        echo $template->render("../views/base.tpl");
     }
 , 60);
 
@@ -162,7 +168,7 @@ F3::route("GET /person/@number",
         F3::set("title", F3::get("current_person")->getName() . " · " . F3::get("Core")->getName());
         
         $template = new Template;
-        echo $template->render("views/base.tpl");
+        echo $template->render("../views/base.tpl");
     }
 , 60);
 
@@ -288,7 +294,7 @@ F3::route("GET /credits",
         F3::set("contributors", $contributors);
         
         $template = new Template;
-        echo $template->render("views/base.tpl");
+        echo $template->render("../views/base.tpl");
     }
 , 60);
 
@@ -299,7 +305,7 @@ F3::route("GET /feedback",
         F3::set("title", "Feedback · " . F3::get("Core")->getName());
         
         $template = new Template;
-        echo $template->render("views/base.tpl");
+        echo $template->render("../views/base.tpl");
     }
 , 60);
 
@@ -347,28 +353,28 @@ F3::route("POST /feedback",
 		}
 			
         $template = new Template;
-        echo $template->render("views/base.tpl");
+        echo $template->render("../views/base.tpl");
     }
 );
 
 F3::route("GET /opensearchdescription.xml",
     function($f3) {
         $template = new Template;
-        echo $template->render("views/opensearchdescription.tpl", "application/xml");
+        echo $template->render("../views/opensearchdescription.tpl", "application/xml");
     }
 , 60);
 
 F3::route("GET /robots.txt",
     function($f3) {
         $template = new Template;
-        echo $template->render("views/robots.tpl", "text/plain");
+        echo $template->render("../views/robots.tpl", "text/plain");
     }
 , 60);
 
 F3::route("GET /sitemap.xml",
     function($f3) {
         $template = new Template;
-        echo $template->render("views/sitemap.tpl", "application/xml");
+        echo $template->render("../views/sitemap.tpl", "application/xml");
     }
 , 60);
 
@@ -388,7 +394,7 @@ F3::route("GET /admin",
 		
 		F3::set("errors", $errors);
 		$template = new Template;
-		echo $template->render("views/admin/base.tpl");
+		echo $template->render("../views/admin/base.tpl");
 	}
 , 60);
 
@@ -412,7 +418,7 @@ F3::route("GET /admin/home",
 		
 		F3::set("errors", $errors);
 		$template = new Template;
-		echo $template->render("views/admin/base.tpl");
+		echo $template->render("../views/admin/base.tpl");
 	}
 , 60);
 
@@ -435,7 +441,7 @@ F3::route("GET /admin/logout",
 		
 		F3::set("errors", $errors);
 		$template = new Template;
-		echo $template->render("views/admin/base.tpl");
+		echo $template->render("../views/admin/base.tpl");
 	}
 , 60);
 
@@ -570,7 +576,7 @@ F3::route(
 		
 		F3::set("errors", $errors);
 		$template = new Template;
-		echo $template->render("views/admin/base.tpl");
+		echo $template->render("../views/admin/base.tpl");
 	}
 );
 
@@ -626,7 +632,7 @@ F3::route(
 		
 		F3::set("errors", $errors);
 		$template = new Template;
-		echo $template->render("views/admin/base.tpl");
+		echo $template->render("../views/admin/base.tpl");
 	}
 );
 
