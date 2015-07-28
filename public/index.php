@@ -7,7 +7,7 @@ F3::set("DB", new DB\SQL("mysql:host=" . apache_getenv("DB_HOST") . ";dbname=" .
 
 F3::set("Core", new \Tripod\Podcast(F3::get("DB")));
 F3::set("Utilities", new \Tripod\Utilities());
-F3::set("DEBUG", 3);
+F3::set("DEBUG", 0);
 
 F3::get("Core")->setName("Painkiller Already");
 F3::get("Core")->setDescription("Three gamers discuss games, current events, and tell a few stories.");
