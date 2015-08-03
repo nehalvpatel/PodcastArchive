@@ -38,7 +38,7 @@
         <include href="../views/meta.tpl" />
         
         <!-- CSS -->
-        <link rel="stylesheet" type="text/css" href="{{ @domain }}css/main.css?ver={{ @commit_count }}">
+        <link rel="stylesheet" type="text/css" href="{{ @domain }}css/main.css?ver={{ @css_modified_time }}">
         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans:400,700">
         <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/3.0.2/css/font-awesome.min.css">
     </head>
@@ -75,6 +75,6 @@
         <div id="loader"></div>
         <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script type="application/javascript">var domain = "{{ @domain }}";var site_name = "{{ @Core->getName() }}";</script>
-        <script type="application/javascript" src="<?php echo $domain; ?>js/main.js?ver={{ @commit_count }}"></script>
+        <script type="application/javascript" src="<?php echo $domain; ?>js/main.js?ver={{ @js_modified_time }}"></script>
     </body>
 </html>

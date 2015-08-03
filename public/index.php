@@ -1,57 +1,59 @@
 <?php
 
 require_once("../vendor/autoload.php");
-require_once("../vendor/bcosca/fatfree/lib/base.php");
 
-F3::set("DB", new DB\SQL("mysql:host=" . apache_getenv("DB_HOST") . ";dbname=" . apache_getenv("DB_NAME") . ";charset=utf8", apache_getenv("DB_USER"), apache_getenv("DB_PASS")));
+// Initialize framework
+$f3 = \Base::instance();
+$f3->set("DEBUG", 3);
 
-F3::set("Core", new \Tripod\Podcast(F3::get("DB")));
-F3::set("Utilities", new \Tripod\Utilities());
-F3::set("DEBUG", 0);
+// Setting up the core
+$f3->set("DB", new DB\SQL("mysql:host=" . apache_getenv("DB_HOST") . ";dbname=" . apache_getenv("DB_NAME") . ";charset=utf8", apache_getenv("DB_USER"), apache_getenv("DB_PASS")));
+$f3->set("Core", new \Tripod\Podcast($f3->get("DB")));
+$f3->set("Utilities", new \Tripod\Utilities());
 
-F3::get("Core")->setName("Painkiller Already");
-F3::get("Core")->setDescription("Three gamers discuss games, current events, and tell a few stories.");
-F3::get("Core")->setPrefix("PKA");
-F3::set("feedburner", "Painkiller_Already");
+// Some settings
+$f3->get("Core")->setName("Painkiller Already");
+$f3->get("Core")->setDescription("Three gamers discuss games, current events, and tell a few stories.");
+$f3->get("Core")->setPrefix("PKA");
+$f3->set("feedburner", "Painkiller_Already");
+$f3->set("base_domain", $f3->get("Utilities")->getBaseDomain());
 
-F3::set("base_domain", F3::get("Utilities")->getBaseDomain());
+// Get modified time to refresh CSS and JS if necessary
+$f3->set("css_modified_time", filemtime("css/main.css"));
+$f3->set("js_modified_time", filemtime("js/main.js"));
 
-$fh = fopen("../commits.txt", "r");
-while ($line = fgets($fh)) {
-	F3::set("commit_count", $line);
-}
-fclose($fh);
+// Loading data for the pages
+$f3->set("description", $f3->get("Core")->getDescription());
+$f3->set("domain", $f3->get("Utilities")->getDomain());
+$f3->set("episodes", $f3->get("Core")->getEpisodes());
+$f3->set("people", $f3->get("Core")->getPeople());
 
-F3::set("description", F3::get("Core")->getDescription());
-F3::set("domain", F3::get("Utilities")->getDomain());
-F3::set("episodes", F3::get("Core")->getEpisodes());
-F3::set("people", F3::get("Core")->getPeople());
+// Some meta data
+$f3->set("gplus", "107397414095793132493");
+$f3->set("twitter", "PKA_Archive");
+$f3->set("creator", "nehalvpatel");
 
-F3::set("gplus", "107397414095793132493");
-F3::set("twitter", "PKA_Archive");
-F3::set("creator", "nehalvpatel");
-
-F3::set("ONERROR",
+$f3->set("ONERROR",
 	function ($f3) {
-		F3::set("type", "error");
-		F3::set("canonical", F3::get("domain") . "error");
-		F3::set("title", F3::get("ERROR.code") . " · " . F3::get("Core")->getName());
+		$f3->set("type", "error");
+		$f3->set("canonical", $f3->get("domain") . "error");
+		$f3->set("title", $f3->get("ERROR.code") . " · " . $f3->get("Core")->getName());
 		
 		$template = new Template;
 		echo $template->render("../views/base.tpl");
 	}
 , 60);
 
-F3::route("GET /",
-    function($f3) {
-        F3::set("type", "episode");
-        F3::set("current_episode", F3::get("episodes")[count(F3::get("episodes")) - 1]);
-        F3::set("canonical", F3::get("domain") . "episode/" . F3::get("current_episode")->getNumber());
-        F3::set("title", F3::get("Core")->getName());
-        F3::set("source", "latest");
+$f3->route("GET /",
+    function ($f3) {
+        $f3->set("type", "episode");
+        $f3->set("current_episode", $f3->get("episodes")[count($f3->get("episodes")) - 1]);
+        $f3->set("canonical", $f3->get("domain") . "episode/" . $f3->get("current_episode")->getNumber());
+        $f3->set("title", $f3->get("Core")->getName());
+        $f3->set("source", "latest");
         
-        if (F3::get("current_episode")->getTimelined() === true) {
-            F3::set("timeline_author", F3::get("current_episode")->getTimelineAuthor());
+        if ($f3->get("current_episode")->getTimelined() === true) {
+            $f3->set("timeline_author", $f3->get("current_episode")->getTimelineAuthor());
         }
         
         $template = new Template;
@@ -59,145 +61,146 @@ F3::route("GET /",
     }
 , 60);
 
-F3::route("GET /episode/@number",
-    function($f3, $params) {
-        F3::set("type", "episode");
+$f3->route("GET /episode/@number",
+    function ($f3, $params) {
+        $f3->set("type", "episode");
         
         if ($params["number"] == "random") {
-            F3::set("current_episode", F3::get("episodes")[array_rand(F3::get("episodes"))]);
-            F3::reroute("/episode/" . F3::get("current_episode")->getNumber());
+            $f3->set("current_episode", $f3->get("episodes")[array_rand($f3->get("episodes"))]);
+            $f3->reroute("/episode/" . $f3->get("current_episode")->getNumber());
         } else {
             if (!is_numeric($params["number"])) {
                 $f3->error(404);
             } else {
-                foreach (F3::get("episodes") as $episode) {
+                foreach ($f3->get("episodes") as $episode) {
                     if ($params["number"] == $episode->getNumber()) {
-                        F3::set("current_episode", $episode);
+                        $f3->set("current_episode", $episode);
                     }
                 }
             }
         }
 		
-		if (!F3::exists("current_episode")) {
+		if (!$f3->exists("current_episode")) {
 			$f3->error(404);
 		}
         
-        $guests = F3::get("current_episode")->getGuests();
+        $guests = $f3->get("current_episode")->getGuests();
         if (count($guests) == 0) {
-            F3::set("guests_list", "Nobody");
+            $f3->set("guests_list", "Nobody");
         } else {
             if (count($guests) > 2) {
                 $guests[count($guests) - 1] = "and " . strval($guests[count($guests) - 1]);
-                F3::set("guests_list", join(", ", array_map("strval", $guests)));
+                $f3->set("guests_list", join(", ", array_map("strval", $guests)));
             } else {
-                F3::set("guests_list", join(" and ", array_map("strval", $guests)));
+                $f3->set("guests_list", join(" and ", array_map("strval", $guests)));
             }
         }
         
-        if (F3::get("current_episode")->getTimelined() === true) {
-            F3::set("timeline_author", F3::get("current_episode")->getTimelineAuthor());
+        if ($f3->get("current_episode")->getTimelined() === true) {
+            $f3->set("timeline_author", $f3->get("current_episode")->getTimelineAuthor());
         }
         
-        F3::set("description", "Guests: " . F3::get("guests_list"));
-        F3::set("canonical", F3::get("domain") . "episode/" . F3::get("current_episode")->getNumber());
-        F3::set("title", "Episode #" . F3::get("current_episode")->getNumber() . " · " . F3::get("Core")->getName());
-        F3::set("source", "get");
+        $f3->set("description", "Guests: " . $f3->get("guests_list"));
+        $f3->set("canonical", $f3->get("domain") . "episode/" . $f3->get("current_episode")->getNumber());
+        $f3->set("title", "Episode #" . $f3->get("current_episode")->getNumber() . " · " . $f3->get("Core")->getName());
+        $f3->set("source", "get");
         
         $template = new Template;
         echo $template->render("../views/base.tpl");
     }
 , 60);
 
-F3::route("GET /person/@number",
-    function($f3, $params) {
-        F3::set("type", "person");
+$f3->route("GET /person/@number",
+    function ($f3, $params) {
+        $f3->set("type", "person");
         
         if ($params["number"] == "random") {
-            F3::set("current_person", F3::get("people")[array_rand(F3::get("people"))]);
-            F3::reroute("/person/" . F3::get("current_person")->getID());
+            $f3->set("current_person", $f3->get("people")[array_rand($f3->get("people"))]);
+            $f3->reroute("/person/" . $f3->get("current_person")->getID());
         } else {
             if (!is_numeric($params["number"])) {
                 $f3->error(404);
             } else {
-                foreach (F3::get("people") as $person) {
+                foreach ($f3->get("people") as $person) {
                     if ($params["number"] == $person->getID()) {
-                        F3::set("current_person", $person);
+                        $f3->set("current_person", $person);
                     }
                 }
             }
         }
         
-		if (!F3::exists("current_person")) {
+		if (!$f3->exists("current_person")) {
 			$f3->error(404);
 		}
 		
         $host_count = 0;
         $guest_count = 0;
         $sponsor_count = 0;
-        foreach (F3::get("episodes") as $episode) {
+        foreach ($f3->get("episodes") as $episode) {
             foreach ($episode->getHosts() as $host) {
-                if ($host->getID() == F3::get("current_person")->getID()) {
+                if ($host->getID() == $f3->get("current_person")->getID()) {
                     $episode->setHighlighted(true);
                     $host_count++;
                 }
             }
             
             foreach ($episode->getGuests() as $guest) {
-                if ($guest->getID() == F3::get("current_person")->getID()) {
+                if ($guest->getID() == $f3->get("current_person")->getID()) {
                     $episode->setHighlighted(true);
                     $guest_count++;
                 }
             }
             
             foreach ($episode->getSponsors() as $sponsor) {
-                if ($sponsor->getID() == F3::get("current_person")->getID()) {
+                if ($sponsor->getID() == $f3->get("current_person")->getID()) {
                     $episode->setHighlighted(true);
                     $sponsor_count++;
                 }
             }
         }
         
-        F3::set("host_count", $host_count);
-        F3::set("guest_count", $guest_count);
-        F3::set("sponsor_count", $sponsor_count);
-        F3::set("recent_videos", F3::get("current_person")->getRecentYouTubeVideos());
-        F3::set("social_links", F3::get("current_person")->getSocialLinks());
+        $f3->set("host_count", $host_count);
+        $f3->set("guest_count", $guest_count);
+        $f3->set("sponsor_count", $sponsor_count);
+        $f3->set("recent_videos", $f3->get("current_person")->getRecentYouTubeVideos());
+        $f3->set("social_links", $f3->get("current_person")->getSocialLinks());
         
-        F3::set("description", F3::get("current_person")->getOverview());
-        F3::set("canonical", F3::get("domain") . "episode/" . F3::get("current_person")->getID());
-        F3::set("title", F3::get("current_person")->getName() . " · " . F3::get("Core")->getName());
+        $f3->set("description", $f3->get("current_person")->getOverview());
+        $f3->set("canonical", $f3->get("domain") . "episode/" . $f3->get("current_person")->getID());
+        $f3->set("title", $f3->get("current_person")->getName() . " · " . $f3->get("Core")->getName());
         
         $template = new Template;
         echo $template->render("../views/base.tpl");
     }
 , 60);
 
-F3::route("GET /content",
-    function($f3) {
+$f3->route("GET /content",
+    function ($f3) {
         if (isset($_GET["id"])) {
             $id = trim($_GET["id"]);
 
             if (!empty($id)) {
                 $id = urldecode($id);
 
-                if (strpos($id, F3::get("domain")) !== FALSE) {
-                    $id = str_replace(F3::get("domain") . "episode/", "", $id);
+                if (strpos($id, $f3->get("domain")) !== FALSE) {
+                    $id = str_replace($f3->get("domain") . "episode/", "", $id);
                     
-                    if (strpos(F3::get("Core")->getPrefix(), $id) === FALSE) {
+                    if (strpos($f3->get("Core")->getPrefix(), $id) === FALSE) {
                         if (is_numeric($id)) {
-                            $id = F3::get("Core")->getPrefix() . "_" . F3::get("Utilities")->padEpisodeNumber($id);
+                            $id = $f3->get("Core")->getPrefix() . "_" . $f3->get("Utilities")->padEpisodeNumber($id);
                         }
                     } else {
-                        $id = F3::get("Core")->getPrefix() . "_" . F3::get("Utilities")->padEpisodeNumber($id);
+                        $id = $f3->get("Core")->getPrefix() . "_" . $f3->get("Utilities")->padEpisodeNumber($id);
                     }
                 }
                 
                 $cache = true;
                 if ($id == "random") {
-                    $episode = F3::get("episodes")[array_rand(F3::get("episodes"))];
+                    $episode = $f3->get("episodes")[array_rand($f3->get("episodes"))];
                     $cache = false;
+                    F3::set("CACHE", false);
                 } else {
-                    $episode = new \Tripod\Episode($id, F3::get("DB"));
+                    $episode = new \Tripod\Episode($id, $f3->get("DB"));
                 }
                 
                 $episode_data = array();
@@ -210,7 +213,7 @@ F3::route("GET /content",
                 $episode_data["YouTube"] = $episode->getYouTube();
                 $episode_data["YouTubeLength"] = $episode->getYouTubeLength();
                 $episode_data["Cache"] = $cache;
-                $episode_data["Link"] = F3::get("domain") . "episode/" . $episode->getNumber();
+                $episode_data["Link"] = $f3->get("domain") . "episode/" . $episode->getNumber();
                 
                 foreach ($episode->getHosts() as $host) {
                     $host_data = array();
@@ -265,55 +268,55 @@ F3::route("GET /content",
     }
 , 60);
 
-F3::route("GET /search",
-    function($f3) {
+$f3->route("GET /search",
+    function ($f3) {
         if (!isset($_GET["query"])) {
-            echo json_encode(F3::get("Core")->getSearchResults(""));
+            echo json_encode($f3->get("Core")->getSearchResults(""));
         } else {
-            echo json_encode(F3::get("Core")->getSearchResults($_GET["query"]));
+            echo json_encode($f3->get("Core")->getSearchResults($_GET["query"]));
         }
     }
 , 60);
 
-F3::route("GET /credits",
-    function($f3) {
-        F3::set("type", "credits");
-        F3::set("canonical", F3::get("domain") . "credits");
-        F3::set("title", "Developers and Contributors · " . F3::get("Core")->getName());
+$f3->route("GET /credits",
+    function ($f3) {
+        $f3->set("type", "credits");
+        $f3->set("canonical", $f3->get("domain") . "credits");
+        $f3->set("title", "Developers and Contributors · " . $f3->get("Core")->getName());
         
         $developers = array();
         $contributors = array();
-        foreach (F3::get("Core")->getAuthors() as $author) {
+        foreach ($f3->get("Core")->getAuthors() as $author) {
             if ($author->getType() == "0") {
                 $developers[] = $author;
             } else {
                 $contributors[] = $author;
             }
         }
-        F3::set("developers", $developers);
-        F3::set("contributors", $contributors);
+        $f3->set("developers", $developers);
+        $f3->set("contributors", $contributors);
         
         $template = new Template;
         echo $template->render("../views/base.tpl");
     }
 , 60);
 
-F3::route("GET /feedback",
-    function($f3) {
-        F3::set("type", "feedback");
-        F3::set("canonical", F3::get("domain") . "feedback");
-        F3::set("title", "Feedback · " . F3::get("Core")->getName());
+$f3->route("GET /feedback",
+    function ($f3) {
+        $f3->set("type", "feedback");
+        $f3->set("canonical", $f3->get("domain") . "feedback");
+        $f3->set("title", "Feedback · " . $f3->get("Core")->getName());
         
         $template = new Template;
         echo $template->render("../views/base.tpl");
     }
 , 60);
 
-F3::route("POST /feedback",
-    function($f3) {
-        F3::set("type", "feedback");
-        F3::set("canonical", F3::get("domain") . "feedback");
-        F3::set("title", "Feedback · " . F3::get("Core")->getName());
+$f3->route("POST /feedback",
+    function ($f3) {
+        $f3->set("type", "feedback");
+        $f3->set("canonical", $f3->get("domain") . "feedback");
+        $f3->set("title", "Feedback · " . $f3->get("Core")->getName());
         
 		if (isset($_POST["issue"], $_POST["explanation"]) && !empty($_POST["issue"]) && !empty($_POST["explanation"])) {		
 			$issueTypes = array(
@@ -332,13 +335,13 @@ F3::route("POST /feedback",
 			}
 			
 			if (empty($errors)) {
-				$feedback_query = F3::get("DB")->prepare("INSERT INTO `feedback` (`issue`, `explanation`) VALUES (:issue, :explanation)");
+				$feedback_query = $f3->get("DB")->prepare("INSERT INTO `feedback` (`issue`, `explanation`) VALUES (:issue, :explanation)");
 				$feedback_query->bindValue(":issue", $_POST["issue"]);
 				$feedback_query->bindValue(":explanation", $_POST["explanation"]);
 				$feedback_result = $feedback_query->execute();
 				
 				if ($feedback_result) {
-					F3::set("success", "Thank you, your feedback has been received and our administrators will now work to solve the problem shortly.");
+					$f3->set("success", "Thank you, your feedback has been received and our administrators will now work to solve the problem shortly.");
 				} else {
 					$errors[] = "There was a MySQL error, please try again.";
 				}
@@ -349,7 +352,7 @@ F3::route("POST /feedback",
 		}
 				
 		if (!empty($errors)) {
-			F3::set("errors", $errors);
+			$f3->set("errors", $errors);
 		}
 			
         $template = new Template;
@@ -357,110 +360,110 @@ F3::route("POST /feedback",
     }
 );
 
-F3::route("GET /opensearchdescription.xml",
-    function($f3) {
+$f3->route("GET /opensearchdescription.xml",
+    function ($f3) {
         $template = new Template;
         echo $template->render("../views/opensearchdescription.tpl", "application/xml");
     }
 , 60);
 
-F3::route("GET /robots.txt",
-    function($f3) {
+$f3->route("GET /robots.txt",
+    function ($f3) {
         $template = new Template;
         echo $template->render("../views/robots.tpl", "text/plain");
     }
 , 60);
 
-F3::route("GET /sitemap.xml",
-    function($f3) {
+$f3->route("GET /sitemap.xml",
+    function ($f3) {
         $template = new Template;
         echo $template->render("../views/sitemap.tpl", "application/xml");
     }
 , 60);
 
-F3::route("GET /admin",
+$f3->route("GET /admin",
 	function ($f3) {
 		session_start();
-		F3::set("page", "Login");
-		F3::set("title", "Admin Panel");
+		$f3->set("page", "Login");
+		$f3->set("title", "Admin Panel");
 		if (isset($_SESSION["admin"], $_SESSION["id"]) && $_SESSION["admin"] != null && (int)$_SESSION["id"] <= 0) {
-			F3::set("loggedIn", true);
+			$f3->set("loggedIn", true);
 			header("Location: /admin/home");
 		}
 		else {
-			F3::set("loggedIn", false);
+			$f3->set("loggedIn", false);
 		}
 		$errors = array();
 		
-		F3::set("errors", $errors);
+		$f3->set("errors", $errors);
 		$template = new Template;
 		echo $template->render("../views/admin/base.tpl");
 	}
 , 60);
 
-F3::route("GET /admin/home",
+$f3->route("GET /admin/home",
 	function ($f3) {
 		session_start();
-		F3::set("page", "Home");
-		F3::set("title", "Admin Panel");		
+		$f3->set("page", "Home");
+		$f3->set("title", "Admin Panel");		
 		$errors = array();
 		
 		if (isset($_SESSION["admin"], $_SESSION["id"]) && $_SESSION["admin"] != null && (int)$_SESSION["id"] > 0) {
-			F3::set("loggedIn", true);
+			$f3->set("loggedIn", true);
 			
-			F3::set("type", "home");
-			F3::set("username", $_SESSION["admin"]);
+			$f3->set("type", "home");
+			$f3->set("username", $_SESSION["admin"]);
 		}
 		else {
-			F3::set("loggedIn", false);
+			$f3->set("loggedIn", false);
 			header("Location: /admin/login");
 		}
 		
-		F3::set("errors", $errors);
+		$f3->set("errors", $errors);
 		$template = new Template;
 		echo $template->render("../views/admin/base.tpl");
 	}
 , 60);
 
-F3::route("GET /admin/logout",
+$f3->route("GET /admin/logout",
 	function ($f3) {
 		session_start();
-		F3::set("page", "Logout");
-		F3::set("title", "Admin Panel");
+		$f3->set("page", "Logout");
+		$f3->set("title", "Admin Panel");
 		$errors = array();
 		
-		F3::set("loggedIn", false);
+		$f3->set("loggedIn", false);
 		if (isset($_SESSION["admin"], $_SESSION["id"]) && $_SESSION["admin"] != null && (int)$_SESSION["id"] > 0) {
 			$_SESSION = array();
 			session_destroy();
-			F3::set("success", "You have been logged out.");
+			$f3->set("success", "You have been logged out.");
 		}
 		else {
 			$errors[] = "You are not logged in.";
 		}
 		
-		F3::set("errors", $errors);
+		$f3->set("errors", $errors);
 		$template = new Template;
 		echo $template->render("../views/admin/base.tpl");
 	}
 , 60);
 
-F3::route(
+$f3->route(
 	array(
 		"GET /admin/accounts",
 		"POST /admin/accounts"
 	),
 	function ($f3) {
 		session_start();
-		F3::set("page", "Accounts");
-		F3::set("title", "Admin Panel");		
+		$f3->set("page", "Accounts");
+		$f3->set("title", "Admin Panel");		
 		$errors = array();
 		
 		if (isset($_SESSION["admin"], $_SESSION["id"]) && $_SESSION["admin"] != null && (int)$_SESSION["id"] > 0) {
-			F3::set("loggedIn", true);			
-			F3::set("type", "accounts");
-			F3::set("adminType", $_SESSION["type"]);
-			F3::set("username", $_SESSION["admin"]);
+			$f3->set("loggedIn", true);			
+			$f3->set("type", "accounts");
+			$f3->set("adminType", $_SESSION["type"]);
+			$f3->set("username", $_SESSION["admin"]);
 			
 			if (isset($_POST["form"]) && in_array($_POST["form"], array("add", "change"))) {
 				if ($_POST["form"] == "add") {
@@ -483,7 +486,7 @@ F3::route(
 							}
 							
 							if (count($errors) == 0) {
-								$checkQuery = F3::get("DB")->prepare("SELECT `Username` FROM `admins` WHERE `Username`=:user");
+								$checkQuery = $f3->get("DB")->prepare("SELECT `Username` FROM `admins` WHERE `Username`=:user");
 								$checkQuery->bindValue(":user", $username);
 								$checkQuery->execute();
 								
@@ -491,14 +494,14 @@ F3::route(
 									$errors[] = "That username is already in use.";
 								}
 								else {
-									$addQuery = F3::get("DB")->prepare("INSERT INTO `admins` (`ID`,`Type`,`Username`,`Password`) VALUES (NULL, :type, :user, :pass)");
+									$addQuery = $f3->get("DB")->prepare("INSERT INTO `admins` (`ID`,`Type`,`Username`,`Password`) VALUES (NULL, :type, :user, :pass)");
 									$addQuery->bindValue(":type", $type);
 									$addQuery->bindValue(":user", $username);
 									$addQuery->bindValue(":pass", password_hash($password, PASSWORD_BCRYPT));
 									$addQuery->execute();
 									
 									if ($addQuery) {
-										F3::set("success", "New account was added.");
+										$f3->set("success", "New account was added.");
 									}
 									else {
 										$errors[] = "There was a MySQL error, please try again.";
@@ -520,13 +523,13 @@ F3::route(
 							$username = trim($_POST["username"]);
 							$password = password_hash($_POST["password"], PASSWORD_BCRYPT);
 							
-							$updateQuery = F3::get("DB")->prepare("UPDATE `admins` SET `Password`=:pass WHERE `Username`=:user");
+							$updateQuery = $f3->get("DB")->prepare("UPDATE `admins` SET `Password`=:pass WHERE `Username`=:user");
 							$updateQuery->bindValue(":pass", $password);
 							$updateQuery->bindValue(":user", $username);
 							$updateQuery->execute();
 							
 							if ($updateQuery->rowCount() > 0) {
-								F3::set("success", "Password updated for specified user.");
+								$f3->set("success", "Password updated for specified user.");
 							}
 							else {
 								$errors[] = "Couldn't find the specified user.";
@@ -541,18 +544,18 @@ F3::route(
 							$currentPass = $_POST["oldpass"];
 							$newPass = password_hash($_POST["newpass"], PASSWORD_BCRYPT);
 							
-							$curQuery = F3::get("DB")->prepare("SELECT `Password` FROM `admins` WHERE `ID`=:id");
+							$curQuery = $f3->get("DB")->prepare("SELECT `Password` FROM `admins` WHERE `ID`=:id");
 							$curQuery->bindValue(":id", $_SESSION["id"]);
 							$curQuery->execute();
 							$queryResults = $curQuery->fetchAll();
 							if (password_verify($currentPass, $queryResults[0]["Password"])) {
-								$updateQuery = F3::get("DB")->prepare("UPDATE `admins` SET `Password`=:pass WHERE `ID`=:id");
+								$updateQuery = $f3->get("DB")->prepare("UPDATE `admins` SET `Password`=:pass WHERE `ID`=:id");
 								$updateQuery->bindValue(":pass", $newPass);
 								$updateQuery->bindValue(":id", $_SESSION["id"]);
 								$updateQuery->execute();
 								
 								if ($updateQuery) {
-									F3::set("success", "Your password was changed.");
+									$f3->set("success", "Your password was changed.");
 								}
 								else {
 									$errors[] = "There was a MySQL error, please try again.";
@@ -570,38 +573,38 @@ F3::route(
 			}
 		}
 		else {
-			F3::set("loggedIn", false);
+			$f3->set("loggedIn", false);
 			header("Location: /admin/login");
 		}
 		
-		F3::set("errors", $errors);
+		$f3->set("errors", $errors);
 		$template = new Template;
 		echo $template->render("../views/admin/base.tpl");
 	}
 );
 
-F3::route(
+$f3->route(
 	array(
 		"POST /admin/login",
 		"GET /admin/login"
 	),
 	function ($f3) {
 		session_start();
-		F3::set("page", "Login");
-		F3::set("title", "Admin Panel");
+		$f3->set("page", "Login");
+		$f3->set("title", "Admin Panel");
 		$errors = array();
 		
 		if (isset($_SESSION["admin"], $_SESSION["id"]) && $_SESSION["admin"] != null && (int)$_SESSION["id"] > 0) {
-			F3::set("loggedIn", true);
+			$f3->set("loggedIn", true);
 			$errors[] = "You are already logged in.";
 		}
 		else {
-			F3::set("loggedIn", false);			
+			$f3->set("loggedIn", false);			
 			if (isset($_POST["username"], $_POST["password"]) && !empty($_POST["username"]) && !empty($_POST["password"])) {
 				$username = trim($_POST["username"]);
 				$password = $_POST["password"];
 				
-				$loginQuery = F3::get("DB")->prepare("SELECT `ID`,`Type`,`Username`,`Password` FROM `admins` WHERE `Username`=:user");
+				$loginQuery = $f3->get("DB")->prepare("SELECT `ID`,`Type`,`Username`,`Password` FROM `admins` WHERE `Username`=:user");
 				$loginQuery->bindValue(":user", $username);
 				$loginQuery->execute();
 				$loginData = $loginQuery->fetchAll();
@@ -630,10 +633,10 @@ F3::route(
 			}
 		}
 		
-		F3::set("errors", $errors);
+		$f3->set("errors", $errors);
 		$template = new Template;
 		echo $template->render("../views/admin/base.tpl");
 	}
 );
 
-F3::run();
+$f3->run();

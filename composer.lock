@@ -1,9 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
     ],
-    "hash": "d289ed5804587143a45233d7320fdcc9",
+    "hash": "a32da4a4d25fce960699a3efd4ac1c52",
     "packages": [
         {
             "name": "bcosca/fatfree",
@@ -202,19 +203,17 @@
             "time": "2014-12-04 22:32:15"
         }
     ],
-    "aliases": [
-
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
         "bcosca/fatfree": 20,
         "nehalvpatel/tripod": 20,
         "ircmaxell/password-compat": 20
     },
+    "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": {
         "php": ">=5.4.0"
     },
-    "platform-dev": [
-
-    ]
+    "platform-dev": []
 }
