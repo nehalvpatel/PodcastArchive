@@ -85,12 +85,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nehalvpatel/tripod.git",
-                "reference": "3023dfd12aade3a742b38b9381904030c00f8428"
+                "reference": "6962030f9fb756cdca41dd61818a7a223830821f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nehalvpatel/tripod/zipball/3023dfd12aade3a742b38b9381904030c00f8428",
-                "reference": "3023dfd12aade3a742b38b9381904030c00f8428",
+                "url": "https://api.github.com/repos/nehalvpatel/tripod/zipball/6962030f9fb756cdca41dd61818a7a223830821f",
+                "reference": "6962030f9fb756cdca41dd61818a7a223830821f",
                 "shasum": ""
             },
             "require": {
@@ -123,7 +123,7 @@
                 "library",
                 "podcasts"
             ],
-            "time": "2014-05-27 04:04:29"
+            "time": "2015-08-03 07:00:59"
         }
     ],
     "packages-dev": [

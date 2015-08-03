@@ -639,4 +639,20 @@ $f3->route(
 	}
 );
 
+$f3->route("GET /api/episodes/add",
+	function ($f3) {
+		if ($_GET["key"] == apache_getenv("PKA_API_PW")) {
+			$hosts = array(
+				new \Tripod\Person(2, $f3->get("DB")),
+				new \Tripod\Person(3, $f3->get("DB")),
+				new \Tripod\Person(28, $f3->get("DB"))
+			);
+			
+			$f3->get("Core")->addEpisode($_GET["number"], $hosts, array(), array(), $_GET["youtube"], $_GET["reddit"], apache_getenv("YT_API_KEY"));
+		} else {
+			$f3->error("Invalid password.");
+		}
+	}
+);
+
 $f3->run();

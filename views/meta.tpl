@@ -16,11 +16,9 @@
         <meta property="og:title" content="{{ @Core->getName() }} #{{ @current_episode->getNumber() }}">
         <meta property="og:description" content="Guests: {{ @guests_list }}">
         <meta property="og:url" content="{{ @domain }}episode/{{ @current_episode->getNumber() }}">
-        <meta property="og:audio" content="http://media.blubrry.com/painkilleralready/archive.org/download/{{ @current_episode->getIdentifier() }}/{{ @current_episode->getFileName() }}">
-        <meta property="og:audio:type" content="audio/vnd.facebook.bridge">
         <meta property="music:album" content="{{ @domain }}">
         <meta property="music:album:track" content="{{ @current_episode->getNumber() }}">
-        <meta property="music:duration" content="{{ @current_episode->getLength() }}">
+        <meta property="music:duration" content="{{ @current_episode->getYouTubeLength() }}">
         <repeat group="{{ @current_episode->getHosts() }}" value="{{ @host }}">
         <meta property="music:musician" content="{{ @domain }}person/{{ @host->getID() }}">
         </repeat>
