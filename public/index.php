@@ -659,4 +659,26 @@ $f3->route("GET /api/episodes/add",
 	}
 );
 
+$f3->route("GET /api/episodes/edit",
+	function ($f3) {
+		if ($_GET["key"] == apache_getenv("PKA_IFTTT_PW")) {
+			$episode_number = trim(str_replace($f3->get("Core")->getName() . " #", "", $_GET["title"]));
+		}
+		
+		$f3->set("current_episode", null);
+		
+		foreach ($f3->get("episodes") as $episode) {
+            if ($episode_number == $episode->getNumber()) {
+                $f3->set("current_episode", $episode);
+            }
+        }
+        
+        if ($f3->get("current_episode") !== null) {
+	        $f3->get("current_episode")->setDescription(trim($_GET["content"]));
+        } else {
+	        $f3->error();
+        }
+	}
+);
+
 $f3->run();

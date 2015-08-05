@@ -13,3 +13,9 @@ composer.phar
 
 # Ignore temporary framework files
 /public/tmp
+
+# Ignore deployer files
+common.php
+composer.php
+deploy.php
+deployer.phar
