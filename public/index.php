@@ -4,7 +4,7 @@ require_once("../vendor/autoload.php");
 
 // Initialize framework
 $f3 = \Base::instance();
-$f3->set("DEBUG", 3);
+$f3->set("DEBUG", 0);
 
 // Setting up the core
 $f3->set("DB", new DB\SQL("mysql:host=" . apache_getenv("DB_HOST") . ";dbname=" . apache_getenv("DB_NAME") . ";charset=utf8", apache_getenv("DB_USER"), apache_getenv("DB_PASS")));
@@ -61,21 +61,22 @@ $f3->route("GET /",
     }
 , 60);
 
+$f3->route("GET /episode/random",
+	function ($f3) {
+		$f3->reroute("/episode/" . $f3->get("episodes")[array_rand($f3->get("episodes"))]->getNumber());
+	}
+, 0);
+
 $f3->route("GET /episode/@number",
     function ($f3, $params) {
         $f3->set("type", "episode");
         
-        if ($params["number"] == "random") {
-            $f3->set("current_episode", $f3->get("episodes")[array_rand($f3->get("episodes"))]);
-            $f3->reroute("/episode/" . $f3->get("current_episode")->getNumber());
+        if (!is_numeric($params["number"])) {
+            $f3->error(404);
         } else {
-            if (!is_numeric($params["number"])) {
-                $f3->error(404);
-            } else {
-                foreach ($f3->get("episodes") as $episode) {
-                    if ($params["number"] == $episode->getNumber()) {
-                        $f3->set("current_episode", $episode);
-                    }
+            foreach ($f3->get("episodes") as $episode) {
+                if ($params["number"] == $episode->getNumber()) {
+                    $f3->set("current_episode", $episode);
                 }
             }
         }
@@ -100,7 +101,12 @@ $f3->route("GET /episode/@number",
             $f3->set("timeline_author", $f3->get("current_episode")->getTimelineAuthor());
         }
         
-        $f3->set("description", "Guests: " . $f3->get("guests_list"));
+        if ($f3->get("current_episode")->getDescription() != "") {
+        	$f3->set("description", $f3->get("current_episode")->getDescription());
+        } else {
+        	$f3->set("description", "Guests: " . $f3->get("guests_list"));
+        }
+        
         $f3->set("canonical", $f3->get("domain") . "episode/" . $f3->get("current_episode")->getNumber());
         $f3->set("title", "Episode #" . $f3->get("current_episode")->getNumber() . " · " . $f3->get("Core")->getName());
         $f3->set("source", "get");
@@ -110,21 +116,22 @@ $f3->route("GET /episode/@number",
     }
 , 60);
 
+$f3->route("GET /person/random",
+	function ($f3) {
+		$f3->reroute("/person/" . $f3->get("people")[array_rand($f3->get("people"))]->getID());
+	}
+, 0);
+
 $f3->route("GET /person/@number",
     function ($f3, $params) {
         $f3->set("type", "person");
         
-        if ($params["number"] == "random") {
-            $f3->set("current_person", $f3->get("people")[array_rand($f3->get("people"))]);
-            $f3->reroute("/person/" . $f3->get("current_person")->getID());
+        if (!is_numeric($params["number"])) {
+            $f3->error(404);
         } else {
-            if (!is_numeric($params["number"])) {
-                $f3->error(404);
-            } else {
-                foreach ($f3->get("people") as $person) {
-                    if ($params["number"] == $person->getID()) {
-                        $f3->set("current_person", $person);
-                    }
+            foreach ($f3->get("people") as $person) {
+                if ($params["number"] == $person->getID()) {
+                    $f3->set("current_person", $person);
                 }
             }
         }
@@ -174,6 +181,12 @@ $f3->route("GET /person/@number",
     }
 , 60);
 
+$f3->route("GET /content/random",
+	function ($f3) {
+		$f3->reroute("/content?id=" . $f3->get("domain") . "episode/" . $f3->get("episodes")[array_rand($f3->get("episodes"))]->getNumber());
+	}
+, 0);
+
 $f3->route("GET /content",
     function ($f3) {
         if (isset($_GET["id"])) {
@@ -194,17 +207,9 @@ $f3->route("GET /content",
                     }
                 }
                 
-                $cache = true;
-                if ($id == "random") {
-                    $episode = $f3->get("episodes")[array_rand($f3->get("episodes"))];
-                    $cache = false;
-                    F3::set("CACHE", false);
-                } else {
-                    $episode = new \Tripod\Episode($id, $f3->get("DB"));
-                }
+                $episode = new \Tripod\Episode($id, $f3->get("DB"));
                 
                 $episode_data = array();
-
                 $episode_data["Identifier"] = $episode->getIdentifier();
                 $episode_data["Number"] = $episode->getNumber();
                 $episode_data["DateTime"] = $episode->getDate();
@@ -212,7 +217,6 @@ $f3->route("GET /content",
                 $episode_data["Reddit"] = $episode->getReddit();
                 $episode_data["YouTube"] = $episode->getYouTube();
                 $episode_data["YouTubeLength"] = $episode->getYouTubeLength();
-                $episode_data["Cache"] = $cache;
                 $episode_data["Link"] = $f3->get("domain") . "episode/" . $episode->getNumber();
                 
                 foreach ($episode->getHosts() as $host) {

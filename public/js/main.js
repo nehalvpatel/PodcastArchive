@@ -63,13 +63,25 @@ function loadContent(url, back_forward) {
 	if (cached_data.hasOwnProperty(url) == 1) {
 		updateContent(cached_data[url], search_timestamp, back_forward);
 	} else {
+		var is_random = false;
+		var extension = "";
+		
+		if (url.replace(domain, "").indexOf("random") > -1) {
+			is_random = true;
+			extension = "content/random";
+		} else {
+			extension = "content";
+		}
+		
 		$.ajax({
-			url: domain + "content",
+			url: domain + extension,
 			dataType: "json",
 			data: {id: cleanURL(url)},
 			async: true,
 			success: function(content) {
-				if ($.parseJSON(content.Cache) === true) {
+				if (is_random) {
+					cached_data[domain + "episode/" + $.parseJSON(content.Number)] = content;
+				} else {
 					cached_data[url] = content;
 				}
 				
