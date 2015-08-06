@@ -4,6 +4,7 @@ require_once("../vendor/autoload.php");
 
 // Initialize framework
 $f3 = \Base::instance();
+$f3->set("CACHE", true);
 $f3->set("DEBUG", 0);
 
 // Setting up the core
@@ -13,17 +14,17 @@ $f3->set("Utilities", new \Tripod\Utilities());
 
 // Some settings
 $f3->get("Core")->setName("Painkiller Already");
-$f3->get("Core")->setDescription("Three gamers discuss games, current events, and tell a few stories.");
+$f3->get("Core")->setDescription("Commonly referred to as PKA, the podcast discusses current events, news, relives comedic stories and gives their perspective on life while throwing in their comedic twist to all discussions.");
 $f3->get("Core")->setPrefix("PKA");
-$f3->set("feedburner", "Painkiller_Already");
-$f3->set("base_domain", $f3->get("Utilities")->getBaseDomain());
 
 // Get modified time to refresh CSS and JS if necessary
-$f3->set("css_modified_time", filemtime("css/main.css"));
-$f3->set("js_modified_time", filemtime("js/main.js"));
+$f3->set("css_modified_time", filemtime("css/main.css"), 0);
+$f3->set("js_modified_time", filemtime("js/main.js"), 0);
 
 // Loading data for the pages
+$f3->set("feed", "http://painkilleralready.podbean.com/feed/");
 $f3->set("description", $f3->get("Core")->getDescription());
+$f3->set("base_domain", $f3->get("Utilities")->getBaseDomain());
 $f3->set("domain", $f3->get("Utilities")->getDomain());
 $f3->set("episodes", $f3->get("Core")->getEpisodes());
 $f3->set("people", $f3->get("Core")->getPeople());
@@ -42,7 +43,7 @@ $f3->set("ONERROR",
 		$template = new Template;
 		echo $template->render("../views/base.tpl");
 	}
-, 60);
+);
 
 $f3->route("GET /",
     function ($f3) {
@@ -114,7 +115,7 @@ $f3->route("GET /episode/@number",
         $template = new Template;
         echo $template->render("../views/base.tpl");
     }
-, 60);
+, 600);
 
 $f3->route("GET /person/random",
 	function ($f3) {
@@ -179,7 +180,7 @@ $f3->route("GET /person/@number",
         $template = new Template;
         echo $template->render("../views/base.tpl");
     }
-, 60);
+, 600);
 
 $f3->route("GET /content/random",
 	function ($f3) {
@@ -207,7 +208,12 @@ $f3->route("GET /content",
                     }
                 }
                 
-                $episode = new \Tripod\Episode($id, $f3->get("DB"));
+                $episode = null;
+                foreach ($f3->get("episodes") as $current_episode) {
+	                if ($current_episode->getIdentifier() == $id) {
+	                    $episode = $current_episode;
+	                }
+	            }
                 
                 $episode_data = array();
                 $episode_data["Identifier"] = $episode->getIdentifier();
@@ -270,7 +276,7 @@ $f3->route("GET /content",
             }
         }
     }
-, 60);
+, 600);
 
 $f3->route("GET /search",
     function ($f3) {
@@ -280,7 +286,7 @@ $f3->route("GET /search",
             echo json_encode($f3->get("Core")->getSearchResults($_GET["query"]));
         }
     }
-, 60);
+, 600);
 
 $f3->route("GET /credits",
     function ($f3) {
@@ -303,7 +309,7 @@ $f3->route("GET /credits",
         $template = new Template;
         echo $template->render("../views/base.tpl");
     }
-, 60);
+, 600);
 
 $f3->route("GET /feedback",
     function ($f3) {
@@ -314,7 +320,7 @@ $f3->route("GET /feedback",
         $template = new Template;
         echo $template->render("../views/base.tpl");
     }
-, 60);
+, 600);
 
 $f3->route("POST /feedback",
     function ($f3) {
@@ -369,21 +375,21 @@ $f3->route("GET /opensearchdescription.xml",
         $template = new Template;
         echo $template->render("../views/opensearchdescription.tpl", "application/xml");
     }
-, 60);
+, 600);
 
 $f3->route("GET /robots.txt",
     function ($f3) {
         $template = new Template;
         echo $template->render("../views/robots.tpl", "text/plain");
     }
-, 60);
+, 600);
 
 $f3->route("GET /sitemap.xml",
     function ($f3) {
         $template = new Template;
         echo $template->render("../views/sitemap.tpl", "application/xml");
     }
-, 60);
+, 600);
 
 $f3->route("GET /admin",
 	function ($f3) {
@@ -403,7 +409,7 @@ $f3->route("GET /admin",
 		$template = new Template;
 		echo $template->render("../views/admin/base.tpl");
 	}
-, 60);
+, 600);
 
 $f3->route("GET /admin/home",
 	function ($f3) {
@@ -427,7 +433,7 @@ $f3->route("GET /admin/home",
 		$template = new Template;
 		echo $template->render("../views/admin/base.tpl");
 	}
-, 60);
+, 600);
 
 $f3->route("GET /admin/logout",
 	function ($f3) {
@@ -450,7 +456,7 @@ $f3->route("GET /admin/logout",
 		$template = new Template;
 		echo $template->render("../views/admin/base.tpl");
 	}
-, 60);
+, 600);
 
 $f3->route(
 	array(

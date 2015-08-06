@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <meta name="description" content="{{ @description }}">
         <link rel="canonical" href="{{ @canonical }}">
-        <link rel="alternate" type="application/rss+xml" title="{{ @Core->getName() }}" href="http://feeds.feedburner.com/{{ @feedburner }}">
+        <link rel="alternate" type="application/rss+xml" title="{{ @Core->getName() }}" href="{{ @feed }}">
         <link rel="search" type="application/opensearchdescription+xml" href="{{ @domain }}opensearchdescription.xml" title="{{ @Core->getName() }}">
         <title>{{ @title }}</title>
         
