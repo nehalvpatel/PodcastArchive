@@ -86,7 +86,7 @@ class Person
 				)
 			);
 
-			$this->_f3->get("log")->addError("Attempt at changing person " . $this->getID() . "'s `" . $field . "` to `" . $value . "` [Database error]", $error_info);
+			$this->_f3->get("log")->addError("Attempt at changing person " . $this->getID() . "'s `" . $field . "` to `" . $value . "`", $error_info);
 			$this->_f3->error("Database error.");
 		}
 	}

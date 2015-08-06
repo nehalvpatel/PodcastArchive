@@ -351,15 +351,29 @@ $f3->route("POST /feedback",
 			}
 			
 			if (empty($errors)) {
-				$feedback_query = $f3->get("DB")->prepare("INSERT INTO `feedback` (`issue`, `explanation`) VALUES (:issue, :explanation)");
-				$feedback_query->bindValue(":issue", $_POST["issue"]);
-				$feedback_query->bindValue(":explanation", $_POST["explanation"]);
-				$feedback_result = $feedback_query->execute();
-				
-				if ($feedback_result) {
-					$f3->set("success", "Thank you, your feedback has been received and our administrators will now work to solve the problem shortly.");
-				} else {
-					$errors[] = "There was a MySQL error, please try again.";
+				try {
+					$feedback_query = "INSERT INTO `feedback` (`issue`, `explanation`) VALUES (:issue, :explanation)";
+					$feedback_paramaters = array(
+						":issue" => $_POST["issue"],
+						":explanation" => $_POST["explanation"]
+					);
+					$feedback_result = $f3->get("DB")->exec($feedback_query, $feedback_paramaters);
+					
+					if ($feedback_result !== false) {
+						$f3->get("log")->addInfo("New feedback added.");
+						$f3->set("success", "Thank you, your feedback has been received and our administrators will now work to solve the problem shortly.");
+					}
+				} catch (\PDOException $e) {
+					$error_info = array(
+						"parameters" => $feedback_paramaters,
+						"error" => array(
+							"mesage" => $e->getMessage(),
+							"trace" => $e->getTrace()
+						)
+					);
+
+					$f3->get("log")->addError("Attempt at adding feedback", $error_info);
+					$f3->error("Database error.");
 				}
 			}					
 		}
@@ -407,10 +421,17 @@ $f3->route("GET /api/episodes/add",
 			);
 			
 			if ($f3->get("Core")->addEpisode($_GET["number"], $hosts, array(), array(), $_GET["youtube"], $_GET["reddit"], $_SERVER["YT_API_KEY"])) {
-				$f3->get("log")->addInfo("New episode added (#" . $_GET["number"] . ")", $_GET);
+				$f3->get("log")->addInfo("New episode added (#" . $_GET["number"] . ")", array("parameters" => $_GET));
 			}
 		} else {
-			$f3->get("log")->addError("Attempt at adding episode [Invalid password]", $_GET);
+			$error_info = array(
+				"parameters" => $_GET,
+				"error" => array(
+					"mesage" => "Invalid password",
+				)
+			);
+
+			$f3->get("log")->addError("Attempt at adding episode", $error_info);
 			$f3->error("Invalid password.");
 		}
 	}
@@ -430,14 +451,28 @@ $f3->route("GET /api/episodes/edit",
 			
 			if ($f3->get("current_episode") !== null) {
 				if ($f3->get("current_episode")->setDescription(trim($_GET["content"]))) {
-					$f3->get("log")->addInfo("Description edited for episode #" . $f3->get("current_episode")->getNumber(), $_GET);
+					$f3->get("log")->addInfo("Description edited for episode #" . $f3->get("current_episode")->getNumber(), array("parameters" => $_GET));
 				}
 			} else {
-				$f3->get("log")->addError("Attempt at editing episode description [Invalid episode number]", $_GET);
+				$error_info = array(
+					"parameters" => $_GET,
+					"error" => array(
+						"mesage" => "Invalid episode number",
+					)
+				);
+
+				$f3->get("log")->addError("Attempt at editing episode description", $error_info);
 				$f3->error("Invalid episode number.");
 			}
 		} else {
-			$f3->get("log")->addError("Attempt at editing episode description [Invalid password]", $_GET);
+			$error_info = array(
+				"parameters" => $_GET,
+				"error" => array(
+					"mesage" => "Invalid password",
+				)
+			);
+
+			$f3->get("log")->addError("Attempt at editing episode description", $error_info);
 			$f3->error("Invalid password.");
 		}
 	}

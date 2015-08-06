@@ -140,7 +140,7 @@ class Podcast
 				)
 			);
 
-			$this->_f3->get("log")->addError("Attempt at adding episode [Database error]", $error_info);
+			$this->_f3->get("log")->addError("Attempt at adding episode", $error_info);
 			$this->_f3->error("Database error.");
 		}
 	}

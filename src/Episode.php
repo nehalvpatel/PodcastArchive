@@ -143,7 +143,7 @@ class Episode
 				)
 			);
 
-			$this->_f3->get("log")->addError("Attempt at changing episode " . $this->getNumber() . "'s `" . $field . "` to `" . $value . "` [Database error]", $error_info);
+			$this->_f3->get("log")->addError("Attempt at changing episode " . $this->getNumber() . "'s `" . $field . "` to `" . $value . "`", $error_info);
 			$this->_f3->error("Database error.");
 		}
 	}
