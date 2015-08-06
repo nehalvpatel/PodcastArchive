@@ -49,7 +49,7 @@ class Episode
 		$episode_parameters = array(
 			":Identifier" => $episode_id
 		);
-		$episode_results = $this->_connection->exec($episodes_query, $episode_parameters, 600);
+		$episode_results = $this->_connection->exec($episode_query, $episode_parameters, 600);
 		
 		if (count($episode_results) > 0) {
 			$hosts_list = json_decode($episode_results[0]["Hosts"], true);
@@ -58,12 +58,12 @@ class Episode
 			$episode_results[0]["Guests"] = array();
 			$sponsors_list = json_decode($episode_results[0]["Sponsors"], true);
 			$episode_results[0]["Sponsors"] = array();
-			
+
 			$people_list = array_unique(array_merge($hosts_list, $guests_list, $sponsors_list));
-			$placeholders = rtrim(str_repeat("?, ", count($people_list)), ", ");
-			$people_query = "SELECT * FROM `people` WHERE `ID` IN ($placeholders) ORDER BY `ID` ASC";
-			$people_results = $this->_connection->exec($people_query, "", 600);
-			
+			$people_list = implode(", ", $people_list);
+			$people_query = "SELECT * FROM `people` WHERE `ID` IN ($people_list) ORDER BY `ID` ASC";
+			$people_results = $this->_connection->exec($people_query, $people_list, 600);
+
 			foreach ($people_results as $person_data) {
 				$person = new Person($person_data, $this->_f3);
 				
@@ -135,7 +135,16 @@ class Episode
 			
 			return true;
 		} catch (\PDOException $e) {
-			die("DATABASE ERROR: " . $e->getMessage());
+			$error_info = array(
+				"parameters" => $update_parameters,
+				"error" => array(
+					"mesage" => $e->getMessage(),
+					"trace" => $e->getTrace()
+				)
+			);
+
+			$this->_f3->get("log")->addError("Attempt at changing episode " . $this->getNumber() . "'s `" . $field . "` to `" . $value . "` [Database error]", $error_info);
+			$this->_f3->error("Database error.");
 		}
 	}
 	

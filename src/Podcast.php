@@ -126,9 +126,22 @@ class Podcast
 				":Reddit" => $reddit,
 			);
 			
-			$this->_connection->exec($add_query, $add_parameters);
+			if ($this->_connection->exec($add_query, $add_parameters) === false) {
+				return false;
+			} else {
+				return true;
+			}
 		} catch (\PDOException $e) {
-			die("DATABASE ERROR: " . $e->getMessage());
+			$error_info = array(
+				"parameters" => $add_parameters,
+				"error" => array(
+					"mesage" => $e->getMessage(),
+					"trace" => $e->getTrace()
+				)
+			);
+
+			$this->_f3->get("log")->addError("Attempt at adding episode [Database error]", $error_info);
+			$this->_f3->error("Database error.");
 		}
 	}
 	

@@ -25,7 +25,8 @@
 	"require": {
 		"php": ">=5.4.0",
 		"bcosca/fatfree": "dev-master",
-		"ircmaxell/password-compat": "dev-master"
+		"ircmaxell/password-compat": "dev-master",
+		"monolog/monolog": "^1.15"
 	},
 
 	"require-dev": {

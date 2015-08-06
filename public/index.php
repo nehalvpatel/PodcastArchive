@@ -2,13 +2,19 @@
 
 require_once("../vendor/autoload.php");
 
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
 // Initialize framework
 $f3 = \Base::instance();
 $f3->set("CACHE", true);
 $f3->set("DEBUG", 0);
 
 // Setting up the core
-$f3->set("DB", new \DB\SQL("mysql:host=" . apache_getenv("DB_HOST") . ";dbname=" . apache_getenv("DB_NAME") . ";charset=utf8", apache_getenv("DB_USER"), apache_getenv("DB_PASS")));
+$f3->set("log", new Logger("PKA"));
+$f3->get("log")->pushHandler(new StreamHandler($_SERVER["LOG_LOCATION"]));
+$f3->set("DB", new \DB\SQL("mysql:host=" . $_SERVER["DB_HOST"] . ";dbname=" . $_SERVER["DB_NAME"] . ";charset=utf8", $_SERVER["DB_USER"], $_SERVER["DB_PASS"]));
+$f3->get("DB")->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
 $f3->set("Core", new \PainkillerAlready\Podcast($f3));
 $f3->set("Utilities", new \PainkillerAlready\Utilities());
 
@@ -651,15 +657,18 @@ $f3->route(
 
 $f3->route("GET /api/episodes/add",
 	function ($f3) {
-		if ($_GET["key"] == apache_getenv("PKA_API_PW")) {
+		if ($_GET["key"] == $_SERVER["PKA_API_PW"]) {
 			$hosts = array(
-				new \Tripod\Person(2, $f3->get("DB")),
-				new \Tripod\Person(3, $f3->get("DB")),
-				new \Tripod\Person(28, $f3->get("DB"))
+				new \PainkillerAlready\Person(2, $f3),
+				new \PainkillerAlready\Person(3, $f3),
+				new \PainkillerAlready\Person(28, $f3)
 			);
 			
-			$f3->get("Core")->addEpisode($_GET["number"], $hosts, array(), array(), $_GET["youtube"], $_GET["reddit"], apache_getenv("YT_API_KEY"));
+			if ($f3->get("Core")->addEpisode($_GET["number"], $hosts, array(), array(), $_GET["youtube"], $_GET["reddit"], $_SERVER["YT_API_KEY"])) {
+				$f3->get("log")->addInfo("New episode added (#" . $_GET["number"] . ")", $_GET);
+			}
 		} else {
+			$f3->get("log")->addError("Attempt at adding episode [Invalid password]", $_GET);
 			$f3->error("Invalid password.");
 		}
 	}
@@ -667,22 +676,27 @@ $f3->route("GET /api/episodes/add",
 
 $f3->route("GET /api/episodes/edit",
 	function ($f3) {
-		if ($_GET["key"] == apache_getenv("PKA_IFTTT_PW")) {
+		if ($_GET["key"] == $_SERVER["PKA_IFTTT_PW"]) {
 			$episode_number = trim(str_replace($f3->get("Core")->getName() . " #", "", $_GET["title"]));
-		}
-		
-		$f3->set("current_episode", null);
-		
-		foreach ($f3->get("episodes") as $episode) {
-			if ($episode_number == $episode->getNumber()) {
-				$f3->set("current_episode", $episode);
+			$f3->set("current_episode", null);
+			
+			foreach ($f3->get("episodes") as $episode) {
+				if ($episode_number == $episode->getNumber()) {
+					$f3->set("current_episode", $episode);
+				}
 			}
-		}
-		
-		if ($f3->get("current_episode") !== null) {
-			$f3->get("current_episode")->setDescription(trim($_GET["content"]));
+			
+			if ($f3->get("current_episode") !== null) {
+				if ($f3->get("current_episode")->setDescription(trim($_GET["content"]))) {
+					$f3->get("log")->addInfo("Description edited for episode #" . $f3->get("current_episode")->getNumber(), $_GET);
+				}
+			} else {
+				$f3->get("log")->addError("Attempt at editing episode description [Invalid episode number]", $_GET);
+				$f3->error("Invalid episode number.");
+			}
 		} else {
-			$f3->error();
+			$f3->get("log")->addError("Attempt at editing episode description [Invalid password]", $_GET);
+			$f3->error("Invalid password.");
 		}
 	}
 );

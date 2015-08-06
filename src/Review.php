@@ -78,7 +78,16 @@ class Review
 			
 			return true;
 		} catch (\PDOException $e) {
-			die("DATABASE ERROR: " . $e->getMessage());
+			$error_info = array(
+				"parameters" => $update_parameters,
+				"error" => array(
+					"mesage" => $e->getMessage(),
+					"trace" => $e->getTrace()
+				)
+			);
+
+			$this->_f3->get("log")->addError("Attempt at changing review " . $this->getID() . "'s `" . $field . "` to `" . $value . "` [Database error]", $error_info);
+			$this->_f3->error("Database error.");
 		}
 	}
 	

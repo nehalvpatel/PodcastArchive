@@ -19,3 +19,6 @@ common.php
 composer.php
 deploy.php
 deployer.phar
+
+# Ignore monolog logs
+monolog.log
