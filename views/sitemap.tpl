@@ -12,16 +12,16 @@
 		<loc>{{ @domain }}feedback</loc>
 		<changefreq>weekly</changefreq>
 	</url>
-    <repeat group="{{ @episodes }}" value="{{ @episode }}">
-        <url>
-            <loc>{{ @domain }}episode/{{ @episode->getNumber(); }}</loc>
-            <changefreq>monthly</changefreq>
-        </url>
-    </repeat>
-    <repeat group="{{ @people }}" value="{{ @person }}">
-        <url>
-            <loc>{{ @domain }}person/{{ @person->getID(); }}</loc>
-            <changefreq>monthly</changefreq>
-        </url>
-    </repeat>
+	<repeat group="{{ @episodes }}" value="{{ @episode }}">
+		<url>
+			<loc>{{ @domain }}episode/{{ @episode->getNumber(); }}</loc>
+			<changefreq>monthly</changefreq>
+		</url>
+	</repeat>
+	<repeat group="{{ @people }}" value="{{ @person }}">
+		<url>
+			<loc>{{ @domain }}person/{{ @person->getID(); }}</loc>
+			<changefreq>monthly</changefreq>
+		</url>
+	</repeat>
 </urlset>

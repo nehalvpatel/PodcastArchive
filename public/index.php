@@ -46,20 +46,20 @@ $f3->set("ONERROR",
 );
 
 $f3->route("GET /",
-    function ($f3) {
-        $f3->set("type", "episode");
-        $f3->set("current_episode", $f3->get("episodes")[count($f3->get("episodes")) - 1]);
-        $f3->set("canonical", $f3->get("domain") . "episode/" . $f3->get("current_episode")->getNumber());
-        $f3->set("title", $f3->get("Core")->getName());
-        $f3->set("source", "latest");
-        
-        if ($f3->get("current_episode")->getTimelined() === true) {
-            $f3->set("timeline_author", $f3->get("current_episode")->getTimelineAuthor());
-        }
-        
-        $template = new Template;
-        echo $template->render("../views/base.tpl");
-    }
+	function ($f3) {
+		$f3->set("type", "episode");
+		$f3->set("current_episode", $f3->get("episodes")[count($f3->get("episodes")) - 1]);
+		$f3->set("canonical", $f3->get("domain") . "episode/" . $f3->get("current_episode")->getNumber());
+		$f3->set("title", $f3->get("Core")->getName());
+		$f3->set("source", "latest");
+		
+		if ($f3->get("current_episode")->getTimelined() === true) {
+			$f3->set("timeline_author", $f3->get("current_episode")->getTimelineAuthor());
+		}
+		
+		$template = new Template;
+		echo $template->render("../views/base.tpl");
+	}
 , 60);
 
 $f3->route("GET /episode/random",
@@ -69,52 +69,52 @@ $f3->route("GET /episode/random",
 , 0);
 
 $f3->route("GET /episode/@number",
-    function ($f3, $params) {
-        $f3->set("type", "episode");
-        
-        if (!is_numeric($params["number"])) {
-            $f3->error(404);
-        } else {
-            foreach ($f3->get("episodes") as $episode) {
-                if ($params["number"] == $episode->getNumber()) {
-                    $f3->set("current_episode", $episode);
-                }
-            }
-        }
+	function ($f3, $params) {
+		$f3->set("type", "episode");
+		
+		if (!is_numeric($params["number"])) {
+			$f3->error(404);
+		} else {
+			foreach ($f3->get("episodes") as $episode) {
+				if ($params["number"] == $episode->getNumber()) {
+					$f3->set("current_episode", $episode);
+				}
+			}
+		}
 		
 		if (!$f3->exists("current_episode")) {
 			$f3->error(404);
 		}
-        
-        $guests = $f3->get("current_episode")->getGuests();
-        if (count($guests) == 0) {
-            $f3->set("guests_list", "Nobody");
-        } else {
-            if (count($guests) > 2) {
-                $guests[count($guests) - 1] = "and " . strval($guests[count($guests) - 1]);
-                $f3->set("guests_list", join(", ", array_map("strval", $guests)));
-            } else {
-                $f3->set("guests_list", join(" and ", array_map("strval", $guests)));
-            }
-        }
-        
-        if ($f3->get("current_episode")->getTimelined() === true) {
-            $f3->set("timeline_author", $f3->get("current_episode")->getTimelineAuthor());
-        }
-        
-        if ($f3->get("current_episode")->getDescription() != "") {
-        	$f3->set("description", $f3->get("current_episode")->getDescription());
-        } else {
-        	$f3->set("description", "Guests: " . $f3->get("guests_list"));
-        }
-        
-        $f3->set("canonical", $f3->get("domain") . "episode/" . $f3->get("current_episode")->getNumber());
-        $f3->set("title", "Episode #" . $f3->get("current_episode")->getNumber() . " · " . $f3->get("Core")->getName());
-        $f3->set("source", "get");
-        
-        $template = new Template;
-        echo $template->render("../views/base.tpl");
-    }
+		
+		$guests = $f3->get("current_episode")->getGuests();
+		if (count($guests) == 0) {
+			$f3->set("guests_list", "Nobody");
+		} else {
+			if (count($guests) > 2) {
+				$guests[count($guests) - 1] = "and " . strval($guests[count($guests) - 1]);
+				$f3->set("guests_list", join(", ", array_map("strval", $guests)));
+			} else {
+				$f3->set("guests_list", join(" and ", array_map("strval", $guests)));
+			}
+		}
+		
+		if ($f3->get("current_episode")->getTimelined() === true) {
+			$f3->set("timeline_author", $f3->get("current_episode")->getTimelineAuthor());
+		}
+		
+		if ($f3->get("current_episode")->getDescription() != "") {
+			$f3->set("description", $f3->get("current_episode")->getDescription());
+		} else {
+			$f3->set("description", "Guests: " . $f3->get("guests_list"));
+		}
+		
+		$f3->set("canonical", $f3->get("domain") . "episode/" . $f3->get("current_episode")->getNumber());
+		$f3->set("title", "Episode #" . $f3->get("current_episode")->getNumber() . " · " . $f3->get("Core")->getName());
+		$f3->set("source", "get");
+		
+		$template = new Template;
+		echo $template->render("../views/base.tpl");
+	}
 , 600);
 
 $f3->route("GET /person/random",
@@ -124,62 +124,62 @@ $f3->route("GET /person/random",
 , 0);
 
 $f3->route("GET /person/@number",
-    function ($f3, $params) {
-        $f3->set("type", "person");
-        
-        if (!is_numeric($params["number"])) {
-            $f3->error(404);
-        } else {
-            foreach ($f3->get("people") as $person) {
-                if ($params["number"] == $person->getID()) {
-                    $f3->set("current_person", $person);
-                }
-            }
-        }
-        
+	function ($f3, $params) {
+		$f3->set("type", "person");
+		
+		if (!is_numeric($params["number"])) {
+			$f3->error(404);
+		} else {
+			foreach ($f3->get("people") as $person) {
+				if ($params["number"] == $person->getID()) {
+					$f3->set("current_person", $person);
+				}
+			}
+		}
+		
 		if (!$f3->exists("current_person")) {
 			$f3->error(404);
 		}
 		
-        $host_count = 0;
-        $guest_count = 0;
-        $sponsor_count = 0;
-        foreach ($f3->get("episodes") as $episode) {
-            foreach ($episode->getHosts() as $host) {
-                if ($host->getID() == $f3->get("current_person")->getID()) {
-                    $episode->setHighlighted(true);
-                    $host_count++;
-                }
-            }
-            
-            foreach ($episode->getGuests() as $guest) {
-                if ($guest->getID() == $f3->get("current_person")->getID()) {
-                    $episode->setHighlighted(true);
-                    $guest_count++;
-                }
-            }
-            
-            foreach ($episode->getSponsors() as $sponsor) {
-                if ($sponsor->getID() == $f3->get("current_person")->getID()) {
-                    $episode->setHighlighted(true);
-                    $sponsor_count++;
-                }
-            }
-        }
-        
-        $f3->set("host_count", $host_count);
-        $f3->set("guest_count", $guest_count);
-        $f3->set("sponsor_count", $sponsor_count);
-        $f3->set("recent_videos", $f3->get("current_person")->getRecentYouTubeVideos());
-        $f3->set("social_links", $f3->get("current_person")->getSocialLinks());
-        
-        $f3->set("description", $f3->get("current_person")->getOverview());
-        $f3->set("canonical", $f3->get("domain") . "episode/" . $f3->get("current_person")->getID());
-        $f3->set("title", $f3->get("current_person")->getName() . " · " . $f3->get("Core")->getName());
-        
-        $template = new Template;
-        echo $template->render("../views/base.tpl");
-    }
+		$host_count = 0;
+		$guest_count = 0;
+		$sponsor_count = 0;
+		foreach ($f3->get("episodes") as $episode) {
+			foreach ($episode->getHosts() as $host) {
+				if ($host->getID() == $f3->get("current_person")->getID()) {
+					$episode->setHighlighted(true);
+					$host_count++;
+				}
+			}
+			
+			foreach ($episode->getGuests() as $guest) {
+				if ($guest->getID() == $f3->get("current_person")->getID()) {
+					$episode->setHighlighted(true);
+					$guest_count++;
+				}
+			}
+			
+			foreach ($episode->getSponsors() as $sponsor) {
+				if ($sponsor->getID() == $f3->get("current_person")->getID()) {
+					$episode->setHighlighted(true);
+					$sponsor_count++;
+				}
+			}
+		}
+		
+		$f3->set("host_count", $host_count);
+		$f3->set("guest_count", $guest_count);
+		$f3->set("sponsor_count", $sponsor_count);
+		$f3->set("recent_videos", $f3->get("current_person")->getRecentYouTubeVideos());
+		$f3->set("social_links", $f3->get("current_person")->getSocialLinks());
+		
+		$f3->set("description", $f3->get("current_person")->getOverview());
+		$f3->set("canonical", $f3->get("domain") . "episode/" . $f3->get("current_person")->getID());
+		$f3->set("title", $f3->get("current_person")->getName() . " · " . $f3->get("Core")->getName());
+		
+		$template = new Template;
+		echo $template->render("../views/base.tpl");
+	}
 , 600);
 
 $f3->route("GET /content/random",
@@ -189,145 +189,145 @@ $f3->route("GET /content/random",
 , 0);
 
 $f3->route("GET /content",
-    function ($f3) {
-        if (isset($_GET["id"])) {
-            $id = trim($_GET["id"]);
+	function ($f3) {
+		if (isset($_GET["id"])) {
+			$id = trim($_GET["id"]);
 
-            if (!empty($id)) {
-                $id = urldecode($id);
+			if (!empty($id)) {
+				$id = urldecode($id);
 
-                if (strpos($id, $f3->get("domain")) !== FALSE) {
-                    $id = str_replace($f3->get("domain") . "episode/", "", $id);
-                    
-                    if (strpos($f3->get("Core")->getPrefix(), $id) === FALSE) {
-                        if (is_numeric($id)) {
-                            $id = $f3->get("Core")->getPrefix() . "_" . $f3->get("Utilities")->padEpisodeNumber($id);
-                        }
-                    } else {
-                        $id = $f3->get("Core")->getPrefix() . "_" . $f3->get("Utilities")->padEpisodeNumber($id);
-                    }
-                }
-                
-                $episode = null;
-                foreach ($f3->get("episodes") as $current_episode) {
-	                if ($current_episode->getIdentifier() == $id) {
-	                    $episode = $current_episode;
-	                }
-	            }
-                
-                $episode_data = array();
-                $episode_data["Identifier"] = $episode->getIdentifier();
-                $episode_data["Number"] = $episode->getNumber();
-                $episode_data["DateTime"] = $episode->getDate();
-                $episode_data["Date"] = date("F d, Y", strtotime($episode->getDate()));
-                $episode_data["Reddit"] = $episode->getReddit();
-                $episode_data["YouTube"] = $episode->getYouTube();
-                $episode_data["YouTubeLength"] = $episode->getYouTubeLength();
-                $episode_data["Link"] = $f3->get("domain") . "episode/" . $episode->getNumber();
-                
-                foreach ($episode->getHosts() as $host) {
-                    $host_data = array();
-                    $host_data["ID"] = $host->getID();
-                    $host_data["Name"] = $host->getName();
-                    $host_data["URL"] = $host->getURL();
-                    
-                    $episode_data["People"]["Hosts"][] = $host_data;
-                }
-                
-                foreach ($episode->getGuests() as $guest) {
-                    $guest_data = array();
-                    $guest_data["ID"] = $guest->getID();
-                    $guest_data["Name"] = $guest->getName();
-                    $guest_data["URL"] = $guest->getURL();
-                    
-                    $episode_data["People"]["Guests"][] = $guest_data;
-                }
-                
-                foreach ($episode->getSponsors() as $sponsor) {
-                    $sponsor_data = array();
-                    $sponsor_data["ID"] = $sponsor->getID();
-                    $sponsor_data["Name"] = $sponsor->getName();
-                    $sponsor_data["URL"] = $sponsor->getURL();
-                    
-                    $episode_data["People"]["Sponsors"][] = $sponsor_data;
-                }
+				if (strpos($id, $f3->get("domain")) !== FALSE) {
+					$id = str_replace($f3->get("domain") . "episode/", "", $id);
+					
+					if (strpos($f3->get("Core")->getPrefix(), $id) === FALSE) {
+						if (is_numeric($id)) {
+							$id = $f3->get("Core")->getPrefix() . "_" . $f3->get("Utilities")->padEpisodeNumber($id);
+						}
+					} else {
+						$id = $f3->get("Core")->getPrefix() . "_" . $f3->get("Utilities")->padEpisodeNumber($id);
+					}
+				}
+				
+				$episode = null;
+				foreach ($f3->get("episodes") as $current_episode) {
+					if ($current_episode->getIdentifier() == $id) {
+						$episode = $current_episode;
+					}
+				}
+				
+				$episode_data = array();
+				$episode_data["Identifier"] = $episode->getIdentifier();
+				$episode_data["Number"] = $episode->getNumber();
+				$episode_data["DateTime"] = $episode->getDate();
+				$episode_data["Date"] = date("F d, Y", strtotime($episode->getDate()));
+				$episode_data["Reddit"] = $episode->getReddit();
+				$episode_data["YouTube"] = $episode->getYouTube();
+				$episode_data["YouTubeLength"] = $episode->getYouTubeLength();
+				$episode_data["Link"] = $f3->get("domain") . "episode/" . $episode->getNumber();
+				
+				foreach ($episode->getHosts() as $host) {
+					$host_data = array();
+					$host_data["ID"] = $host->getID();
+					$host_data["Name"] = $host->getName();
+					$host_data["URL"] = $host->getURL();
+					
+					$episode_data["People"]["Hosts"][] = $host_data;
+				}
+				
+				foreach ($episode->getGuests() as $guest) {
+					$guest_data = array();
+					$guest_data["ID"] = $guest->getID();
+					$guest_data["Name"] = $guest->getName();
+					$guest_data["URL"] = $guest->getURL();
+					
+					$episode_data["People"]["Guests"][] = $guest_data;
+				}
+				
+				foreach ($episode->getSponsors() as $sponsor) {
+					$sponsor_data = array();
+					$sponsor_data["ID"] = $sponsor->getID();
+					$sponsor_data["Name"] = $sponsor->getName();
+					$sponsor_data["URL"] = $sponsor->getURL();
+					
+					$episode_data["People"]["Sponsors"][] = $sponsor_data;
+				}
 
-                $episode_data["Timeline"] = array();
-                if ($episode->getTimelined()) {
-                    $author = $episode->getTimelineAuthor();
-                    $episode_data["Timeline"]["Author"]["Name"] = $author->getDisplayName();
-                    $episode_data["Timeline"]["Author"]["Link"] = $author->getDisplayLink();
-                    
-                    $episode_data["Timeline"]["Timestamps"] = array();
-                    foreach ($episode->getTimestamps() as $timestamp) {
-                        $timestamp_data = array();
-                        $timestamp_data["HMS"] = $timestamp->getTime();
-                        $timestamp_data["Value"] = $timestamp->getValue();
-                        $timestamp_data["URL"] = $timestamp->getURL();
-                        $timestamp_data["Begin"] = $timestamp->getBegin();
-                        $timestamp_data["End"] = $timestamp->getEnd();
-                        $timestamp_data["Width"] = $timestamp->getWidth();
-                        
-                        $episode_data["Timeline"]["Timestamps"][] = $timestamp_data;
-                    }
-                }
+				$episode_data["Timeline"] = array();
+				if ($episode->getTimelined()) {
+					$author = $episode->getTimelineAuthor();
+					$episode_data["Timeline"]["Author"]["Name"] = $author->getDisplayName();
+					$episode_data["Timeline"]["Author"]["Link"] = $author->getDisplayLink();
+					
+					$episode_data["Timeline"]["Timestamps"] = array();
+					foreach ($episode->getTimestamps() as $timestamp) {
+						$timestamp_data = array();
+						$timestamp_data["HMS"] = $timestamp->getTime();
+						$timestamp_data["Value"] = $timestamp->getValue();
+						$timestamp_data["URL"] = $timestamp->getURL();
+						$timestamp_data["Begin"] = $timestamp->getBegin();
+						$timestamp_data["End"] = $timestamp->getEnd();
+						$timestamp_data["Width"] = $timestamp->getWidth();
+						
+						$episode_data["Timeline"]["Timestamps"][] = $timestamp_data;
+					}
+				}
 
-                echo json_encode($episode_data);
-            }
-        }
-    }
+				echo json_encode($episode_data);
+			}
+		}
+	}
 , 600);
 
 $f3->route("GET /search",
-    function ($f3) {
-        if (!isset($_GET["query"])) {
-            echo json_encode($f3->get("Core")->getSearchResults(""));
-        } else {
-            echo json_encode($f3->get("Core")->getSearchResults($_GET["query"]));
-        }
-    }
+	function ($f3) {
+		if (!isset($_GET["query"])) {
+			echo json_encode($f3->get("Core")->getSearchResults(""));
+		} else {
+			echo json_encode($f3->get("Core")->getSearchResults($_GET["query"]));
+		}
+	}
 , 600);
 
 $f3->route("GET /credits",
-    function ($f3) {
-        $f3->set("type", "credits");
-        $f3->set("canonical", $f3->get("domain") . "credits");
-        $f3->set("title", "Developers and Contributors · " . $f3->get("Core")->getName());
-        
-        $developers = array();
-        $contributors = array();
-        foreach ($f3->get("Core")->getAuthors() as $author) {
-            if ($author->getType() == "0") {
-                $developers[] = $author;
-            } else {
-                $contributors[] = $author;
-            }
-        }
-        $f3->set("developers", $developers);
-        $f3->set("contributors", $contributors);
-        
-        $template = new Template;
-        echo $template->render("../views/base.tpl");
-    }
+	function ($f3) {
+		$f3->set("type", "credits");
+		$f3->set("canonical", $f3->get("domain") . "credits");
+		$f3->set("title", "Developers and Contributors · " . $f3->get("Core")->getName());
+		
+		$developers = array();
+		$contributors = array();
+		foreach ($f3->get("Core")->getAuthors() as $author) {
+			if ($author->getType() == "0") {
+				$developers[] = $author;
+			} else {
+				$contributors[] = $author;
+			}
+		}
+		$f3->set("developers", $developers);
+		$f3->set("contributors", $contributors);
+		
+		$template = new Template;
+		echo $template->render("../views/base.tpl");
+	}
 , 600);
 
 $f3->route("GET /feedback",
-    function ($f3) {
-        $f3->set("type", "feedback");
-        $f3->set("canonical", $f3->get("domain") . "feedback");
-        $f3->set("title", "Feedback · " . $f3->get("Core")->getName());
-        
-        $template = new Template;
-        echo $template->render("../views/base.tpl");
-    }
+	function ($f3) {
+		$f3->set("type", "feedback");
+		$f3->set("canonical", $f3->get("domain") . "feedback");
+		$f3->set("title", "Feedback · " . $f3->get("Core")->getName());
+		
+		$template = new Template;
+		echo $template->render("../views/base.tpl");
+	}
 , 600);
 
 $f3->route("POST /feedback",
-    function ($f3) {
-        $f3->set("type", "feedback");
-        $f3->set("canonical", $f3->get("domain") . "feedback");
-        $f3->set("title", "Feedback · " . $f3->get("Core")->getName());
-        
+	function ($f3) {
+		$f3->set("type", "feedback");
+		$f3->set("canonical", $f3->get("domain") . "feedback");
+		$f3->set("title", "Feedback · " . $f3->get("Core")->getName());
+		
 		if (isset($_POST["issue"], $_POST["explanation"]) && !empty($_POST["issue"]) && !empty($_POST["explanation"])) {		
 			$issueTypes = array(
 				"timeline_typo",
@@ -365,30 +365,30 @@ $f3->route("POST /feedback",
 			$f3->set("errors", $errors);
 		}
 			
-        $template = new Template;
-        echo $template->render("../views/base.tpl");
-    }
+		$template = new Template;
+		echo $template->render("../views/base.tpl");
+	}
 );
 
 $f3->route("GET /opensearchdescription.xml",
-    function ($f3) {
-        $template = new Template;
-        echo $template->render("../views/opensearchdescription.tpl", "application/xml");
-    }
+	function ($f3) {
+		$template = new Template;
+		echo $template->render("../views/opensearchdescription.tpl", "application/xml");
+	}
 , 600);
 
 $f3->route("GET /robots.txt",
-    function ($f3) {
-        $template = new Template;
-        echo $template->render("../views/robots.tpl", "text/plain");
-    }
+	function ($f3) {
+		$template = new Template;
+		echo $template->render("../views/robots.tpl", "text/plain");
+	}
 , 600);
 
 $f3->route("GET /sitemap.xml",
-    function ($f3) {
-        $template = new Template;
-        echo $template->render("../views/sitemap.tpl", "application/xml");
-    }
+	function ($f3) {
+		$template = new Template;
+		echo $template->render("../views/sitemap.tpl", "application/xml");
+	}
 , 600);
 
 $f3->route("GET /admin",
@@ -674,16 +674,16 @@ $f3->route("GET /api/episodes/edit",
 		$f3->set("current_episode", null);
 		
 		foreach ($f3->get("episodes") as $episode) {
-            if ($episode_number == $episode->getNumber()) {
-                $f3->set("current_episode", $episode);
-            }
-        }
-        
-        if ($f3->get("current_episode") !== null) {
-	        $f3->get("current_episode")->setDescription(trim($_GET["content"]));
-        } else {
-	        $f3->error();
-        }
+			if ($episode_number == $episode->getNumber()) {
+				$f3->set("current_episode", $episode);
+			}
+		}
+		
+		if ($f3->get("current_episode") !== null) {
+			$f3->get("current_episode")->setDescription(trim($_GET["content"]));
+		} else {
+			$f3->error();
+		}
 	}
 );
 
