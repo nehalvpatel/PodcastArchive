@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "97922a71f4d20c38144a5e1a53bf68be",
+    "hash": "29fcb105a912fd3b8ef7e2075c747635",
     "packages": [
         {
             "name": "bcosca/fatfree",
@@ -78,52 +78,6 @@
                 "password"
             ],
             "time": "2015-04-23 15:44:03"
-        },
-        {
-            "name": "nehalvpatel/tripod",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/nehalvpatel/tripod.git",
-                "reference": "60f507f9d3ce6738bca109a7448a79332b761e17"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/nehalvpatel/tripod/zipball/60f507f9d3ce6738bca109a7448a79332b761e17",
-                "reference": "60f507f9d3ce6738bca109a7448a79332b761e17",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "squizlabs/php_codesniffer": "1.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Tripod\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nehal Patel",
-                    "email": "nehal@itspatel.com",
-                    "homepage": "http://www.itspatel.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Tripod is a podcast library handler.",
-            "homepage": "https://github.com/nehalvpatel/tripod",
-            "keywords": [
-                "library",
-                "podcasts"
-            ],
-            "time": "2015-08-05 06:39:07"
         }
     ],
     "packages-dev": [
@@ -207,7 +161,6 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "bcosca/fatfree": 20,
-        "nehalvpatel/tripod": 20,
         "ircmaxell/password-compat": 20
     },
     "prefer-stable": false,

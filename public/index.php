@@ -8,9 +8,9 @@ $f3->set("CACHE", true);
 $f3->set("DEBUG", 0);
 
 // Setting up the core
-$f3->set("DB", new DB\SQL("mysql:host=" . apache_getenv("DB_HOST") . ";dbname=" . apache_getenv("DB_NAME") . ";charset=utf8", apache_getenv("DB_USER"), apache_getenv("DB_PASS")));
-$f3->set("Core", new \Tripod\Podcast($f3->get("DB")));
-$f3->set("Utilities", new \Tripod\Utilities());
+$f3->set("DB", new \DB\SQL("mysql:host=" . apache_getenv("DB_HOST") . ";dbname=" . apache_getenv("DB_NAME") . ";charset=utf8", apache_getenv("DB_USER"), apache_getenv("DB_PASS")));
+$f3->set("Core", new \PainkillerAlready\Podcast($f3));
+$f3->set("Utilities", new \PainkillerAlready\Utilities());
 
 // Some settings
 $f3->get("Core")->setName("Painkiller Already");
