@@ -43,7 +43,7 @@ class Author
 		if (is_numeric($author_id)) {
 			$author_query = "SELECT * FROM `admins` WHERE `ID` = :ID";
 			$author_parameters = array(
-				":ID" => $author_id, \PDO::PARAM_INT
+				":ID" => $author_id
 			);
 			$author_results = $this->_connection->exec($author_query, $author_parameters, 600);
 			
