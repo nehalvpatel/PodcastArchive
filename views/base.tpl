@@ -48,7 +48,7 @@
 				<div class="search-form"><input class="search-field" type="search" id="search-field" name="search" placeholder="Search"></div>
 				<h3><span>Episodes</span><a title="Random Episode" href="<?php echo $domain; ?>episode/random" class="random-button timelined"><i class="icon-random"></i></a></h3>
 				<div id="search-error" class="error">
-					<p>There was an error with the search engine.<br><br>Please message /u/nehalvpatel on reddit.</p>
+					<p></p>
 				</div>
 				<ul data-current="<check if="{{ @type == 'episode' }}">{{ @current_episode->getIdentifier() }}</check>">
 				<repeat group="{{ array_reverse(@episodes) }}" value="{{ @episode }}">

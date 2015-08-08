@@ -302,6 +302,10 @@ nav ul li a:hover {
 #search-error p {
 	padding: 20px;
 }
+#search-error p::before {
+	content: 'There was an error with the search engine. \a\a Please message /u/nehalvpatel on reddit.';
+	white-space: pre-wrap;
+}
 form div {
 	margin: 10px 0 0;
 }
