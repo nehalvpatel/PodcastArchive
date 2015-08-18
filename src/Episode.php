@@ -94,20 +94,6 @@ class Episode
 				$episode_results[0]["Timestamps"] = array();
 			}
 			
-			$reviews_query = "SELECT * FROM `reviews` WHERE `Episode` = :Identifier ORDER BY `ID` ASC";
-			$reviews_parameters = array(
-				":Identifier" => $episode_id
-			);
-			$reviews_results = $this->_connection->exec($reviews_query, $reviews_parameters, 600);
-			
-			if (count($reviews_results) > 0) {
-				foreach ($reviews_results as $review) {
-					$episode_results[0]["Reviews"][] = new Review($review, $this->_f3);
-				}
-			} else {
-				$episode_results[0]["Reviews"] = array();
-			}
-			
 			$this->_data = $episode_results[0];
 		} else {
 			throw new \Exception("No episode with that identifier exists");
@@ -378,31 +364,6 @@ class Episode
 			);
 
 			$this->_connection->exec($timestamp_query, $timestamp_parameters);
-			$this->reloadData();
-			
-			return true;
-		} catch (PDOException $e) {
-			return false;
-		}
-	}
-	
-	public function getReviews()
-	{
-		return $this->_getValue("Reviews");
-	}
-	
-	public function addReview(Person $person, $review)
-	{
-		try {
-			$review_query = "INSERT INTO `reviews` (`Person`, `Episode`, `Review`) VALUES (:Person, :Episode, :Review)";
-			
-			$review_parameters = array(
-				":Person" => $person->getID(),
-				":Episode" => $this->getIdentifier(),
-				":Review" => $review
-			);
-			
-			$this->_connection->exec($review_query, $review_parameters);
 			$this->reloadData();
 			
 			return true;

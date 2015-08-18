@@ -187,14 +187,6 @@ class Podcast
 				$timelines[$timestamp["Episode"]][] = new Timestamp($timestamp, $this->_f3);
 			}
 			
-			$reviews_query = "SELECT * FROM `reviews` ORDER BY `ID` ASC";
-			$reviews_results = $this->_connection->exec($reviews_query, "", 600);
-			
-			$reviews = array();
-			foreach ($reviews_results as $review) {
-				$reviews[$review["Episode"]][] = new Review($review, $this->_f3);
-			}
-			
 			$episodes = array();
 			foreach ($episodes_results as $episode) {
 				$hosts = json_decode($episode["Hosts"], true);
@@ -219,12 +211,6 @@ class Podcast
 					$episode["Timestamps"] = $timelines[$episode["Identifier"]];
 				} else {
 					$episode["Timestamps"] = array();
-				}
-				
-				if (isset($reviews[$episode["Identifier"]])) {
-					$episode["Reviews"] = $reviews[$episode["Identifier"]];
-				} else {
-					$episode["Reviews"] = array();
 				}
 				
 				$episodes[] = new Episode($episode, $this->_f3);
