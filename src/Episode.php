@@ -117,6 +117,11 @@ class Episode
 	private function _getValue($field)
 	{
 		$this->checkData();
+		
+		if (!isset($this->_data[$field])) {
+			$this->reloadData();
+		}
+		
 		return $this->_data[$field];
 	}
 	

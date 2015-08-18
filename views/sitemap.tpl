@@ -12,7 +12,7 @@
 		<loc>{{ @domain }}feedback</loc>
 		<changefreq>weekly</changefreq>
 	</url>
-	<repeat group="{{ @episodes }}" value="{{ @episode }}">
+	<repeat group="{{ @Core->getEpisodes() }}" value="{{ @episode }}">
 		<url>
 			<loc>{{ @domain }}episode/{{ @episode->getNumber(); }}</loc>
 			<changefreq>monthly</changefreq>

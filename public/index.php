@@ -32,8 +32,6 @@ $f3->set("feed", "http://painkilleralready.podbean.com/feed/");
 $f3->set("description", $f3->get("Core")->getDescription());
 $f3->set("base_domain", $f3->get("Utilities")->getBaseDomain());
 $f3->set("domain", $f3->get("Utilities")->getDomain());
-$f3->set("episodes", $f3->get("Core")->getEpisodes());
-$f3->set("people", $f3->get("Core")->getPeople());
 
 // Some meta data
 $f3->set("gplus", "107397414095793132493");
@@ -54,7 +52,7 @@ $f3->set("ONERROR",
 $f3->route("GET /",
 	function ($f3) {
 		$f3->set("type", "episode");
-		$f3->set("current_episode", $f3->get("episodes")[count($f3->get("episodes")) - 1]);
+		$f3->set("current_episode", $f3->get("Core")->getLatestEpisode());
 		$f3->set("canonical", $f3->get("domain") . "episode/" . $f3->get("current_episode")->getNumber());
 		$f3->set("title", $f3->get("Core")->getName());
 		$f3->set("source", "latest");
@@ -70,7 +68,7 @@ $f3->route("GET /",
 
 $f3->route("GET /episode/random",
 	function ($f3) {
-		$f3->reroute("/episode/" . $f3->get("episodes")[array_rand($f3->get("episodes"))]->getNumber());
+		$f3->reroute("/episode/" . $f3->get("Core")->getRandomEpisode()->getNumber());
 	}
 , 0);
 
@@ -81,7 +79,7 @@ $f3->route("GET /episode/@number",
 		if (!is_numeric($params["number"])) {
 			$f3->error(404);
 		} else {
-			foreach ($f3->get("episodes") as $episode) {
+			foreach ($f3->get("Core")->getEpisodes() as $episode) {
 				if ($params["number"] == $episode->getNumber()) {
 					$f3->set("current_episode", $episode);
 				}
@@ -125,7 +123,7 @@ $f3->route("GET /episode/@number",
 
 $f3->route("GET /person/random",
 	function ($f3) {
-		$f3->reroute("/person/" . $f3->get("people")[array_rand($f3->get("people"))]->getID());
+		$f3->reroute("/person/" . $f3->get("Core")->getRandomPerson()->getID());
 	}
 , 0);
 
@@ -136,7 +134,7 @@ $f3->route("GET /person/@number",
 		if (!is_numeric($params["number"])) {
 			$f3->error(404);
 		} else {
-			foreach ($f3->get("people") as $person) {
+			foreach ($f3->get("Core")->getPeople() as $person) {
 				if ($params["number"] == $person->getID()) {
 					$f3->set("current_person", $person);
 				}
@@ -150,7 +148,7 @@ $f3->route("GET /person/@number",
 		$host_count = 0;
 		$guest_count = 0;
 		$sponsor_count = 0;
-		foreach ($f3->get("episodes") as $episode) {
+		foreach ($f3->get("Core")->getEpisodes() as $episode) {
 			foreach ($episode->getHosts() as $host) {
 				if ($host->getID() == $f3->get("current_person")->getID()) {
 					$episode->setHighlighted(true);
@@ -190,7 +188,7 @@ $f3->route("GET /person/@number",
 
 $f3->route("GET /content/random",
 	function ($f3) {
-		$f3->reroute("/content?id=" . $f3->get("domain") . "episode/" . $f3->get("episodes")[array_rand($f3->get("episodes"))]->getNumber());
+		$f3->reroute("/content?id=" . $f3->get("domain") . "episode/" . $f3->get("Core")->getRandomEpisode()->getIdentifier());
 	}
 , 0);
 
@@ -215,7 +213,7 @@ $f3->route("GET /content",
 				}
 				
 				$episode = null;
-				foreach ($f3->get("episodes") as $current_episode) {
+				foreach ($f3->get("Core")->getEpisodes() as $current_episode) {
 					if ($current_episode->getIdentifier() == $id) {
 						$episode = $current_episode;
 					}
@@ -443,7 +441,7 @@ $f3->route("GET /api/episodes/edit",
 			$episode_number = trim(str_replace($f3->get("Core")->getName() . " #", "", $_GET["title"]));
 			$f3->set("current_episode", null);
 			
-			foreach ($f3->get("episodes") as $episode) {
+			foreach ($f3->get("Core")->getEpisodes() as $episode) {
 				if ($episode_number == $episode->getNumber()) {
 					$f3->set("current_episode", $episode);
 				}

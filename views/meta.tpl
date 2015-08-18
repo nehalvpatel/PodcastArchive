@@ -32,7 +32,7 @@
 		<meta property="og:description" content="{{ @description }}">
 		<meta property="og:url" content="{{ @domain }}">
 		<meta property="music:release_date" content="2010-04-19">
-		<repeat group="{{ @episodes }}" value="{{ @episode }}">
+		<repeat group="{{ @Core->getEpisodes() }}" value="{{ @episode }}">
 		<meta property="music:song" content="{{ @domain }}episode/{{ @episode->getNumber() }}">
 		<meta property="music:song:disc" content="1">
 		<meta property="music:song:track" content="{{ @episode->getNumber() }}">

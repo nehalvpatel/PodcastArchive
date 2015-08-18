@@ -12,6 +12,8 @@ class Podcast
 	
 	// instance
 	private $_data;
+	private $_episodes_data;
+	private $_people_data;
 	
 	public function __construct($f3)
 	{
@@ -19,6 +21,8 @@ class Podcast
 		$this->_connection = $this->_f3->get("DB");
 		
 		$this->_data = array();
+		$this->_episodes_data = array();
+		$this->_people_data = array();
 	}
 	
 	private function _getValue($field)
@@ -145,81 +149,117 @@ class Podcast
 		}
 	}
 	
+	public function getLatestEpisode()
+	{
+		$episodes = $this->getEpisodes();
+		
+		if (count($episodes) > 0) {
+			return $episodes[count($episodes) - 1];
+		} else {
+			throw new \Exception("No episode found.");
+		}
+	}
+	
+	public function getRandomEpisode()
+	{
+		$episodes = $this->getEpisodes();
+		
+		if (count($episodes) > 0) {
+			return $episodes[array_rand($episodes)];
+		} else {
+			throw new \Exception("No episode found.");
+		}
+	}
+	
 	public function getEpisodes()
 	{
-		$episodes_query = "SELECT * FROM `episodes` ORDER BY `Identifier` ASC";
-		$episodes_results = $this->_connection->exec($episodes_query, "", 600);
+		if (count($this->_episodes_data) > 0) {
+			return $this->_episodes_data;
+		} else {
+			$episodes_query = "SELECT `Identifier`, `Number`, `YouTube Length`, `Hosts`, `Guests`, `Sponsors` FROM `episodes` ORDER BY `Identifier` ASC";
+			$episodes_results = $this->_connection->exec($episodes_query, "", 600);
+			
+			$timestamps_query = "SELECT `ID`, `Episode` FROM `timestamps` ORDER BY `Timestamp` ASC";
+			$timestamps_results = $this->_connection->exec($timestamps_query, "", 600);
 
-		$people = array();
-		foreach ($this->getPeople() as $person) {
-			$people[$person->getID()] = $person;
+			$timelines = array();
+			foreach ($timestamps_results as $timestamp) {
+				$timelines[$timestamp["Episode"]][] = new Timestamp($timestamp, $this->_f3);
+			}
+			
+			$reviews_query = "SELECT * FROM `reviews` ORDER BY `ID` ASC";
+			$reviews_results = $this->_connection->exec($reviews_query, "", 600);
+			
+			$reviews = array();
+			foreach ($reviews_results as $review) {
+				$reviews[$review["Episode"]][] = new Review($review, $this->_f3);
+			}
+			
+			$episodes = array();
+			foreach ($episodes_results as $episode) {
+				$hosts = json_decode($episode["Hosts"], true);
+				$episode["Hosts"] = array();
+				foreach ($hosts as $host) {
+					$episode["Hosts"][] = new Person(array("ID" => $host), $this->_f3);
+				}
+				
+				$guests = json_decode($episode["Guests"], true);
+				$episode["Guests"] = array();
+				foreach ($guests as $guest) {
+					$episode["Guests"][] = new Person(array("ID" => $guest), $this->_f3);
+				}
+				
+				$sponsors = json_decode($episode["Sponsors"], true);
+				$episode["Sponsors"] = array();
+				foreach ($sponsors as $sponsor) {
+					$episode["Sponsors"][] = new Person(array("ID" => $sponsor), $this->_f3);
+				}
+				
+				if (isset($timelines[$episode["Identifier"]])) {
+					$episode["Timestamps"] = $timelines[$episode["Identifier"]];
+				} else {
+					$episode["Timestamps"] = array();
+				}
+				
+				if (isset($reviews[$episode["Identifier"]])) {
+					$episode["Reviews"] = $reviews[$episode["Identifier"]];
+				} else {
+					$episode["Reviews"] = array();
+				}
+				
+				$episodes[] = new Episode($episode, $this->_f3);
+			}
+			
+			return $episodes;
 		}
+	}
+	
+	public function getRandomPerson()
+	{
+		$people = $this->getPeople();
 		
-		$timestamps_query = "SELECT * FROM `timestamps` ORDER BY `Timestamp` ASC";
-		$timestamps_results = $this->_connection->exec($timestamps_query, "", 600);
-
-		$timelines = array();
-		foreach ($timestamps_results as $timestamp) {
-			$timelines[$timestamp["Episode"]][] = new Timestamp($timestamp, $this->_f3);
+		if (count($people) > 0) {
+			return $people[array_rand($people)];
+		} else {
+			throw new \Exception("No person found.");
 		}
-		
-		$reviews_query = "SELECT * FROM `reviews` ORDER BY `ID` ASC";
-		$reviews_results = $this->_connection->exec($reviews_query, "", 600);
-		
-		$reviews = array();
-		foreach ($reviews_results as $review) {
-			$reviews[$review["Episode"]][] = new Review($review, $this->_f3);
-		}
-		
-		$episodes = array();
-		foreach ($episodes_results as $episode) {
-			$hosts = json_decode($episode["Hosts"], true);
-			$episode["Hosts"] = array();
-			foreach ($hosts as $host) {
-				$episode["Hosts"][] = $people[$host];
-			}
-			
-			$guests = json_decode($episode["Guests"], true);
-			$episode["Guests"] = array();
-			foreach ($guests as $guest) {
-				$episode["Guests"][] = $people[$guest];
-			}
-			
-			$sponsors = json_decode($episode["Sponsors"], true);
-			$episode["Sponsors"] = array();
-			foreach ($sponsors as $sponsor) {
-				$episode["Sponsors"][] = $people[$sponsor];
-			}
-			
-			if (isset($timelines[$episode["Identifier"]])) {
-				$episode["Timestamps"] = $timelines[$episode["Identifier"]];
-			} else {
-				$episode["Timestamps"] = array();
-			}
-			
-			if (isset($reviews[$episode["Identifier"]])) {
-				$episode["Reviews"] = $reviews[$episode["Identifier"]];
-			} else {
-				$episode["Reviews"] = array();
-			}
-			
-			$episodes[] = new Episode($episode, $this->_f3);
-		}
-		
-		return $episodes;
 	}
 	
 	public function getPeople()
 	{
-		$people_query = "SELECT * FROM `people` ORDER BY `ID` ASC";
-		$people_results = $this->_connection->exec($people_query, "", 600);
-		
-		$people = array();
-		foreach ($people_results as $person) {
-			$people[] = new Person($person, $this->_f3);
+		if (count($this->_people_data) > 0) {
+			return $this->_people_data;
+		} else {
+			$people_query = "SELECT `ID` FROM `people` ORDER BY `ID` ASC";
+			$people_results = $this->_connection->exec($people_query, "", 600);
+			
+			$people = array();
+			foreach ($people_results as $person) {
+				$people[] = new Person(array("ID" => $person["ID"]), $this->_f3);
+			}
+			
+			return $people;
 		}
-		
-		return $people;
 	}
 	
 	public function getSearchResults($query)

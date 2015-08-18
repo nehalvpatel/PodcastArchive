@@ -51,7 +51,7 @@
 					<p></p>
 				</div>
 				<ul data-current="<check if="{{ @type == 'episode' }}">{{ @current_episode->getIdentifier() }}</check>">
-				<repeat group="{{ array_reverse(@episodes) }}" value="{{ @episode }}">
+				<repeat group="{{ array_reverse(@Core->getEpisodes()) }}" value="{{ @episode }}">
 					<li data-episode="{{ @episode->getIdentifier() }}"<check if="{{ @type == 'episode' }}"><check if="{{ @current_episode->getIdentifier() == @episode->getIdentifier() }}"> id="active"</check></check>>
 						<a href="{{ @domain }}episode/{{ @episode->getNumber() }}" class="<check if="{{ @episode->getHighlighted() }}">highlighted-episode</check>"><span>#{{ @episode->getNumber() }}</span><check if="{{ @episode->getTimelined() === true }}"><span class="timelined"></span></check></a>
 					</li>
