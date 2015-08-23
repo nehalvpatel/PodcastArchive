@@ -6,16 +6,16 @@
 	</url>
 	<url>
 		<loc>{{ @domain }}credits</loc>
-		<changefreq>weekly</changefreq>
+		<changefreq>monthly</changefreq>
 	</url>
 	<url>
 		<loc>{{ @domain }}feedback</loc>
-		<changefreq>weekly</changefreq>
+		<changefreq>monthly</changefreq>
 	</url>
 	<repeat group="{{ @Core->getEpisodes() }}" value="{{ @episode }}">
 		<url>
 			<loc>{{ @domain }}episode/{{ @episode->getNumber(); }}</loc>
-			<changefreq>monthly</changefreq>
+			<changefreq>weekly</changefreq>
 		</url>
 	</repeat>
 	<repeat group="{{ @people }}" value="{{ @person }}">
