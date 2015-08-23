@@ -297,7 +297,8 @@ $f3->route("GET /credits",
 		$f3->set("type", "credits");
 		$f3->set("canonical", $f3->get("domain") . "credits");
 		$f3->set("title", "Developers and Contributors · " . $f3->get("Core")->getName());
-		
+		$f3->set("description", "");
+
 		$developers = array();
 		$contributors = array();
 		foreach ($f3->get("Core")->getAuthors() as $author) {
@@ -320,7 +321,8 @@ $f3->route("GET /feedback",
 		$f3->set("type", "feedback");
 		$f3->set("canonical", $f3->get("domain") . "feedback");
 		$f3->set("title", "Feedback · " . $f3->get("Core")->getName());
-		
+		$f3->set("description", "");
+
 		$template = new Template;
 		echo $template->render("../views/base.tpl");
 	}
