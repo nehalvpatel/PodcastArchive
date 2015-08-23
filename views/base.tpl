@@ -6,7 +6,9 @@
 		<meta name="apple-mobile-web-app-title" content="{{ @Core->getName() }}">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<meta name="description" content="{{ @description }}">
-		<link rel="canonical" href="{{ @canonical }}">
+		<check if="{{ @home }} === false">
+			<link rel="canonical" href="{{ @canonical }}">
+		</check>
 		<link rel="alternate" type="application/rss+xml" title="{{ @Core->getName() }}" href="{{ @feed }}">
 		<link rel="search" type="application/opensearchdescription+xml" href="{{ @domain }}opensearchdescription.xml" title="{{ @Core->getName() }}">
 		<title>{{ @title }}</title>

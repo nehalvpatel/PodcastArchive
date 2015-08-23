@@ -28,6 +28,7 @@ $f3->set("css_modified_time", filemtime("css/main.css"), 0);
 $f3->set("js_modified_time", filemtime("js/main.js"), 0);
 
 // Loading data for the pages
+$f3->set("home", false);
 $f3->set("feed", "http://painkilleralready.podbean.com/feed/");
 $f3->set("description", $f3->get("Core")->getDescription());
 $f3->set("base_domain", $f3->get("Utilities")->getBaseDomain());
@@ -51,6 +52,7 @@ $f3->set("ONERROR",
 
 $f3->route("GET /",
 	function ($f3) {
+		$f3->set("home", true);
 		$f3->set("type", "episode");
 		$f3->set("current_episode", $f3->get("Core")->getLatestEpisode());
 		$f3->set("canonical", $f3->get("domain") . "episode/" . $f3->get("current_episode")->getNumber());
