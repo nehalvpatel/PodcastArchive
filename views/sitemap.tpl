@@ -18,7 +18,7 @@
 			<changefreq>weekly</changefreq>
 		</url>
 	</repeat>
-	<repeat group="{{ @people }}" value="{{ @person }}">
+	<repeat group="{{ @Core->getPeople() }}" value="{{ @person }}">
 		<url>
 			<loc>{{ @domain }}person/{{ @person->getID(); }}</loc>
 			<changefreq>monthly</changefreq>
