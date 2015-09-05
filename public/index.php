@@ -452,7 +452,14 @@ $f3->route("GET /api/episodes/edit",
 			}
 			
 			if ($f3->get("current_episode") !== null) {
-				if ($f3->get("current_episode")->setDescription(trim($_GET["content"]))) {
+				$description = $_GET["content"];
+				$description = str_replace("<<<", "", $description);
+				$description = str_replace(">>>", "", $description);
+				$description = strip_tags($description);
+				$description = iconv("UTF-8", "ASCII//TRANSLIT", $description);
+				$description = trim($description);
+				
+				if ($f3->get("current_episode")->setDescription($description)) {
 					$f3->get("log")->addInfo("Description edited for episode #" . $f3->get("current_episode")->getNumber(), array("parameters" => $_GET));
 				}
 			} else {
