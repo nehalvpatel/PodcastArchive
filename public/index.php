@@ -413,6 +413,90 @@ $f3->route("GET /sitemap.xml",
 	}
 , 600);
 
+$f3->route("GET /admin/episodes/timeline",
+	function ($f3) {
+		$template = new Template;
+		echo $template->render("../views/admin/episodes/timeline.tpl");
+	}
+);
+
+$f3->route("POST /admin/episodes/timeline",
+	function ($f3) {
+		if ($_POST["password"] != $_SERVER["TIMELINE_API_PW"])
+		{
+			$error_info = array(
+				"parameters" => $_POST,
+				"error" => array(
+					"mesage" => "Invalid password",
+				)
+			);
+
+			$f3->get("log")->addError("Attempt at adding episode timeline", $error_info);
+			$f3->error("Invalid password.");
+		}
+
+		$f3->set("current_episode", null);
+
+		foreach ($f3->get("Core")->getEpisodes() as $episode)
+		{
+			if ($_POST["episode"] == $episode->getNumber()) {
+				$f3->set("current_episode", $episode);
+			}
+		}
+
+		if ($f3->get("current_episode") === null)
+		{
+			$error_info = array(
+				"parameters" => $_POST,
+				"error" => array(
+					"mesage" => "Invalid episode number",
+				)
+			);
+
+			$f3->get("log")->addError("Attempt at adding episode timeline", $error_info);
+			$f3->error("Invalid episode number.");
+		}
+
+		preg_match_all("/(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d) (.*)/", $_POST["timeline"], $output_array);
+
+		$timestamp_count = count($output_array[4]);
+		$submitted_count = 0;
+		foreach ($output_array[4] as $timestamp_key => $timestamp_text)
+		{
+			$hour = $output_array[1][$timestamp_key] ?: "0";
+			$minute = $output_array[2][$timestamp_key];
+			$second = $output_array[3][$timestamp_key];
+			$text = $output_array[4][$timestamp_key];
+			$link = "";
+
+			preg_match("/\[(.*)\]/", $text, $text_output);
+
+			if (isset($text_output[1]))
+			{
+				$link = $text_output[1];
+				$text = str_replace("[" . $link . "]", "", $text);
+				$text = trim($text);
+			}
+
+			$timestamp = $second + (60 * $minute) + (3600 * $hour);
+
+			if ($f3->get("current_episode")->addTimestamp($timestamp, $text, $link) === true)
+			{
+				$submitted_count++;
+			}
+		}
+
+		if ($submitted_count > 0)
+		{
+			$author = new \PainkillerAlready\Author(24, $f3);
+			$f3->get("current_episode")->setTimelineAuthor($author);
+		}
+
+		$f3->get("log")->addInfo("Timeline added for episode #" . $f3->get("current_episode")->getNumber() . "(" . $submitted_count . " of " . $timestamp_count . ")", array("parameters" => $_POST));
+		echo $submitted_count . " out of " . $timestamp_count . " timestamps added to episode #" . $f3->get("current_episode")->getNumber();
+	}
+);
+
 $f3->route("GET /api/episodes/add",
 	function ($f3) {
 		if ($_GET["key"] == $_SERVER["PKA_API_PW"]) {
