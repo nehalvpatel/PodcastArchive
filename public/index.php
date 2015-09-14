@@ -492,6 +492,8 @@ $f3->route("POST /admin/episodes/timeline",
 			$f3->get("current_episode")->setTimelineAuthor($author);
 		}
 
+		$f3->clear("CACHE");
+
 		$f3->get("log")->addInfo("Timeline added for episode #" . $f3->get("current_episode")->getNumber() . "(" . $submitted_count . " of " . $timestamp_count . ")", array("parameters" => $_POST));
 		echo $submitted_count . " out of " . $timestamp_count . " timestamps added to episode #" . $f3->get("current_episode")->getNumber();
 	}
