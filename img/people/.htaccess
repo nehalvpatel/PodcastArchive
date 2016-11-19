@@ -1,0 +1,5 @@
+RewriteEngine on
+
+# use small image if big image doesn't exist
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([0-9]+)a\.png$ $1.png [L]

@@ -1,8 +1,0 @@
-RewriteEngine on
-
-# return unknown person if image doesn't exist
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^([0-9]+)\.png$ 0.png [L]
-
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^([0-9]+)a\.png$ 0a.png [L]
