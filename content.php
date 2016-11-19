@@ -4,10 +4,8 @@
 	
 	if (isset($_GET["id"])) {
 		$id = trim($_GET["id"]);
-		
 		if (!empty($id)) {
 			$id = urldecode($id);
-			
 			if (strpos($id, $domain) !== FALSE) {
 				$id = str_replace($domain . "episode/", "", $id);
 				
