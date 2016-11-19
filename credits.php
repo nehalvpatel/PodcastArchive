@@ -35,7 +35,7 @@
 		<link rel="publisher" href="https://plus.google.com/107397414095793132493">
 		
 		<!-- CSS -->
-		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css?ver=<?php echo $commit_count; ?>">
+		<link rel="stylesheet" type="text/css" href="<?php echo $domain; ?>css/main.css?ver=<?php echo filemtime("css/main.css"); ?>">
 		<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/3.0.2/css/font-awesome.min.css">
 	</head>
 	<body>

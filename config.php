@@ -30,12 +30,5 @@
 	
 	$base_domain = rtrim($_SERVER["HTTP_HOST"] . str_replace(basename($_SERVER["PHP_SELF"]), "", $_SERVER["PHP_SELF"]), "/");
 	$domain = "http://" . $base_domain . "/";
-	
-	ob_start();
-	passthru("git rev-list --count HEAD");
-	$commit_count = trim(ob_get_contents());
-	ob_end_clean();
-	
-	if ($commit_count == "") { $commit_count = "0"; }
 
 ?>
