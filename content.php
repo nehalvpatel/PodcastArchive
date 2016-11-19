@@ -4,8 +4,12 @@
 	
 	if (isset($_GET["id"])) {
 		$id = trim($_GET["id"]);
+		
 		if (!empty($id)) {
 			$id = urldecode($id);
+			var_dump($id);
+			var_dump($domain);
+			die();
 			if (strpos($id, $domain) !== FALSE) {
 				$id = str_replace($domain . "episode/", "", $id);
 				
@@ -58,6 +62,15 @@
 			$timestamps = $episode->getTimestamps();
 			if (count($timestamps) > 0) {
 				$author = new Author($con, $episode->getTimelineAuthor());
+				
+				if ($author) {
+					$episode_data["Timeline"]["Author"]["Name"] = $author->getDisplayName();
+					$episode_data["Timeline"]["Author"]["Link"] = $author->getDisplayLink();
+				} else {
+					$episode_data["Timeline"]["Author"]["Name"] = "";
+					$episode_data["Timeline"]["Author"]["Link"] = "";
+				}
+				
 				$episode_data["Timeline"]["Author"]["Name"] = $author->getDisplayName();
 				$episode_data["Timeline"]["Author"]["Link"] = $author->getDisplayLink();
 				$episode_data["Timeline"]["Timestamps"] = $timestamps;

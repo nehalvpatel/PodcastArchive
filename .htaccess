@@ -27,3 +27,5 @@ RewriteRule ^sitemap.xml$ sitemap.php
 RewriteRule ^(favicon(-[\d]*x[\d]*){0,1}\.(ico|png))$ img/favicons/$1 [PT]
 RewriteRule ^(mstile(-[\d]*x[\d]*)\.png)$ img/favicons/$1 [PT]
 RewriteRule ^(apple-touch-icon(-[\d]*x[\d]*){0,1}(-precomposed){0,1}\.png)$ img/favicons/$1 [PT]
+
+RewriteRule ^content$ content.php [QSA]
