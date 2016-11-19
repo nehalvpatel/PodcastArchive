@@ -7,9 +7,6 @@
 		
 		if (!empty($id)) {
 			$id = urldecode($id);
-			var_dump($id);
-			var_dump($domain);
-			die();
 			if (strpos($id, $domain) !== FALSE) {
 				$id = str_replace($domain . "episode/", "", $id);
 				
