@@ -29,6 +29,6 @@
 	$Podcast->setAuthorEmail("nehal@itspatel.com");
 	
 	$base_domain = rtrim($_SERVER["HTTP_HOST"] . str_replace(basename($_SERVER["PHP_SELF"]), "", $_SERVER["PHP_SELF"]), "/");
-	$domain = "http://" . $base_domain . "/";
+	$domain = "https://" . $base_domain . "/";
 
 ?>
