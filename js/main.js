@@ -235,6 +235,7 @@ function setCommentCount(element, reddit_id) {
 		async: true,
 		success: function(data) {
 			element.text(data[0].data.children[0].data.num_comments + " Comments");
+			element.parent().attr("href", "https://www.reddit.com/" + data[0].data.children[0].data.permalink);
 		},
 		error: function(xhr, textStatus, error) {
 			element.text("Comments");
