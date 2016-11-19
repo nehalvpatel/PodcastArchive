@@ -58,18 +58,14 @@
 			$episode_data["Timeline"] = array();
 			$timestamps = $episode->getTimestamps();
 			if (count($timestamps) > 0) {
-				$author = new Author($con, $episode->getTimelineAuthor());
-				
-				if ($author) {
+				if ($episode->getTimelineAuthor() > 0) {
+					$author = new Author($con, $episode->getTimelineAuthor());
 					$episode_data["Timeline"]["Author"]["Name"] = $author->getDisplayName();
 					$episode_data["Timeline"]["Author"]["Link"] = $author->getDisplayLink();
 				} else {
 					$episode_data["Timeline"]["Author"]["Name"] = "";
 					$episode_data["Timeline"]["Author"]["Link"] = "";
 				}
-				
-				$episode_data["Timeline"]["Author"]["Name"] = $author->getDisplayName();
-				$episode_data["Timeline"]["Author"]["Link"] = $author->getDisplayLink();
 				$episode_data["Timeline"]["Timestamps"] = $timestamps;
 			}
 			
