@@ -1,12 +1,7 @@
 <?php
 
-namespace PainkillerAlready;
-
 class Podcast
 {
-	// f3
-	private $_f3;
-
 	// database
 	private $_connection;
 	
@@ -15,10 +10,9 @@ class Podcast
 	private $_episodes_data;
 	private $_people_data;
 	
-	public function __construct($f3)
+	public function __construct($connection)
 	{
-		$this->_f3 = $f3;
-		$this->_connection = $this->_f3->get("DB");
+		$this->_connection = $connection;
 		
 		$this->_data = array();
 		$this->_episodes_data = array();
@@ -76,7 +70,7 @@ class Podcast
 		
 		$authors = array();
 		foreach ($authors_results as $author) {
-			$authors[] = new Author($author, $this->_f3);
+			$authors[] = new Author($this->_connection, $author);
 		}
 		
 		return $authors; 
@@ -143,9 +137,6 @@ class Podcast
 					"trace" => $e->getTrace()
 				)
 			);
-
-			$this->_f3->get("log")->addError("Attempt at adding episode", $error_info);
-			$this->_f3->error("Database error.");
 		}
 	}
 	
@@ -176,15 +167,17 @@ class Podcast
 		if (count($this->_episodes_data) > 0) {
 			return $this->_episodes_data;
 		} else {
-			$episodes_query = "SELECT `Identifier`, `Number`, `YouTube Length`, `Hosts`, `Guests`, `Sponsors` FROM `episodes` ORDER BY `Identifier` ASC";
-			$episodes_results = $this->_connection->exec($episodes_query, "", 600);
+			$episodes_query = $this->_connection->prepare("SELECT `Identifier`, `Number`, `YouTube Length`, `Hosts`, `Guests`, `Sponsors` FROM `episodes` ORDER BY `Identifier` ASC");
+			$episodes_query->execute();			
+			$episodes_results = $episodes_query->fetchAll();
 			
-			$timestamps_query = "SELECT `ID`, `Episode` FROM `timestamps` ORDER BY `Timestamp` ASC";
-			$timestamps_results = $this->_connection->exec($timestamps_query, "", 600);
+			$timestamps_query = $this->_connection->prepare("SELECT `ID`, `Episode` FROM `timestamps` ORDER BY `Timestamp` ASC");
+			$timestamps_query->execute();
+			$timestamps_results = $timestamps_query->fetchAll();
 
 			$timelines = array();
 			foreach ($timestamps_results as $timestamp) {
-				$timelines[$timestamp["Episode"]][] = new Timestamp($timestamp, $this->_f3);
+				$timelines[$timestamp["Episode"]][] = new Timestamp($this->_connection, $timestamp);
 			}
 			
 			$episodes = array();
@@ -192,19 +185,19 @@ class Podcast
 				$hosts = json_decode($episode["Hosts"], true);
 				$episode["Hosts"] = array();
 				foreach ($hosts as $host) {
-					$episode["Hosts"][] = new Person(array("ID" => $host), $this->_f3);
+					$episode["Hosts"][] = new Person($this->_connection, array("ID" => $host));
 				}
 				
 				$guests = json_decode($episode["Guests"], true);
 				$episode["Guests"] = array();
 				foreach ($guests as $guest) {
-					$episode["Guests"][] = new Person(array("ID" => $guest), $this->_f3);
+					$episode["Guests"][] = new Person($this->_connection, array("ID" => $guest));
 				}
 				
 				$sponsors = json_decode($episode["Sponsors"], true);
 				$episode["Sponsors"] = array();
 				foreach ($sponsors as $sponsor) {
-					$episode["Sponsors"][] = new Person(array("ID" => $sponsor), $this->_f3);
+					$episode["Sponsors"][] = new Person($this->_connection, array("ID" => $sponsor));
 				}
 				
 				if (isset($timelines[$episode["Identifier"]])) {
@@ -213,7 +206,7 @@ class Podcast
 					$episode["Timestamps"] = array();
 				}
 				
-				$episodes[] = new Episode($episode, $this->_f3);
+				$episodes[] = new Episode($this->_connection, $episode);
 			}
 			
 			return $episodes;
@@ -241,7 +234,7 @@ class Podcast
 			
 			$people = array();
 			foreach ($people_results as $person) {
-				$people[] = new Person(array("ID" => $person["ID"]), $this->_f3);
+				$people[] = new Person($this->_connection, array("ID" => $person["ID"]));
 			}
 			
 			return $people;

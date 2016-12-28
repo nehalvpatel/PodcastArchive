@@ -1,12 +1,7 @@
 <?php
 
-namespace PainkillerAlready;
-
 class Episode
 {
-	// f3
-	private $_f3;
-
 	// database
 	private $_connection;
 	
@@ -15,10 +10,9 @@ class Episode
 	private $_data;
 	private $_highlighted = false;
 	
-	public function __construct($initiator, $f3)
+	public function __construct($connection, $initiator)
 	{
-		$this->_f3 = $f3;
-		$this->_connection = $this->_f3->get("DB");
+		$this->_connection = $connection;
 		
 		if (is_array($initiator)) {
 			$this->_init_id = $initiator["Identifier"];
@@ -45,11 +39,10 @@ class Episode
 			$episode_id = "PKA_" . Utilities::padEpisodeNumber($episode_id);
 		}
 		
-		$episode_query = "SELECT * FROM `episodes` WHERE `Identifier` = :Identifier";
-		$episode_parameters = array(
-			":Identifier" => $episode_id
-		);
-		$episode_results = $this->_connection->exec($episode_query, $episode_parameters, 600);
+		$episode_query = $this->_connection->prepare("SELECT * FROM `episodes` WHERE `Identifier` = :Identifier");
+		$episode_query->bindValue(":Identifier", $episode_id);
+		$episode_query->execute();
+		$episode_results = $episode_query->fetchAll();
 		
 		if (count($episode_results) > 0) {
 			$hosts_list = json_decode($episode_results[0]["Hosts"], true);
@@ -61,11 +54,12 @@ class Episode
 
 			$people_list = array_unique(array_merge($hosts_list, $guests_list, $sponsors_list));
 			$people_list = implode(", ", $people_list);
-			$people_query = "SELECT * FROM `people` WHERE `ID` IN ($people_list) ORDER BY `ID` ASC";
-			$people_results = $this->_connection->exec($people_query, $people_list, 600);
+			$people_query = $this->_connection->prepare("SELECT * FROM `people` WHERE `ID` IN ($people_list) ORDER BY `ID` ASC");
+			$people_query->execute();
+			$people_results = $people_query->fetchAll();
 
 			foreach ($people_results as $person_data) {
-				$person = new Person($person_data, $this->_f3);
+				$person = new Person($this->_connection, $person_data);
 				
 				if (in_array($person->getID(), $hosts_list)) {
 					$episode_results[0]["Hosts"][] = $person;
@@ -80,15 +74,14 @@ class Episode
 				}
 			}
 			
-			$timeline_query = "SELECT * FROM `timestamps` WHERE `Episode` = :Identifier ORDER BY `Timestamp` ASC";
-			$timeline_parameters = array(
-				":Identifier" => $episode_id
-			);
-			$timeline_results = $this->_connection->exec($timeline_query, $timeline_parameters, 600);
+			$timeline_query = $this->_connection->prepare("SELECT * FROM `timestamps` WHERE `Episode` = :Identifier AND `Deleted` = '0' ORDER BY `Timestamp` ASC");
+			$timeline_query->bindValue(":Identifier", $episode_id);
+			$timeline_query->execute();
+			$timeline_results = $timeline_query->fetchAll();
 			
 			if (count($timeline_results) > 0) {
 				foreach ($timeline_results as $timestamp) {
-					$episode_results[0]["Timestamps"][] = new Timestamp($timestamp, $this->_f3);
+					$episode_results[0]["Timestamps"][] = new Timestamp($this->_connection, $timestamp);
 				}
 			} else {
 				$episode_results[0]["Timestamps"] = array();
@@ -133,9 +126,6 @@ class Episode
 					"trace" => $e->getTrace()
 				)
 			);
-
-			$this->_f3->get("log")->addError("Attempt at changing episode " . $this->getNumber() . "'s `" . $field . "` to `" . $value . "`", $error_info);
-			$this->_f3->error("Database error.");
 		}
 	}
 	
@@ -291,7 +281,7 @@ class Episode
 	public function getTimelineAuthor()
 	{
 		if ($this->_getValue("TimelineAuthor") != "0") {
-			return new Author($this->_getValue("TimelineAuthor"), $this->_f3);
+			return new Author($this->_connection, $this->_getValue("TimelineAuthor"));
 		} else {
 			return false;
 		}

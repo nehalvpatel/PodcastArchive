@@ -1,12 +1,7 @@
 <?php
 
-namespace PainkillerAlready;
-
 class Author
 {
-	// f3
-	private $_f3;
-
 	// database
 	private $_connection;
 	
@@ -14,10 +9,9 @@ class Author
 	private $_init_id;
 	private $_data;
 	
-	public function __construct($initiator, $f3)
+	public function __construct($connection, $initiator)
 	{
-		$this->_f3 = $f3;
-		$this->_connection = $this->_f3->get("DB");
+		$this->_connection = $connection;
 		
 		if (is_array($initiator)) {
 			$this->_init_id = $initiator["ID"];
@@ -85,9 +79,6 @@ class Author
 					"trace" => $e->getTrace()
 				)
 			);
-
-			$this->_f3->get("log")->addError("Attempt at changing author " . $this->getID() . "'s `" . $field . "` to `" . $value . "`", $error_info);
-			$this->_f3->error("Database error.");
 		}
 	}
 	

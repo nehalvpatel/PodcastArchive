@@ -1,7 +1,5 @@
 <?php
 
-namespace PainkillerAlready;
-
 class Utilities
 {
 	public static function getBaseDomain()
@@ -11,21 +9,7 @@ class Utilities
 	
 	public static function getDomain()
 	{
-		return "http://" . self::getBaseDomain() . "/";
-	}
-	
-	public static function getCommitCount()
-	{
-		ob_start();
-		passthru("git rev-list --count HEAD");
-		$commit_count = trim(ob_get_contents());
-		ob_end_clean();
-		
-		if ($commit_count == "") {
-			$commit_count = "0";
-		}
-		
-		return $commit_count;
+		return "https://" . self::getBaseDomain() . "/";
 	}
 	
 	public static function trimEpisodeNumber($episode)

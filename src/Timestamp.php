@@ -1,12 +1,7 @@
 <?php
 
-namespace PainkillerAlready;
-
 class Timestamp
 {
-	// f3
-	private $_f3;
-
 	// database
 	private $_connection;
 	
@@ -18,10 +13,9 @@ class Timestamp
 	private $_end;
 	private $_width;
 	
-	public function __construct($initiator, $f3)
+	public function __construct($connection, $initiator)
 	{
-		$this->_f3 = $f3;
-		$this->_connection = $this->_f3->get("DB");
+		$this->_connection = $connection;
 		
 		if (is_array($initiator)) {
 			$this->_init_id = $initiator["ID"];
@@ -89,9 +83,6 @@ class Timestamp
 					"trace" => $e->getTrace()
 				)
 			);
-
-			$this->_f3->get("log")->addError("Attempt at changing timestamp " . $this->getID() . "'s `" . $field . "` to `" . $value . "`", $error_info);
-			$this->_f3->error("Database error.");
 		}
 	}
 	
@@ -102,7 +93,7 @@ class Timestamp
 	
 	public function getEpisode()
 	{
-		return new Episode($this->_getValue("Episode"), $this->_f3);
+		return new Episode($this->_connection, $this->_getValue("Episode"));
 	}
 	
 	public function getSpecial()
