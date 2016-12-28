@@ -129,7 +129,7 @@ function updateContent(episode_data, search_timestamp, back_forward) {
 	// get comment count if possible
 	tryDelete(".comments");
 	if (episode_data.Reddit !== "") {
-		var $comments_link = $("<a>", {"class": "comments", "title": "Discussion Comments", "href": "http://www.reddit.com/comments/" + episode_data.Reddit});
+		var $comments_link = $("<a>", {"class": "comments", "title": "Discussion Comments", "href": "https://www.reddit.com/comments/" + episode_data.Reddit});
 		var $icon = $("<i>", {"class": "icon-comments"});
 		var $comment_text = $("<small>", {"data-reddit": episode_data.Reddit});
 		$comment_text.text("Comments");
@@ -242,12 +242,12 @@ function updateContent(episode_data, search_timestamp, back_forward) {
 // fetch reddit comment count
 function setCommentCount(element, reddit_id) {
 	$.ajax({
-		url: "http://www.reddit.com/comments/" + reddit_id + ".json",
+		url: "https://www.reddit.com/comments/" + reddit_id + ".json",
 		dataType: "json",
 		async: true,
 		success: function(data) {
 			element.text(data[0].data.children[0].data.num_comments + " Comments");
-			element.parent().attr("href", data[0].data.children[0].data.url);
+			element.parent().attr("href", "https://www.reddit.com/" + data[0].data.children[0].data.permalink);
 		},
 		error: function(xhr, textStatus, error) {
 			element.text("Comments");
