@@ -65,8 +65,9 @@ class Podcast
 	
 	public function getAuthors()
 	{
-		$authors_query = "SELECT * FROM `admins` ORDER BY `ID` ASC";
-		$authors_results = $this->_connection->exec($authors_query, "", 600);
+		$authors_query = $this->_connection->prepare("SELECT * FROM `admins` ORDER BY `ID` ASC");
+		$authors_query->execute();
+		$authors_results = $authors_query->fetchAll();
 		
 		$authors = array();
 		foreach ($authors_results as $author) {
@@ -109,22 +110,20 @@ class Podcast
 		$duration = $start->format("U");
 		
 		try {
-			$add_query = "INSERT INTO `episodes` (`Identifier`, `Number`, `Date`, `Hosts`, `Guests`, `Sponsors`, `YouTube Length`, `YouTube`, `Published`, `Reddit`) VALUES (:Identifier, :Number, :Date, :Hosts, :Guests, :Sponsors, :YouTubeLength, :YouTube, :Published, :Reddit)";
+			$add_query = $this->_connection->prepare("INSERT INTO `episodes` (`Identifier`, `Number`, `Date`, `Hosts`, `Guests`, `Sponsors`, `YouTube Length`, `YouTube`, `Published`, `Reddit`) VALUES (:Identifier, :Number, :Date, :Hosts, :Guests, :Sponsors, :YouTubeLength, :YouTube, :Published, :Reddit)");
 			
-			$add_parameters = array(
-				":Identifier" => $this->getPrefix() . "_" . $number,
-				":Number" => $number,
-				":Date" => $created,
-				":Hosts" => json_encode($hosts_list),
-				":Guests" => json_encode($guests_list),
-				":Sponsors" => json_encode($sponsors_list),
-				":YouTubeLength" => $duration,
-				":YouTube" => $youtube,
-				":Published" => $published,
-				":Reddit" => $reddit,
-			);
+			$add_query->bindValue(":Identifier", $this->getPrefix() . "_" . $number);
+			$add_query->bindValue(":Number", $number);
+			$add_query->bindValue(":Date", $created);
+			$add_query->bindValue(":Hosts", json_encode($hosts_list));
+			$add_query->bindValue(":Guests", json_encode($guests_list));
+			$add_query->bindValue(":Sponsors", json_encode($sponsors_list));
+			$add_query->bindValue(":YouTubeLength", $duration);
+			$add_query->bindValue(":YouTube", $youtube);
+			$add_query->bindValue(":Published", $published);
+			$add_query->bindValue(":Reddit", $reddit);
 			
-			if ($this->_connection->exec($add_query, $add_parameters) === false) {
+			if ($add_query->execute() === false) {
 				return false;
 			} else {
 				return true;
@@ -229,8 +228,9 @@ class Podcast
 		if (count($this->_people_data) > 0) {
 			return $this->_people_data;
 		} else {
-			$people_query = "SELECT `ID` FROM `people` ORDER BY `ID` ASC";
-			$people_results = $this->_connection->exec($people_query, "", 600);
+			$people_query = $this->_connection->prepare("SELECT `ID` FROM `people` ORDER BY `ID` ASC");
+			$people_query->execute();
+			$people_results = $people_query->fetchAll();
 			
 			$people = array();
 			foreach ($people_results as $person) {
@@ -245,12 +245,11 @@ class Podcast
 	{
 		$search_results = array();
 		if (!empty($query)) {
-			$search_query = "SELECT `Episode`, `Timestamp`, `Value` FROM `timestamps` WHERE REPLACE(`Value`, :Replace, '') LIKE :Value";
-			$search_query_parameters = array(
-				":Replace" => "'",
-				":Value" => "%" . str_replace("'", "", trim($query) . "%")
-			);
-			$search_query_results = $this->_connection->exec($search_query, $search_query_parameters, 600);
+			$search_query = $this->_connection->prepare("SELECT `Episode`, `Timestamp`, `Value` FROM `timestamps` WHERE REPLACE(`Value`, :Replace, '') LIKE :Value");
+			$search_query->bindValue(":Replace", "'");
+			$search_query->bindValue(":Value", "%" . str_replace("'", "", trim($query) . "%"));
+			$search_query->execute();
+			$search_query_results = $search_query->fetchAll();
 
 			foreach ($search_query_results as $result) {
 				$timestamp_data = array();
@@ -261,8 +260,9 @@ class Podcast
 				$search_results[$result["Episode"]][] = $timestamp_data;
 			}
 		} else {
-			$search_query = "SELECT * FROM `episodes`";
-			$search_query_results = $this->_connection->exec($search_query, "", 600);
+			$search_query = $this->_connection->prepare("SELECT * FROM `episodes`");
+			$search_query->execute();
+			$search_query_results = $search_query->fetchAll();
 
 			foreach ($search_query_results as $result) {
 				$search_results[] = $result["Identifier"];

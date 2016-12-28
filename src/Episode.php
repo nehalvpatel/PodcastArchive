@@ -108,12 +108,10 @@ class Episode
 	{
 		$this->checkData();
 		try {
-			$update_query = "UPDATE `episodes` SET {$field} = :Value WHERE `Identifier` = :Identifier";
-			$update_parameters = array(
-				":Value" => $value,
-				":Identifier" => $this->getIdentifier()
-			);
-			$this->_connection->exec($update_query, $update_parameters);
+			$update_query = $this->_connection->prepare("UPDATE `episodes` set `" . $field . "` = :Value WHERE `Identifier` = :Identifier");
+			$update_query->bindValue(":Value", $value);
+			$update_query->bindValue(":Identifier", $this->getIdentifier());
+			$update_query->execute();
 			
 			$this->reloadData();
 			
@@ -343,17 +341,14 @@ class Episode
 		}
 		
 		try {
-			$timestamp_query = "INSERT INTO `timestamps` (`Episode`, `Timestamp`, `Value`, `URL`, `Special`) VALUES (:Episode, :Timestamp, :Value, :URL, :Special)";
+			$timestamp_query = $this->_connection->prepare("INSERT INTO `timestamps` (`Episode`, `Timestamp`, `Value`, `URL`, `Special`) VALUES (:Episode, :Timestamp, :Value, :URL, :Special)");
+			$timestamp_query->bindValue(":Episode", $this->getIdentifier());
+			$timestamp_query->bindValue(":Timestamp", $timestamp);
+			$timestamp_query->bindValue(":Value", $value);
+			$timestamp_query->bindValue(":URL", $url);
+			$timestamp_query->bindValue(":Special", (int)$special);
 			
-			$timestamp_parameters = array(
-				":Episode" => $this->getIdentifier(),
-				":Timestamp" => $timestamp,
-				":Value" => $value,
-				":URL" => $url,
-				":Special" => (int)$special
-			);
-
-			$this->_connection->exec($timestamp_query, $timestamp_parameters);
+			$timestamp_query->execute();
 			$this->reloadData();
 			
 			return true;

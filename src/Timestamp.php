@@ -39,11 +39,10 @@ class Timestamp
 		}
 		
 		if (is_numeric($timestamp_id)) {
-			$timestamp_query = "SELECT * FROM `timestamps` WHERE `ID` = :ID";
-			$timestamp_parameters = array(
-				":ID" => $timestamp_id
-			);
-			$timestamp_results = $this->_connection->exec($timestamp_query, $timestamp_parameters, 600);
+			$timestamp_query = $this->_connection->prepare("SELECT * FROM `timestamps` WHERE `ID` = :ID");
+			$timestamp_query->bindValue(":ID", $timestamp_id);
+			$timestamp_query->execute();
+			$timestamp_results = $timestamp_query->fetchAll();
 			
 			if (count($timestamp_results) > 0) {
 				$this->_data = $timestamp_results[0];
@@ -65,12 +64,10 @@ class Timestamp
 	{
 		$this->checkData();
 		try {
-			$update_query = "UPDATE `timestamps` SET {$field} = :Value WHERE `ID` = :ID";
-			$update_parameters = array(
-				":Value" => $value,
-				":ID" => $this->getID()
-			);
-			$this->_connection->exec($update_query, $update_parameters);
+			$update_query = $this->_connection->prepare("UPDATE `timestamps` set `" . $field . "` = :Value WHERE `ID` = :ID");
+			$update_query->bindValue(":Value", $value);
+			$update_query->bindValue(":ID", $this->getID());
+			$update_query->execute();
 			
 			$this->reloadData();
 			

@@ -35,11 +35,10 @@ class Author
 		}
 		
 		if (is_numeric($author_id)) {
-			$author_query = "SELECT * FROM `admins` WHERE `ID` = :ID";
-			$author_parameters = array(
-				":ID" => $author_id
-			);
-			$author_results = $this->_connection->exec($author_query, $author_parameters, 600);
+			$author_query = $this->_connection->prepare("SELECT * FROM `admins` WHERE `ID` = :ID");
+			$author_query->bindValue(":ID", $author_id);
+			$author_query->execute();
+			$author_results = $author_query->fetchAll();
 			
 			if (count($author_results) > 0) {
 				$this->_data = $author_results[0];
@@ -61,12 +60,10 @@ class Author
 	{
 		$this->checkData();
 		try {
-			$update_query = "UPDATE `admins` SET {$field} = :Value WHERE `ID` = :ID";
-			$update_parameters = array(
-				":Value" => $value,
-				":ID" => $this->getID()
-			);
-			$this->_connection->exec($update_query, $update_parameters);
+			$update_query = $this->_connection->prepare("UPDATE `admins` set `" . $field . "` = :Value WHERE `ID` = :ID");
+			$update_query->bindValue(":Value", $value);
+			$update_query->bindValue(":ID", $this->getID());
+			$update_query->execute();
 			
 			$this->reloadData();
 			

@@ -35,11 +35,10 @@ class Person
 		}
 		
 		if (is_numeric($person_id)) {
-			$person_query = "SELECT * FROM `people` WHERE `ID` = :ID";
-			$person_parameters = array(
-				":ID" => $person_id
-			);
-			$person_results = $this->_connection->exec($person_query, $person_parameters, 600);
+			$person_query = $this->_connection->prepare("SELECT * FROM `people` WHERE `ID` = :ID");
+			$person_query->bindValue(":ID", $person_id);
+			$person_query->execute();
+			$person_results = $person_query->fetchAll();
 			
 			if (count($person_results) > 0) {
 				$this->_data = $person_results[0];
@@ -66,12 +65,10 @@ class Person
 	{
 		$this->checkData();
 		try {
-			$update_query = "UPDATE `people` SET {$field} = :Value WHERE `ID` = :ID";
-			$update_parameters = array(
-				":Value" => $value,
-				":ID" => $this->getID()
-			);
-			$this->_connection->exec($update_query, $update_parameters);
+			$update_query = $this->_connection->prepare("UPDATE `people` set `" . $field . "` = :Value WHERE `ID` = :ID");
+			$update_query->bindValue(":Value", $value);
+			$update_query->bindValue(":ID", $this->getID());
+			$update_query->execute();
 			
 			$this->reloadData();
 			
