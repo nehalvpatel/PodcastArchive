@@ -5,13 +5,13 @@ ini_set("display_startup_errors", 1);
 error_reporting(E_ALL);
 
 session_start();
-require_once("src/Podcast.php");
-require_once("src/Episode.php");
-require_once("src/Person.php");
-require_once("src/Author.php");
-require_once("src/Timestamp.php");
-require_once("src/Utilities.php");
-require_once("src/Log.php");
+require_once("src/backend/Podcast.php");
+require_once("src/backend/Episode.php");
+require_once("src/backend/Person.php");
+require_once("src/backend/Author.php");
+require_once("src/backend/Timestamp.php");
+require_once("src/backend/Utilities.php");
+require_once("src/backend/Log.php");
 
 // Setting up the core
 $con = new PDO('mysql:host=' . $_SERVER["DB_HOST"] . ';dbname=' . $_SERVER["DB_NAME"] . ';charset=utf8', $_SERVER["DB_USER"], $_SERVER["DB_PASS"]);
@@ -26,10 +26,6 @@ $Podcast->setDescription("Commonly referred to as PKA, the podcast discusses cur
 $Podcast->setPrefix("PKA");
 $base_domain = $Utilities->getBaseDomain();
 $domain = $Utilities->getDomain();
-
-// Get modified time to refresh CSS and JS if necessary
-$css_modified_time = filemtime("css/main.css");
-$js_modified_time = filemtime("js/main.js");
 
 // Loading data for the pages
 $home = false;

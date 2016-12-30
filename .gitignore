@@ -22,3 +22,7 @@ deployer.phar
 
 # Ignore monolog logs
 monolog.log
+
+node_modules/*
+public/api/json/*
+*.map

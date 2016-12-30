@@ -10,4 +10,4 @@ RewriteRule ^(apple-touch-icon(-[\d]*x[\d]*){0,1}(-precomposed){0,1}\.png)$ img/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-l
-RewriteRule .* index.php [L,QSA]
+RewriteRule .* index.html [L,QSA]
