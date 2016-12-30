@@ -3,7 +3,7 @@
         <sidebar :episodes="episodes"></sidebar>
         <section class="main">
             <header>
-                <span class="toggle-menu icon-reorder" v-on:click="toggleSidebar"></span>
+                <span class="toggle-menu icon-reorder" @click="toggleSidebar"></span>
                 <h1>Painkiller Already</h1>
             </header>
             <div id="container">

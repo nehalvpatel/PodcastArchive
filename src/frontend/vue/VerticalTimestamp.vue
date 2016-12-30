@@ -1,6 +1,6 @@
 <template>
     <tr :class="timestampClass">
-        <td class="timestamp"><a class="timelink" :href="'/episode/' + number + '?timestamp=' + timestamp.Begin" v-on:click.prevent="seek" :data-begin="timestamp.Begin" :data-end="timestamp.End" v-text="timestamp.HMS"></a></td>
+        <td class="timestamp"><a class="timelink" :href="timestampLink" @click.prevent="seek" v-text="timestamp.HMS"></a></td>
         <td class="event">
             <a v-if="timestamp.URL" target="_blank" :href="timestamp.URL" v-text="timestamp.Value"></a>
             <span v-else v-text="timestamp.Value"></span>
@@ -15,14 +15,14 @@ module.exports = {
             type: Object,
             required: true
         },
-        number: {
+        episodeNumber: {
             type: String,
             required: true
         }
     },
     methods: {
         seek: function() {
-            this.$emit("seek", this.timestamp.Begin);
+            this.$emit("seek", this.episodeNumber, this.timestamp.Begin);
         }
     },
     computed: {
@@ -30,6 +30,9 @@ module.exports = {
             return {
                 "active-timestamp-vertical": this.timestamp.Highlighted
             };
+        },
+        timestampLink: function() {
+            return "/episode/" + this.episodeNumber + "?timestamp=" + this.timestamp.Begin;
         }
     }
 };

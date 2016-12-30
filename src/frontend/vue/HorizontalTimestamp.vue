@@ -1,7 +1,7 @@
 <template>
-    <a class="timelink" :href="'/episode/' + number + '?timestamp=' + timestamp.Begin" v-on:click.prevent="seek" :data-begin="timestamp.Begin" :data-end="timestamp.End">
-        <div class="topic" :class="timestampClass" :style="'width: ' + timestamp.Width + '%'">
-            <div class="tooltip" :class="{ right: timestamp.Right }" :id="timestamp.ID">
+    <a class="timelink" :href="timestampLink" @click.prevent="seek">
+        <div class="topic" :class="timestampClass" :style="timestampWidth">
+            <div class="tooltip" :class="tooltipAlignment" :id="timestamp.ID">
                 <div class="triangle"></div>
                 <span v-text="timestamp.Value"></span>
             </div>
@@ -16,21 +16,34 @@ module.exports = {
             type: Object,
             required: true
         },
-        number: {
+        episodeNumber: {
             type: String,
             required: true
         }
     },
     methods: {
         seek: function() {
-            this.$emit("seek", this.timestamp.Begin);
+            this.$emit("seek", this.episodeNumber, this.timestamp.Begin);
         }
     },
     computed: {
+        tooltipAlignment: function() {
+            return {
+                right: this.timestamp.Right
+            };
+        },
+        timestampWidth: function() {
+            return {
+                width: this.timestamp.Width
+            };
+        },
         timestampClass: function() {
             return {
                 "active-timestamp-horizontal": this.timestamp.Highlighted
             };
+        },
+        timestampLink: function() {
+            return "/episode/" + this.episodeNumber + "?timestamp=" + this.timestamp.Begin;
         }
     }
 };

@@ -6,9 +6,8 @@
             <div id="search-error" class="error">
                 <p></p>
             </div>
-            <!--<ul data-current="<check if="{{ @type == 'episode' }}">{{ @current_episode->getIdentifier() }}</check>">-->
-            <ul :data-current="checkType">
-                <sidebar-item v-for="(episode, index) in episodes" :episode="episode" v-bind:index="index"></sidebar-item>
+            <ul>
+                <sidebar-item v-for="(episode, index) in episodes" :episode="episode" :index="index"></sidebar-item>
             </ul>
         </nav>
     </aside>-

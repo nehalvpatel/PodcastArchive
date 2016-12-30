@@ -1,5 +1,5 @@
 <template>
-    <li :data-episode="episode.Identifier">
+    <li>
         <router-link :to="episodeLink" :class="episodeClass" exact>
             <span v-text="poundEpisodeNumber"></span>
             <span v-if="episode.Timelined" class="timelined"></span>

@@ -1,12 +1,12 @@
 <template>
-    <div class="eps">
+    <div class="episode">
         <h2 v-text="episodeTitle"></h2>
         <div class="info">
             <span class="published" title="Date Published">
                 <i class="icon-time"></i><small><time :datetime="episode.DateTime" v-text="episode.Date"></time></small>
             </span>
             <a v-if="episode.Reddit != ''" class="comments" title="Discussion Comments" :href="redditCommentsLink">
-                <i class="icon-comments"></i><small id="comments" :data-reddit="episode.Reddit" v-text="redditCommentCount"></small>
+                <i class="icon-comments"></i><small id="comments" v-text="redditCommentCount"></small>
             </a>
             <a v-if="hasAuthor" class="author" title="Timeline Author" :href="episode.Timeline.Author.Link">
                 <i class="icon-user"></i><small v-text="episode.Timeline.Author.Name"></small>
@@ -14,7 +14,7 @@
         </div>
         <div id="rock-hardplace" class="clear"></div>
         <div id="video">
-            <youtube :videoId="episode.YouTube" playerHeight="400px" playerWidth="100%" :playerVars="videoArgs" v-on:ready="playerReady" v-on:playing="playerPlaying" v-on:ended="playerIdle" v-on:paused="playerIdle" v-on:buffering="playerIdle" v-on:qued="playerIdle" v-on:error="playerIdle"></youtube>
+            <youtube :videoId="episode.YouTube" playerHeight="400px" playerWidth="100%" :playerVars="videoArgs" @ready="playerReady" @playing="playerPlaying" @ended="playerIdle" @paused="playerIdle" @buffering="playerIdle" @qued="playerIdle" @error="playerIdle"></youtube>
         </div>
         <div id="Hosts" class="section items">
             <h4 class="section-header">Hosts</h4>
@@ -32,7 +32,7 @@
         <div v-if="hasTimestamps" id="timeline-horizontal" class="section">
             <h4 class="section-header">Timeline</h4>
             <div class="timeline">
-                <horizontal-timestamp v-for="(timestamp, index) in episode.Timeline.Timestamps" :number="episode.Number" :timestamp="timestamp" v-on:seek="seekTo"></horizontal-timestamp>
+                <horizontal-timestamp v-for="(timestamp, index) in episode.Timeline.Timestamps" :episodeNumber="episode.Number" :timestamp="timestamp" @seek="seekTo"></horizontal-timestamp>
             </div>
         </div>
         <table v-if="hasTimestamps" id="timeline-vertical" class="section">
@@ -43,7 +43,7 @@
                 </tr>
             </thead>
             <tbody>
-                <vertical-timestamp v-for="(timestamp, index) in episode.Timeline.Timestamps" :number="episode.Number" :timestamp="timestamp" v-on:seek="seekTo"></vertical-timestamp>
+                <vertical-timestamp v-for="(timestamp, index) in episode.Timeline.Timestamps" :episodeNumber="episode.Number" :timestamp="timestamp" @seek="seekTo"></vertical-timestamp>
             </tbody>
         </table>
     </div>
@@ -101,9 +101,21 @@ module.exports = {
         }
     },
     methods: {
-        seekTo: function(timestamp) {
-            this.videoPlayer.seekTo(timestamp);
-            document.getElementsByTagName("header")[0].scrollIntoView();
+        seekTo: function(episodeNumber, timestamp) {
+            if (this.videoPlayer) {
+                this.$router.replace({
+                    name: "specific-episode",
+                    params: {
+                        number: episodeNumber
+                    },
+                    query: {
+                        timestamp: timestamp
+                    }
+                });
+
+                this.videoPlayer.seekTo(timestamp);
+                document.getElementsByTagName("header")[0].scrollIntoView();
+            }
         },
         playerReady: function(player) {
             this.videoPlayer = player;

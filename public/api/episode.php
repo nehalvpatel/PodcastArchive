@@ -67,8 +67,8 @@ if ($episode->getTimelined()) {
         $timestamp_data["URL"] = $timestamp->getURL();
         $timestamp_data["Begin"] = (int)$timestamp->getBegin();
         $timestamp_data["End"] = (int)$timestamp->getEnd();
-        $timestamp_data["Width"] = $timestamp->getWidth();
-        $timestamp_data["Right"] = $timestamp_data["Begin"] > ($episode_data["YouTubeLength"] / 2);
+        $timestamp_data["Width"] = $timestamp->getWidth() . "%";
+        $timestamp_data["Right"] = $timestamp_data["Begin"] > ($episode->getYouTubeLength() / 2);
         
         $episode_data["Timeline"]["Timestamps"][] = $timestamp_data;
     }
