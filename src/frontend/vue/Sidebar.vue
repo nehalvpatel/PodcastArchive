@@ -15,11 +15,14 @@
 
 <script>
 module.exports = {
+    created: function() {
+        this.searchQuery = this.$route.query.query;
+    },
     props: ["episodes"],
     data: function() {
         return {
             searchTimer: null,
-            searchQuery: this.$route.query.query,
+            searchQuery: "",
             previousQuery: ""
         }
     },
@@ -32,6 +35,11 @@ module.exports = {
     },
     watch: {
         searchQuery: function(newVal, oldVal) {
+            this.handleSearch(newVal);
+        }
+    },
+    methods: {
+        handleSearch: function(newVal) {
             clearTimeout(this.searchTimer);
             
             this.searchTimer = setTimeout(() => {
