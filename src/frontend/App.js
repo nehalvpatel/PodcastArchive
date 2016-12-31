@@ -6,6 +6,7 @@ var VueYouTubeEmbed = require("vue-youtube-embed");
 
 // components
 var App = require("./vue/App.vue");
+var Credits = require("./vue/Credits.vue");
 var Episode = require("./vue/Episode.vue");
 var Sidebar = require("./vue/Sidebar.vue");
 var SidebarItem = require("./vue/SidebarItem.vue");
@@ -13,7 +14,7 @@ var SearchResult = require("./vue/SearchResult.vue");
 var PersonItem = require("./vue/PersonItem.vue");
 var HorizontalTimestamp = require("./vue/HorizontalTimestamp.vue");
 var VerticalTimestamp = require("./vue/VerticalTimestamp.vue");
-var Credits = require("./vue/Credits.vue");
+var Feedback = require("./vue/Feedback.vue");
 
 Vue.use(VueRouter);
 Vue.use(Vuex);
@@ -78,6 +79,11 @@ function initScript() {
                 path: "/episode/:number",
                 component: Episode,
                 name: "specific-episode"
+            },
+            {
+                path: "/feedback",
+                component: Feedback,
+                name: "feedback"
             }
         ]
     });

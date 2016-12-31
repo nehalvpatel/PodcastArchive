@@ -25,6 +25,12 @@
 
 <script>
 module.exports = {
+    created: function() {
+        this.$store.commit("markLaunched");
+    },
+    mounted: function() {
+        document.title = "Developers and Contributors \u00B7 Painkiller Already";
+    },
     data: function() {
         return {
             developers: this.$store.state.credits.developers,

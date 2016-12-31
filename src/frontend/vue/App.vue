@@ -10,7 +10,7 @@
 				<router-view></router-view>
                 <ul id="footer-links">
                     <li><router-link to="/credits" activeClass="active">Developers and Contributors</router-link></li>
-                    <li><a href="/feedback">Provide us with Feedback</a></li>
+                    <li><router-link to="/feedback" activeClass="active">Provide us with Feedback</router-link></li>
                 </ul>
             </div>
         </section>
