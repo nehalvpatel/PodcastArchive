@@ -1,9 +1,12 @@
 <template>
-    <li>
+    <li v-if="showLink">
         <router-link :to="episodeLink" :class="episodeClass" exact>
-            <span v-text="poundEpisodeNumber"></span>
-            <span v-if="timelined" class="timelined"></span>
+            <span>
+                <span v-text="poundEpisodeNumber"></span>
+                <span v-if="timelined" class="timelined"></span>
+            </span>
         </router-link>
+        <search-result v-if="searchResults.length > 0" v-for="result in searchResults" :episodeNumber="number" :result="result"></search-result>
     </li>
 </template>
 
@@ -25,6 +28,15 @@ module.exports = {
         },
         poundEpisodeNumber: function() {
             return "#" + this.number;
+        },
+        showLink: function() {
+            if (this.$store.state.searchMode) {
+                if (this.searchResults.length === 0) {
+                    return false;
+                }
+            }
+
+            return true;
         }
     },
     props: {
@@ -34,6 +46,10 @@ module.exports = {
         },
         highlighted: {
             type: Boolean,
+            required: true
+        },
+        searchResults: {
+            type: Array,
             required: true
         },
         timelined: {

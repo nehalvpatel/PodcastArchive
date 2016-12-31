@@ -9,6 +9,7 @@ var App = require("./vue/App.vue");
 var Episode = require("./vue/Episode.vue");
 var Sidebar = require("./vue/Sidebar.vue");
 var SidebarItem = require("./vue/SidebarItem.vue");
+var SearchResult = require("./vue/SearchResult.vue");
 var PersonItem = require("./vue/PersonItem.vue");
 var HorizontalTimestamp = require("./vue/HorizontalTimestamp.vue");
 var VerticalTimestamp = require("./vue/VerticalTimestamp.vue");
@@ -18,6 +19,7 @@ Vue.use(Vuex);
 Vue.use(VueYouTubeEmbed);
 Vue.component("sidebar", Sidebar);
 Vue.component("sidebar-item", SidebarItem);
+Vue.component("search-result", SearchResult);
 Vue.component("person-item", PersonItem);
 Vue.component("horizontal-timestamp", HorizontalTimestamp);
 Vue.component("vertical-timestamp", VerticalTimestamp);
@@ -79,27 +81,47 @@ function initScript() {
             episodes: episodesJson["episodes"],
             map: episodesJson["map"],
             latest: episodesJson["latest"],
-            sidebarOpen: false
+            sidebarOpen: false,
+            searchError: false,
+            searchMode: false
         },
         mutations: {
             cacheEpisode(state, data) {
-                state.episodes[data.Identifier] = data;
+                Vue.set(state.episodes, data.Identifier, data);
             },
             cacheReddit(state, data) {
                 Vue.set(state.episodes[data.Identifier], "RedditCount", data.RedditCount);
                 Vue.set(state.episodes[data.Identifier], "RedditLink", data.RedditLink);
             },
             openSidebar(state) {
-                state.sidebarOpen = true;
+                Vue.set(state, "sidebarOpen", true);
             },
             closeSidebar(state) {
-                state.sidebarOpen = false;
+                Vue.set(state, "sidebarOpen", false);
             },
             highlightTimestamp(state, data) {
                 Vue.set(state.episodes[data.Identifier].Timeline.Timestamps[data.TimestampIndex], "Highlighted", true);
             },
             unhighlightTimestamp(state, data) {
                 Vue.set(state.episodes[data.Identifier].Timeline.Timestamps[data.TimestampIndex], "Highlighted", false);
+            },
+            showSearchError(state) {
+                Vue.set(state, "searchError", true);
+            },
+            hideSearchError(state) {
+                Vue.set(state, "searchError", false);
+            },
+            enableSearchMode(state) {
+                Vue.set(state, "searchMode", true);
+            },
+            disableSearchMode(state) {
+                Vue.set(state, "searchMode", false);
+            },
+            addSearchResults(state, data) {
+                Vue.set(state.episodes[data.Identifier], "SearchResults", data.SearchResults);
+            },
+            removeSearchResults(state, identifier) {
+                Vue.set(state.episodes[identifier], "SearchResults", []);
             }
         },
         actions: {
@@ -110,13 +132,22 @@ function initScript() {
                     context.commit("openSidebar");
                 }
             },
-            clearHighlighted(context, identifier) {
+            clearAllHighlighted(context, identifier) {
                 for (var i = 0; i < context.state.episodes[identifier].Timeline.Timestamps.length; i++) {
                     if (context.state.episodes[identifier].Timeline.Timestamps[i].Highlighted) {
                         context.commit("unhighlightTimestamp", {
                             Identifier: identifier,
                             TimestampIndex: i
                         });
+                    }
+                }
+            },
+            clearSearchResults(context) {
+                for (var identifier in context.state.episodes) {
+                    if (!context.state.episodes.hasOwnProperty(identifier)) continue;
+
+                    if (context.state.episodes[identifier].SearchResults.length > 0) {
+                        context.commit("removeSearchResults", identifier);
                     }
                 }
             }

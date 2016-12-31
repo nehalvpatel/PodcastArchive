@@ -14,6 +14,7 @@ foreach (array_reverse($episodes_results) as $episode_result) {
     $episode_data = array();
     $episode_data["Loaded"] = false;
     $episode_data["Highlighted"] = false;
+    $episode_data["SearchResults"] = array();
     $episode_data["Identifier"] = $episode->getIdentifier();
     $episode_data["Number"] = (float)$episode->getNumber();
     $episode_data["DateTime"] = $episode->getDate();

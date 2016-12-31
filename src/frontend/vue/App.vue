@@ -331,14 +331,11 @@ nav ul li a:hover {
 .error h3{
 	background: transparent;
 }
-#search-error {
-	display: none;
-}
 #search-error p {
 	padding: 20px;
 }
 #search-error p::before {
-	content: 'There was an error with the search engine. \a\a Please message /u/nehalvpatel on reddit.';
+	content: 'There was an error with the search engine.';
 	white-space: pre-wrap;
 }
 form div {

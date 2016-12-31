@@ -59,7 +59,7 @@ module.exports = {
             videoTime: 0,
             videoArgs: {
 				start: this.$route.query.timestamp,
-				autoplay: 0
+				autoplay: 1
 			}
         };
     },
@@ -102,7 +102,7 @@ module.exports = {
             return false;
         },
         hasTimestamps: function() {
-            return Object.keys(this.episode.Timeline.Timestamps).length > 0;
+            return this.episode.Timelined;
         }
     },
     watch: {
@@ -193,7 +193,7 @@ module.exports = {
                 }
             }
 
-            this.$store.dispatch("clearHighlighted", episodeIdentifier);
+            this.$store.dispatch("clearAllHighlighted", episodeIdentifier);
 
             return episodeIdentifier;
         },
