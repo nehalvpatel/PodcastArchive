@@ -178,6 +178,11 @@ module.exports = {
             var episodeIdentifier = null;
             if (this.$route.name === "latest-episode") {
                 episodeIdentifier = this.$store.state.latest.Identifier;
+
+                this.$store.dispatch("fetchEpisode", {
+                    episodeToFetch: this.$store.state.latest.Number,
+                    firstLaunch: firstLaunch
+                });
             } else if (this.$route.name === "random-episode") {
                 var episodeKeys = Object.keys(this.$store.state.episodes);
                 episodeIdentifier = episodeKeys[episodeKeys.length * Math.random() << 0];
