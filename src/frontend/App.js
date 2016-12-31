@@ -35,7 +35,7 @@ if (document.readyState === "complete") {
 
 var episodesLoaded = false;
 var episodesJson = {};
-fetch("http://localhost:8080/api/json/episodes.json")
+fetch("/api/json/episodes.json")
     .then((response) => {
         return response.json();
     }).then((json) => {
@@ -85,11 +85,21 @@ function initScript() {
             cacheEpisode(state, data) {
                 state.episodes[data.Identifier] = data;
             },
+            cacheReddit(state, data) {
+                Vue.set(state.episodes[data.Identifier], "RedditCount", data.RedditCount);
+                Vue.set(state.episodes[data.Identifier], "RedditLink", data.RedditLink);
+            },
             openSidebar(state) {
                 state.sidebarOpen = true;
             },
             closeSidebar(state) {
                 state.sidebarOpen = false;
+            },
+            highlightTimestamp(state, data) {
+                Vue.set(state.episodes[data.Identifier].Timeline.Timestamps[data.TimestampIndex], "Highlighted", true);
+            },
+            unhighlightTimestamp(state, data) {
+                Vue.set(state.episodes[data.Identifier].Timeline.Timestamps[data.TimestampIndex], "Highlighted", false);
             }
         },
         actions: {
@@ -98,6 +108,16 @@ function initScript() {
                     context.commit("closeSidebar");
                 } else {
                     context.commit("openSidebar");
+                }
+            },
+            clearHighlighted(context, identifier) {
+                for (var i = 0; i < context.state.episodes[identifier].Timeline.Timestamps.length; i++) {
+                    if (context.state.episodes[identifier].Timeline.Timestamps[i].Highlighted) {
+                        context.commit("unhighlightTimestamp", {
+                            Identifier: identifier,
+                            TimestampIndex: i
+                        });
+                    }
                 }
             }
         }

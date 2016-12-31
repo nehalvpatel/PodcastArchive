@@ -53,7 +53,7 @@
 module.exports = {
     data: function() {
         return {
-            episode: this.handleNavigation(true),
+            identifier: this.handleNavigation(true),
             videoPlayer: null,
             videoTimer: null,
             videoTime: 0,
@@ -64,6 +64,9 @@ module.exports = {
         };
     },
     computed: {
+        episode: function() {
+            return this.$store.state.episodes[this.identifier];
+        },
         episodeTitle: function() {
             document.title = "Episode #" + this.episode.Number + " \u00B7 Painkiller Already";
             return "Painkiller Already #" + this.episode.Number;
@@ -104,7 +107,7 @@ module.exports = {
     },
     watch: {
         $route: function() {
-            this.episode = this.handleNavigation(false);
+            this.identifier = this.handleNavigation(false);
         }
     },
     methods: {
@@ -127,7 +130,6 @@ module.exports = {
                 });
 
                 this.videoPlayer.seekTo(timestamp.Begin);
-                this.$set(this.episode.Timeline.Timestamps[timestamp.ID], "Highlighted", true);
 
                 document.getElementsByTagName("header")[0].scrollIntoView();
             }
@@ -152,75 +154,78 @@ module.exports = {
             }
         },
         onProgress: function(currentTime) {
-            for (var key in this.episode.Timeline.Timestamps) {
-                // skip loop if the property is from prototype
-                if (!this.episode.Timeline.Timestamps.hasOwnProperty(key)) continue;
-
-                var currentTimestamp = this.episode.Timeline.Timestamps[key];
+            for (var i = 0; i < this.episode.Timeline.Timestamps.length; i++) {
+                var currentTimestamp = this.episode.Timeline.Timestamps[i];
 
                 if ((currentTime > currentTimestamp.Begin) && (currentTime < currentTimestamp.End)) {
-                    this.$set(this.episode.Timeline.Timestamps[key], "Highlighted", true);
+                    if (currentTimestamp.Highlighted === false) {
+                        this.$store.commit("highlightTimestamp", {
+                            Identifier: this.episode.Identifier,
+                            TimestampIndex: i
+                        });
+                    }
                 } else {
-                    this.$set(this.episode.Timeline.Timestamps[key], "Highlighted", false);
+                    if (currentTimestamp.Highlighted === true) {
+                        this.$store.commit("unhighlightTimestamp", {
+                            Identifier: this.episode.Identifier,
+                            TimestampIndex: i
+                        });
+                    }
                 }
             }
         },
         handleNavigation: function(firstLaunch) {
-            var episodeObject = {};
+            var episodeIdentifier = null;
             if (this.$route.name === "latest-episode") {
-                episodeObject = this.$store.state.episodes[this.$store.state.latest.Identifier];
+                episodeIdentifier = this.$store.state.latest.Identifier;
             } else if (this.$route.name === "random-episode") {
-                var keys = Object.keys(this.$store.state.episodes);
-                var random = keys[ keys.length * Math.random() << 0];
+                var episodeKeys = Object.keys(this.$store.state.episodes);
+                episodeIdentifier = episodeKeys[episodeKeys.length * Math.random() << 0];
 
-                episodeObject = this.$store.state.episodes[random];
-
-                this.$router.replace("/episode/" + episodeObject.Number);
+                this.$router.replace("/episode/" + this.$store.state.episodes[episodeIdentifier].Number);
             } else if (this.$route.name === "specific-episode") {
-                episodeObject = this.$store.state.episodes[this.$store.state.map[this.$route.params.number]];
+                episodeIdentifier = this.$store.state.map[this.$route.params.number];
 
-                if (episodeObject.Loaded) {
+                if (this.$store.state.episodes[episodeIdentifier].Loaded) {
                     this.$store.commit("closeSidebar");
                 } else {
-                    this.fetchEpisode(Number(this.$route.params.number), firstLaunch);
+                    this.fetchEpisode(this.$route.params.number, firstLaunch);
                 }
             }
 
-            return episodeObject;
+            this.$store.dispatch("clearHighlighted", episodeIdentifier);
+
+            return episodeIdentifier;
         },
         fetchEpisode: function(episodeToFetch, firstLaunch) {
-            fetch("http://localhost:8080/api/json/" + episodeToFetch + ".json")
+            fetch("/api/json/" + episodeToFetch + ".json")
                 .then((response) => {
                     return response.json();
                 }).then((json) => {
-                    if (this.episode.Number === episodeToFetch) {
-                        this.episode = json;
+                    this.$store.commit("cacheEpisode", json);
+                    this.$store.commit("closeSidebar");
 
-                        this.$store.commit("closeSidebar");
+                    if (firstLaunch) {
+                        document.querySelector(".router-link-active").scrollIntoView();
+                    }
 
-                        if (firstLaunch) {
-                            document.querySelector(".router-link-active").scrollIntoView();
-                        }
-
-                        if (json.Reddit) {
-                            this.fetchRedditCount(episodeToFetch, json.Reddit);
-                        } else {
-                            this.$store.commit("cacheEpisode", json);
-                        }
+                    if (json.Reddit) {
+                        this.fetchRedditCount(json.Identifier, json.Reddit);
                     }
                 });
         },
-        fetchRedditCount: function(episodeToFetch, Reddit) {
+        fetchRedditCount: function(identifierToFetch, Reddit) {
             fetch("https://www.reddit.com/comments/" + Reddit + ".json")
                 .then((response) => {
                     return response.json();
                 }).then((json) => {
-                    if (this.episode.Number === episodeToFetch) {
-                        this.$set(this.episode, "RedditCount", json[0].data.children[0].data.num_comments);
-                        this.$set(this.episode, "RedditLink", "https://www.reddit.com" + json[0].data.children[0].data.permalink);
+                    var redditPayload = {
+                        Identifier: identifierToFetch,
+                        RedditCount: json[0].data.children[0].data.num_comments,
+                        RedditLink: "https://www.reddit.com" + json[0].data.children[0].data.permalink
+                    };
 
-                        this.$store.commit("cacheEpisode", this.episode);
-                    }
+                    this.$store.commit("cacheReddit", redditPayload);
                 });
         }
     }

@@ -71,6 +71,7 @@ if ($episode->getTimelined()) {
         $timestamp_data["End"] = (int)$timestamp->getEnd();
         $timestamp_data["Width"] = $timestamp->getWidth() . "%";
         $timestamp_data["Right"] = $timestamp_data["Begin"] > ($episode->getYouTubeLength() / 2);
+        $timestamp_data["Highlighted"] = false;
         
         $episode_data["Timeline"]["Timestamps"][] = $timestamp_data;
     }
