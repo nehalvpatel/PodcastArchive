@@ -9,7 +9,7 @@
             <div id="container">
 				<router-view></router-view>
                 <ul id="footer-links">
-                    <li><a href="/credits">Developers and Contributors</a></li>
+                    <li><router-link to="/credits" activeClass="active">Developers and Contributors</router-link></li>
                     <li><a href="/feedback">Provide us with Feedback</a></li>
                 </ul>
             </div>

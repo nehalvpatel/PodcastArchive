@@ -13,6 +13,7 @@ var SearchResult = require("./vue/SearchResult.vue");
 var PersonItem = require("./vue/PersonItem.vue");
 var HorizontalTimestamp = require("./vue/HorizontalTimestamp.vue");
 var VerticalTimestamp = require("./vue/VerticalTimestamp.vue");
+var Credits = require("./vue/Credits.vue");
 
 Vue.use(VueRouter);
 Vue.use(Vuex);
@@ -35,19 +36,19 @@ if (document.readyState === "complete") {
     });
 }
 
-var episodesLoaded = false;
+var jsonLoaded = false;
 var episodesJson = {};
 fetch("/api/json/episodes.json")
     .then((response) => {
         return response.json();
     }).then((json) => {
         episodesJson = json;
-        episodesLoaded = true;
+        jsonLoaded = true;
         launch();
     });
 
 function launch() {
-    if (domLoaded && episodesLoaded) {
+    if (domLoaded && jsonLoaded) {
         initScript();
     }
 }
@@ -58,6 +59,11 @@ function initScript() {
         mode: "history",
         root: "/",
         routes: [
+            {
+                path: "/credits",
+                component: Credits,
+                name: "credits"
+            },
             {
                 path: "/",
                 component: Episode,
@@ -78,14 +84,19 @@ function initScript() {
 
     const store = new Vuex.Store({
         state: {
+            credits: episodesJson["credits"],
             episodes: episodesJson["episodes"],
             map: episodesJson["map"],
             latest: episodesJson["latest"],
+            firstLaunch: true,
             sidebarOpen: false,
             searchError: false,
             searchMode: false
         },
         mutations: {
+            markLaunched(state) {
+                Vue.set(state, "firstLaunch", false);
+            },
             cacheEpisode(state, data) {
                 Vue.set(state.episodes, data.Identifier, data);
             },
@@ -125,16 +136,17 @@ function initScript() {
             }
         },
         actions: {
-            fetchEpisode(context, data) {
-                fetch("/api/json/" + data.episodeToFetch + ".json")
+            fetchEpisode(context, episodeToFetch) {
+                fetch("/api/json/" + episodeToFetch + ".json")
                     .then((response) => {
                         return response.json();
                     }).then((json) => {
                         context.commit("cacheEpisode", json);
                         context.commit("closeSidebar");
 
-                        if (data.firstLaunch) {
+                        if (context.state.firstLaunch) {
                             document.querySelector(".router-link-active").scrollIntoView();
+                            context.commit("markLaunched");
                         }
 
                         if (json.Reddit) {

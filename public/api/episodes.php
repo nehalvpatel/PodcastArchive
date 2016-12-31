@@ -7,7 +7,7 @@ $episodes_query->execute();
 $episodes_results = $episodes_query->fetchAll();
 
 $latest = true;
-$episodes = array();
+$output = array();
 foreach (array_reverse($episodes_results) as $episode_result) {
     $episode = new Episode($con, $episode_result["Identifier"]);
 
@@ -54,11 +54,11 @@ foreach (array_reverse($episodes_results) as $episode_result) {
     );
     $episode_data["Timelined"] = $episode->getTimelined();
 
-    $episodes["episodes"][$episode_data["Identifier"]] = $episode_data;
-    $episodes["map"][$episode->getNumber()] = $episode_data["Identifier"];
+    $output["episodes"][$episode_data["Identifier"]] = $episode_data;
+    $output["map"][$episode->getNumber()] = $episode_data["Identifier"];
 
     if ($latest) {
-        $episodes["latest"] = array(
+        $output["latest"] = array(
             "Identifier" => $episode_data["Identifier"],
             "Number" => $episode_data["Number"]
         );
@@ -67,6 +67,25 @@ foreach (array_reverse($episodes_results) as $episode_result) {
     file_get_contents("http://localhost/api/episode.php?episode=" . $episode_data["Number"]);
 }
 
+$credits = array();
+foreach ($Podcast->getAuthors() as $author) {
+    if ($author->getType() == "0") {
+        $credits["developers"][] = array(
+            "DisplayLink" => $author->getDisplayLink(),
+            "DisplayName" => $author->getDisplayName(),
+            "Praise" => $author->getPraise()
+        );
+    } else {
+        $credits["contributors"][] = array(
+            "DisplayLink" => $author->getDisplayLink(),
+            "DisplayName" => $author->getDisplayName(),
+            "Praise" => $author->getPraise()
+        );
+    }
+}
+
+$output["credits"] = $credits;
+
 header('Content-Type: application/json');
-echo json_encode($episodes);
-file_put_contents("json/episodes.json", json_encode($episodes));
+echo json_encode($output);
+file_put_contents("json/episodes.json", json_encode($output));

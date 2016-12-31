@@ -53,7 +53,7 @@
 module.exports = {
     data: function() {
         return {
-            identifier: this.handleNavigation(true),
+            identifier: this.handleNavigation(),
             videoPlayer: null,
             videoTimer: null,
             videoTime: 0,
@@ -107,7 +107,7 @@ module.exports = {
     },
     watch: {
         $route: function() {
-            this.identifier = this.handleNavigation(false);
+            this.identifier = this.handleNavigation();
         }
     },
     methods: {
@@ -174,15 +174,12 @@ module.exports = {
                 }
             }
         },
-        handleNavigation: function(firstLaunch) {
+        handleNavigation: function() {
             var episodeIdentifier = null;
             if (this.$route.name === "latest-episode") {
                 episodeIdentifier = this.$store.state.latest.Identifier;
 
-                this.$store.dispatch("fetchEpisode", {
-                    episodeToFetch: this.$store.state.latest.Number,
-                    firstLaunch: firstLaunch
-                });
+                this.$store.dispatch("fetchEpisode", this.$store.state.latest.Number);
             } else if (this.$route.name === "random-episode") {
                 var episodeKeys = Object.keys(this.$store.state.episodes);
                 episodeIdentifier = episodeKeys[episodeKeys.length * Math.random() << 0];
@@ -194,10 +191,7 @@ module.exports = {
                 if (this.$store.state.episodes[episodeIdentifier].Loaded) {
                     this.$store.commit("closeSidebar");
                 } else {
-                    this.$store.dispatch("fetchEpisode", {
-                        episodeToFetch: this.$route.params.number,
-                        firstLaunch: firstLaunch
-                    });
+                    this.$store.dispatch("fetchEpisode", this.$route.params.number);
                 }
             }
 
