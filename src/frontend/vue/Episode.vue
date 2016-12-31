@@ -189,44 +189,16 @@ module.exports = {
                 if (this.$store.state.episodes[episodeIdentifier].Loaded) {
                     this.$store.commit("closeSidebar");
                 } else {
-                    this.fetchEpisode(this.$route.params.number, firstLaunch);
+                    this.$store.dispatch("fetchEpisode", {
+                        episodeToFetch: this.$route.params.number,
+                        firstLaunch: firstLaunch
+                    });
                 }
             }
 
             this.$store.dispatch("clearAllHighlighted", episodeIdentifier);
 
             return episodeIdentifier;
-        },
-        fetchEpisode: function(episodeToFetch, firstLaunch) {
-            fetch("/api/json/" + episodeToFetch + ".json")
-                .then((response) => {
-                    return response.json();
-                }).then((json) => {
-                    this.$store.commit("cacheEpisode", json);
-                    this.$store.commit("closeSidebar");
-
-                    if (firstLaunch) {
-                        document.querySelector(".router-link-active").scrollIntoView();
-                    }
-
-                    if (json.Reddit) {
-                        this.fetchRedditCount(json.Identifier, json.Reddit);
-                    }
-                });
-        },
-        fetchRedditCount: function(identifierToFetch, Reddit) {
-            fetch("https://www.reddit.com/comments/" + Reddit + ".json")
-                .then((response) => {
-                    return response.json();
-                }).then((json) => {
-                    var redditPayload = {
-                        Identifier: identifierToFetch,
-                        RedditCount: json[0].data.children[0].data.num_comments,
-                        RedditLink: "https://www.reddit.com" + json[0].data.children[0].data.permalink
-                    };
-
-                    this.$store.commit("cacheReddit", redditPayload);
-                });
         }
     }
 }

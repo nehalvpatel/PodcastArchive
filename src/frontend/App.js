@@ -125,6 +125,40 @@ function initScript() {
             }
         },
         actions: {
+            fetchEpisode(context, data) {
+                fetch("/api/json/" + data.episodeToFetch + ".json")
+                    .then((response) => {
+                        return response.json();
+                    }).then((json) => {
+                        context.commit("cacheEpisode", json);
+                        context.commit("closeSidebar");
+
+                        if (data.firstLaunch) {
+                            document.querySelector(".router-link-active").scrollIntoView();
+                        }
+
+                        if (json.Reddit) {
+                            context.dispatch("fetchRedditCount", {
+                                identifierToFetch: json.Identifier,
+                                Reddit: json.Reddit
+                            });
+                        }
+                    });
+            },
+            fetchRedditCount(context, data) {
+                fetch("https://www.reddit.com/comments/" + data.Reddit + ".json")
+                    .then((response) => {
+                        return response.json();
+                    }).then((json) => {
+                        var redditPayload = {
+                            Identifier: data.identifierToFetch,
+                            RedditCount: json[0].data.children[0].data.num_comments,
+                            RedditLink: "https://www.reddit.com" + json[0].data.children[0].data.permalink
+                        };
+
+                        context.commit("cacheReddit", redditPayload);
+                    });
+            },
             toggleSidebar(context, currentlyOpen) {
                 if (currentlyOpen) {
                     context.commit("closeSidebar");
