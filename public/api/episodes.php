@@ -13,8 +13,9 @@ foreach (array_reverse($episodes_results) as $episode_result) {
 
     $episode_data = array();
     $episode_data["Loaded"] = false;
+    $episode_data["Highlighted"] = false;
     $episode_data["Identifier"] = $episode->getIdentifier();
-    $episode_data["Number"] = $episode->getNumber();
+    $episode_data["Number"] = (float)$episode->getNumber();
     $episode_data["DateTime"] = $episode->getDate();
     $episode_data["Date"] = date("F d, Y", strtotime($episode->getDate()));
     $episode_data["Reddit"] = $episode->getReddit();
@@ -53,7 +54,7 @@ foreach (array_reverse($episodes_results) as $episode_result) {
     $episode_data["Timelined"] = $episode->getTimelined();
 
     $episodes["episodes"][$episode_data["Identifier"]] = $episode_data;
-    $episodes["map"][$episode_data["Number"]] = $episode_data["Identifier"];
+    $episodes["map"][$episode->getNumber()] = $episode_data["Identifier"];
 
     if ($latest) {
         $episodes["latest"] = array(

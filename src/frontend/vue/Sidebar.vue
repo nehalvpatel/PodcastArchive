@@ -7,7 +7,7 @@
                 <p></p>
             </div>
             <ul>
-                <sidebar-item v-for="(episode, index) in episodes" :episode="episode" :index="index"></sidebar-item>
+                <sidebar-item v-for="episode in episodes" :key="episode.Identifier" :number="episode.Number" :highlighted="episode.Highlighted" :timelined="episode.Timelined"></sidebar-item>
             </ul>
         </nav>
     </aside>-
@@ -17,9 +17,6 @@
 module.exports = {
     props: ["episodes"],
     computed: {
-        checkType: function() {
-            return "asdf";
-        },
         sidebarClass: function() {
             return {
                 toggled: this.$store.state.sidebarOpen

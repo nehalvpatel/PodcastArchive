@@ -6,8 +6,9 @@ $episode = new Episode($con, $_GET["episode"]);
 
 $episode_data = array();
 $episode_data["Loaded"] = true;
+$episode_data["Highlighted"] = false;
 $episode_data["Identifier"] = $episode->getIdentifier();
-$episode_data["Number"] = $episode->getNumber();
+$episode_data["Number"] = (float)$episode->getNumber();
 $episode_data["DateTime"] = $episode->getDate();
 $episode_data["Date"] = date("F d, Y", strtotime($episode->getDate()));
 $episode_data["Reddit"] = $episode->getReddit();
@@ -62,6 +63,7 @@ if ($episode->getTimelined()) {
     $episode_data["Timeline"]["Timestamps"] = array();
     foreach ($episode->getTimestamps() as $timestamp) {
         $timestamp_data = array();
+        $timestamp_data["ID"] = (int)$timestamp->getID();
         $timestamp_data["HMS"] = $timestamp->getTime();
         $timestamp_data["Value"] = $timestamp->getValue();
         $timestamp_data["URL"] = $timestamp->getURL();

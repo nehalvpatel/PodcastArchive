@@ -2,7 +2,7 @@
     <li>
         <router-link :to="episodeLink" :class="episodeClass" exact>
             <span v-text="poundEpisodeNumber"></span>
-            <span v-if="episode.Timelined" class="timelined"></span>
+            <span v-if="timelined" class="timelined"></span>
         </router-link>
     </li>
 </template>
@@ -14,26 +14,30 @@ module.exports = {
             return {
                 name: "specific-episode",
                 params: {
-                    number: this.episode.Number
+                    number: this.number
                 }
             };
         },
         episodeClass: function() {
             return {
-                "highlighted-episode": this.episode.Highlighted
+                "highlighted-episode": this.highlighted
             };
         },
         poundEpisodeNumber: function() {
-            return "#" + this.episode.Number;
+            return "#" + this.number;
         }
     },
     props: {
-        episode: {
-            type: Object,
+        number: {
+            type: Number,
             required: true
         },
-        index: {
-            type: String,
+        highlighted: {
+            type: Boolean,
+            required: true
+        },
+        timelined: {
+            type: Boolean,
             required: true
         }
     }

@@ -16,13 +16,13 @@ module.exports = {
             required: true
         },
         episodeNumber: {
-            type: String,
+            type: Number,
             required: true
         }
     },
     methods: {
         seek: function() {
-            this.$emit("seek", this.episodeNumber, this.timestamp.Begin);
+            this.$emit("seek", this.episodeNumber, this.timestamp);
         }
     },
     computed: {
