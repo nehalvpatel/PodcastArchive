@@ -16,6 +16,7 @@ var HorizontalTimestamp = require("./vue/HorizontalTimestamp.vue");
 var VerticalTimestamp = require("./vue/VerticalTimestamp.vue");
 var Feedback = require("./vue/Feedback.vue");
 var Person = require("./vue/Person.vue");
+var Error = require("./vue/Error.vue");
 
 Vue.use(VueRouter);
 Vue.use(Vuex);
@@ -79,7 +80,16 @@ function initScript() {
             {
                 path: "/episode/:number",
                 component: Episode,
-                name: "specific-episode"
+                name: "specific-episode",
+                beforeEnter: function(to, from, next) {
+                    if (store.state.map.hasOwnProperty(to.params.number)) {
+                        next();
+                    } else {
+                        next({
+                            path: "/404"
+                        });
+                    }
+                },
             },
             {
                 path: "/feedback",
@@ -89,7 +99,21 @@ function initScript() {
             {
                 path: "/person/:number",
                 component: Person,
-                name: "specific-person"
+                name: "specific-person",
+                beforeEnter: function(to, from, next) {
+                    if (store.state.people.hasOwnProperty(to.params.number)) {
+                        next();
+                    } else {
+                        next({
+                            path: "/404"
+                        });
+                    }
+                }
+            },
+            {
+                path: "*",
+                component: Error,
+                name: "error"
             }
         ]
     });
