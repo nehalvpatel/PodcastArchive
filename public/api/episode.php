@@ -6,7 +6,6 @@ $episode = new Episode($con, $_GET["episode"]);
 
 $episode_data = array();
 $episode_data["Loaded"] = true;
-$episode_data["Highlighted"] = false;
 $episode_data["SearchResults"] = array();
 $episode_data["Identifier"] = $episode->getIdentifier();
 $episode_data["Number"] = (float)$episode->getNumber();
@@ -86,4 +85,4 @@ if ($episode->getTimelined()) {
 
 //header('Content-Type: application/json');
 //echo json_encode($episode_data);
-file_put_contents("json/" . $episode_data["Number"] . ".json", json_encode($episode_data));
+file_put_contents("episodes/" . $episode_data["Number"] . ".json", json_encode($episode_data));

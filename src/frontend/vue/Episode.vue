@@ -179,6 +179,8 @@ module.exports = {
             if (this.$route.name === "latest-episode") {
                 episodeIdentifier = this.$store.state.latest.Identifier;
 
+                this.$store.commit("markLaunched");
+
                 this.$store.dispatch("fetchEpisode", this.$store.state.latest.Number);
             } else if (this.$route.name === "random-episode") {
                 var episodeKeys = Object.keys(this.$store.state.episodes);

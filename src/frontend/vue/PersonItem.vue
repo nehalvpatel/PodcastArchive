@@ -1,7 +1,7 @@
 <template>
-    <a class="item" target="_blank" :href="personLink">
+    <router-link class="item" target="_blank" :to="personLink">
         <img :alt="person.name" :title="person.Name" :src="personImage">
-    </a>
+    </router-link>
 </template>
 
 <script>

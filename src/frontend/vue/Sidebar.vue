@@ -7,7 +7,7 @@
                 <p></p>
             </div>
             <ul>
-                <sidebar-item v-for="episode in episodes" :key="episode.Identifier" :number="episode.Number" :highlighted="episode.Highlighted" :searchResults="episode.SearchResults" :timelined="episode.Timelined"></sidebar-item>
+                <sidebar-item v-for="episode in episodes" :key="episode.Identifier" :number="episode.Number" :identifier="episode.Identifier" :searchResults="episode.SearchResults" :timelined="episode.Timelined"></sidebar-item>
             </ul>
         </nav>
     </aside>-
@@ -43,7 +43,7 @@ module.exports = {
             clearTimeout(this.searchTimer);
             
             this.searchTimer = setTimeout(() => {
-                if (newVal.trim()) {
+                if (newVal && newVal.trim()) {
                     fetch("/api/search.php?query=" + encodeURIComponent(newVal))
                         .then((response) => {
                             return response.json();

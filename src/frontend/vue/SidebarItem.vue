@@ -30,13 +30,22 @@ module.exports = {
             return "#" + this.number;
         },
         showLink: function() {
-            if (this.$store.state.searchMode) {
-                if (this.searchResults.length === 0) {
-                    return false;
-                }
+            if (this.$store.state.searchMode && this.searchResults.length === 0) {
+                return false;
             }
 
             return true;
+        },
+        highlighted: function() {
+            if (this.$route.name === "specific-person") {
+                if (this.$store.state.people[this.$route.params.number].Loaded) {
+                    if (this.$store.state.people[this.$route.params.number].Episodes.indexOf(this.identifier) != -1) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
     },
     props: {
@@ -44,8 +53,8 @@ module.exports = {
             type: Number,
             required: true
         },
-        highlighted: {
-            type: Boolean,
+        identifier: {
+            type: String,
             required: true
         },
         searchResults: {

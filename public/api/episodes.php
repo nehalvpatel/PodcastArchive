@@ -13,7 +13,6 @@ foreach (array_reverse($episodes_results) as $episode_result) {
 
     $episode_data = array();
     $episode_data["Loaded"] = false;
-    $episode_data["Highlighted"] = false;
     $episode_data["SearchResults"] = array();
     $episode_data["Identifier"] = $episode->getIdentifier();
     $episode_data["Number"] = (float)$episode->getNumber();
@@ -86,6 +85,11 @@ foreach ($Podcast->getAuthors() as $author) {
 
 $output["credits"] = $credits;
 
+$output["people"] = array();
+foreach ($Podcast->getPeople() as $person) {
+    $output["people"][$person->getID()] = array();
+}
+
 header('Content-Type: application/json');
 echo json_encode($output);
-file_put_contents("json/episodes.json", json_encode($output));
+file_put_contents("episodes/all.json", json_encode($output));

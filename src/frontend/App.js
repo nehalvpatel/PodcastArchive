@@ -15,6 +15,7 @@ var PersonItem = require("./vue/PersonItem.vue");
 var HorizontalTimestamp = require("./vue/HorizontalTimestamp.vue");
 var VerticalTimestamp = require("./vue/VerticalTimestamp.vue");
 var Feedback = require("./vue/Feedback.vue");
+var Person = require("./vue/Person.vue");
 
 Vue.use(VueRouter);
 Vue.use(Vuex);
@@ -39,7 +40,7 @@ if (document.readyState === "complete") {
 
 var jsonLoaded = false;
 var episodesJson = {};
-fetch("/api/json/episodes.json")
+fetch("/api/episodes/all.json")
     .then((response) => {
         return response.json();
     }).then((json) => {
@@ -84,6 +85,11 @@ function initScript() {
                 path: "/feedback",
                 component: Feedback,
                 name: "feedback"
+            },
+            {
+                path: "/person/:number",
+                component: Person,
+                name: "specific-person"
             }
         ]
     });
@@ -94,6 +100,7 @@ function initScript() {
             episodes: episodesJson["episodes"],
             map: episodesJson["map"],
             latest: episodesJson["latest"],
+            people: episodesJson["people"],
             firstLaunch: true,
             sidebarOpen: false,
             searchError: false,
@@ -109,6 +116,9 @@ function initScript() {
             cacheReddit(state, data) {
                 Vue.set(state.episodes[data.Identifier], "RedditCount", data.RedditCount);
                 Vue.set(state.episodes[data.Identifier], "RedditLink", data.RedditLink);
+            },
+            cachePerson(state, data) {
+                Vue.set(state.people, data.ID, data);
             },
             openSidebar(state) {
                 Vue.set(state, "sidebarOpen", true);
@@ -143,7 +153,7 @@ function initScript() {
         },
         actions: {
             fetchEpisode(context, episodeToFetch) {
-                fetch("/api/json/" + episodeToFetch + ".json")
+                fetch("/api/episodes/" + episodeToFetch + ".json")
                     .then((response) => {
                         return response.json();
                     }).then((json) => {
@@ -175,6 +185,14 @@ function initScript() {
                         };
 
                         context.commit("cacheReddit", redditPayload);
+                    });
+            },
+            fetchPerson(context, personToFetch) {
+                fetch("/api/people/" + personToFetch + ".json")
+                    .then((response) => {
+                        return response.json();
+                    }).then((json) => {
+                        context.commit("cachePerson", json);
                     });
             },
             toggleSidebar(context, currentlyOpen) {
