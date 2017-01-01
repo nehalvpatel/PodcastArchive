@@ -41,7 +41,7 @@
 <script>
 module.exports = {
     created: function() {
-        this.$store.commit("markLaunched");
+        this.$store.dispatch("markLaunched");
     },
     mounted: function() {
         document.title = "Feedback \u00B7 Painkiller Already";

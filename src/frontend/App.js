@@ -176,17 +176,22 @@ function initScript() {
             }
         },
         actions: {
+            markLaunched(context) {
+                if (context.state.firstLaunch) {
+                    context.commit("markLaunched");
+                }
+            },
             fetchEpisode(context, episodeToFetch) {
                 fetch("/api/episodes/" + episodeToFetch + ".json")
                     .then((response) => {
                         return response.json();
                     }).then((json) => {
                         context.commit("cacheEpisode", json);
-                        context.commit("closeSidebar");
+                        context.dispatch("closeSidebar");
 
                         if (context.state.firstLaunch) {
                             document.querySelector(".router-link-active").scrollIntoView();
-                            context.commit("markLaunched");
+                            context.dispatch("markLaunched");
                         }
 
                         if (json.Reddit) {
@@ -219,21 +224,55 @@ function initScript() {
                         context.commit("cachePerson", json);
                     });
             },
-            toggleSidebar(context, currentlyOpen) {
-                if (currentlyOpen) {
+            closeSidebar(context) {
+                if (context.state.sidebarOpen) {
+                    context.commit("closeSidebar");
+                }
+            },
+            toggleSidebar(context) {
+                if (context.state.sidebarOpen) {
                     context.commit("closeSidebar");
                 } else {
                     context.commit("openSidebar");
                 }
             },
+            highlightTimestamp(context, data) {
+                if (!data.Highlighted) {
+                    context.commit("highlightTimestamp", data);
+                }
+            },
+            unhighlightTimestamp(context, data) {
+                if (data.Highlighted) {
+                    context.commit("unhighlightTimestamp", data);
+                }
+            },
             clearAllHighlighted(context, identifier) {
-                for (var i = 0; i < context.state.episodes[identifier].Timeline.Timestamps.length; i++) {
-                    if (context.state.episodes[identifier].Timeline.Timestamps[i].Highlighted) {
-                        context.commit("unhighlightTimestamp", {
-                            Identifier: identifier,
-                            TimestampIndex: i
-                        });
-                    }
+                for (var i = 0, timestampCount = context.state.episodes[identifier].Timeline.Timestamps.length; i < timestampCount; i++) {
+                    context.dispatch("unhighlightTimestamp", {
+                        Identifier: identifier,
+                        Highlighted: context.state.episodes[identifier].Timeline.Timestamps[i].Highlighted,
+                        TimestampIndex: i
+                    });
+                }
+            },
+            showSearchError(context) {
+                if (!context.state.searchError) {
+                    context.commit("showSearchError");
+                }
+            },
+            hideSearchError(context) {
+                if (context.state.searchError) {
+                    context.commit("hideSearchError");
+                }
+            },
+            enableSearchMode(context) {
+                if (!context.state.searchMode) {
+                    context.commit("enableSearchMode");
+                }
+            },
+            disableSearchMode(context) {
+                if (context.state.searchMode) {
+                    context.commit("disableSearchMode");
                 }
             },
             clearSearchResults(context) {
@@ -244,7 +283,7 @@ function initScript() {
                         context.commit("removeSearchResults", identifier);
                     }
                 }
-            }
+            },
         }
     });
 

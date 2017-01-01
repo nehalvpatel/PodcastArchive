@@ -24,10 +24,7 @@
 <script>
 module.exports = {
     created: function() {
-        
-    },
-    mounted: function() {
-        document.title = this.person.Name + " \u00B7 Painkiller Already";
+        this.$store.dispatch("markLaunched");
     },
     computed: {
         person: function() {
@@ -57,6 +54,11 @@ module.exports = {
             } else {
                 return "She";
             }
+        }
+    },
+    watch: {
+        person: function() {
+            document.title = this.person.Name + " \u00B7 Painkiller Already";
         }
     }
 }

@@ -156,22 +156,17 @@ module.exports = {
         onProgress: function(currentTime) {
             for (var i = 0; i < this.episode.Timeline.Timestamps.length; i++) {
                 var currentTimestamp = this.episode.Timeline.Timestamps[i];
-
+                
+                var timestampAction = "unhighlightTimestamp";
                 if ((currentTime > currentTimestamp.Begin) && (currentTime < currentTimestamp.End)) {
-                    if (currentTimestamp.Highlighted === false) {
-                        this.$store.commit("highlightTimestamp", {
-                            Identifier: this.episode.Identifier,
-                            TimestampIndex: i
-                        });
-                    }
-                } else {
-                    if (currentTimestamp.Highlighted === true) {
-                        this.$store.commit("unhighlightTimestamp", {
-                            Identifier: this.episode.Identifier,
-                            TimestampIndex: i
-                        });
-                    }
+                    timestampAction = "highlightTimestamp";
                 }
+
+                this.$store.dispatch(timestampAction, {
+                    Identifier: this.episode.Identifier,
+                    Highlighted: currentTimestamp.Highlighted,
+                    TimestampIndex: i
+                });
             }
         },
         handleNavigation: function() {
@@ -179,7 +174,7 @@ module.exports = {
             if (this.$route.name === "latest-episode") {
                 episodeIdentifier = this.$store.state.latest.Identifier;
 
-                this.$store.commit("markLaunched");
+                this.$store.dispatch("markLaunched");
 
                 this.$store.dispatch("fetchEpisode", this.$store.state.latest.Number);
             } else if (this.$route.name === "random-episode") {
@@ -191,7 +186,7 @@ module.exports = {
                 episodeIdentifier = this.$store.state.map[this.$route.params.number];
 
                 if (this.$store.state.episodes[episodeIdentifier].Loaded) {
-                    this.$store.commit("closeSidebar");
+                    this.$store.dispatch("closeSidebar");
                 } else {
                     this.$store.dispatch("fetchEpisode", this.$route.params.number);
                 }

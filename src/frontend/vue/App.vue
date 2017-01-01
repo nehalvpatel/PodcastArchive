@@ -26,7 +26,7 @@ module.exports = {
 	},
 	methods: {
 		toggleSidebar: function() {
-			this.$store.dispatch("toggleSidebar", this.$store.state.sidebarOpen);
+			this.$store.dispatch("toggleSidebar");
 		}
 	}
 }

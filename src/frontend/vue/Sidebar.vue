@@ -50,9 +50,9 @@ module.exports = {
                         }).then((json) => {
                             this.previousQuery = newVal;
 
-                            this.$store.commit("hideSearchError");
+                            this.$store.dispatch("hideSearchError");
                             this.$store.dispatch("clearSearchResults");
-                            this.$store.commit("enableSearchMode");
+                            this.$store.dispatch("enableSearchMode");
                             
                             if (json.count > 0) {
                                 for (var identifier in json.results) {
@@ -69,16 +69,16 @@ module.exports = {
                         }).catch((error) => {
                             this.previousQuery = newVal;
 
-                            this.$store.commit("showSearchError");
+                            this.$store.dispatch("showSearchError");
                             this.$store.dispatch("clearSearchResults");
-                            this.$store.commit("enableSearchMode");
+                            this.$store.dispatch("enableSearchMode");
                         });
                 } else {
                     this.previousQuery = "";
 
-                    this.$store.commit("hideSearchError");
+                    this.$store.dispatch("hideSearchError");
                     this.$store.dispatch("clearSearchResults");
-                    this.$store.commit("disableSearchMode");
+                    this.$store.dispatch("disableSearchMode");
                 }
             }, 1000);
         }
