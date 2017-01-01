@@ -46,6 +46,40 @@ fetch("/api/episodes/all.json")
         return response.json();
     }).then((json) => {
         episodesJson = json;
+        episodesJson["map"] = {};
+        episodesJson["credits"] = {
+            Loaded: false,
+            developers: [],
+            contributors: []
+        };
+
+        for (var episodeIdentifier in episodesJson["episodes"]) {
+            if (!episodesJson["episodes"].hasOwnProperty(episodeIdentifier)) continue;
+
+            episodesJson["episodes"][episodeIdentifier]["Loaded"] = false;
+            episodesJson["episodes"][episodeIdentifier]["SearchResults"] = [];
+            episodesJson["episodes"][episodeIdentifier]["Timeline"] = {
+                Timestamps: []
+            }
+
+            episodesJson["map"][episodesJson["episodes"][episodeIdentifier]["Number"]] = episodeIdentifier;
+        }
+
+        for (var personID in episodesJson["people"]) {
+            if (!episodesJson["people"].hasOwnProperty(personID)) continue;
+
+            episodesJson["people"][personID] = {
+                ID: personID,
+                Name: "",
+                Overview: "",
+                SocialLinks: [],
+                HostCount: 0,
+                GuestCount: 0,
+                SponsorCount: 0,
+                Gender: 1
+            };
+        }
+
         jsonLoaded = true;
         launch();
     });
@@ -65,30 +99,54 @@ function initScript() {
             {
                 path: "/credits",
                 component: Credits,
-                name: "credits"
+                name: "credits",
+                beforeEnter: function(to, from, next) {
+                    store.dispatch("fetchCredits", to)
+                        .then((data) => {
+                            next();
+                        });
+                }
             },
             {
                 path: "/",
                 component: Episode,
-                name: "latest-episode"
+                name: "latest-episode",
+                beforeEnter: function(to, from, next) {
+                    store.dispatch("handleEpisodeNavigation", to)
+                        .then((data) => {
+                            next();
+                        });
+                }
             },
             {
                 path: "/episode/random",
                 component: Episode,
-                name: "random-episode"
+                name: "random-episode",
+                beforeEnter: function(to, from, next) {
+                    store.dispatch("handleEpisodeNavigation", to)
+                        .then((data) => {
+                            next({
+                                name: "specific-episode",
+                                params: {
+                                    number: data
+                                }
+                            });
+                        });
+                }
             },
             {
                 path: "/episode/:number",
                 component: Episode,
                 name: "specific-episode",
                 beforeEnter: function(to, from, next) {
-                    if (store.state.map.hasOwnProperty(to.params.number)) {
-                        next();
-                    } else {
-                        next({
-                            path: "/404"
+                    store.dispatch("handleEpisodeNavigation", to)
+                        .then((data) => {
+                            next();
+                        }).catch((error) => {
+                            next({
+                                path: "/404"
+                            });
                         });
-                    }
                 },
             },
             {
@@ -101,13 +159,14 @@ function initScript() {
                 component: Person,
                 name: "specific-person",
                 beforeEnter: function(to, from, next) {
-                    if (store.state.people.hasOwnProperty(to.params.number)) {
-                        next();
-                    } else {
-                        next({
-                            path: "/404"
+                    store.dispatch("handlePersonNavigation", to)
+                        .then((data) => {
+                            next();
+                        }).catch((error) => {
+                            next({
+                                path: "/404"
+                            });
                         });
-                    }
                 }
             },
             {
@@ -128,11 +187,15 @@ function initScript() {
             firstLaunch: true,
             sidebarOpen: false,
             searchError: false,
-            searchMode: false
+            searchMode: false,
+            episodeIdentifier: ""
         },
         mutations: {
             markLaunched(state) {
                 Vue.set(state, "firstLaunch", false);
+            },
+            setEpisodeIdentifier(state, identifier) {
+                Vue.set(state, "episodeIdentifier", identifier);
             },
             cacheEpisode(state, data) {
                 Vue.set(state.episodes, data.Identifier, data);
@@ -143,6 +206,9 @@ function initScript() {
             },
             cachePerson(state, data) {
                 Vue.set(state.people, data.ID, data);
+            },
+            cacheCredits(state, data) {
+                Vue.set(state, "credits", data);
             },
             openSidebar(state) {
                 Vue.set(state, "sidebarOpen", true);
@@ -178,29 +244,69 @@ function initScript() {
         actions: {
             markLaunched(context) {
                 if (context.state.firstLaunch) {
+                    if (document.querySelector(".router-link-active")) {
+                        document.querySelector(".router-link-active").scrollIntoView();
+                    }
                     context.commit("markLaunched");
                 }
+
+                context.dispatch("closeSidebar");
+            },
+            setEpisodeIdentifier(context, identifier) {
+                if (context.state.episodeIdentifier !== identifier) {
+                    context.dispatch("clearAllHighlighted", identifier);
+                    context.commit("setEpisodeIdentifier", identifier);
+                }
+            },
+            handleEpisodeNavigation(context, routeData) {
+                return new Promise((resolve, reject) => {
+                    if (routeData.name === "latest-episode") {
+                        context.dispatch("fetchEpisode", context.state.latest.Identifier)
+                            .then((data) => {
+                                context.dispatch("markLaunched");
+                                context.dispatch("setEpisodeIdentifier", context.state.latest.Identifier);
+                            }).then(resolve());
+                    } else if (routeData.name === "random-episode") {
+                        var episodeKeys = Object.keys(context.state.episodes);
+                        var episodeIdentifier = episodeKeys[episodeKeys.length * Math.random() << 0];
+                        context.dispatch("setEpisodeIdentifier", episodeIdentifier);
+
+                        resolve(context.state.episodes[episodeIdentifier].Number);
+                    } else if (routeData.name === "specific-episode") {
+                        if (context.state.map.hasOwnProperty(routeData.params.number)) {
+                            var episodeIdentifier = context.state.map[routeData.params.number]
+
+                            context.dispatch("fetchEpisode", episodeIdentifier)
+                                .then((data) => {
+                                    context.dispatch("markLaunched");
+                                    context.dispatch("setEpisodeIdentifier", episodeIdentifier);
+                                }).then(resolve());
+                        } else {
+                            reject("404");
+                        }
+                    }
+                });
             },
             fetchEpisode(context, episodeToFetch) {
-                fetch("/api/episodes/" + episodeToFetch + ".json")
-                    .then((response) => {
-                        return response.json();
-                    }).then((json) => {
-                        context.commit("cacheEpisode", json);
-                        context.dispatch("closeSidebar");
+                return new Promise((resolve, reject) => {
+                    if (context.state.episodes[episodeToFetch].Loaded) {
+                        resolve();
+                    } else {
+                        fetch("/api/episodes/" + context.state.episodes[episodeToFetch].Number + ".json")
+                            .then((response) => {
+                                return response.json();
+                            }).then((json) => {
+                                context.commit("cacheEpisode", json);
 
-                        if (context.state.firstLaunch) {
-                            document.querySelector(".router-link-active").scrollIntoView();
-                            context.dispatch("markLaunched");
-                        }
-
-                        if (json.Reddit) {
-                            context.dispatch("fetchRedditCount", {
-                                identifierToFetch: json.Identifier,
-                                Reddit: json.Reddit
-                            });
-                        }
-                    });
+                                if (json.Reddit) {
+                                    context.dispatch("fetchRedditCount", {
+                                        identifierToFetch: json.Identifier,
+                                        Reddit: json.Reddit
+                                    });
+                                }
+                            }).then(resolve());
+                    }
+                });
             },
             fetchRedditCount(context, data) {
                 fetch("https://www.reddit.com/comments/" + data.Reddit + ".json")
@@ -216,13 +322,46 @@ function initScript() {
                         context.commit("cacheReddit", redditPayload);
                     });
             },
+            handlePersonNavigation(context, routeData) {
+                return new Promise((resolve, reject) => {
+                    if (routeData.name === "specific-person") {
+                        if (context.state.people.hasOwnProperty(routeData.params.number)) {
+                            var personID = routeData.params.number;
+
+                            context.dispatch("fetchPerson", personID).then(resolve());
+                        } else {
+                            reject("404");
+                        }
+                    }
+                });
+            },
             fetchPerson(context, personToFetch) {
-                fetch("/api/people/" + personToFetch + ".json")
-                    .then((response) => {
-                        return response.json();
-                    }).then((json) => {
-                        context.commit("cachePerson", json);
-                    });
+                return new Promise((resolve, reject) => {
+                    if (context.state.people[personToFetch].Loaded) {
+                        resolve();
+                    } else {
+                        fetch("/api/people/" + personToFetch + ".json")
+                            .then((response) => {
+                                return response.json();
+                            }).then((json) => {
+                                context.commit("cachePerson", json);
+                            }).then(resolve());
+                    }
+                });
+            },
+            fetchCredits(context) {
+                return new Promise((resolve, reject) => {
+                    if (context.state.Loaded) {
+                        resolve();
+                    } else {
+                        fetch("/api/credits.json")
+                            .then((response) => {
+                                return response.json();
+                            }).then((json) => {
+                                context.commit("cacheCredits", json);
+                            }).then(resolve());
+                    }
+                });
             },
             closeSidebar(context) {
                 if (context.state.sidebarOpen) {

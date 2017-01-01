@@ -28,22 +28,7 @@ module.exports = {
     },
     computed: {
         person: function() {
-            if (this.$store.state.people[this.$route.params.number].Loaded) {
-                return this.$store.state.people[this.$route.params.number];
-            } else {
-                this.$store.dispatch("fetchPerson", this.$route.params.number);
-
-                return {
-                    ID: 0,
-                    Name: "",
-                    Overview: "",
-                    SocialLinks: [],
-                    HostCount: 0,
-                    GuestCount: 0,
-                    SponsorCount: 0,
-                    Gender: 1
-                };
-            }
+            return this.$store.state.people[this.$route.params.number];
         },
         image: function() {
             return "/img/people/" + this.person.ID + "a.png";

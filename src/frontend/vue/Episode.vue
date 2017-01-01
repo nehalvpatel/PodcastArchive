@@ -16,15 +16,15 @@
         <div id="video">
             <youtube :videoId="episode.YouTube" playerHeight="400px" playerWidth="100%" :playerVars="videoArgs" @ready="playerReady" @playing="playerPlaying" @ended="playerIdle" @paused="playerIdle" @buffering="playerIdle" @qued="playerIdle" @error="playerIdle"></youtube>
         </div>
-        <div id="Hosts" class="section items">
+        <div v-if="hasHosts" id="Hosts" class="section items">
             <h4 class="section-header">Hosts</h4>
             <person-item v-for="person in episode.People.Hosts" :key="personKey(person.ID)" :person="person"></person-item>
         </div>
-        <div v-if="episode.People.Guests" id="guests" class="section items">
+        <div v-if="hasGuests" id="guests" class="section items">
             <h4 class="section-header">Guests</h4>
             <person-item v-for="person in episode.People.Guests" :key="personKey(person.ID)" :person="person"></person-item>
         </div>
-        <div v-if="episode.People.Sponsors" id="sponsors" class="section items">
+        <div v-if="hasSponsors" id="sponsors" class="section items">
             <h4 class="section-header">Sponsors</h4>
             <person-item v-for="person in episode.People.Sponsors" :key="personKey(person.ID)" :person="person"></person-item>
         </div>
@@ -53,7 +53,6 @@
 module.exports = {
     data: function() {
         return {
-            identifier: this.handleNavigation(),
             videoPlayer: null,
             videoTimer: null,
             videoTime: 0,
@@ -65,7 +64,7 @@ module.exports = {
     },
     computed: {
         episode: function() {
-            return this.$store.state.episodes[this.identifier];
+            return this.$store.state.episodes[this.$store.state.episodeIdentifier];
         },
         episodeTitle: function() {
             document.title = "Episode #" + this.episode.Number + " \u00B7 Painkiller Already";
@@ -101,13 +100,17 @@ module.exports = {
 
             return false;
         },
+        hasHosts: function() {
+            return this.episode.People && this.episode.People.Hosts;
+        },
+        hasGuests: function() {
+            return this.episode.People && this.episode.People.Guests;
+        },
+        hasSponsors: function() {
+            return this.episode.People && this.episode.People.Sponsors;
+        },
         hasTimestamps: function() {
             return this.episode.Timelined;
-        }
-    },
-    watch: {
-        $route: function() {
-            this.identifier = this.handleNavigation();
         }
     },
     methods: {
@@ -168,33 +171,11 @@ module.exports = {
                     TimestampIndex: i
                 });
             }
-        },
-        handleNavigation: function() {
-            var episodeIdentifier = null;
-            if (this.$route.name === "latest-episode") {
-                episodeIdentifier = this.$store.state.latest.Identifier;
-
-                this.$store.dispatch("markLaunched");
-
-                this.$store.dispatch("fetchEpisode", this.$store.state.latest.Number);
-            } else if (this.$route.name === "random-episode") {
-                var episodeKeys = Object.keys(this.$store.state.episodes);
-                episodeIdentifier = episodeKeys[episodeKeys.length * Math.random() << 0];
-
-                this.$router.replace("/episode/" + this.$store.state.episodes[episodeIdentifier].Number);
-            } else if (this.$route.name === "specific-episode") {
-                episodeIdentifier = this.$store.state.map[this.$route.params.number];
-
-                if (this.$store.state.episodes[episodeIdentifier].Loaded) {
-                    this.$store.dispatch("closeSidebar");
-                } else {
-                    this.$store.dispatch("fetchEpisode", this.$route.params.number);
-                }
-            }
-
-            this.$store.dispatch("clearAllHighlighted", episodeIdentifier);
-
-            return episodeIdentifier;
+        }
+    },
+    watch: {
+        $route: function(to, from) {
+            this.$store.dispatch("handleEpisodeNavigation", to);
         }
     }
 }

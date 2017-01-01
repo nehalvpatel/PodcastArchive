@@ -31,11 +31,13 @@ module.exports = {
     mounted: function() {
         document.title = "Developers and Contributors \u00B7 Painkiller Already";
     },
-    data: function() {
-        return {
-            developers: this.$store.state.credits.developers,
-            contributors: this.$store.state.credits.contributors
-        };
+    computed: {
+        developers: function() {
+            return this.$store.state.credits.developers;
+        },
+        contributors: function() {
+            return this.$store.state.credits.contributors;
+        }
     }
 };
 </script>
