@@ -1,5 +1,11 @@
 <template>
     <div class="episode">
+        <div v-if="$store.state.successes" v-for="success in $store.state.successes" class="success-message">
+            <p v-text="success"></p>
+        </div>
+        <div v-if="$store.state.errors" v-for="error in $store.state" class="error-message">
+            <p v-text="error"></p>
+        </div>
         <h2 v-text="episodeTitle"></h2>
         <div class="info">
             <span class="published" title="Date Published">
@@ -35,9 +41,19 @@
                 <horizontal-timestamp v-for="timestamp in episode.Timeline.Timestamps" :key="timestampKey(timestamp.ID)" :episodeNumber="episode.Number" :timestamp="timestamp" @seek="seekTo"></horizontal-timestamp>
             </div>
         </div>
+        <div v-if="this.$store.state.loggedIn" id="addTimelineRow" class="section">
+            <h4 class="section-header">Add Single Timeline Row</h4>
+            <form @submit.prevent="addTimelineRow" method="POST">
+                <input type="text" v-model="formAddTimestamp" id="time" placeholder="1:23:45" />
+                <input type="text" v-model="formAddEvent" id="event" placeholder="The hosts talk about a topic" />
+                <input type="text" v-model="formAddURL" id="url" placeholder="http://www.relevanturl.com (optional)" />
+                <input type="submit" value="Add Timeline Row" />
+            </form>
+        </div>
         <table v-if="hasTimestamps" id="timeline-vertical" class="section">
             <thead>
                 <tr>
+                    <th v-if="this.$store.state.loggedIn">Delete</th>
                     <th>Time</th>
                     <th>Event</th>
                 </tr>
@@ -46,6 +62,13 @@
                 <vertical-timestamp v-for="timestamp in episode.Timeline.Timestamps" :key="timestampKey(timestamp.ID)" :episodeNumber="episode.Number" :timestamp="timestamp" @seek="seekTo"></vertical-timestamp>
             </tbody>
         </table>
+        <div v-if="this.$store.state.loggedIn" id="Add Timeline" class="section">
+            <h4 class="section-header">Add Timeline</h4>
+            <form @submit.prevent="addTimeline" method="POST">
+                <textarea v-model="formAddTimeline" :placeholder="formAddTimelinePlaceholder"></textarea>
+                <input type="submit" value="Submit Timeline" />
+            </form>
+        </div>
     </div>
 </template>
 
@@ -53,12 +76,17 @@
 module.exports = {
     data: function() {
         return {
+            formAddTimestamp: "",
+            formAddEvent: "",
+            formAddURL: "",
+            formAddTimeline: "",
+            formAddTimelinePlaceholder: "23:45 The hosts talk about a topic\r\n1:32:54 The hosts talk about a topic with a relevant website http://www.relevanturl.com",
             videoPlayer: null,
             videoTimer: null,
             videoTime: 0,
             videoArgs: {
 				start: this.$route.query.timestamp,
-				autoplay: 1
+				autoplay: 0
 			}
         };
     },
@@ -101,13 +129,25 @@ module.exports = {
             return false;
         },
         hasHosts: function() {
-            return this.episode.People && this.episode.People.Hosts;
+            if (this.episode.People && this.episode.People.Hosts) {
+                return true;
+            } else {
+                return false;
+            }
         },
         hasGuests: function() {
-            return this.episode.People && this.episode.People.Guests;
+            if (this.episode.People && this.episode.People.Guests) {
+                return true;
+            } else {
+                return false;
+            }
         },
         hasSponsors: function() {
-            return this.episode.People && this.episode.People.Sponsors;
+            if (this.episode.People && this.episode.People.Sponsors) {
+                return true;
+            } else {
+                return false;
+            }
         },
         hasTimestamps: function() {
             return this.episode.Timelined;
@@ -170,6 +210,42 @@ module.exports = {
                     Highlighted: currentTimestamp.Highlighted,
                     TimestampIndex: i
                 });
+            }
+        },
+        addTimelineRow: function() {
+            if (this.formAddTimestamp && this.formAddEvent && this.formAddURL) {
+                this.$store.dispatch("addTimestamp", {
+                    Identifier: this.episode.Identifier,
+                    formAddTimestamp: this.formAddTimestamp,
+                    formAddEvent: this.formAddEvent,
+                    formAddURL: this.formAddURL
+                }).then((messages) => {
+                    this.$store.dispatch("displaySuccesses", messages);
+
+                    this.formAddTimestamp = "";
+                    this.formAddEvent = "";
+                    this.formAddURL = "";
+                }).catch((messages) => {
+                    this.$store.dispatch("displayErrors", messages);
+                });
+            } else {
+                this.$store.dispatch("displayErrors", ["Please make sure you filled in the timestamp row."]);
+            }
+        },
+        addTimeline: function() {
+            if (this.formAddTimeline) {
+                this.$store.dispatch("addTimeline", {
+                    Identifier: this.episode.Identifier,
+                    formAddTimeline: this.formAddTimeline,
+                }).then((messages) => {
+                    this.$store.dispatch("displaySuccesses", messages);
+
+                    this.formAddTimeline = "";
+                }).catch((messages) => {
+                    this.$store.dispatch("displayErrors", messages);
+                });
+            } else {
+                this.$store.dispatch("displayErrors", ["Please make sure you filled in the timeline."]);
             }
         }
     },

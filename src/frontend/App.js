@@ -188,11 +188,32 @@ function initScript() {
             sidebarOpen: false,
             searchError: false,
             searchMode: false,
-            episodeIdentifier: ""
+            episodeIdentifier: "",
+            loggedIn: false,
+            globalSuccesses: [],
+            globalErrors: []
         },
         mutations: {
             markLaunched(state) {
                 Vue.set(state, "firstLaunch", false);
+            },
+            showSuccesses(state, successes) {
+                Vue.set(state, "globalSuccesses", successes);
+            },
+            clearSuccesses(state) {
+                Vue.set(state, "globalSuccesses", []);
+            },
+            showErrors(state, errors) {
+                Vue.set(state, "globalErrors", errors);
+            },
+            clearErrors(state) {
+                Vue.set(state, "globalErrors", []);
+            },
+            login(state) {
+                Vue.set(state, "loggedIn", true);
+            },
+            logout(state) {
+                Vue.set(state, "loggedIn", false);
             },
             setEpisodeIdentifier(state, identifier) {
                 Vue.set(state, "episodeIdentifier", identifier);
@@ -203,6 +224,10 @@ function initScript() {
             cacheReddit(state, data) {
                 Vue.set(state.episodes[data.Identifier], "RedditCount", data.RedditCount);
                 Vue.set(state.episodes[data.Identifier], "RedditLink", data.RedditLink);
+            },
+            updateTimestamps(state, data) {
+                Vue.set(state.episodes[data.Identifier], "Timeline", data.Payload.Timeline);
+                Vue.set(state.episodes[data.Identifier], "Timelined", data.Payload.Timelined);
             },
             cachePerson(state, data) {
                 Vue.set(state.people, data.ID, data);
@@ -250,7 +275,79 @@ function initScript() {
                     context.commit("markLaunched");
                 }
 
+                context.dispatch("clearSuccesses");
+                context.dispatch("clearErrors");
+
                 context.dispatch("closeSidebar");
+            },
+            displaySuccesses(context, successes) {
+                context.dispatch("clearErrors");
+
+                if (successes.length > 0) {
+                    context.commit("showSuccesses", successes);
+                }
+            },
+            clearSuccesses(context) {
+                if (context.state.globalSuccesses.length > 0) {
+                    context.commit("clearSuccesses");
+                }
+            },
+            displayErrors(context, errors) {
+                context.dispatch("clearSuccesses");
+
+                if (errors.length > 0) {
+                    context.commit("showErrors", errors);
+                }
+            },
+            clearErrors(context) {
+                if (context.state.globalErrors.length > 0) {
+                    context.commit("clearErrors");
+                }
+            },
+            displayMessages(context, data) {
+                if (data.type === "success") {
+                    context.dispatch("displaySuccesses", data.data);
+                } else {
+                    context.dispatch("displayErrors", data.data);
+                }
+            },
+            login(context, data) {
+                return new Promise((resolve, reject) => {
+                    var formData = new FormData();
+                    formData.append("username", data.Username);
+                    formData.append("password", data.Password);
+
+                    fetch("/api/login.php", {
+                        method: "POST",
+                        body: formData
+                    }).then((response) => {
+                        var contentType = response.headers.get("content-type");
+                        if (contentType && contentType.indexOf("application/json") !== -1) {
+                            return response.json();
+                        } else {
+                            reject(["An error occured with the login request."]);
+                        }
+                    }).then((json) => {
+                        if (json.type === "success") {
+                            context.commit("login");
+
+                            resolve(json.data);
+                        } else {
+                            reject(json.data);
+                        }
+                    });
+                });
+            },
+            logout(context) {
+                return new Promise((resolve, reject) => {
+                    fetch("/api/logout.php")
+                        .then((response) => {
+                            context.commit("logout");
+                            resolve();
+                        }).catch((error) => {
+                            reject();
+                        })
+                });
             },
             setEpisodeIdentifier(context, identifier) {
                 if (context.state.episodeIdentifier !== identifier) {
@@ -292,7 +389,7 @@ function initScript() {
                     if (context.state.episodes[episodeToFetch].Loaded) {
                         resolve();
                     } else {
-                        fetch("/api/episodes/" + context.state.episodes[episodeToFetch].Number + ".json")
+                        fetch("/api/episode.php?episode=" + context.state.episodes[episodeToFetch].Number)
                             .then((response) => {
                                 return response.json();
                             }).then((json) => {
@@ -335,6 +432,128 @@ function initScript() {
                     }
                 });
             },
+            addTimeline(context, data) {
+                return new Promise((resolve, reject) => {
+                    var formData = new FormData();
+                    formData.append("identifier", data.Identifier);
+                    formData.append("timeline", data.formAddTimeline);
+
+                    fetch("/api/addTimeline.php", {
+                        method: "POST",
+                        body: formData
+                    }).then((response) => {
+                        var contentType = response.headers.get("content-type");
+                        if (contentType && contentType.indexOf("application/json") !== -1) {
+                            return response.json();
+                        } else {
+                            reject(["An error occured with the timeline submit request."]);
+                        }
+                    }).then((json) => {
+                        if (json.type === "success") {
+                            context.commit("updateTimestamps", {
+                                Identifier: data.Identifier,
+                                Payload: json.payload
+                            });
+
+                            resolve(json.data);
+                        } else {
+                            reject(json.data);
+                        }
+                    });
+                });
+            },
+            addTimestamp(context, data) {
+                return new Promise((resolve, reject) => {
+                    var formData = new FormData();
+                    formData.append("identifier", data.Identifier);
+                    formData.append("time", data.formAddTimestamp);
+                    formData.append("event", data.formAddEvent);
+                    formData.append("url", data.formAddURL);
+
+                    fetch("/api/addTimelineRow.php", {
+                        method: "POST",
+                        body: formData
+                    }).then((response) => {
+                        var contentType = response.headers.get("content-type");
+                        if (contentType && contentType.indexOf("application/json") !== -1) {
+                            return response.json();
+                        } else {
+                            reject(["An error occured with the timestamp submit request."]);
+                        }
+                    }).then((json) => {
+                        if (json.type === "success") {
+                            context.commit("updateTimestamps", {
+                                Identifier: data.Identifier,
+                                Payload: json.payload
+                            });
+
+                            resolve(json.data);
+                        } else {
+                            reject(json.data);
+                        }
+                    });
+                });
+            },
+            updateTimestamp(context, data) {
+                return new Promise((resolve, reject) => {
+                    var formData = new FormData();
+                    formData.append("id", data.timestampID);
+                    formData.append("value", data.timestampEvent);
+                    formData.append("url", data.timestampURL);
+
+                    fetch("/api/updateTimestamp.php", {
+                        method: "POST",
+                        body: formData
+                    }).then((response) => {
+                        var contentType = response.headers.get("content-type");
+                        if (contentType && contentType.indexOf("application/json") !== -1) {
+                            return response.json();
+                        } else {
+                            reject(["An error occured with the timestamp update request."]);
+                        }
+                    }).then((json) => {
+                        if (json.type === "success") {
+                            context.commit("updateTimestamps", {
+                                Identifier: data.Identifier,
+                                Payload: json.payload
+                            });
+
+                            resolve(json.data);
+                        } else {
+                            reject(json.data);
+                        }
+                    });
+                });
+            },
+            deleteTimestamp(context, data) {
+                return new Promise((resolve, reject) => {
+                    var formData = new FormData();
+                    formData.append("id", data.timestampID);
+
+                    fetch("/api/deleteTimestamp.php", {
+                        method: "POST",
+                        body: formData
+                    }).then((response) => {
+                        var contentType = response.headers.get("content-type");
+                        if (contentType && contentType.indexOf("application/json") !== -1) {
+                            return response.json();
+                        } else {
+                            reject(["An error occured with the timestamp delete request."]);
+                        }
+                    }).then((json) => {
+                        if (json.type === "success") {
+                            context.commit("updateTimestamps", {
+                                Identifier: data.Identifier,
+                                Payload: json.payload
+                            });
+
+                            resolve(json.data);
+                        } else {
+                            reject(json.data);
+                        }
+                    });
+                });
+            },
             fetchPerson(context, personToFetch) {
                 return new Promise((resolve, reject) => {
                     if (context.state.people[personToFetch].Loaded) {
@@ -347,6 +566,31 @@ function initScript() {
                                 context.commit("cachePerson", json);
                             }).then(resolve());
                     }
+                });
+            },
+            submitFeedback(context, data) {
+                return new Promise((resolve, reject) => {
+                    var formData = new FormData();
+                    formData.append("issue", data.feedbackIssue);
+                    formData.append("explanation", data.feedbackExplanation);
+
+                    fetch("/api/feedback.php", {
+                        method: "POST",
+                        body: formData
+                    }).then((response) => {
+                        var contentType = response.headers.get("content-type");
+                        if (contentType && contentType.indexOf("application/json") !== -1) {
+                            return response.json();
+                        } else {
+                            reject(["An error occured with the feedback submit request."]);
+                        }
+                    }).then((json) => {
+                        if (json.type === "success") {
+                            resolve(json.data);
+                        } else {
+                            reject(json.data);
+                        }
+                    });
                 });
             },
             fetchCredits(context) {

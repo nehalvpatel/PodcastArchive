@@ -26,7 +26,6 @@ foreach (array_reverse($episodes_results) as $episode_result) {
         );
         $latest = false;
     }
-    file_get_contents("http://localhost/api/episode.php?episode=" . $episode_data["Number"]);
 }
 
 $credits = array(

@@ -1,11 +1,5 @@
 <template>
     <div class="feedback">
-        <div v-if="successes" v-for="success in successes" class="success-message">
-            <p v-text="success"></p>
-        </div>
-        <div v-if="errors" v-for="error in errors" class="error-message">
-            <p v-text="error"></p>
-        </div>
         <div id="page-title">
             <h2>Feedback</h2>
             <p>Thank you for helping us improve our website. We apologise for any way our website may have inconvenienced you.</p>
@@ -48,8 +42,6 @@ module.exports = {
     },
     data: function() {
         return {
-            successes: [],
-            errors: [],
             issue: "other",
             explanation: ""
         }
@@ -57,31 +49,19 @@ module.exports = {
     methods: {
         submitFeedback: function() {
             if (this.issue && this.explanation) {
-                var formData = new FormData();
-                formData.append("issue", this.issue);
-                formData.append("explanation", this.explanation);
+                this.$store.dispatch("submitFeedback", {
+                    feedbackIssue: this.issue,
+                    feedbackExplanation: this.explanation
+                }).then((messages) => {
+                    this.$store.dispatch("displaySuccesses", messages);
 
-                fetch("/api/feedback.php", {
-                    method: "POST",
-                    body: formData
-                }).then((response) => {
-                    return response.json();
-                }).then((json) => {
-                    if (json.type === "success") {
-                        this.successes.push(json.success);
-                        this.errors = [];
-                    } else if (json.type === "error") {
-                        this.successes = [];
-                        this.errors = json.errors;
-                    }
-                }).catch((error) => {
-                    this.successes = [];
-                    this.errors = ["An error occured while submitting the feedback."];
+                    this.issue = "";
+                    this.explanation = "";
+                }).catch((messages) => {
+                    this.$store.dispatch("displayErrors", messages);
                 });
-                
             } else {
-                this.successes = [];
-                this.errors = ["Please make sure you selected an issue and filled out the explanation."];
+                this.$store.dispatch("displayErrors", ["Please make sure you selected an issue and filled out the explanation."]);
             }
         }
     }

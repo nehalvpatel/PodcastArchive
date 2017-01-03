@@ -53,6 +53,12 @@ class Timestamp
 			throw new \Exception("Invalid timestamp ID");
 		}
 	}
+
+	public function getData()
+	{
+		$this->checkData();
+		return $this->_data;
+	}
 	
 	private function _getValue($field)
 	{
@@ -64,7 +70,7 @@ class Timestamp
 	{
 		$this->checkData();
 		try {
-			$update_query = $this->_connection->prepare("UPDATE `timestamps` set `" . $field . "` = :Value WHERE `ID` = :ID");
+			$update_query = $this->_connection->prepare("UPDATE `timestamps` SET `" . $field . "` = :Value WHERE `ID` = :ID");
 			$update_query->bindValue(":Value", $value);
 			$update_query->bindValue(":ID", $this->getID());
 			$update_query->execute();

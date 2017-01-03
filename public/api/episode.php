@@ -79,10 +79,5 @@ if ($episode->getTimelined()) {
     $episode_data["Timelined"] = false;
 }
 
-//echo "<pre>";
-//var_dump($episodes);
-//echo "</pre>";
-
-//header('Content-Type: application/json');
-//echo json_encode($episode_data);
-file_put_contents("episodes/" . $episode_data["Number"] . ".json", json_encode($episode_data));
+header('Content-Type: application/json');
+echo json_encode($episode_data);

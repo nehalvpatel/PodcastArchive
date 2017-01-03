@@ -5,8 +5,24 @@
             <header>
                 <span class="toggle-menu icon-reorder" @click="toggleSidebar"></span>
                 <h1>Painkiller Already</h1>
+				<div v-if="this.$store.state.loggedIn === false">
+					<form @submit.prevent="loginButtonClick" method="POST" id="loginform">
+						<input v-show="showLoginForm" type="text" v-model="formLoginUsername" placeholder="Username" />
+						<input v-show="showLoginForm" type="password" v-model="formLoginPassword" placeholder="Password" />
+						<button class="login">Log In</button>
+					</form>
+				</div>
+				<div v-else>
+					<button @click.prevent="logout" class="login">Log Out</button>
+				</div>
             </header>
             <div id="container">
+				<div v-for="success in successes" class="success-message">
+					<p v-text="success"></p>
+				</div>
+				<div v-for="error in errors" class="error-message">
+					<p v-text="error"></p>
+				</div>
 				<router-view></router-view>
                 <ul id="footer-links">
                     <li><router-link to="/credits" activeClass="active">Developers and Contributors</router-link></li>
@@ -19,14 +35,52 @@
 
 <script>
 module.exports = {
+	data: function() {
+		return {
+			showLoginForm: false,
+			formLoginUsername: "",
+			formLoginPassword: ""
+		}
+	},
 	computed: {
 		episodes: function() {
 			return this.$store.state.episodes;
+		},
+		errors: function() {
+			return this.$store.state.globalErrors;
+		},
+		successes: function() {
+			return this.$store.state.globalSuccesses;
 		}
 	},
 	methods: {
 		toggleSidebar: function() {
 			this.$store.dispatch("toggleSidebar");
+		},
+		loginButtonClick: function() {
+			if (this.showLoginForm === false) {
+				this.showLoginForm = true;
+			} else {
+				if (this.formLoginUsername && this.formLoginPassword) {
+					this.$store.dispatch("login", {
+						Username: this.formLoginUsername,
+						Password: this.formLoginPassword
+					}).then((messages) => {
+						this.$store.dispatch("displaySuccesses", messages);
+
+						this.formLoginUsername = "";
+						this.formLoginPassword = "";
+						this.showLoginForm = false;
+					}).catch((messages) => {
+						this.$store.dispatch("displayErrors", messages);
+					});
+				} else {
+					this.$store.dispatch("displayErrors", ["Please make sure you filled in the username and password."]);
+				}
+			}
+		},
+		logout: function() {
+			this.$store.dispatch("logout");
 		}
 	}
 }
@@ -77,6 +131,30 @@ h1 {
 	overflow: hidden;
 	-o-text-overflow: ellipsis;
 	text-overflow: ellipsis;
+	float: left;
+}
+
+button.login {
+	float: right;
+	margin: 12px; /*15px*/
+	height: 40px;
+	padding: 10px;
+	background: #9c463a;
+	color: white;
+	font-weight: bold;
+	width: auto;
+	display: inline;
+}
+header input[type=text], header input[type=password]{
+	margin: 12px; /*15px*/
+	height: 40px;
+	padding: 10px;
+	background: #9c463a;
+	color: white;
+	font-weight: bold;
+}
+header form#loginform{
+	float: right;
 }
 
 /* Sidebar */
@@ -349,12 +427,20 @@ textarea {
 	display: block;
 	width: 100%;
 	resize: vertical;
+	min-height: 300px;
 }
-input[type=submit] {
-	display: block;
-	padding: 5px 7px;
-	width: 100%;
-	margin-top: 20px;
+#addTimelineRow input{
+	padding: 5px;
+}
+#addTimelineRow input#time{
+	width: 10%;
+	min-width: 60px;
+}
+#addTimelineRow input#event{
+	width: 30%;
+}
+#addTimelineRow input#url{
+	width: 30%;
 }
 
 /* Horizontal Timeline Styles */
@@ -458,6 +544,43 @@ td.event {
 }
 td.event a {
 	color: inherit;
+}
+
+.delete{
+	width: 20px;
+}
+.delete input[type=submit]{
+	width: 100%;
+	background: transparent;
+	color: white;
+}
+.updateTimestampForm input[type=text]{
+	background: transparent;
+	font-size: 10.5pt;
+	color: white;
+	font-family: 'Open Sans', sans-serif;
+	border: 1px solid #999;
+	width: 40%;
+}
+.updateTimestampForm input[type=submit]{
+	float: right;
+	padding: 3px;
+	color: white;
+	background: transparent;
+	cursor: pointer;
+}
+.updateTimestampForm input[type=submit]:hover{
+	text-decoration: underline;
+}
+.editTimestamp{
+	float: right;
+	padding: 3px;
+	color: white;
+	background: transparent;
+	cursor: pointer;
+}
+.editTimestamp:hover{
+	text-decoration: underline;
 }
 
 /* Search Styles */
