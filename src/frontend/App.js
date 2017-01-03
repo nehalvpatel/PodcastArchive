@@ -41,7 +41,7 @@ if (document.readyState === "complete") {
 
 var jsonLoaded = false;
 var episodesJson = {};
-fetch("/api/episodes/all.json")
+fetch("/api/episodes.php")
     .then((response) => {
         return response.json();
     }).then((json) => {
@@ -362,7 +362,9 @@ function initScript() {
                             .then((data) => {
                                 context.dispatch("markLaunched");
                                 context.dispatch("setEpisodeIdentifier", context.state.latest.Identifier);
-                            }).then(resolve());
+                            });
+
+                        resolve();
                     } else if (routeData.name === "random-episode") {
                         var episodeKeys = Object.keys(context.state.episodes);
                         var episodeIdentifier = episodeKeys[episodeKeys.length * Math.random() << 0];
@@ -377,7 +379,9 @@ function initScript() {
                                 .then((data) => {
                                     context.dispatch("markLaunched");
                                     context.dispatch("setEpisodeIdentifier", episodeIdentifier);
-                                }).then(resolve());
+                                });
+
+                            resolve();
                         } else {
                             reject("404");
                         }
@@ -425,7 +429,9 @@ function initScript() {
                         if (context.state.people.hasOwnProperty(routeData.params.number)) {
                             var personID = routeData.params.number;
 
-                            context.dispatch("fetchPerson", personID).then(resolve());
+                            context.dispatch("fetchPerson", personID);
+                            
+                            resolve();
                         } else {
                             reject("404");
                         }
@@ -559,7 +565,7 @@ function initScript() {
                     if (context.state.people[personToFetch].Loaded) {
                         resolve();
                     } else {
-                        fetch("/api/people/" + personToFetch + ".json")
+                        fetch("/api/person.php?person=" + personToFetch)
                             .then((response) => {
                                 return response.json();
                             }).then((json) => {
@@ -598,7 +604,7 @@ function initScript() {
                     if (context.state.Loaded) {
                         resolve();
                     } else {
-                        fetch("/api/credits.json")
+                        fetch("/api/credits.php")
                             .then((response) => {
                                 return response.json();
                             }).then((json) => {

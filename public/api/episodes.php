@@ -28,26 +28,7 @@ foreach (array_reverse($episodes_results) as $episode_result) {
     }
 }
 
-$credits = array(
-    "Loaded" => true
-);
-foreach ($Podcast->getAuthors() as $author) {
-    if ($author->getType() == "0") {
-        $credits["developers"][] = array(
-            "DisplayLink" => $author->getDisplayLink(),
-            "DisplayName" => $author->getDisplayName(),
-            "Praise" => $author->getPraise()
-        );
-    } else {
-        $credits["contributors"][] = array(
-            "DisplayLink" => $author->getDisplayLink(),
-            "DisplayName" => $author->getDisplayName(),
-            "Praise" => $author->getPraise()
-        );
-    }
-}
 
-file_put_contents("credits.json", json_encode($credits));
 
 $output["people"] = array();
 foreach ($Podcast->getPeople() as $person) {
@@ -56,4 +37,3 @@ foreach ($Podcast->getPeople() as $person) {
 
 header('Content-Type: application/json');
 echo json_encode($output);
-file_put_contents("episodes/all.json", json_encode($output));
