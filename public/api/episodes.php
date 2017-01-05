@@ -28,7 +28,11 @@ foreach (array_reverse($episodes_results) as $episode_result) {
     }
 }
 
-
+if (isset($_SESSION["username"])) {
+    $output["loggedIn"] = true;
+} else {
+    $output["loggedIn"] = false;
+}
 
 $output["people"] = array();
 foreach ($Podcast->getPeople() as $person) {

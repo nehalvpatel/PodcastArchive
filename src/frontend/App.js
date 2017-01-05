@@ -191,7 +191,7 @@ async function initScript() {
             searchError: false,
             searchMode: false,
             episodeIdentifier: "",
-            loggedIn: false,
+            loggedIn: episodesJson["loggedIn"],
             globalSuccesses: [],
             globalErrors: []
         },
