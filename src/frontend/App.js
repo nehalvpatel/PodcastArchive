@@ -479,7 +479,7 @@ async function initScript() {
                     formData.append("event", data.formAddEvent);
                     formData.append("url", data.formAddURL);
 
-                    fetch("/api/addTimelineRow.php", {
+                    fetch("/api/addTimestamp.php", {
                         method: "POST",
                         body: formData
                     }).then((response) => {

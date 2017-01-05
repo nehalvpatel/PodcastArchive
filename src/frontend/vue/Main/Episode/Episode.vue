@@ -32,7 +32,7 @@
         <horizontal-timeline v-if="hasTimestamps" :timestamps="episode.Timeline.Timestamps" :episodeNumber="episode.Number" @seek="seekTo"></horizontal-timeline>
         <div v-if="this.$store.state.loggedIn" :class="$style.section">
             <h4 :class="$style.sectionHeader">Add Single Timeline Row</h4>
-            <form @submit.prevent="addTimelineRow" method="POST">
+            <form @submit.prevent="addTimestamp" method="POST">
                 <input type="text" v-model="formAddTime" :class="$style.timestampTimeField" placeholder="1:23:45" />
                 <input type="text" v-model="formAddEvent" :class="$style.timestampEventField" placeholder="The hosts talk about a topic" />
                 <input type="text" v-model="formAddURL" :class="$style.timestampURLField" placeholder="http://www.relevanturl.com (optional)" />
@@ -190,7 +190,7 @@ module.exports = {
                 });
             }
         },
-        addTimelineRow: function() {
+        addTimestamp: function() {
             if (this.formAddTime && this.formAddEvent) {
                 this.$store.dispatch("addTimestamp", {
                     Identifier: this.episode.Identifier,
