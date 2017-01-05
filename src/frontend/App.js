@@ -20,6 +20,7 @@ var VerticalTimestamp = require("./vue/VerticalTimestamp.vue");
 var Feedback = require("./vue/Feedback.vue");
 var Person = require("./vue/Person.vue");
 var Error = require("./vue/Error.vue");
+var LoginForm = require("./vue/LoginForm.vue");
 
 Vue.use(VueRouter);
 Vue.use(Vuex);
@@ -33,6 +34,7 @@ Vue.component("horizontal-timeline", HorizontalTimeline);
 Vue.component("horizontal-timestamp", HorizontalTimestamp);
 Vue.component("vertical-timeline", VerticalTimeline);
 Vue.component("vertical-timestamp", VerticalTimestamp);
+Vue.component("login-form", LoginForm);
 
 if (document.readyState === "complete") {
     initScript();

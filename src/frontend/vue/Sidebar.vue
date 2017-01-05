@@ -15,13 +15,10 @@
 
 <script>
 module.exports = {
-    props: {
-        episodes: {
-            type: Object,
-            required: true
-        }
-    },
     computed: {
+        episodes: function() {
+            return this.$store.state.episodes;
+        },
         sidebarClass: function() {
             return {
                 [this.$style.sidebarPane]: true,
