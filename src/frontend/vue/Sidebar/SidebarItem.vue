@@ -85,15 +85,7 @@ module.exports = {
 	color: #aaa;
 }
 .sidebarItemLink {
-    text-decoration: none;
-	display: block;
-	font-weight: bold;
-	color: inherit;
-	padding: 10px 0 10px 25px;
-	border-left: 10px solid transparent;
-}
-.sidebarItemLink:hover {
-	border-left: 10px solid #BB4D3E;
+    composes: sidebarLink from "./../Global.css";
 }
 .sidebarItemTimelined {
     composes: label from "./../Global.css";

@@ -1,5 +1,5 @@
 <template>
-    <a :href="timestampLink">
+    <a :href="timestampLink" :class="$style.resultLink">
         <span :class="$style.searchResult" :title="result.Value">
             <strong v-text="result.HMS"></strong> - <span v-text="result.Value"></span>
         </span>
@@ -32,5 +32,8 @@ module.exports = {
 	display: block;
 	font-size: smaller;
 	font-weight: normal;
+}
+.resultLink {
+    composes: sidebarLink from "./../Global.css";
 }
 </style>

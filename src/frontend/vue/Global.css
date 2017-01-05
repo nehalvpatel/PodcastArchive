@@ -9,6 +9,19 @@
 	transition: transform 0.2s ease-out, right 0.2s ease-out;
 }
 
+.sidebarLink {
+    text-decoration: none;
+	display: block;
+	font-weight: bold;
+	color: inherit;
+	padding: 10px 0 10px 25px;
+	border-left: 10px solid transparent;
+}
+
+.sidebarLink:hover {
+	border-left: 10px solid #BB4D3E;
+}
+
 .pageTitle {
 	padding: 10px;
 	background: #555555;
