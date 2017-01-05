@@ -23,11 +23,12 @@ if (isset($_SESSION["username"])) {
 
             if(isset($_POST["url"])){
                 $episode->addTimestamp($time, $_POST["event"], $_POST["url"]);			
-                $Log->Log("addTimelineRow", $episode->getIdentifier(), json_encode(array($_POST["time"], $_POST["event"], $_POST["url"])));				
+                $Log->Log("addTimestamp", $episode->getIdentifier(), json_encode(array($_POST["time"], $_POST["event"], $_POST["url"])));				
             } else {
                 $episode->addTimestamp($time, $_POST["event"]);
-                $Log->Log("addTimelineRow", $episode->getIdentifier(), json_encode(array($_POST["time"], $_POST["event"])));
+                $Log->Log("addTimestamp", $episode->getIdentifier(), json_encode(array($_POST["time"], $_POST["event"])));
             }
+
             $successes[] = "Timeline row has been successfully added.";
 
             $payload = array();
