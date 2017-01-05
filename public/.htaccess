@@ -5,6 +5,7 @@ RewriteBase /
 RewriteRule ^(favicon(-[\d]*x[\d]*){0,1}\.(ico|png))$ img/favicons/$1 [PT]
 RewriteRule ^(mstile(-[\d]*x[\d]*)\.png)$ img/favicons/$1 [PT]
 RewriteRule ^(apple-touch-icon(-[\d]*x[\d]*){0,1}(-precomposed){0,1}\.png)$ img/favicons/$1 [PT]
+RewriteRule ^sitemap.xml$ api/sitemap.php [L]
 
 # f3
 RewriteCond %{REQUEST_FILENAME} !-f
