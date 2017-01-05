@@ -4,8 +4,8 @@
         <td :class="$style.timestampSeekCell"><a :class="$style.timestampSeekLink" :href="timestampLink" @click.prevent="seek" v-text="timestamp.HMS"></a></td>
         <td :class="$style.timestampEventCell">
             <form v-if="this.$store.state.loggedIn && showEditForm" @submit.prevent="updateTimestamp">
-                <input :class="$style.updateTimestampText" type="text" v-model="formEditEvent" />
-                <input :class="$style.updateTimestampText" type="text" v-model="formEditURL" />
+                <input :class="$style.updateTimestampText" type="text" v-model="formEditEvent" placeholder="The hosts talk about a topic" />
+                <input :class="$style.updateTimestampText" type="text" v-model="formEditURL" placeholder="http://www.relevanturl.com (optional)" />
                 <button :class="$style.updateFormSubmitButton" type="submit">Update Timestamp</button>
             </form>
             <span v-if="showEditForm === false">
