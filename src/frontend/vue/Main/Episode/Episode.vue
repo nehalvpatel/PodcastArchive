@@ -191,7 +191,7 @@ module.exports = {
             }
         },
         addTimelineRow: function() {
-            if (this.formAddTime && this.formAddEvent && this.formAddURL) {
+            if (this.formAddTime && this.formAddEvent) {
                 this.$store.dispatch("addTimestamp", {
                     Identifier: this.episode.Identifier,
                     formAddTimestamp: this.formAddTime,
