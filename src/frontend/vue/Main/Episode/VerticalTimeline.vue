@@ -38,7 +38,7 @@ module.exports = {
 
 <style module>
 .section {
-    composes: section from "./Global.css"
+    composes: section from "./../../Global.css"
 }
 .verticalTimelineSection {
 	width: 100%;

@@ -32,18 +32,18 @@ module.exports = {
 
 <style module>
 .sidebarPane {
-	composes: pane from "./Global.css";
+	composes: pane from "./../Global.css";
 	width: 230px;
 	background: #333;
 	overflow: hidden;
 }
 
 .sidebarPaneWhenOpen {
-    composes: paneWhenSidebarOpen from "./Global.css"
+    composes: paneWhenSidebarOpen from "./../Global.css"
 }
 
 .sidebarPaneWhenClosed {
-    composes: paneWhenSidebarClosed from "./Global.css"
+    composes: paneWhenSidebarClosed from "./../Global.css"
 }
 
 .sidebar {
@@ -52,11 +52,11 @@ module.exports = {
 }
 
 .sidebarTitle {
-    composes: sectionHead3 from "./Global.css";
+    composes: sectionHead3 from "./../Global.css";
 }
 
 .searchError {
-    composes: error from "./Global.css";
+    composes: error from "./../Global.css";
 }
 
 .searchErrorText {
@@ -69,7 +69,7 @@ module.exports = {
 }
 
 .randomButton {
-    composes: label from "./Global.css";
+    composes: label from "./../Global.css";
     display: inline-block;
 	margin: 4px -8px 0 0 !important;
 	padding: 0 !important;

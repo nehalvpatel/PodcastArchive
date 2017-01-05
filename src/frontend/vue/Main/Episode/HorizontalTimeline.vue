@@ -32,10 +32,10 @@ module.exports = {
 
 <style module>
     .section {
-        composes: section from "./Global.css"
+        composes: section from "./../../Global.css"
     }
     .sectionHeader {
-        composes: sectionHeader from "./Global.css"
+        composes: sectionHeader from "./../../Global.css"
     }
     .horizontalTimeline {
         height: 35px;

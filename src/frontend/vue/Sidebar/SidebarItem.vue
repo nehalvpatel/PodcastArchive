@@ -96,7 +96,7 @@ module.exports = {
 	border-left: 10px solid #BB4D3E;
 }
 .sidebarItemTimelined {
-    composes: label from "./Global.css";
+    composes: label from "./../Global.css";
 }
 .sidebarItemTimelined:before {
     content: "TIMELINED";

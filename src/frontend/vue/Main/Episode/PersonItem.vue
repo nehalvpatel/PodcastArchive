@@ -25,9 +25,9 @@ module.exports = {
 
 <style module>
     .item {
-        composes: item from "./Global.css"
+        composes: item from "./../../Global.css"
     }
     .itemImage {
-        composes: itemImage from "./Global.css"
+        composes: itemImage from "./../../Global.css"
     }
 </style>

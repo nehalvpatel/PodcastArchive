@@ -51,22 +51,22 @@ module.exports = {
 
 <style module>
     .section {
-        composes: section from "./Global.css"
+        composes: section from "./../../Global.css"
     }
     .sectionHeader {
-        composes: sectionHeader from "./Global.css"
+        composes: sectionHeader from "./../../Global.css"
     }
     .items {
-        composes: items from "./Global.css"
+        composes: items from "./../../Global.css"
     }
     .item {
-        composes: item from "./Global.css"
+        composes: item from "./../../Global.css"
     }
     .itemImage {
-        composes: itemImage from "./Global.css"
+        composes: itemImage from "./../../Global.css"
     }
     .clear {
-        composes: clear from "./Global.css"
+        composes: clear from "./../../Global.css"
     }
     .personImage {
         max-width: 100%;
@@ -89,12 +89,12 @@ module.exports = {
     }
 
     .personOverview {
-        composes: section from "./Global.css";
+        composes: section from "./../../Global.css";
         margin-top: 0px;
     }
 
     .socialIcons {
-        composes: items from "./Global.css", section from "./Global.css";
+        composes: items from "./../../Global.css", section from "./../../Global.css";
         float: none;
         margin-right: 0px;
     }

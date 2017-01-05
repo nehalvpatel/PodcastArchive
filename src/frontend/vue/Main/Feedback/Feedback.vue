@@ -70,19 +70,19 @@ module.exports = {
 
 <style module>
     .pageTitle {
-        composes: pageTitle from "./Global.css"
+        composes: pageTitle from "./../../Global.css"
     }
 
     .pageDescription {
-        composes: pageDescription from "./Global.css"
+        composes: pageDescription from "./../../Global.css"
     }
 
     .section {
-        composes: section from "./Global.css"
+        composes: section from "./../../Global.css"
     }
 
     .sectionTitle {
-        composes: sectionHead3 from "./Global.css", sectionTitle from "./Global.css"
+        composes: sectionHead3 from "./../../Global.css", sectionTitle from "./../../Global.css"
     }
 
     .feedbackFields {
@@ -95,10 +95,10 @@ module.exports = {
     }
 
     .feedbackTextarea {
-        composes: textarea from "./Global.css"
+        composes: textarea from "./../../Global.css"
     }
 
     .feedbackSubmitButton {
-        composes: textareaSubmitButton from "./Global.css"
+        composes: textareaSubmitButton from "./../../Global.css"
     }
 </style>

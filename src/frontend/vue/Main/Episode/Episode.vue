@@ -237,20 +237,20 @@ module.exports = {
 
 <style module>
     .section {
-        composes: section from "./Global.css"
+        composes: section from "./../../Global.css"
     }
     .sectionHeader {
-        composes: sectionHeader from "./Global.css"
+        composes: sectionHeader from "./../../Global.css"
     }
     .items {
-        composes: items from "./Global.css"
+        composes: items from "./../../Global.css"
     }
     .videoClear {
-        composes: clear from "./Global.css";
+        composes: clear from "./../../Global.css";
         height: 20px;
     }
     .timelineClear {
-        composes: clear from "./Global.css"
+        composes: clear from "./../../Global.css"
     }
     .infoIcon {
         font-size: 15px;
@@ -290,11 +290,11 @@ module.exports = {
     }
 
     .timelineTextarea {
-        composes: textarea from "./Global.css"
+        composes: textarea from "./../../Global.css"
     }
 
     .timelineSubmitButton {
-        composes: textareaSubmitButton from "./Global.css"
+        composes: textareaSubmitButton from "./../../Global.css"
     }
 
     @media (max-width: 1024px) {

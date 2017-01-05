@@ -19,7 +19,7 @@ module.exports = {
 
 <style module>
 .error {
-    composes: error from "./Global.css"
+    composes: error from "./../../Global.css"
 }
 
 .errorImage {
