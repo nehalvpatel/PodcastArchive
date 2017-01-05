@@ -1,6 +1,6 @@
 <template>
     <a :href="timestampLink">
-        <span class="search-result" :title="result.Value">
+        <span :class="$style.searchResult" :title="result.Value">
             <strong v-text="result.HMS"></strong> - <span v-text="result.Value"></span>
         </span>
     </a>
@@ -25,3 +25,12 @@ module.exports = {
     }
 }
 </script>
+
+<style module>
+.searchResult {
+	width: 175px;
+	display: block;
+	font-size: smaller;
+	font-weight: normal;
+}
+</style>

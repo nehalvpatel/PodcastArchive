@@ -1,7 +1,7 @@
 <template>
-    <div class="error">
-        <img alt="Lefty" title="Lefty" src="/img/404.png">
-        <h2><span v-text="code"></span> <span v-text="status"></span></h2>
+    <div :class="$style.error">
+        <img :class="$style.errorImage" alt="Lefty" title="Lefty" src="/img/404.png">
+        <h2 :class="$style.errorText"><span v-text="code"></span> <span v-text="status"></span></h2>
         <p>Blame the government!</p>
     </div>
 </template>
@@ -16,3 +16,19 @@ module.exports = {
     }
 }
 </script>
+
+<style module>
+.error {
+    composes: error from "./Global.css"
+}
+
+.errorImage {
+	margin-bottom: 50px;
+	max-width: 747px;
+	width: 100%;
+}
+
+.errorText {
+	font-size: 3em;
+}
+</style>

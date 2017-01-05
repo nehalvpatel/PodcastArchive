@@ -1,72 +1,50 @@
 <template>
-    <div class="episode">
-        <div v-if="$store.state.successes" v-for="success in $store.state.successes" class="success-message">
-            <p v-text="success"></p>
-        </div>
-        <div v-if="$store.state.errors" v-for="error in $store.state" class="error-message">
-            <p v-text="error"></p>
-        </div>
+    <div>
         <h2 v-text="episodeTitle"></h2>
-        <div class="info">
-            <span class="published" title="Date Published">
-                <i class="icon-time"></i><small><time :datetime="episode.DateTime" v-text="episode.Date"></time></small>
+        <div>
+            <span title="Date Published">
+                <i :class="$style.infoIcon" class="icon-time"></i><small :class="$style.infoText"><time :datetime="episode.DateTime" v-text="episode.Date"></time></small>
             </span>
-            <a v-if="hasReddit" class="comments" title="Discussion Comments" :href="redditCommentsLink">
-                <i class="icon-comments"></i><small id="comments" v-text="redditCommentCount"></small>
+            <a v-if="hasReddit" :class="$style.optionalInfo" title="Discussion Comments" :href="redditCommentsLink">
+                <i :class="$style.infoIcon" class="icon-comments"></i><small :class="$style.infoText" v-text="redditCommentCount"></small>
             </a>
-            <a v-if="hasAuthor" class="author" title="Timeline Author" :href="episode.Timeline.Author.Link">
-                <i class="icon-user"></i><small v-text="episode.Timeline.Author.Name"></small>
+            <a v-if="hasAuthor" :class="$style.optionalInfo" title="Timeline Author" :href="episode.Timeline.Author.Link">
+                <i :class="$style.infoIcon" class="icon-user"></i><small :class="$style.infoText" v-text="episode.Timeline.Author.Name"></small>
             </a>
         </div>
-        <div id="rock-hardplace" class="clear"></div>
-        <div id="video">
+        <div :class="$style.videoClear"></div>
+        <div>
             <youtube :videoId="episode.YouTube" playerHeight="400px" playerWidth="100%" :playerVars="videoArgs" @ready="playerReady" @playing="playerPlaying" @ended="playerIdle" @paused="playerIdle" @buffering="playerIdle" @qued="playerIdle" @error="playerIdle"></youtube>
         </div>
-        <div v-if="hasHosts" id="Hosts" class="section items">
-            <h4 class="section-header">Hosts</h4>
+        <div v-if="hasHosts" :class="[$style.items, $style.section]">
+            <h4 :class="$style.sectionHeader">Hosts</h4>
             <person-item v-for="person in episode.People.Hosts" :key="personKey(person.ID)" :person="person"></person-item>
         </div>
-        <div v-if="hasGuests" id="guests" class="section items">
-            <h4 class="section-header">Guests</h4>
+        <div v-if="hasGuests" :class="[$style.items, $style.section]">
+            <h4 :class="$style.sectionHeader">Guests</h4>
             <person-item v-for="person in episode.People.Guests" :key="personKey(person.ID)" :person="person"></person-item>
         </div>
-        <div v-if="hasSponsors" id="sponsors" class="section items">
-            <h4 class="section-header">Sponsors</h4>
+        <div v-if="hasSponsors" :class="[$style.items, $style.section]">
+            <h4 :class="$style.sectionHeader">Sponsors</h4>
             <person-item v-for="person in episode.People.Sponsors" :key="personKey(person.ID)" :person="person"></person-item>
         </div>
-        <div id="timeline-clear" class="clear"></div>
-        <div v-if="hasTimestamps" id="timeline-horizontal" class="section">
-            <h4 class="section-header">Timeline</h4>
-            <div class="timeline">
-                <horizontal-timestamp v-for="timestamp in episode.Timeline.Timestamps" :key="timestampKey(timestamp.ID)" :episodeNumber="episode.Number" :timestamp="timestamp" @seek="seekTo"></horizontal-timestamp>
-            </div>
-        </div>
-        <div v-if="this.$store.state.loggedIn" id="addTimelineRow" class="section">
-            <h4 class="section-header">Add Single Timeline Row</h4>
+        <div :class="$style.timelineClear"></div>
+        <horizontal-timeline v-if="hasTimestamps" :timestamps="episode.Timeline.Timestamps" :episodeNumber="episode.Number" @seek="seekTo"></horizontal-timeline>
+        <div v-if="this.$store.state.loggedIn" :class="$style.section">
+            <h4 :class="$style.sectionHeader">Add Single Timeline Row</h4>
             <form @submit.prevent="addTimelineRow" method="POST">
-                <input type="text" v-model="formAddTimestamp" id="time" placeholder="1:23:45" />
-                <input type="text" v-model="formAddEvent" id="event" placeholder="The hosts talk about a topic" />
-                <input type="text" v-model="formAddURL" id="url" placeholder="http://www.relevanturl.com (optional)" />
-                <input type="submit" value="Add Timeline Row" />
+                <input type="text" v-model="formAddTime" :class="$style.timestampTimeField" placeholder="1:23:45" />
+                <input type="text" v-model="formAddEvent" :class="$style.timestampEventField" placeholder="The hosts talk about a topic" />
+                <input type="text" v-model="formAddURL" :class="$style.timestampURLField" placeholder="http://www.relevanturl.com (optional)" />
+                <button type="submit" :class="$style.timestampSubmitButton">Add Timeline Row</button>
             </form>
         </div>
-        <table v-if="hasTimestamps" id="timeline-vertical" class="section">
-            <thead>
-                <tr>
-                    <th v-if="this.$store.state.loggedIn">Delete</th>
-                    <th>Time</th>
-                    <th>Event</th>
-                </tr>
-            </thead>
-            <tbody>
-                <vertical-timestamp v-for="timestamp in episode.Timeline.Timestamps" :key="timestampKey(timestamp.ID)" :episodeNumber="episode.Number" :timestamp="timestamp" @seek="seekTo"></vertical-timestamp>
-            </tbody>
-        </table>
-        <div v-if="this.$store.state.loggedIn" id="Add Timeline" class="section">
-            <h4 class="section-header">Add Timeline</h4>
+        <vertical-timeline v-if="hasTimestamps" :timestamps="episode.Timeline.Timestamps" :episodeNumber="episode.Number" @seek="seekTo"></vertical-timeline>
+        <div v-if="this.$store.state.loggedIn" :class="$style.section">
+            <h4 :class="$style.sectionHeader">Add Timeline</h4>
             <form @submit.prevent="addTimeline" method="POST">
-                <textarea v-model="formAddTimeline" :placeholder="formAddTimelinePlaceholder"></textarea>
-                <input type="submit" value="Submit Timeline" />
+                <textarea v-model="formAddTimeline" :class="$style.timelineTextarea" :placeholder="formAddTimelinePlaceholder"></textarea>
+                <button type="submit" :class="$style.timelineSubmitButton">Submit Timeline</button>
             </form>
         </div>
     </div>
@@ -76,7 +54,7 @@
 module.exports = {
     data: function() {
         return {
-            formAddTimestamp: "",
+            formAddTime: "",
             formAddEvent: "",
             formAddURL: "",
             formAddTimeline: "",
@@ -213,16 +191,16 @@ module.exports = {
             }
         },
         addTimelineRow: function() {
-            if (this.formAddTimestamp && this.formAddEvent && this.formAddURL) {
+            if (this.formAddTime && this.formAddEvent && this.formAddURL) {
                 this.$store.dispatch("addTimestamp", {
                     Identifier: this.episode.Identifier,
-                    formAddTimestamp: this.formAddTimestamp,
+                    formAddTimestamp: this.formAddTime,
                     formAddEvent: this.formAddEvent,
                     formAddURL: this.formAddURL
                 }).then((messages) => {
                     this.$store.dispatch("displaySuccesses", messages);
 
-                    this.formAddTimestamp = "";
+                    this.formAddTime = "";
                     this.formAddEvent = "";
                     this.formAddURL = "";
                 }).catch((messages) => {
@@ -256,3 +234,72 @@ module.exports = {
     }
 }
 </script>
+
+<style module>
+    .section {
+        composes: section from "./Global.css"
+    }
+    .sectionHeader {
+        composes: sectionHeader from "./Global.css"
+    }
+    .items {
+        composes: items from "./Global.css"
+    }
+    .videoClear {
+        composes: clear from "./Global.css";
+        height: 20px;
+    }
+    .timelineClear {
+        composes: clear from "./Global.css"
+    }
+    .infoIcon {
+        font-size: 15px;
+    }
+    .infoText {
+        margin-left: 5px;
+    }
+
+    .optionalInfo {
+        text-decoration: none;
+        color: inherit;
+        margin-left: 10px;
+    }
+
+    .timestampFormField {
+        padding: 5px;
+    }
+
+    .timestampTimeField {
+        composes: timestampFormField;
+        width: 10%;
+        min-width: 60px;
+    }
+
+    .timestampEventField {
+        composes: timestampFormField;
+        width: 30%;
+    }
+
+    .timestampURLField {
+        composes: timestampFormField;
+        width: 30%;
+    }
+
+    .timestampSubmitButton {
+        padding: 7px;
+    }
+
+    .timelineTextarea {
+        composes: textarea from "./Global.css"
+    }
+
+    .timelineSubmitButton {
+        composes: textareaSubmitButton from "./Global.css"
+    }
+
+    @media (max-width: 1024px) {
+        .optionalInfo {
+            float: right;
+        }
+    }
+</style>

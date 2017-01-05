@@ -1,87 +1,87 @@
 <template>
-    <aside class="sidebar" :class="sidebarClass">
-        <nav id="sidebar">
-            <div class="search-form"><input v-model="searchQuery" class="search-field" type="search" id="search-field" name="search" placeholder="Search"></div>
-            <h3><span>Episodes</span><router-link title="Random Episode" to="/episode/random" class="random-button timelined"><i class="icon-random"></i></router-link></h3>
-            <div v-if="this.$store.state.searchError" id="search-error" class="error">
-                <p></p>
+    <aside :class="sidebarClass">
+        <nav :class="$style.sidebar">
+            <search-bar></search-bar>
+            <h3 :class="$style.sidebarTitle" ><span>Episodes</span><router-link title="Random Episode" to="/episode/random" :class="$style.randomButton"><i :class="$style.randomButtonIcon" class="icon-random"></i></router-link></h3>
+            <div v-if="this.$store.state.searchError" :class="$style.searchError">
+                <p :class="$style.searchErrorText"></p>
             </div>
             <ul>
                 <sidebar-item v-for="episode in episodes" :key="episode.Identifier" :number="episode.Number" :identifier="episode.Identifier" :searchResults="episode.SearchResults" :timelined="episode.Timelined"></sidebar-item>
             </ul>
         </nav>
-    </aside>-
+    </aside>
 </template>
 
 <script>
 module.exports = {
-    created: function() {
-        this.searchQuery = this.$route.query.query;
-    },
-    props: ["episodes"],
-    data: function() {
-        return {
-            searchTimer: null,
-            searchQuery: "",
-            previousQuery: ""
+    props: {
+        episodes: {
+            type: Object,
+            required: true
         }
     },
     computed: {
         sidebarClass: function() {
             return {
-                toggled: this.$store.state.sidebarOpen
+                [this.$style.sidebarPane]: true,
+                [this.$style.sidebarPaneWhenOpen]: this.$store.state.sidebarOpen,
+                [this.$style.sidebarPaneWhenClosed]: !this.$store.state.sidebarOpen
             }
-        }
-    },
-    watch: {
-        searchQuery: function(newVal, oldVal) {
-            this.handleSearch(newVal);
-        }
-    },
-    methods: {
-        handleSearch: function(newVal) {
-            clearTimeout(this.searchTimer);
-            
-            this.searchTimer = setTimeout(() => {
-                if (newVal && newVal.trim()) {
-                    fetch("/api/search.php?query=" + encodeURIComponent(newVal))
-                        .then((response) => {
-                            return response.json();
-                        }).then((json) => {
-                            this.previousQuery = newVal;
-
-                            this.$store.dispatch("hideSearchError");
-                            this.$store.dispatch("clearSearchResults");
-                            this.$store.dispatch("enableSearchMode");
-                            
-                            if (json.count > 0) {
-                                for (var identifier in json.results) {
-                                    if (!json.results.hasOwnProperty(identifier)) continue;
-
-                                    var episodeResults = {
-                                        Identifier: identifier,
-                                        SearchResults: json.results[identifier]
-                                    };
-
-                                    this.$store.commit("addSearchResults", episodeResults);
-                                }
-                            }
-                        }).catch((error) => {
-                            this.previousQuery = newVal;
-
-                            this.$store.dispatch("showSearchError");
-                            this.$store.dispatch("clearSearchResults");
-                            this.$store.dispatch("enableSearchMode");
-                        });
-                } else {
-                    this.previousQuery = "";
-
-                    this.$store.dispatch("hideSearchError");
-                    this.$store.dispatch("clearSearchResults");
-                    this.$store.dispatch("disableSearchMode");
-                }
-            }, 1000);
         }
     }
 }
 </script>
+
+<style module>
+.sidebarPane {
+	composes: pane from "./Global.css";
+	width: 230px;
+	background: #333;
+	overflow: hidden;
+}
+
+.sidebarPaneWhenOpen {
+    composes: paneWhenSidebarOpen from "./Global.css"
+}
+
+.sidebarPaneWhenClosed {
+    composes: paneWhenSidebarClosed from "./Global.css"
+}
+
+.sidebar {
+	height: 100%;
+	overflow: auto;
+}
+
+.sidebarTitle {
+    composes: sectionHead3 from "./Global.css";
+}
+
+.searchError {
+    composes: error from "./Global.css";
+}
+
+.searchErrorText {
+	padding: 20px;
+}
+
+.searchErrorText::before {
+	content: 'There was an error with the search engine.';
+	white-space: pre-wrap;
+}
+
+.randomButton {
+    composes: label from "./Global.css";
+    display: inline-block;
+	margin: 4px -8px 0 0 !important;
+	padding: 0 !important;
+	text-decoration: none;
+}
+
+.randomButtonIcon {
+    font-size: 12px;
+	vertical-align: top;
+	padding: 4px;
+}
+</style>

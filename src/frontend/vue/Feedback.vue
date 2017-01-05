@@ -1,33 +1,33 @@
 <template>
-    <div class="feedback">
-        <div id="page-title">
+    <div>
+        <div :class="$style.pageTitle">
             <h2>Feedback</h2>
-            <p>Thank you for helping us improve our website. We apologise for any way our website may have inconvenienced you.</p>
+            <p :class="$style.pageDescription">Thank you for helping us improve our website. We apologise for any way our website may have inconvenienced you.</p>
         </div>
         <form @submit.prevent="submitFeedback">
-            <div class="section">
-                <h3>Issue</h3>
-                <div>
+            <div :class="$style.section">
+                <h3 :class="$style.sectionTitle">Issue</h3>
+                <div :class="$style.feedbackFields">
                     <input type="radio" v-model="issue" value="timeline_typo" id="timeline_typo">
-                    <label for="timeline_typo">A spelling/grammar/punctuation/timing mistake in the website's timelines.</label>
+                    <label for="timeline_typo" :class="$style.feedbackLabel">A spelling/grammar/punctuation/timing mistake in the website's timelines.</label>
                     <br>
                     <input type="radio" v-model="issue" value="browser_rendering" id="browser_rendering">
-                    <label for="browser_rendering">A problem with browser rendering (the website doesn't look right).</label>
+                    <label for="browser_rendering" :class="$style.feedbackLabel">A problem with browser rendering (the website doesn't look right).</label>
                     <br>
                     <input type="radio" v-model="issue" value="website_content" id="website_content">
-                    <label for="website_content">A problem with the content on our website.</label>
+                    <label for="website_content" :class="$style.feedbackLabel">A problem with the content on our website.</label>
                     <br>
                     <input type="radio" v-model="issue" value="other" id="otherwise">
-                    <label for="otherwise">Other</label>
+                    <label for="otherwise" :class="$style.feedbackLabel">Other</label>
                 </div>
             </div>
-            <div class="section">
-                <h3>Explain</h3>
-                <div>
-                    <textarea v-model="explanation" id="explanation" rows="5"></textarea>
+            <div :class="$style.section">
+                <h3 :class="$style.sectionTitle">Explain</h3>
+                <div :class="$style.feedbackFields">
+                    <textarea v-model="explanation" :class="$style.feedbackTextarea"></textarea>
                 </div>
             </div>
-            <input type="submit" value="Submit Feedback">
+            <button type="submit" :class="$style.feedbackSubmitButton">Submit Feedback</button<
         </form>
     </div>
 </template>
@@ -67,3 +67,38 @@ module.exports = {
     }
 }
 </script>
+
+<style module>
+    .pageTitle {
+        composes: pageTitle from "./Global.css"
+    }
+
+    .pageDescription {
+        composes: pageDescription from "./Global.css"
+    }
+
+    .section {
+        composes: section from "./Global.css"
+    }
+
+    .sectionTitle {
+        composes: sectionHead3 from "./Global.css", sectionTitle from "./Global.css"
+    }
+
+    .feedbackFields {
+        margin: 10px 0 0;
+    }
+
+    .feedbackLabel {
+        -ms-word-break: break-all;
+	    word-break: break-all;
+    }
+
+    .feedbackTextarea {
+        composes: textarea from "./Global.css"
+    }
+
+    .feedbackSubmitButton {
+        composes: textareaSubmitButton from "./Global.css"
+    }
+</style>

@@ -10,9 +10,12 @@ var Credits = require("./vue/Credits.vue");
 var Episode = require("./vue/Episode.vue");
 var Sidebar = require("./vue/Sidebar.vue");
 var SidebarItem = require("./vue/SidebarItem.vue");
+var SearchBar = require("./vue/SearchBar.vue");
 var SearchResult = require("./vue/SearchResult.vue");
 var PersonItem = require("./vue/PersonItem.vue");
+var HorizontalTimeline = require("./vue/HorizontalTimeline.vue");
 var HorizontalTimestamp = require("./vue/HorizontalTimestamp.vue");
+var VerticalTimeline = require("./vue/VerticalTimeline.vue");
 var VerticalTimestamp = require("./vue/VerticalTimestamp.vue");
 var Feedback = require("./vue/Feedback.vue");
 var Person = require("./vue/Person.vue");
@@ -23,74 +26,67 @@ Vue.use(Vuex);
 Vue.use(VueYouTubeEmbed);
 Vue.component("sidebar", Sidebar);
 Vue.component("sidebar-item", SidebarItem);
+Vue.component("search-bar", SearchBar);
 Vue.component("search-result", SearchResult);
 Vue.component("person-item", PersonItem);
+Vue.component("horizontal-timeline", HorizontalTimeline);
 Vue.component("horizontal-timestamp", HorizontalTimestamp);
+Vue.component("vertical-timeline", VerticalTimeline);
 Vue.component("vertical-timestamp", VerticalTimestamp);
 
-var domLoaded = false;
 if (document.readyState === "complete") {
-    domLoaded = true;
-    launch();
+    initScript();
 } else {
     document.addEventListener("DOMContentLoaded", function() {
-        domLoaded = true;
-        launch();
+        initScript();
     });
 }
 
-var jsonLoaded = false;
-var episodesJson = {};
-fetch("/api/episodes.php")
-    .then((response) => {
-        return response.json();
-    }).then((json) => {
-        episodesJson = json;
-        episodesJson["map"] = {};
-        episodesJson["credits"] = {
-            Loaded: false,
-            developers: [],
-            contributors: []
-        };
+function fetchEpisodes() {
+    return fetch("/api/episodes.php")
+        .then((response) => {
+            return response.json();
+        }).then((json) => {
+            var episodesJson = json;
+            episodesJson["map"] = {};
+            episodesJson["credits"] = {
+                Loaded: false,
+                developers: [],
+                contributors: []
+            };
 
-        for (var episodeIdentifier in episodesJson["episodes"]) {
-            if (!episodesJson["episodes"].hasOwnProperty(episodeIdentifier)) continue;
+            for (var episodeIdentifier in episodesJson["episodes"]) {
+                if (!episodesJson["episodes"].hasOwnProperty(episodeIdentifier)) continue;
 
-            episodesJson["episodes"][episodeIdentifier]["Loaded"] = false;
-            episodesJson["episodes"][episodeIdentifier]["SearchResults"] = [];
-            episodesJson["episodes"][episodeIdentifier]["Timeline"] = {
-                Timestamps: []
+                episodesJson["episodes"][episodeIdentifier]["Loaded"] = false;
+                episodesJson["episodes"][episodeIdentifier]["SearchResults"] = [];
+                episodesJson["episodes"][episodeIdentifier]["Timeline"] = {
+                    Timestamps: []
+                }
+
+                episodesJson["map"][episodesJson["episodes"][episodeIdentifier]["Number"]] = episodeIdentifier;
             }
 
-            episodesJson["map"][episodesJson["episodes"][episodeIdentifier]["Number"]] = episodeIdentifier;
-        }
+            for (var personID in episodesJson["people"]) {
+                if (!episodesJson["people"].hasOwnProperty(personID)) continue;
 
-        for (var personID in episodesJson["people"]) {
-            if (!episodesJson["people"].hasOwnProperty(personID)) continue;
+                episodesJson["people"][personID] = {
+                    ID: personID,
+                    Name: "",
+                    Overview: "",
+                    SocialLinks: [],
+                    HostCount: 0,
+                    GuestCount: 0,
+                    SponsorCount: 0,
+                    Gender: 1
+                };
+            }
 
-            episodesJson["people"][personID] = {
-                ID: personID,
-                Name: "",
-                Overview: "",
-                SocialLinks: [],
-                HostCount: 0,
-                GuestCount: 0,
-                SponsorCount: 0,
-                Gender: 1
-            };
-        }
+            return episodesJson;
+        });
+};
 
-        jsonLoaded = true;
-        launch();
-    });
-
-function launch() {
-    if (domLoaded && jsonLoaded) {
-        initScript();
-    }
-}
-
-function initScript() {
+async function initScript() {
     var router = new VueRouter({
         base: "/",
         mode: "history",
@@ -177,6 +173,8 @@ function initScript() {
         ]
     });
 
+    var episodesJson = await fetchEpisodes();
+
     const store = new Vuex.Store({
         state: {
             credits: episodesJson["credits"],
@@ -189,7 +187,7 @@ function initScript() {
             searchError: false,
             searchMode: false,
             episodeIdentifier: "",
-            loggedIn: false,
+            loggedIn: true,
             globalSuccesses: [],
             globalErrors: []
         },
@@ -219,7 +217,7 @@ function initScript() {
                 Vue.set(state, "episodeIdentifier", identifier);
             },
             cacheEpisode(state, data) {
-                Vue.set(state.episodes, data.Identifier, data);
+                Vue.set(state.episodes, data.Identifier, Object.assign(state.episodes[data.Identifier], data));
             },
             cacheReddit(state, data) {
                 Vue.set(state.episodes[data.Identifier], "RedditCount", data.RedditCount);
@@ -267,11 +265,12 @@ function initScript() {
             }
         },
         actions: {
-            markLaunched(context) {
+            markLaunched(context, page) {
                 if (context.state.firstLaunch) {
-                    if (document.querySelector(".router-link-active")) {
+                    // disabled for now
+                    /*if (document.querySelector(".router-link-active")) {
                         document.querySelector(".router-link-active").scrollIntoView();
-                    }
+                    }*/
                     context.commit("markLaunched");
                 }
 

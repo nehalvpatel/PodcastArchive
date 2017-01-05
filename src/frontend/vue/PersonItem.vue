@@ -1,6 +1,6 @@
 <template>
-    <router-link class="item" target="_blank" :to="personLink">
-        <img :alt="person.name" :title="person.Name" :src="personImage">
+    <router-link :class="$style.item" target="_blank" :to="personLink">
+        <img :class="$style.itemImage" :alt="person.name" :title="person.Name" :src="personImage">
     </router-link>
 </template>
 
@@ -22,3 +22,12 @@ module.exports = {
     }
 }
 </script>
+
+<style module>
+    .item {
+        composes: item from "./Global.css"
+    }
+    .itemImage {
+        composes: itemImage from "./Global.css"
+    }
+</style>

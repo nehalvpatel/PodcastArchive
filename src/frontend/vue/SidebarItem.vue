@@ -1,9 +1,9 @@
 <template>
-    <li v-if="showLink">
+    <li v-if="showLink" :class="$style.sidebarItem">
         <router-link :to="episodeLink" :class="episodeClass" exact>
             <span>
                 <span v-text="poundEpisodeNumber"></span>
-                <span v-if="timelined" class="timelined"></span>
+                <span v-if="timelined" :class="timelinedClass"></span>
             </span>
         </router-link>
         <search-result v-if="searchResults.length > 0" v-for="result in searchResults" :episodeNumber="number" :result="result"></search-result>
@@ -23,7 +23,15 @@ module.exports = {
         },
         episodeClass: function() {
             return {
-                "highlighted-episode": this.highlighted
+                [this.$style.sidebarItemLink]: true,
+                [this.$style.sidebarItemActiveLink]: (this.$store.state.episodeIdentifier === this.identifier) && this.$route.name === "specific-episode",
+                [this.$style.sidebarItemHighlighted]: this.highlighted
+            };
+        },
+        timelinedClass: function() {
+            return {
+                [this.$style.sidebarItemActiveTimelined]: (this.$store.state.episodeIdentifier === this.identifier) && this.$route.name === "specific-episode",
+                [this.$style.sidebarItemTimelined]: true
             };
         },
         poundEpisodeNumber: function() {
@@ -68,3 +76,40 @@ module.exports = {
     }
 }
 </script>
+
+<style module>
+.sidebarItem {
+    background: #333;
+	list-style: none;
+	border-bottom: 1px solid #444;
+	color: #aaa;
+}
+.sidebarItemLink {
+    text-decoration: none;
+	display: block;
+	font-weight: bold;
+	color: inherit;
+	padding: 10px 0 10px 25px;
+	border-left: 10px solid transparent;
+}
+.sidebarItemLink:hover {
+	border-left: 10px solid #BB4D3E;
+}
+.sidebarItemTimelined {
+    composes: label from "./Global.css";
+}
+.sidebarItemTimelined:before {
+    content: "TIMELINED";
+}
+.sidebarItemHighlighted {
+	border-left: 10px solid #444;
+}
+.sidebarItemActiveLink {
+	background: #BB4D3E;
+	color: #FFFFFF;
+}
+.sidebarItemActiveTimelined {
+	background: #A0493E;
+	color: #aaa;
+}
+</style>

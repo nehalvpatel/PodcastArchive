@@ -1,22 +1,18 @@
 <template>
     <tr :class="timestampClass">
-        <td v-if="this.$store.state.loggedIn" class="delete">
-            <form @submit.prevent="deleteTimestamp" method="POST">
-                <input type="submit" value="☓" />
-            </form>
-        </td>
-        <td class="timestamp"><a class="timelink" :href="timestampLink" @click.prevent="seek" v-text="timestamp.HMS"></a></td>
-        <td class="event">
-            <form v-if="this.$store.state.loggedIn && showEditForm" @submit.prevent="updateTimestamp" class="updateTimestampForm">
-                <input type="text" v-model="formEditEvent" />
-                <input type="text" v-model="formEditURL" />
-                <input type="submit" value="Update Timestamp" />
+        <td v-if="this.$store.state.loggedIn" @click="deleteTimestamp" :class="$style.deleteTimestampButton">☓</td>
+        <td :class="$style.timestampSeekCell"><a :class="$style.timestampSeekLink" :href="timestampLink" @click.prevent="seek" v-text="timestamp.HMS"></a></td>
+        <td :class="$style.timestampEventCell">
+            <form v-if="this.$store.state.loggedIn && showEditForm" @submit.prevent="updateTimestamp">
+                <input :class="$style.updateTimestampText" type="text" v-model="formEditEvent" />
+                <input :class="$style.updateTimestampText" type="text" v-model="formEditURL" />
+                <button :class="$style.updateFormSubmitButton" type="submit">Update Timestamp</button>
             </form>
             <span v-if="showEditForm === false">
-                <a v-if="timestamp.URL" target="_blank" :href="timestamp.URL" v-text="timestamp.Value"></a>
+                <a v-if="timestamp.URL" :class="$style.timestampURLLink" target="_blank" :href="timestamp.URL" v-text="timestamp.Value"></a>
                 <span v-else v-text="timestamp.Value"></span>
             </span>
-            <button v-if="this.$store.state.loggedIn" @click.prevent="toggleEditForm" class="editTimestamp">Edit Timestamp</button>
+            <button v-if="this.$store.state.loggedIn" @click.prevent="toggleEditForm" :class="$style.editTimestampButton">Edit Timestamp</button>
         </td>
     </tr>
 </template>
@@ -42,7 +38,7 @@ module.exports = {
     },
     methods: {
         seek: function() {
-            this.$emit("seek", this.episodeNumber, this.timestamp);
+            this.$emit("seek", this.timestamp);
         },
         toggleEditForm: function() {
             this.showEditForm = !this.showEditForm;
@@ -79,7 +75,7 @@ module.exports = {
     computed: {
         timestampClass: function() {
             return {
-                "active-timestamp-vertical": this.timestamp.Highlighted
+                [this.$style.timestampActive]: this.timestamp.Highlighted
             };
         },
         timestampLink: function() {
@@ -88,3 +84,49 @@ module.exports = {
     }
 };
 </script>
+
+<style module>
+.timestampActive {
+    font-weight: bold;
+	background: #333;
+}
+.timestampSeekCell {
+	width: 35px;
+}
+.timestampSeekLink {
+	color: inherit;
+}
+.timestampEventCell {
+	-ms-word-break: break-word;
+	word-break: break-word;
+}
+.timestampURLLink {
+	color: inherit;
+}
+
+.deleteTimestampButton {
+	width: 20px;
+    cursor: pointer;
+    text-align: center;
+}
+.updateTimestampText {
+	background: transparent;
+	font-size: 10.5pt;
+	color: white;
+	font-family: 'Open Sans', sans-serif;
+	border: 1px solid #999;
+	width: 40%;
+}
+.updateFormSubmitButton, .editTimestampButton {
+	float: right;
+	padding: 3px;
+	color: white;
+	background: transparent;
+	cursor: pointer;
+    border: none;
+    outline: none;
+}
+.updateFormSubmitButton:hover, .editTimestampButton:hover {
+	text-decoration: underline;
+}
+</style>

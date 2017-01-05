@@ -1,9 +1,9 @@
 <template>
-    <a class="timelink" :href="timestampLink" @click.prevent="seek">
-        <div class="topic" :class="timestampClass" :style="timestampWidth">
-            <div class="tooltip" :class="tooltipAlignment" :id="timestamp.ID">
-                <div class="triangle"></div>
-                <span v-text="timestamp.Value"></span>
+    <a :class="$style.timestampSeekLink" :href="timestampLink" @click.prevent="seek">
+        <div :class="timestampClass" :style="timestampWidth">
+            <div :class="tooltipAlignment">
+                <div :class="$style.timestampEventTooltipTriangle"></div>
+                <span :class="$style.timestampEventTooltipText" v-text="timestamp.Value"></span>
             </div>
         </div>
     </a>
@@ -23,13 +23,14 @@ module.exports = {
     },
     methods: {
         seek: function() {
-            this.$emit("seek", this.episodeNumber, this.timestamp);
+            this.$emit("seek", this.timestamp);
         }
     },
     computed: {
         tooltipAlignment: function() {
             return {
-                right: this.timestamp.Right
+                [this.$style.timestampEventTooltip]: true,
+                [this.$style.timestampEventTooltipRight]: this.timestamp.Right
             };
         },
         timestampWidth: function() {
@@ -39,7 +40,8 @@ module.exports = {
         },
         timestampClass: function() {
             return {
-                "active-timestamp-horizontal": this.timestamp.Highlighted
+                [this.$style.timestampEvent]: true,
+                [this.$style.timestampActive]: this.timestamp.Highlighted
             };
         },
         timestampLink: function() {
@@ -48,3 +50,52 @@ module.exports = {
     }
 };
 </script>
+
+<style module>
+.timestampActive {
+    background: #414040 !important;
+}
+.timestampSeekLink {
+	color: inherit;
+}
+.timestampEvent {
+	height: 100%;
+	float: left;
+	background: #333;
+	border-right: 1px solid #414040;
+	border-top: 4px solid #414040;
+}
+.timestampEvent:hover {
+	background: #414040;
+}
+.timestampEvent:hover * {
+	display: block;
+}
+.timestampEventTooltip {
+	width: 300px;
+	padding: 3px;
+	background: black;
+	position: relative;
+	top: 40px;
+	text-align: center;
+	left: -5px;
+	display: none;
+}
+.timestampEventTooltip .timestampEventTooltipTriangle {
+	position: absolute;
+	top: -10px;
+	height: 0;
+	width: 1px;
+	border: 5px solid black;
+	border-color: transparent transparent black transparent;
+}
+.timestampEventTooltipText {
+	font-size: 0.8em;
+}
+.timestampEventTooltipRight {
+	left: -290px;
+}
+.timestampEventTooltipRight .timestampEventTooltipTriangle {
+	left: 288px;
+}
+</style>
