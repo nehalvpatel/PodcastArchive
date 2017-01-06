@@ -191,6 +191,7 @@ async function initScript() {
             searchError: false,
             searchMode: false,
             episodeIdentifier: "",
+            highlightedTimestamp: null,
             loggedIn: episodesJson["loggedIn"],
             globalSuccesses: [],
             globalErrors: []
@@ -244,10 +245,10 @@ async function initScript() {
                 Vue.set(state, "sidebarOpen", false);
             },
             highlightTimestamp(state, data) {
-                Vue.set(state.episodes[data.Identifier].Timeline.Timestamps[data.TimestampIndex], "Highlighted", true);
+                Vue.set(state, "highlightedTimestamp", data.TimestampIndex);
             },
-            unhighlightTimestamp(state, data) {
-                Vue.set(state.episodes[data.Identifier].Timeline.Timestamps[data.TimestampIndex], "Highlighted", false);
+            clearHighlightedTimestamp(state) {
+                Vue.set(state, "highlightedTimestamp", null);
             },
             showSearchError(state) {
                 Vue.set(state, "searchError", true);
@@ -354,7 +355,7 @@ async function initScript() {
             },
             setEpisodeIdentifier(context, identifier) {
                 if (context.state.episodeIdentifier !== identifier) {
-                    context.dispatch("clearAllHighlighted", identifier);
+                    context.dispatch("clearHighlightedTimestamp");
                     context.commit("setEpisodeIdentifier", identifier);
                 }
             },
@@ -629,22 +630,13 @@ async function initScript() {
                 }
             },
             highlightTimestamp(context, data) {
-                if (!data.Highlighted) {
+                if (context.state.highlightedTimestamp !== data.TimestampIndex) {
                     context.commit("highlightTimestamp", data);
                 }
             },
-            unhighlightTimestamp(context, data) {
-                if (data.Highlighted) {
-                    context.commit("unhighlightTimestamp", data);
-                }
-            },
-            clearAllHighlighted(context, identifier) {
-                for (var i = 0, timestampCount = context.state.episodes[identifier].Timeline.Timestamps.length; i < timestampCount; i++) {
-                    context.dispatch("unhighlightTimestamp", {
-                        Identifier: identifier,
-                        Highlighted: context.state.episodes[identifier].Timeline.Timestamps[i].Highlighted,
-                        TimestampIndex: i
-                    });
+            clearHighlightedTimestamp(context) {
+                if (context.state.highlightedTimestamp !== null) {
+                    context.commit("clearHighlightedTimestamp");
                 }
             },
             showSearchError(context) {

@@ -41,7 +41,7 @@ module.exports = {
         timestampClass: function() {
             return {
                 [this.$style.timestampEvent]: true,
-                [this.$style.timestampActive]: this.timestamp.Highlighted
+                [this.$style.timestampActive]: (this.$store.state.highlightedTimestamp === this.timestamp.ID)
             };
         },
         timestampLink: function() {

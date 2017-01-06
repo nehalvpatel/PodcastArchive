@@ -178,16 +178,11 @@ module.exports = {
             for (var i = 0; i < this.episode.Timeline.Timestamps.length; i++) {
                 var currentTimestamp = this.episode.Timeline.Timestamps[i];
                 
-                var timestampAction = "unhighlightTimestamp";
                 if ((currentTime > currentTimestamp.Begin) && (currentTime < currentTimestamp.End)) {
-                    timestampAction = "highlightTimestamp";
+                    this.$store.dispatch("highlightTimestamp", {
+                        TimestampIndex: currentTimestamp.ID
+                    });
                 }
-
-                this.$store.dispatch(timestampAction, {
-                    Identifier: this.episode.Identifier,
-                    Highlighted: currentTimestamp.Highlighted,
-                    TimestampIndex: i
-                });
             }
         },
         addTimestamp: function() {
