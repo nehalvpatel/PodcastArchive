@@ -47,47 +47,48 @@ if (document.readyState === "complete") {
 }
 
 function fetchEpisodes() {
-    return fetch("/api/episodes.php")
-        .then((response) => {
-            return response.json();
-        }).then((json) => {
-            var episodesJson = json;
-            episodesJson["map"] = {};
-            episodesJson["credits"] = {
-                Loaded: false,
-                developers: [],
-                contributors: []
+    return fetch("/api/episodes.php", {
+        credentials: "same-origin"
+    }).then((response) => {
+        return response.json();
+    }).then((json) => {
+        var episodesJson = json;
+        episodesJson["map"] = {};
+        episodesJson["credits"] = {
+            Loaded: false,
+            developers: [],
+            contributors: []
+        };
+
+        for (var episodeIdentifier in episodesJson["episodes"]) {
+            if (!episodesJson["episodes"].hasOwnProperty(episodeIdentifier)) continue;
+
+            episodesJson["episodes"][episodeIdentifier]["Loaded"] = false;
+            episodesJson["episodes"][episodeIdentifier]["SearchResults"] = [];
+            episodesJson["episodes"][episodeIdentifier]["Timeline"] = {
+                Timestamps: []
+            }
+
+            episodesJson["map"][episodesJson["episodes"][episodeIdentifier]["Number"]] = episodeIdentifier;
+        }
+
+        for (var personID in episodesJson["people"]) {
+            if (!episodesJson["people"].hasOwnProperty(personID)) continue;
+
+            episodesJson["people"][personID] = {
+                ID: personID,
+                Name: "",
+                Overview: "",
+                SocialLinks: [],
+                HostCount: 0,
+                GuestCount: 0,
+                SponsorCount: 0,
+                Gender: 1
             };
+        }
 
-            for (var episodeIdentifier in episodesJson["episodes"]) {
-                if (!episodesJson["episodes"].hasOwnProperty(episodeIdentifier)) continue;
-
-                episodesJson["episodes"][episodeIdentifier]["Loaded"] = false;
-                episodesJson["episodes"][episodeIdentifier]["SearchResults"] = [];
-                episodesJson["episodes"][episodeIdentifier]["Timeline"] = {
-                    Timestamps: []
-                }
-
-                episodesJson["map"][episodesJson["episodes"][episodeIdentifier]["Number"]] = episodeIdentifier;
-            }
-
-            for (var personID in episodesJson["people"]) {
-                if (!episodesJson["people"].hasOwnProperty(personID)) continue;
-
-                episodesJson["people"][personID] = {
-                    ID: personID,
-                    Name: "",
-                    Overview: "",
-                    SocialLinks: [],
-                    HostCount: 0,
-                    GuestCount: 0,
-                    SponsorCount: 0,
-                    Gender: 1
-                };
-            }
-
-            return episodesJson;
-        });
+        return episodesJson;
+    });
 };
 
 async function initScript() {
@@ -327,7 +328,8 @@ async function initScript() {
 
                     fetch("/api/login.php", {
                         method: "POST",
-                        body: formData
+                        body: formData,
+                        credentials: "same-origin"
                     }).then((response) => {
                         var contentType = response.headers.get("content-type");
                         if (contentType && contentType.indexOf("application/json") !== -1) {
@@ -348,13 +350,14 @@ async function initScript() {
             },
             logout(context) {
                 return new Promise((resolve, reject) => {
-                    fetch("/api/logout.php")
-                        .then((response) => {
-                            context.commit("logout");
-                            resolve();
-                        }).catch((error) => {
-                            reject();
-                        })
+                    fetch("/api/logout.php", {
+                        credentials: "same-origin"
+                    }).then((response) => {
+                        context.commit("logout");
+                        resolve();
+                    }).catch((error) => {
+                        reject();
+                    })
                 });
             },
             setEpisodeIdentifier(context, identifier) {
@@ -454,7 +457,8 @@ async function initScript() {
 
                     fetch("/api/addTimeline.php", {
                         method: "POST",
-                        body: formData
+                        body: formData,
+                        credentials: "same-origin"
                     }).then((response) => {
                         var contentType = response.headers.get("content-type");
                         if (contentType && contentType.indexOf("application/json") !== -1) {
@@ -486,7 +490,8 @@ async function initScript() {
 
                     fetch("/api/addTimestamp.php", {
                         method: "POST",
-                        body: formData
+                        body: formData,
+                        credentials: "same-origin"
                     }).then((response) => {
                         var contentType = response.headers.get("content-type");
                         if (contentType && contentType.indexOf("application/json") !== -1) {
@@ -517,7 +522,8 @@ async function initScript() {
 
                     fetch("/api/updateTimestamp.php", {
                         method: "POST",
-                        body: formData
+                        body: formData,
+                        credentials: "same-origin"
                     }).then((response) => {
                         var contentType = response.headers.get("content-type");
                         if (contentType && contentType.indexOf("application/json") !== -1) {
@@ -546,7 +552,8 @@ async function initScript() {
 
                     fetch("/api/deleteTimestamp.php", {
                         method: "POST",
-                        body: formData
+                        body: formData,
+                        credentials: "same-origin"
                     }).then((response) => {
                         var contentType = response.headers.get("content-type");
                         if (contentType && contentType.indexOf("application/json") !== -1) {
