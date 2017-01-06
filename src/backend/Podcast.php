@@ -245,7 +245,7 @@ class Podcast
 	{
 		$search_results = array();
 		if (!empty($query)) {
-			$search_query = $this->_connection->prepare("SELECT `Episode`, `Timestamp`, `Value` FROM `timestamps` WHERE REPLACE(`Value`, :Replace, '') LIKE :Value");
+			$search_query = $this->_connection->prepare("SELECT `ID`, `Episode`, `Timestamp`, `Value` FROM `timestamps` WHERE REPLACE(`Value`, :Replace, '') LIKE :Value");
 			$search_query->bindValue(":Replace", "'");
 			$search_query->bindValue(":Value", "%" . str_replace("'", "", trim($query) . "%"));
 			$search_query->execute();
@@ -253,6 +253,7 @@ class Podcast
 
 			foreach ($search_query_results as $result) {
 				$timestamp_data = array();
+				$timestamp_data["ID"] = (int)$result["ID"];
 				$timestamp_data["Timestamp"] = $result["Timestamp"];
 				$timestamp_data["Value"] = $result["Value"];
 				$timestamp_data["HMS"] = Utilities::convertToHMS($result["Timestamp"]);

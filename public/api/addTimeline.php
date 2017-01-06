@@ -85,7 +85,6 @@ if (isset($_SESSION["username"])) {
                 $timestamp_data["End"] = (int)$timestamp->getEnd();
                 $timestamp_data["Width"] = $timestamp->getWidth() . "%";
                 $timestamp_data["Right"] = $timestamp_data["Begin"] > ($episode->getYouTubeLength() / 2);
-                $timestamp_data["Highlighted"] = false;
                 
                 $payload["Timeline"]["Timestamps"][] = $timestamp_data;
             }

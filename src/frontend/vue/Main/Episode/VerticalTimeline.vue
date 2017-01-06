@@ -8,7 +8,7 @@
             </tr>
         </thead>
         <tbody :class="$style.verticalTimelineBody">
-            <vertical-timestamp v-for="timestamp in timestamps" :key="timestampKey(timestamp.ID)" :episodeNumber="episodeNumber" :timestamp="timestamp" @seek="seek"></vertical-timestamp>
+            <vertical-timestamp v-for="timestamp in timestamps" :key="timestampKey(timestamp.ID)" :episodeNumber="episodeNumber" :timestamp="timestamp"></vertical-timestamp>
         </tbody>
     </table>
 </template>
@@ -28,9 +28,6 @@ module.exports = {
     methods: {
         timestampKey: function(id) {
             return "timestamp-v-" + id;
-        },
-        seek: function(timestamp) {
-            this.$emit("seek", this.episodeNumber, timestamp);
         }
     }
 }

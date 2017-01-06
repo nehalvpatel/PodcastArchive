@@ -14,7 +14,7 @@
         </div>
         <div :class="$style.videoClear"></div>
         <div>
-            <youtube :videoId="episode.YouTube" playerHeight="400px" playerWidth="100%" :playerVars="videoArgs" @ready="playerReady" @playing="playerPlaying" @ended="playerIdle" @paused="playerIdle" @buffering="playerIdle" @qued="playerIdle" @error="playerIdle"></youtube>
+            <youtube :videoId="videoId" playerHeight="400px" playerWidth="100%" :playerVars="videoArgs" @ready="playerReady" @playing="playerPlaying" @ended="playerIdle" @paused="playerIdle" @buffering="playerIdle" @cued="cued" @error="playerIdle"></youtube>
         </div>
         <div v-if="hasHosts" :class="[$style.items, $style.section]">
             <h4 :class="$style.sectionHeader">Hosts</h4>
@@ -29,7 +29,7 @@
             <person-item v-for="person in episode.People.Sponsors" :key="personKey(person.ID)" :person="person"></person-item>
         </div>
         <div :class="$style.timelineClear"></div>
-        <horizontal-timeline v-if="hasTimestamps" :timestamps="episode.Timeline.Timestamps" :episodeNumber="episode.Number" @seek="seekTo"></horizontal-timeline>
+        <horizontal-timeline v-if="hasTimestamps" :timestamps="episode.Timeline.Timestamps" :episodeNumber="episode.Number"></horizontal-timeline>
         <div v-if="this.$store.state.loggedIn" :class="$style.section">
             <h4 :class="$style.sectionHeader">Add Single Timeline Row</h4>
             <form @submit.prevent="addTimestamp" method="POST">
@@ -39,7 +39,7 @@
                 <button type="submit" :class="$style.timestampSubmitButton">Add Timeline Row</button>
             </form>
         </div>
-        <vertical-timeline v-if="hasTimestamps" :timestamps="episode.Timeline.Timestamps" :episodeNumber="episode.Number" @seek="seekTo"></vertical-timeline>
+        <vertical-timeline v-if="hasTimestamps" :timestamps="episode.Timeline.Timestamps" :episodeNumber="episode.Number"></vertical-timeline>
         <div v-if="this.$store.state.loggedIn" :class="$style.section">
             <h4 :class="$style.sectionHeader">Add Timeline</h4>
             <form @submit.prevent="addTimeline" method="POST">
@@ -59,7 +59,7 @@ module.exports = {
             formAddURL: "",
             formAddTimeline: "",
             formAddTimelinePlaceholder: "23:45 The hosts talk about a topic\r\n1:32:54 The hosts talk about a topic with a relevant website http://www.relevanturl.com",
-            videoPlayer: null,
+            videoId: this.$store.state.episodes[this.$store.state.episodeIdentifier].YouTube,
             videoTimer: null,
             videoTime: 0,
             videoArgs: {
@@ -138,36 +138,22 @@ module.exports = {
         timestampKey: function(id) {
             return "timestamp-" + id;
         },
-        seekTo: function(episodeNumber, timestamp) {
-            if (this.videoPlayer) {
-                this.$router.replace({
-                    name: "specific-episode",
-                    params: {
-                        number: episodeNumber
-                    },
-                    query: {
-                        timestamp: timestamp.Begin
-                    }
-                });
-
-                this.videoPlayer.seekTo(timestamp.Begin);
-
-                document.getElementsByTagName("header")[0].scrollIntoView();
-            }
-        },
         playerReady: function(player) {
-            this.videoPlayer = player;
+            this.$store.commit("mountPlayer", player);
         },
         playerPlaying: function() {
             this.videoTimer = setInterval(this.updateTime, 1000);
+        },
+        cued: function() {
+            this.$store.state.episodePlayer.playVideo();
         },
         playerIdle: function() {
             clearTimeout(this.videoTimer);
         },
         updateTime: function() {
             var oldTime = this.videoTime;
-            if (this.videoPlayer && this.videoPlayer.getCurrentTime) {
-                this.videoTime = this.videoPlayer.getCurrentTime();
+            if (this.$store.state.episodePlayer && this.$store.state.episodePlayer.getCurrentTime) {
+                this.videoTime = this.$store.state.episodePlayer.getCurrentTime();
             }
 
             if (this.videoTime !== oldTime) {
@@ -220,11 +206,28 @@ module.exports = {
             } else {
                 this.$store.dispatch("displayErrors", ["Please make sure you filled in the timeline."]);
             }
+        },
+        loadNextVideo: function(videoId, startSeconds) {
+            var name = "cueVideoById";
+
+            if (this.$store.state.episodePlayer.hasOwnProperty(name)) {
+                this.$store.state.episodePlayer[name]({
+                    videoId: videoId,
+                    startSeconds: startSeconds
+                });
+            } else {
+                setTimeout(() => {
+                    this.loadNextVideo(videoId, startSeconds);
+                }, 100);
+            }
         }
     },
     watch: {
         $route: function(to, from) {
             this.$store.dispatch("handleEpisodeNavigation", to);
+        },
+        "episode.YouTube": function(to, from) {
+            this.loadNextVideo(to, this.$route.query.timestamp);
         }
     }
 }

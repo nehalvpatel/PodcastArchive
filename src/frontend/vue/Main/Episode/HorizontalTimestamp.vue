@@ -23,7 +23,17 @@ module.exports = {
     },
     methods: {
         seek: function() {
-            this.$emit("seek", this.timestamp);
+            this.$store.state.episodePlayer.seekTo(this.timestamp.Begin);
+
+            this.$router.replace({
+                name: "specific-episode",
+                params: {
+                    number: this.episodeNumber
+                },
+                query: {
+                    timestamp: this.timestamp.Begin
+                }
+            });
         }
     },
     computed: {

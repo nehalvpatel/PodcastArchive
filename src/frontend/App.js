@@ -191,6 +191,7 @@ async function initScript() {
             searchError: false,
             searchMode: false,
             episodeIdentifier: "",
+            episodePlayer: null,
             highlightedTimestamp: null,
             loggedIn: episodesJson["loggedIn"],
             globalSuccesses: [],
@@ -220,6 +221,9 @@ async function initScript() {
             },
             setEpisodeIdentifier(state, identifier) {
                 Vue.set(state, "episodeIdentifier", identifier);
+            },
+            mountPlayer(state, player) {
+                Vue.set(state, "episodePlayer", player);
             },
             cacheEpisode(state, data) {
                 Vue.set(state.episodes, data.Identifier, Object.assign(state.episodes[data.Identifier], data));

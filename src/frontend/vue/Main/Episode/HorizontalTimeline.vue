@@ -2,7 +2,7 @@
     <div :class="[$style.horizontalTimelineSection, $style.section]">
         <h4 :class="$style.sectionHeader">Timeline</h4>
         <div :class="$style.horizontalTimeline">
-            <horizontal-timestamp v-for="timestamp in timestamps" :key="timestampKey(timestamp.ID)" :episodeNumber="episodeNumber" :timestamp="timestamp" @seek="seek"></horizontal-timestamp>
+            <horizontal-timestamp v-for="timestamp in timestamps" :key="timestampKey(timestamp.ID)" :episodeNumber="episodeNumber" :timestamp="timestamp"></horizontal-timestamp>
         </div>
     </div>
 </template>
@@ -22,9 +22,6 @@ module.exports = {
     methods: {
         timestampKey: function(id) {
             return "timestamp-h-" + id;
-        },
-        seek: function(timestamp) {
-            this.$emit("seek", this.episodeNumber, timestamp);
         }
     }
 }
