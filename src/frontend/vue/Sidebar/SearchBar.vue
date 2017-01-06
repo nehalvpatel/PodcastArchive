@@ -28,6 +28,15 @@ module.exports = {
             this.searchTimer = setTimeout(() => {
                 if (newVal) {
                     if (newVal !== this.previousQuery) {
+                        if (window.ga) {
+                            window.ga("send", {
+                                hitType: "event",
+                                eventCategory: "Search",
+                                eventAction: "Search",
+                                eventLabel: newVal
+                            })
+                        }
+
                         fetch("/api/search.php?query=" + encodeURIComponent(newVal))
                             .then((response) => {
                                 return response.json();

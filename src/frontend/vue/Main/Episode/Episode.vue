@@ -210,7 +210,7 @@ module.exports = {
         loadNextVideo: function(videoId, startSeconds) {
             var name = "cueVideoById";
 
-            if (this.$store.state.episodePlayer.hasOwnProperty(name)) {
+            if (this.$store.state.episodePlayer && this.$store.state.episodePlayer.hasOwnProperty(name)) {
                 this.$store.state.episodePlayer[name]({
                     videoId: videoId,
                     startSeconds: startSeconds

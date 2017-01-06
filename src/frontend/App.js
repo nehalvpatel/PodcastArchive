@@ -178,6 +178,13 @@ async function initScript() {
         ]
     });
 
+    router.afterEach((to) => {
+        if (window.ga) {
+            window.ga("set", "page", to.fullPath);
+            window.ga("send", "pageview");
+        }
+    });
+
     var episodesJson = await fetchEpisodes();
 
     const store = new Vuex.Store({
