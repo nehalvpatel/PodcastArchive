@@ -6,7 +6,7 @@ $episodes_query = $con->prepare("SELECT * FROM `episodes` ORDER BY `Identifier` 
 $episodes_query->execute();			
 $episodes_results = $episodes_query->fetchAll();
 
-$timestamps_query = $con->prepare("SELECT DISTINCT `Episode` FROM `timestamps`");
+$timestamps_query = $con->prepare("SELECT DISTINCT `Episode` FROM `timestamps` WHERE `Deleted` = '0'");
 $timestamps_query->execute();
 $timestamps_results = $timestamps_query->fetchAll();
 
