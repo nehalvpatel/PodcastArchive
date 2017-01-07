@@ -14,7 +14,7 @@
         </div>
         <div :class="$style.videoClear"></div>
         <div>
-            <youtube :videoId="videoId" playerHeight="400px" playerWidth="100%" :playerVars="videoArgs" @ready="playerReady" @playing="playerPlaying" @ended="playerIdle" @paused="playerIdle" @buffering="playerIdle" @cued="cued" @error="playerIdle"></youtube>
+            <youtube :videoId="videoId" playerHeight="400px" playerWidth="100%" :playerVars="videoArgs" @ready="playerReady" @playing="playerPlaying" @ended="playerEnded" @paused="playerIdle" @buffering="playerIdle" @cued="playerCued" @error="playerIdle"></youtube>
         </div>
         <div v-if="hasHosts" :class="[$style.items, $style.section]">
             <h4 :class="$style.sectionHeader">Hosts</h4>
@@ -72,6 +72,20 @@ module.exports = {
         };
     },
     data: function() {
+        var videoArgs = {
+            autoplay: 1
+        }
+
+        if (this.$route.query.timestamp) {
+            videoArgs["start"] = this.$route.query.timestamp;
+        } else {
+            if (localStorage.getItem(this.$store.state.episodeIdentifier)) {
+                videoArgs["start"] = parseInt(localStorage.getItem(this.$store.state.episodeIdentifier));
+            } else {
+                videoArgs["start"] = 0;
+            }
+        }
+
         return {
             formAddTime: "",
             formAddEvent: "",
@@ -81,10 +95,7 @@ module.exports = {
             videoId: this.$store.state.episodes[this.$store.state.episodeIdentifier].YouTube,
             videoTimer: null,
             videoTime: 0,
-            videoArgs: {
-				start: this.$route.query.timestamp,
-				autoplay: 1
-			}
+            videoArgs: videoArgs
         };
     },
     computed: {
@@ -162,8 +173,13 @@ module.exports = {
         playerPlaying: function() {
             this.videoTimer = setInterval(this.updateTime, 1000);
         },
-        cued: function() {
+        playerCued: function() {
             this.$store.state.episodePlayer.playVideo();
+        },
+        playerEnded: function() {
+            localStorage.removeItem(this.$store.state.episodeIdentifier);
+            
+            this.playerIdle();
         },
         playerIdle: function() {
             clearTimeout(this.videoTimer);
@@ -179,6 +195,8 @@ module.exports = {
             }
         },
         onProgress: function(currentTime) {
+            localStorage.setItem(this.episode.Identifier, currentTime);
+
             for (var i = 0; i < this.episode.Timeline.Timestamps.length; i++) {
                 var currentTimestamp = this.episode.Timeline.Timestamps[i];
                 
@@ -245,7 +263,11 @@ module.exports = {
             this.$store.dispatch("handleEpisodeNavigation", to);
         },
         "episode.YouTube": function(to, from) {
-            this.loadNextVideo(to, this.$route.query.timestamp);
+            if (localStorage.getItem(this.$store.state.episodeIdentifier)) {
+                this.loadNextVideo(to, localStorage.getItem(this.$store.state.episodeIdentifier));
+            } else {
+                this.loadNextVideo(to);
+            }
         }
     }
 }
