@@ -3,6 +3,7 @@ var Vue = require("vue");
 var VueRouter = require("vue-router");
 var Vuex = require("vuex");
 var VueYouTubeEmbed = require("vue-youtube-embed");
+var VueMeta = require("vue-meta");
 
 // components
 var App = require("./vue/App.vue");
@@ -26,6 +27,7 @@ var LoginForm = require("./vue/Main/LoginForm.vue");
 Vue.use(VueRouter);
 Vue.use(Vuex);
 Vue.use(VueYouTubeEmbed);
+Vue.use(VueMeta);
 Vue.component("main-pane", Main);
 Vue.component("sidebar-pane", Sidebar);
 Vue.component("sidebar-item", SidebarItem);
@@ -64,6 +66,7 @@ function fetchEpisodes() {
             if (!episodesJson["episodes"].hasOwnProperty(episodeIdentifier)) continue;
 
             episodesJson["episodes"][episodeIdentifier]["Loaded"] = false;
+            episodesJson["episodes"][episodeIdentifier]["Description"] = "";
             episodesJson["episodes"][episodeIdentifier]["SearchResults"] = [];
             episodesJson["episodes"][episodeIdentifier]["Timeline"] = {
                 Timestamps: []

@@ -25,11 +25,14 @@
 
 <script>
 module.exports = {
+    metaInfo: function() {
+        return {
+            title: "Developers and Contributors",
+            titleTemplate: "%s · Painkiller Already",
+        };
+    },
     created: function() {
         this.$store.dispatch("markLaunched");
-    },
-    mounted: function() {
-        document.title = "Developers and Contributors \u00B7 Painkiller Already";
     },
     computed: {
         developers: function() {

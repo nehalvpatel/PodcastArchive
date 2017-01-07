@@ -52,6 +52,25 @@
 
 <script>
 module.exports = {
+    metaInfo: function() {
+        var title = "Painkiller Already";
+        var titleTemplate = null;
+        var description = "Commonly referred to as PKA, the podcast discusses current events, news, relives comedic stories and gives their perspective on life while throwing in their comedic twist to all discussions.";
+
+        if (this.$route.name === "specific-episode") {
+            title = "Episode #" + this.episode.Number;
+            titleTemplate = "%s · Painkiller Already"
+            description = this.episode.Description;
+        }
+
+        return {
+            title: title,
+            titleTemplate: titleTemplate,
+            meta: [
+                { vmid: "description", name: "description", content: description }
+            ]
+        };
+    },
     data: function() {
         return {
             formAddTime: "",
@@ -64,7 +83,7 @@ module.exports = {
             videoTime: 0,
             videoArgs: {
 				start: this.$route.query.timestamp,
-				autoplay: 1
+				autoplay: 0
 			}
         };
     },
@@ -73,7 +92,6 @@ module.exports = {
             return this.$store.state.episodes[this.$store.state.episodeIdentifier];
         },
         episodeTitle: function() {
-            document.title = "Episode #" + this.episode.Number + " \u00B7 Painkiller Already";
             return "Painkiller Already #" + this.episode.Number;
         },
         hasReddit: function() {

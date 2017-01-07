@@ -34,11 +34,14 @@
 
 <script>
 module.exports = {
+    metaInfo: function() {
+        return {
+            title: "Feedback",
+            titleTemplate: "%s · Painkiller Already",
+        };
+    },
     created: function() {
         this.$store.dispatch("markLaunched");
-    },
-    mounted: function() {
-        document.title = "Feedback \u00B7 Painkiller Already";
     },
     data: function() {
         return {

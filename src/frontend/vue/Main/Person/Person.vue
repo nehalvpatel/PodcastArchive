@@ -23,6 +23,15 @@
 
 <script>
 module.exports = {
+    metaInfo: function() {
+        return {
+            title: this.person.Name,
+            titleTemplate: "%s · Painkiller Already",
+            meta: [
+                { vmid: "description", name: "description", content: this.person.Overview }
+            ]
+        };
+    },
     created: function() {
         this.$store.dispatch("markLaunched");
     },
@@ -39,11 +48,6 @@ module.exports = {
             } else {
                 return "She";
             }
-        }
-    },
-    watch: {
-        person: function() {
-            document.title = this.person.Name + " \u00B7 Painkiller Already";
         }
     }
 }

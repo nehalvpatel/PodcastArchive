@@ -40,6 +40,23 @@ foreach ($episode->getSponsors() as $sponsor) {
     $episode_data["People"]["Sponsors"][] = $sponsor_data;
 }
 
+$guests = $episode->getGuests();
+$description = $episode->getDescription();
+if ($description != "") {
+    $episode_data["Description"] = $description;
+} else {
+    if (count($guests) == 0) {
+        $episode_data["Description"] = "Guests: Nobody";
+    } else {
+        if (count($guests) > 2) {
+            $guests[count($guests) - 1] = "and " . strval($guests[count($guests) - 1]);
+			$episode_data["Description"] = "Guests: " . join(", ", array_map("strval", $guests));
+        } else {
+            $episode_data["Description"] = "Guests: " . join(" and ", array_map("strval", $guests));
+        }
+    }
+}
+
 $episode_data["Timeline"] = array(
     "Author" => array(
         "Name" => "",
