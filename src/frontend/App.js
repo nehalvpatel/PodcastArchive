@@ -48,12 +48,7 @@ if (document.readyState === "complete") {
     });
 }
 
-function fetchEpisodes() {
-    return fetch("/api/episodes.php", {
-        credentials: "same-origin"
-    }).then((response) => {
-        return response.json();
-    }).then((json) => {
+function fetchEpisodes(json) {
         var episodesJson = json;
         episodesJson["map"] = {};
         episodesJson["credits"] = {
@@ -91,10 +86,9 @@ function fetchEpisodes() {
         }
 
         return episodesJson;
-    });
 };
 
-async function initScript() {
+function initScript() {
     var router = new VueRouter({
         base: "/",
         mode: "history",
@@ -188,7 +182,7 @@ async function initScript() {
         }
     });
 
-    var episodesJson = await fetchEpisodes();
+    var episodesJson = fetchEpisodes(JSON.parse(document.getElementById("data").textContent));
 
     const store = new Vuex.Store({
         state: {

@@ -1,4 +1,54 @@
-<!DOCTYPE html>
+<?php
+
+require_once("../config.php");
+
+$episodes_query = $con->prepare("SELECT * FROM `episodes` ORDER BY `Identifier` ASC");
+$episodes_query->execute();			
+$episodes_results = $episodes_query->fetchAll();
+
+$timestamps_query = $con->prepare("SELECT DISTINCT `Episode` FROM `timestamps`");
+$timestamps_query->execute();
+$timestamps_results = $timestamps_query->fetchAll();
+
+$timelined_episodes = array();
+foreach ($timestamps_results as $timestamp_result) {
+    $timelined_episodes[] = $timestamp_result["Episode"];
+}
+
+$latest = true;
+$output = array();
+foreach (array_reverse($episodes_results) as $episode_result) {
+    $episode = new Episode($con, $episode_result);
+
+    $episode_data = array();
+    $episode_data["Identifier"] = $episode->getIdentifier();
+    $episode_data["Number"] = (float)$episode->getNumber();
+    $episode_data["YouTube"] = $episode->getYouTube();
+    $episode_data["Timelined"] = in_array($episode_data["Identifier"], $timelined_episodes);
+
+    $output["episodes"][$episode_data["Identifier"]] = $episode_data;
+
+    if ($latest) {
+        $output["latest"] = array(
+            "Identifier" => $episode_data["Identifier"],
+            "Number" => $episode_data["Number"]
+        );
+        $latest = false;
+    }
+}
+
+if (isset($_SESSION["username"])) {
+    $output["loggedIn"] = true;
+} else {
+    $output["loggedIn"] = false;
+}
+
+$output["people"] = array();
+foreach ($Podcast->getPeople() as $person) {
+    $output["people"][$person->getID()] = array();
+}
+
+?><!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -28,6 +78,8 @@
         <meta property="og:image" content="https://www.painkilleralready.com/img/pka.png">
 		<meta property="og:site_name" content="Painkiller Already">
 
+        <script id="data" type="application/json"><?php echo json_encode($output); ?></script>
+        
         <script src="/js/App.js"></script>
         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans:400,700">
         <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/3.0.2/css/font-awesome.min.css">

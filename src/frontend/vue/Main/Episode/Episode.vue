@@ -83,7 +83,7 @@ module.exports = {
             videoTime: 0,
             videoArgs: {
 				start: this.$route.query.timestamp,
-				autoplay: 0
+				autoplay: 1
 			}
         };
     },
