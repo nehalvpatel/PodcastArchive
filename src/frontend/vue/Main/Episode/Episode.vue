@@ -43,7 +43,7 @@
         <div v-if="this.$store.state.loggedIn" :class="$style.section">
             <h4 :class="$style.sectionHeader">Add Timeline</h4>
             <form @submit.prevent="addTimeline" method="POST">
-                <textarea v-model="formAddTimeline" :class="$style.timelineTextarea" :placeholder="formAddTimelinePlaceholder"></textarea>
+                <textarea v-model.trim="formAddTimeline" :class="$style.timelineTextarea" :placeholder="formAddTimelinePlaceholder"></textarea>
                 <button type="submit" :class="$style.timelineSubmitButton">Submit Timeline</button>
             </form>
         </div>

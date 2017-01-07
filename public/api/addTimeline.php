@@ -8,6 +8,8 @@ $successes = array();
 
 if (isset($_SESSION["username"])) {
     if (!empty($_POST["timeline"]) && !empty($_POST["identifier"])) {
+        $_POST["timeline"] = trim($_POST["timeline"]);
+        
         $timeline_array = explode("\n", $_POST["timeline"]);
         $detailed_timeline_array = array();
         $timeline_error = false;
