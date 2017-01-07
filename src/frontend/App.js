@@ -370,6 +370,9 @@ function initScript() {
                     context.commit("setEpisodeIdentifier", identifier);
                 }
             },
+            setEpisodeProgress(context, data) {
+                localStorage.setItem(data.Identifier, data.Timestamp);
+            },
             handleEpisodeNavigation(context, routeData) {
                 return new Promise((resolve, reject) => {
                     if (routeData.name === "latest-episode") {

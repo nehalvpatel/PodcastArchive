@@ -195,7 +195,10 @@ module.exports = {
             }
         },
         onProgress: function(currentTime) {
-            localStorage.setItem(this.episode.Identifier, currentTime);
+            this.$store.dispatch("setEpisodeProgress", {
+                Identifier: this.episode.Identifier,
+                Timestamp: currentTime
+            });
 
             for (var i = 0; i < this.episode.Timeline.Timestamps.length; i++) {
                 var currentTimestamp = this.episode.Timeline.Timestamps[i];
@@ -263,10 +266,14 @@ module.exports = {
             this.$store.dispatch("handleEpisodeNavigation", to);
         },
         "episode.YouTube": function(to, from) {
-            if (localStorage.getItem(this.$store.state.episodeIdentifier)) {
-                this.loadNextVideo(to, localStorage.getItem(this.$store.state.episodeIdentifier));
+            if (this.$route.query.timestamp) {
+                this.loadNextVideo(to, this.$route.query.timestamp);
             } else {
-                this.loadNextVideo(to);
+                if (localStorage.getItem(this.$store.state.episodeIdentifier)) {
+                    this.loadNextVideo(to, parseInt(localStorage.getItem(this.$store.state.episodeIdentifier)));
+                } else {
+                    this.loadNextVideo(to);
+                }
             }
         }
     }

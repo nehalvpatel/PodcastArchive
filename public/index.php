@@ -23,6 +23,8 @@ foreach (array_reverse($episodes_results) as $episode_result) {
     $episode_data = array();
     $episode_data["Identifier"] = $episode->getIdentifier();
     $episode_data["Number"] = (float)$episode->getNumber();
+    $episode_data["DateTime"] = $episode->getDate();
+    $episode_data["Date"] = date("F d, Y", strtotime($episode->getDate()));
     $episode_data["YouTube"] = $episode->getYouTube();
     $episode_data["Timelined"] = in_array($episode_data["Identifier"], $timelined_episodes);
 
