@@ -19,6 +19,9 @@ module.exports = {
     watch: {
         searchQuery: function(newVal, oldVal) {
             this.handleSearch(newVal);
+        },
+        "$route.query.query": function(newVal) {
+            this.searchQuery = newVal;
         }
     },
     methods: {
