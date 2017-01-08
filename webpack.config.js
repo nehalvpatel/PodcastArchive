@@ -11,20 +11,13 @@
              {
                  test: /\.js$/,
                  loader: 'babel',
-                 exclude: /node_modules/,
-                 options: {
-                    plugins: ["transform-runtime"],
-                    presets: [
-                        ["es2015", { "modules": false }],
-                        "stage-0"
-                    ]
-                }
+                 exclude: /node_modules/
              },
              {
                  test: /\.vue$/,
                  loader: 'vue',
                  options: {
-                     loaders: {
+                    loaders: {
                         js: 'babel'
                     }
                  }
