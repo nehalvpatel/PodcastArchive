@@ -106,6 +106,15 @@
 	margin-top: 10px;
 }
 
+.loginButton {
+	height: 40px;
+	color: white;
+	font-weight: bold;
+	width: auto;
+	display: inline;
+	border: none;
+}
+
 @media (max-width: 1024px) {
 	.items {
 		width: 100%;

@@ -14,7 +14,14 @@
 </template>
 
 <script>
+import SearchBar from "./SearchBar.vue";
+import SidebarItem from "./SidebarItem.vue";
+
 module.exports = {
+    components: {
+        SearchBar,
+        SidebarItem
+    },
     computed: {
         episodes: function() {
             return this.$store.state.episodes;

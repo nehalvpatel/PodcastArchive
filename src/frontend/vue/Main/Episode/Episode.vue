@@ -51,6 +51,10 @@
 </template>
 
 <script>
+import PersonItem from "./PersonItem.vue";
+import HorizontalTimeline from "./HorizontalTimeline.vue";
+import VerticalTimeline from "./VerticalTimeline.vue";
+
 module.exports = {
     metaInfo: function() {
         var title = "Painkiller Already";
@@ -70,6 +74,11 @@ module.exports = {
                 { vmid: "description", name: "description", content: description }
             ]
         };
+    },
+    components: {
+        PersonItem,
+        HorizontalTimeline,
+        VerticalTimeline,
     },
     data: function() {
         var videoArgs = {

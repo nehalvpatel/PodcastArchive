@@ -14,7 +14,12 @@
 </template>
 
 <script>
+import VerticalTimestamp from "./VerticalTimestamp.vue";
+
 module.exports = {
+    components: {
+        VerticalTimestamp
+    },
     props: {
         timestamps: {
             type: Array,

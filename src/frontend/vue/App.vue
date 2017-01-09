@@ -5,6 +5,18 @@
     </div>
 </template>
 
+<script>
+import SidebarPane from "./Sidebar/SidebarPane.vue";
+import MainPane from "./Main/MainPane.vue";
+
+module.exports = {
+	components: {
+		SidebarPane,
+		MainPane
+	}
+}
+</script>
+
 <style>
 /* Universal */
 *, *:before, *:after {

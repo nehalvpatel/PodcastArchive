@@ -8,7 +8,12 @@
 </template>
 
 <script>
+import HorizontalTimestamp from "./HorizontalTimestamp.vue";
+
 module.exports = {
+    components: {
+        HorizontalTimestamp
+    },
     props: {
         timestamps: {
             type: Array,

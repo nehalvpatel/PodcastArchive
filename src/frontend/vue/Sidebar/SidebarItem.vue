@@ -11,7 +11,12 @@
 </template>
 
 <script>
+import SearchResult from "./SearchResult.vue";
+
 module.exports = {
+    components: {
+        SearchResult
+    },
     computed: {
         episodeLink: function() {
             return {

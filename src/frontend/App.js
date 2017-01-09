@@ -1,44 +1,16 @@
-// dependencies
-var Vue = require("vue");
-var VueRouter = require("vue-router");
-var Vuex = require("vuex");
-var VueYouTubeEmbed = require("vue-youtube-embed");
-var VueMeta = require("vue-meta");
+import Vue from "vue";
 
-// components
-var App = require("./vue/App.vue");
-var Credits = require("./vue/Main/Credits/Credits.vue");
-var Episode = require("./vue/Main/Episode/Episode.vue");
-var Main = require("./vue/Main/Main.vue");
-var Sidebar = require("./vue/Sidebar/Sidebar.vue");
-var SidebarItem = require("./vue/Sidebar/SidebarItem.vue");
-var SearchBar = require("./vue/Sidebar/SearchBar.vue");
-var SearchResult = require("./vue/Sidebar/SearchResult.vue");
-var PersonItem = require("./vue/Main/Episode/PersonItem.vue");
-var HorizontalTimeline = require("./vue/Main/Episode/HorizontalTimeline.vue");
-var HorizontalTimestamp = require("./vue/Main/Episode/HorizontalTimestamp.vue");
-var VerticalTimeline = require("./vue/Main/Episode/VerticalTimeline.vue");
-var VerticalTimestamp = require("./vue/Main/Episode/VerticalTimestamp.vue");
-var Feedback = require("./vue/Main/Feedback/Feedback.vue");
-var Person = require("./vue/Main/Person/Person.vue");
-var Error = require("./vue/Main/Error/Error.vue");
-var LoginForm = require("./vue/Main/LoginForm.vue");
-
+import VueRouter from "vue-router";
 Vue.use(VueRouter);
+
+import Vuex from "vuex";
 Vue.use(Vuex);
+
+import VueYouTubeEmbed from "vue-youtube-embed";
 Vue.use(VueYouTubeEmbed);
+
+import VueMeta from "vue-meta";
 Vue.use(VueMeta);
-Vue.component("main-pane", Main);
-Vue.component("sidebar-pane", Sidebar);
-Vue.component("sidebar-item", SidebarItem);
-Vue.component("search-bar", SearchBar);
-Vue.component("search-result", SearchResult);
-Vue.component("person-item", PersonItem);
-Vue.component("horizontal-timeline", HorizontalTimeline);
-Vue.component("horizontal-timestamp", HorizontalTimestamp);
-Vue.component("vertical-timeline", VerticalTimeline);
-Vue.component("vertical-timestamp", VerticalTimestamp);
-Vue.component("login-form", LoginForm);
 
 if (document.readyState === "complete") {
     initScript();
@@ -96,7 +68,7 @@ function initScript() {
         routes: [
             {
                 path: "/credits",
-                component: Credits,
+                component: require("./vue/Main/Credits/Credits.vue"),
                 name: "credits",
                 beforeEnter: function(to, from, next) {
                     store.dispatch("fetchCredits", to)
@@ -107,7 +79,7 @@ function initScript() {
             },
             {
                 path: "/",
-                component: Episode,
+                component: require("./vue/Main/Episode/Episode.vue"),
                 name: "latest-episode",
                 beforeEnter: function(to, from, next) {
                     store.dispatch("handleEpisodeNavigation", to)
@@ -118,7 +90,7 @@ function initScript() {
             },
             {
                 path: "/episode/random",
-                component: Episode,
+                component: require("./vue/Main/Episode/Episode.vue"),
                 name: "random-episode",
                 beforeEnter: function(to, from, next) {
                     store.dispatch("handleEpisodeNavigation", to)
@@ -134,7 +106,7 @@ function initScript() {
             },
             {
                 path: "/episode/:number",
-                component: Episode,
+                component: require("./vue/Main/Episode/Episode.vue"),
                 name: "specific-episode",
                 beforeEnter: function(to, from, next) {
                     store.dispatch("handleEpisodeNavigation", to)
@@ -149,12 +121,17 @@ function initScript() {
             },
             {
                 path: "/feedback",
-                component: Feedback,
+                component: require("./vue/Main/Feedback/Feedback.vue"),
                 name: "feedback"
             },
             {
+                path: "/login",
+                component: require("./vue/Main/Login/Login.vue"),
+                name: "login"
+            },
+            {
                 path: "/person/:number",
-                component: Person,
+                component: require("./vue/Main/Person/Person.vue"),
                 name: "specific-person",
                 beforeEnter: function(to, from, next) {
                     store.dispatch("handlePersonNavigation", to)
@@ -169,7 +146,7 @@ function initScript() {
             },
             {
                 path: "*",
-                component: Error,
+                component: require("./vue/Main/Error/Error.vue"),
                 name: "error"
             }
         ]
@@ -690,10 +667,9 @@ function initScript() {
     });
 
     new Vue({
+        el: "#app",
         router,
         store,
-        render(h) {
-            return h(App);
-        }
-    }).$mount("#app");
+        render: createElement => createElement(require("./vue/App.vue"))
+    });
 }

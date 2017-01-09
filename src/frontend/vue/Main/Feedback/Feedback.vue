@@ -27,7 +27,7 @@
                     <textarea v-model="explanation" :class="$style.feedbackTextarea"></textarea>
                 </div>
             </div>
-            <button type="submit" :class="$style.feedbackSubmitButton">Submit Feedback</button<
+            <button type="submit" :class="$style.feedbackSubmitButton">Submit Feedback</button>
         </form>
     </div>
 </template>

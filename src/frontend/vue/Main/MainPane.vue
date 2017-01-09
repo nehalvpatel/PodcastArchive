@@ -3,7 +3,7 @@
         <header :class="$style.mainHeader">
             <span :class="$style.toggleSidebarButton" class="icon-reorder" @click="toggleSidebar"></span>
             <h1 :class="$style.mainTitle">Painkiller Already</h1>
-            <login-form></login-form>
+			<button v-if="$store.state.loggedIn" @click.prevent="logout" :class="$style.logoutButton">Log Out</button>
         </header>
         <div :class="$style.appContainer">
             <div v-for="success in successes" :class="$style.successMessage">
@@ -41,6 +41,10 @@ module.exports = {
 	methods: {
 		toggleSidebar: function() {
 			this.$store.dispatch("toggleSidebar");
+		},
+		logout: function() {
+			this.$store.dispatch("clearErrors");
+			this.$store.dispatch("logout");
 		}
 	}
 }
@@ -102,6 +106,14 @@ module.exports = {
 	-o-text-overflow: ellipsis;
 	text-overflow: ellipsis;
 	float: left;
+}
+
+.logoutButton {
+	composes: loginButton from "./../Global.css";
+	float: right;
+	margin: 12px; /*15px*/
+	padding: 10px;
+	background: #9c463a;
 }
 
 .appContainer {
