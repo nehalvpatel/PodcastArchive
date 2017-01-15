@@ -4,25 +4,12 @@
 coverage
 Thumbs.db
 
-# Ignore potentially sensitive PHPUnit file
-phpunit.xml
-
-# Ignore composer generated files
-composer.phar
-/vendor
-
-# Ignore temporary framework files
-/public/tmp
-
 # Ignore deployer files
-common.php
-composer.php
 deploy.php
 deployer.phar
 
-# Ignore monolog logs
-monolog.log
-
+# Ignore development artifacts
 node_modules/*
-public/api/json/*
-*.map
+*.sql
+*.log
+public/js/*
