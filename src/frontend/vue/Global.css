@@ -1,0 +1,135 @@
+.pane {
+	overflow-x: hidden;
+	overflow-y: scroll;
+	-webkit-overflow-scrolling: touch;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	-webkit-transition: -webkit-transform 0.2s ease-out, right 0.2s ease-out;
+	transition: transform 0.2s ease-out, right 0.2s ease-out;
+}
+
+.sidebarLink {
+    text-decoration: none;
+	display: block;
+	font-weight: bold;
+	color: inherit;
+	padding: 10px 0 10px 25px;
+	border-left: 10px solid transparent;
+}
+
+.sidebarLink:hover {
+	border-left: 10px solid #BB4D3E;
+}
+
+.pageTitle {
+	padding: 10px;
+	background: #555555;
+}
+
+.pageDescription {
+	margin-top: 5px;
+}
+
+.section {
+	background: #BB4D3E;
+	padding: 10px;
+	margin-top: 20px;
+}
+
+.sectionHead3 {
+	background-color: #555555;
+	color: #cccccc;
+	padding: 0 20px;
+	font-weight: normal;
+	line-height: 2;
+	text-transform: uppercase;
+	font-size: 90%;
+}
+
+.sectionTitle {
+	margin: 0 -10px;
+}
+
+.sectionHeader {
+	margin: 0 10px 10px 0;
+}
+
+.items {
+	padding: 10px 0 0 10px;
+	float: left;
+	margin-right: 20px;
+}
+
+.item {
+	display: inline-block;
+	margin: 0 10px 10px 0;
+	vertical-align: top;
+	background: #333;
+}
+
+.itemImage {
+	vertical-align: top;
+	max-width: 50px;
+	padding: 4px;
+}
+
+.label {
+	background: #3a3a3a;
+	color: #666;
+	padding: 2px 3px;
+	font-size: 0.6em;
+	float: right;
+	margin: 2px 12px 0 0;
+}
+
+.error {
+	text-align:center;
+	color: #777;
+	text-shadow: 2px 2px 2px #333;
+}
+
+.clear {
+	clear: both;
+}
+
+.textarea {
+	display: block;
+	width: 100%;
+	resize: vertical;
+	min-height: 300px;
+}
+
+.textareaSubmitButton {
+	width: 100%;
+	padding: 10px;
+	margin-top: 10px;
+}
+
+.loginButton {
+	height: 40px;
+	color: white;
+	font-weight: bold;
+	width: auto;
+	display: inline;
+	border: none;
+}
+
+@media (max-width: 1024px) {
+	.items {
+		width: 100%;
+		margin-right: 0;
+	}
+
+	.paneWhenSidebarOpen {
+		-ms-transform: translateX(0px);
+		-webkit-transform: translateX(0px);
+		transform: translateX(0px);
+	}
+
+	.paneWhenSidebarClosed {
+		-ms-transform: translateX(-230px);
+		-webkit-transform: translateX(-230px);
+		transform: translateX(-230px);
+	}
+}

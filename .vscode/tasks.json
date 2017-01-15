@@ -1,0 +1,62 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "0.1.0",
+    "command": "bash",
+    "isShellCommand": true,
+    "args": [
+        "-c"
+    ],
+    "echoCommand": true,
+    "tasks": [
+		{
+			"args": [
+				"docker run -v ${workspaceRoot}:/var/www/html --name painkilleralready_app -d -p 8080:80 painkilleralready_app"
+			],
+			"suppressTaskName": true,
+			"taskName": "start container",
+			"isBuildCommand": true
+		},
+		{
+			"args": [
+				"docker stop painkilleralready_app && docker rm painkilleralready_app"
+			],
+			"suppressTaskName": true,
+			"taskName": "stop container",
+			"isBuildCommand": true
+		},
+		{
+			"args": [
+				"docker exec painkilleralready_app mysql -u root -e 'create database needl_pka';"
+			],
+			"suppressTaskName": true,
+			"taskName": "create database",
+			"isBuildCommand": false
+		},
+		{
+			"args": [
+				"docker exec painkilleralready_app bash -c 'mysql -u root needl_pka < /var/www/needl_pka.sql'"
+			],
+			"suppressTaskName": true,
+			"taskName": "upload database",
+			"isBuildCommand": false
+		},
+		{
+			"args": [
+				"${workspaceRoot}/node_modules/.bin/webpack -d --display-modules --progress"
+			],
+			"suppressTaskName": true,
+			"taskName": "webpack dev",
+			"isBuildCommand": true
+		},
+		{
+			"args": [
+				"${workspaceRoot}/node_modules/.bin/webpack -p --display-modules --progress"
+			],
+			"suppressTaskName": true,
+			"taskName": "webpack dist",
+			"isBuildCommand": false
+		}
+	],
+    "showOutput": "always"
+}

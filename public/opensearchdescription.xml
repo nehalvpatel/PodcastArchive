@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+	<ShortName>Painkiller Already</ShortName>
+	<Description>Search Painkiller Already episodes</Description>
+	<Url type="text/html" method="get" template="https://www.painkilleralready.com/?query={searchTerms}" />
+	<Image width="16" height="16">https://www.painkilleralready.com/favicon.ico</Image>
+	<InputEncoding>UTF-8</InputEncoding>
+	<SearchForm>https://www.painkilleralready.com/</SearchForm>
+</OpenSearchDescription>

@@ -1,1 +1,15 @@
-mysql.php
+# Ignore common cruft
+.DS_Store
+.idea
+coverage
+Thumbs.db
+
+# Ignore deployer files
+deploy.php
+deployer.phar
+
+# Ignore development artifacts
+node_modules/*
+*.sql
+*.log
+public/js/*

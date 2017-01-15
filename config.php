@@ -1,34 +1,39 @@
 <?php
 
-	session_start();
-	require_once("mysql.php");
-	require_once("class.podcast.php");
-	require_once("class.episode.php");
-	require_once("class.person.php");
-	require_once("class.author.php");
-	require_once("class.log.php");
-	
-	$Log = new Log($con);
-	
-	$Podcast = new Podcast($con);
-	
-	$Podcast->setName("Painkiller Already");
-	$Podcast->setTitle($Podcast->getName());
-	$Podcast->setDescription("Four gamers discuss games, current events, and tell a few stories.");
-	$Podcast->setPrefix("PKA");
-	
-	$Podcast->setTable("episodes");
-	$Podcast->setBlubrry("painkilleralready");
-	$Podcast->setFeedburner("Painkiller_Already");
-	$Podcast->setSubreddit("PKA");
-	$Podcast->setItunes("692564838");
-	
-	$Podcast->setCollection("painkilleralready");
-	
-	$Podcast->setAuthorName("Nehal Patel");
-	$Podcast->setAuthorEmail("nehal@itspatel.com");
-	
-	$base_domain = rtrim($_SERVER["HTTP_HOST"] . str_replace(basename($_SERVER["PHP_SELF"]), "", $_SERVER["PHP_SELF"]), "/");
-	$domain = "https://" . $base_domain . "/";
+session_start();
 
-?>
+ini_set("display_errors", 1);
+ini_set("display_startup_errors", 1);
+error_reporting(E_ALL);
+
+require_once("src/backend/Podcast.php");
+require_once("src/backend/Episode.php");
+require_once("src/backend/Person.php");
+require_once("src/backend/Author.php");
+require_once("src/backend/Timestamp.php");
+require_once("src/backend/Utilities.php");
+require_once("src/backend/Log.php");
+
+// Setting up the core
+$con = new PDO('mysql:host=' . $_SERVER["DB_HOST"] . ';dbname=' . $_SERVER["DB_NAME"] . ';charset=utf8', $_SERVER["DB_USER"], $_SERVER["DB_PASS"]);
+$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$Log = new Log($con);
+$Podcast = new Podcast($con);
+$Utilities = new Utilities();
+
+// Some settings
+$Podcast->setName("Painkiller Already");
+$Podcast->setDescription("Commonly referred to as PKA, the podcast discusses current events, news, relives comedic stories and gives their perspective on life while throwing in their comedic twist to all discussions.");
+$Podcast->setPrefix("PKA");
+$base_domain = $Utilities->getBaseDomain();
+$domain = $Utilities->getDomain();
+
+// Loading data for the pages
+$home = false;
+$feed = "http://painkilleralready.podbean.com/feed/";
+$description = $Podcast->getDescription();
+
+// Some meta data
+$gplus = "107397414095793132493";
+$twitter = "PKA_Archive";
+$creator = "nehalvpatel";
