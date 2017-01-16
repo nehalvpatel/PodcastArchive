@@ -10,6 +10,5 @@ deployer.phar
 
 # Ignore development artifacts
 node_modules/*
-*.sql
-*.log
 public/js/*
+*.log
