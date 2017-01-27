@@ -270,10 +270,11 @@ module.exports = {
             }
         }
     },
+    beforeRouteUpdate: function(to, from, next) {
+        this.$store.dispatch("handleEpisodeNavigation", to);
+        next();
+    },
     watch: {
-        $route: function(to, from) {
-            this.$store.dispatch("handleEpisodeNavigation", to);
-        },
         "episode.YouTube": function(to, from) {
             if (this.$route.query.timestamp) {
                 this.loadNextVideo(to, this.$route.query.timestamp);
