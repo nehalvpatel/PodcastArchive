@@ -9,6 +9,8 @@ deploy.php
 deployer.phar
 
 # Ignore development artifacts
+.vscode/*
 node_modules/*
+sql/data.sql
 public/js/*
 *.log

@@ -79,10 +79,6 @@ class Podcast
 	
 	public function addEpisode($number, array $hosts, array $guests, array $sponsors, $youtube, $reddit, $yt_api_key)
 	{
-		if ($this->getPrefix() == "") {
-			throw new \Exception("The prefix must be set before adding an episode.");
-		}
-		
 		$hosts_list = array();
 		foreach ($hosts as $host) {
 			$hosts_list[] = (int)$host->getID();
@@ -112,7 +108,7 @@ class Podcast
 		try {
 			$add_query = $this->_connection->prepare("INSERT INTO `episodes` (`Identifier`, `Number`, `Date`, `Hosts`, `Guests`, `Sponsors`, `YouTube Length`, `YouTube`, `Published`, `Reddit`) VALUES (:Identifier, :Number, :Date, :Hosts, :Guests, :Sponsors, :YouTubeLength, :YouTube, :Published, :Reddit)");
 			
-			$add_query->bindValue(":Identifier", $this->getPrefix() . "_" . $number);
+			$add_query->bindValue(":Identifier", "PKA_" . $number);
 			$add_query->bindValue(":Number", $number);
 			$add_query->bindValue(":Date", $created);
 			$add_query->bindValue(":Hosts", json_encode($hosts_list));
