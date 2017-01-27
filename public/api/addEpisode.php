@@ -8,8 +8,10 @@ if ($_GET["key"] == $_SERVER["PKA_API_PW"]) {
         new Person($con, 3),
         new Person($con, 28)
     );
-    
+
     $Podcast->addEpisode($_GET["number"], $hosts, array(), array(), $_GET["youtube"], $_GET["reddit"], $_SERVER["YT_API_KEY"]);
+
+    $Log->Log("addEpisode", $_GET["number"], json_encode($_GET));
 } else {
-    echo "Invalid password.";
+    $Log->Log("addEpisodeError", $_GET["number"], json_encode($_GET), "Invalid password.");
 }

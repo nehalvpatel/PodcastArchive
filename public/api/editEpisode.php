@@ -20,10 +20,13 @@ if ($_GET["key"] == $_SERVER["PKA_IFTTT_PW"]) {
         $description = iconv("UTF-8", "ASCII//TRANSLIT", $description);
         $description = trim($description);
         
+        $old_description = $current_episode->getDescription();
         $current_episode->setDescription($description);
+
+        $Log->Log("descriptionUpdate", $current_episode->getIdentifier(), $description, $old_description);
     } else {
-        echo "Invalid episode number.";
+        $Log->Log("descriptionUpdateError", $_GET["title"], json_encode($_GET), "Invalid episode number.");
     }
 } else {
-    echo "Invalid password.";
+    $Log->Log("descriptionUpdateError", $_GET["title"], json_encode($_GET), "Invalid password.");
 }
