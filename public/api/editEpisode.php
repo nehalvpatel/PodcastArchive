@@ -3,7 +3,7 @@
 require_once("../../config.php");
 
 if ($_GET["key"] == $_SERVER["PKA_IFTTT_PW"]) {
-    $episode_number = trim(str_replace("Painkiller Already #", "", $_GET["title"]));
+    $episode_number = trim(str_replace("Painkiller Already #", "", urldecode($_GET["title"])));
 
     $current_episode = null;
     foreach ($Podcast->getEpisodes() as $episode) {
@@ -13,7 +13,7 @@ if ($_GET["key"] == $_SERVER["PKA_IFTTT_PW"]) {
     }
     
     if ($current_episode !== null) {
-        $description = $_GET["content"];
+        $description = urldecode($_GET["content"]);
         $description = str_replace("<<<", "", $description);
         $description = str_replace(">>>", "", $description);
         $description = strip_tags($description);
@@ -25,8 +25,8 @@ if ($_GET["key"] == $_SERVER["PKA_IFTTT_PW"]) {
 
         $Log->Log("descriptionUpdate", $current_episode->getIdentifier(), $description, $old_description);
     } else {
-        $Log->Log("descriptionUpdateError", $_GET["title"], json_encode($_GET), "Invalid episode number.");
+        $Log->Log("descriptionUpdateError", urldecode($_GET["title"]), json_encode($_GET), "Invalid episode number.");
     }
 } else {
-    $Log->Log("descriptionUpdateError", $_GET["title"], json_encode($_GET), "Invalid password.");
+    $Log->Log("descriptionUpdateError", urldecode($_GET["title"]), json_encode($_GET), "Invalid password.");
 }
